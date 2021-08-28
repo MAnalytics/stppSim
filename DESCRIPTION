@@ -1,4 +1,4 @@
-Package: pointcloudSim
+Package: PCSimulation
 Type: Package
 Title: Point Cloud Simulation for Spatial and Temporal Model Evaluation
 Version: 0.1.0
