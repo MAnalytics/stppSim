@@ -1,25 +1,22 @@
-Package: stppSim
+Package: pointcloudSim
 Type: Package
-Title: Spatio-Temporal Point Process Simulation for Social Science Research
+Title: Point Cloud Simulation for Spatial and Temporal Model Evaluation
 Version: 0.1.0
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
-Description: Designed to simulate point process in accordance with specified
-  spatio-temporal signatures of the built environment. 
+Description: Designed to simulate point cloud for evaluating 
+  spatial, temporal, and/or spatio-temporal models across a range 
+  of application fields, including geography and social sciences.
 Language: en-US
 License: GPL-3
-URL: https://github.com/MAnalytics/stppSim
-BugReports: https://github.com/Manalytics/stppSim/issues/new/choose
+URL: https://github.com/MAnalytics/pointcloudSim
+BugReports: https://github.com/Manalytics/pointcloudSim/issues/new/choose
 Depends: R (>= 4.0.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
-  ggplots
 RoxygenNote: 7.1.1
 Suggests:
-  knitr,
-  rmarkdown
-VignetteBuilder: knitr
 
 
