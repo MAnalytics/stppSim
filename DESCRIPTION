@@ -1,16 +1,18 @@
-Package: PCSimulation
+Package: stppSim
 Type: Package
-Title: Point Cloud Simulation for Spatial and Temporal Model Evaluation
+Title: Spatio-Temporal Point Process Simulation for Social Science Research
 Version: 0.1.0
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
-Description: Designed to simulate point cloud for evaluating 
-  spatial, temporal, and/or spatio-temporal models across a range 
-  of application fields, including geography and social sciences.
+Description: Designed for simulating point cloud in accordance with
+  the specified spatial and temporal signatures within a built environment.
+  The package is particularly useful for testing and evaluating the 
+  performances of newly built spatio-temporal models in social science 
+  research.
 Language: en-US
 License: GPL-3
-URL: https://github.com/MAnalytics/pointcloudSim
-BugReports: https://github.com/Manalytics/pointcloudSim/issues/new/choose
+URL: https://github.com/MAnalytics/stppSim
+BugReports: https://github.com/Manalytics/stppSim/issues/new/choose
 Depends: R (>= 4.0.0)
 Encoding: UTF-8
 LazyData: true

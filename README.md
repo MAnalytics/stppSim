@@ -1,7 +1,7 @@
-# "PCSimulation"
+# "stppSim"
 
-Point Cloud Simulation for Spatial and Temporal Model Evaluation
+Spatio-Temporal Point Process Simulation for Social Science Research
 
 ## Description
 
-"`PCSimulation`"  
+"`stppSim`"  
