@@ -4,20 +4,27 @@
 \alias{p_prob}
 \title{Pareto Probability distribution}
 \usage{
-p_prob(npoints)
+p_prob(npoints,  p_ratio = 30)
 }
 \arguments{
-\item{npoints}{(an integer) Number of points}
+\item{npoints}{(an integer) Number of points. Default is
+\code{50}.}
+
+\item{p_ratio}{(an integer) The smaller of the
+two terms of a Pareto ratio. For example, for a 20:80
+ratio, \code{p_ratio} will be \code{20}. Default value is
+\code{30}. Input values must be \code{10}, \code{20},
+\code{30}, \code{40}, or \code{50}. The 'p_ratio'
+determines the proportion of points that are the most
+dominant event generators.}
 }
 \value{
 Returns the global temporal pattern
 }
 \description{
-Given a number of points, this function
-assign probability values (signifying
-their strength) to the points in accordance with
-the pareto principle (i.e. 80\% of the events
-come from 20\% of the locations).
+Given a specified number of points \code{n},
+this function generates an \code{n} probability values
+in accordance with the Pareto principle.
 }
 \references{
 
