@@ -20,6 +20,10 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
+  splancs,
+  dplyr,
+  magrittr,
+  utils
 RoxygenNote: 7.1.1
 Suggests:
 
