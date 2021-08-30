@@ -11,8 +11,8 @@ p_prob(npoints,  p_ratio = 30)
 \code{50}.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio. For example, for a 20:80
-ratio, \code{p_ratio} will be \code{20}. Default value is
+two terms of a Pareto ratio. For instance, for a
+\code{20:80} ratio, \code{p_ratio} will be \code{20}. Default value is
 \code{30}. Input values must be \code{10}, \code{20},
 \code{30}, \code{40}, or \code{50}. The 'p_ratio'
 determines the proportion of points that are the most
@@ -24,7 +24,7 @@ Returns the global temporal pattern
 \description{
 Given a specified number of points \code{n},
 this function generates an \code{n} probability values
-in accordance with the Pareto principle.
+in accordance with a specified Pareto ratio.
 }
 \references{
 
