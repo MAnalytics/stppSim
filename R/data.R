@@ -15,3 +15,12 @@
 #'   \item y: y coordinate
 #'     }
 "regular_poly"
+
+#' A boundary shapefile
+#'
+#' @format A boundary file (ESRI format)
+#' \itemize{
+#'   \item x: x coordinate
+#'   \item y: y coordinate
+#'     }
+"camden_boundary"
