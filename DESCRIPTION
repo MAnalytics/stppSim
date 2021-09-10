@@ -1,14 +1,14 @@
 Package: stppSim
 Type: Package
-Title: Spacio-Temporal Point Pattern Simulation for Social Science Research
+Title: Socio-spatial and Temporal Point Pattern Simulation for Social Science Research
 Version: 0.1.0
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
-Description: Designed for simulating socio-related point pattern with 
-  both spatial and temporal signatures within a confined
-  geographical and time boundaries. Social phenomena, such as crime 
-  and diseases fall into this category. The package is suitable 
-  for testing and evaluation of models for social science research. 
+Description: Designed for simulating point patterns within a socio-spatial
+  and temporal configuration. Social phenomena, such as crime 
+  and diseases can exhibit this type of point pattern configuration. 
+  The datasets simulated by `stppSim` can be utilized for 
+  model testing and evaluation in social science research. 
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim

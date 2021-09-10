@@ -7,8 +7,7 @@
 extract_coords(poly)
 }
 \arguments{
-\item{poly}{(a spatialPolygons, spatialPolygonDataFrames,
-or a simple feature polygon). The polygon object must be in a
+\item{poly}{(a spatialPolygons, spatialPolygonDataFrames). The polygon object must be in a
 Cartesian coordinate system.}
 }
 \value{

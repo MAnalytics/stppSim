@@ -1,11 +1,11 @@
-#' @title Simulate event origins
-#' @description Simulate completely random points inside
-#' a polygon boundary and assign probability values (signifying
-#' their strength) in accordance with a specified
-#' Pareto ratio. The points represent the origin
-#' from which events originate.
-#' @param poly (a list or dataframe) A list of boundary coordinates
-#' (cartesian or geographic).
+#' @title Simulate random spatial point patterns
+#' @description Simulate spatial point pattern from
+#' randomly created event origin. Each origin is assigned
+#' a probability value (representing the intensity) at which
+#' the origin generates events in accordance with a specified
+#' Pareto ratio.
+#' @param poly (a list or dataframe) A list of spatial boundary
+#' coordinates within which the events are confined.
 #' @param npoints (an integer) Number of points to simulate
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
@@ -15,7 +15,7 @@
 #' 30% dominant and 70% non-dominant origins.
 #' @param show.plot (TRUE or FALSE) To display plot showing
 #' points (origins).
-#' @usage e_origins(poly, npoints, p_ratio, show.plot=FALSE)
+#' @usage random_spp(poly, npoints, p_ratio, show.plot=FALSE)
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -27,7 +27,7 @@
 #' @export
 #'
 
-e_origins <- function(poly, npoints =  50, p_ratio = 30,
+random_spp <- function(poly, npoints =  50, p_ratio = 30,
                         show.plot=FALSE){
 
   origins <- list()

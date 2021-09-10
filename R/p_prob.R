@@ -27,13 +27,13 @@ p_prob <- function(npoints =  50, p_ratio = 30){
   #pre-determined
   #exponential constant for different
   #Pareto ratio
-  exp_param_table <- data.frame(ratio=seq(10, 50, 10),
+  exp_param_table <- data.frame(ratio=seq(10, 40, 10),
                                 constant = c(2.3, 0.8, 0.39,
                                              0.17, 0.004))
 
   if(!p_ratio %in% exp_param_table$ratio){
-    stop(paste(" 'p_ratio' has to be one of the",
-               "following values: [10, 20, 30, 40, 50]", sep = " "))
+    stop(paste(" 'p_ratio' needs to be one of the",
+               "following values: [10, 20, 30, 40]", sep = " "))
   }
 
 #}
