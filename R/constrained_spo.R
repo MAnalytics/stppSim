@@ -20,7 +20,7 @@
 #' 30% dominant and 70% non-dominant origins.
 #' @param show.plot (TRUE or FALSE) To display plot showing
 #' points (origins).
-#' @usage nRandom_spo(bpoly, npoints =  50, p_ratio = 30,
+#' @usage constrained_spo(bpoly, npoints =  50, p_ratio = 30,
 #' show.plot=FALSE)
 #' @examples
 #' @details
@@ -33,7 +33,7 @@
 #' @export
 #'
 
-nRandom_spo <- function(bpoly=camden_boundary, npoints =  50, p_ratio = 30,
+constrained_spo <- function(bpoly=camden_boundary, npoints =  50, p_ratio = 30,
                           show.plot=FALSE){
 
     #create a boundary map from the base map
