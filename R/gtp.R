@@ -22,7 +22,7 @@
 #' @param scale (an integer) For scaling point count
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
-#' @usage tpp(start_date = "01-01", trend = "stable",
+#' @usage gtp(start_date = "01-01", trend = "stable",
 #' slope = "gentle", first_s_peak=90, scale = 1, show.plot =FALSE)
 #' @examples
 #' @details
@@ -32,7 +32,7 @@
 #' @export
 #'
 
-tpp <- function(start_date="01-01", trend="stable",
+gtp <- function(start_date="01-01", trend="stable",
                       slope = "gentle", first_s_peak = 90,
                       scale = 1, show.plot =FALSE){
 
