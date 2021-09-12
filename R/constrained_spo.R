@@ -33,11 +33,16 @@
 #' @export
 #'
 
-constrained_spo <- function(bpoly=camden_boundary, npoints =  50, p_ratio = 30,
+constrained_spo <- function(bpoly=San_Francisco, npoints =  50, p_ratio = 30,
                           show.plot=FALSE){
 
     #create a boundary map from the base map
     poly2 <- st_as_sf(bpoly)
+
+    #check that a binary 'class' field exist
+
+
+    #combine to derive boundary
     boundMap <- st_union(poly2) #plot(boundMap)
 
 

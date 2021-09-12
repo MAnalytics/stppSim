@@ -24,3 +24,16 @@
 #'   \item y: y coordinate
 #'     }
 "camden_boundary"
+
+#' A land use shapefile of a portion of
+#' San Francisco City, United States
+#'
+#' @format A boundary file (ESRI format)
+#' \itemize{
+#'   \item landuse_1: land use categories denoting
+#'   the social configuration of the urban space
+#'   \item class: a binary field indicating origins that
+#'   have the ability to generate events ('1') and origins
+#'   that lack the ability to generate points ('0').
+#'     }
+"San_Francisco"
