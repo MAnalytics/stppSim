@@ -30,18 +30,33 @@
 #' @importFrom splancs csr
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
+#' @importFrom dplyr rename
 #' @export
 #'
 
 constrained_spo <- function(bpoly=San_Francisco, npoints =  50, p_ratio = 30,
                           show.plot=FALSE){
 
-    #create a boundary map from the base map
+    #convert to simple feature
     poly2 <- st_as_sf(bpoly)
 
+    #check if 'class' field is named incorrectly
     #check that a binary 'class' field exist
+    if("Class" %in% names(poly2)){
+      poly2 <- poly2 %>%
+        rename(class = Class)
+        flush.console()
+        print(" 'Class' field is renamed as 'class'! ")
+    }
 
+    #check that a binary 'class' field exist
+    if(!"class" %in% names(poly2)){
 
+      stop(paste("There is binary field 'class'",
+                 "in the attribute of the spatialPolygonDataFrames", sep = " "))
+    }
+
+    #create a boundary map from the base map
     #combine to derive boundary
     boundMap <- st_union(poly2) #plot(boundMap)
 
