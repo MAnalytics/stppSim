@@ -6,7 +6,7 @@
 #' Pareto ratio.
 #' @param poly (a list or dataframe) A list of spatial boundary
 #' coordinates within which the events are confined.
-#' @param npoints (an integer) Number of points to simulate
+#' @param npoints (an integer) Number of origins (points) to simulate
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is

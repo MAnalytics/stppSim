@@ -7,8 +7,8 @@
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For instance, for a
 #' \code{20:80} ratio, `p_ratio` will be \code{20}. Default value is
-#' \code{30}. Input values must be \code{10}, \code{20},
-#' \code{30}, \code{40}, or \code{50}. The 'p_ratio'
+#' \code{20}. Input values must be \code{5}, \code{10}, \code{20},
+#' \code{30}, or \code{40}. The 'p_ratio'
 #' determines the proportion of points that are the most
 #' dominant event generators.
 #' @usage p_prob(npoints,  p_ratio = 30)
@@ -27,13 +27,13 @@ p_prob <- function(npoints =  50, p_ratio = 30){
   #pre-determined
   #exponential constant for different
   #Pareto ratio
-  exp_param_table <- data.frame(ratio=seq(10, 40, 10),
-                                constant = c(2.3, 0.8, 0.39,
-                                             0.17, 0.004))
+  exp_param_table <- data.frame(ratio=c(5, seq(10, 40, 10)),
+                                constant = c(6.0, 2.3, 0.8, 0.39,
+                                             0.17))
 
   if(!p_ratio %in% exp_param_table$ratio){
     stop(paste(" 'p_ratio' needs to be one of the",
-               "following values: [10, 20, 30, 40]", sep = " "))
+               "following values: [5, 10, 20, 30, 40]", sep = " "))
   }
 
 #}
