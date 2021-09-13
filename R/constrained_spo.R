@@ -2,8 +2,8 @@
 #' by the social configuration of the urban space.
 #' @description Simulate event origins (EOs) on a land use map
 #' (contrained space) with binary classes \code{1} and \code{0}, representing
-#' enabled and disabled origins. An enabled origin can
-#' generate events while disabled origins can not generate
+#' enabled and disabled origins. An `enabled` origin can
+#' generate events while `disabled` origins can not generate
 #' events. Each enabled origin is assigned
 #' a probability value (representing the intensity) at which
 #' the origin generates events in accordance with a specified
@@ -22,8 +22,10 @@
 #' @usage constrained_spo(bpoly, p_ratio = 5,
 #' show.plot=FALSE)
 #' @examples
-#' @details
-#' @return Returns the global temporal pattern
+#' @details Note: The `class` field of 'bpoly'
+#' will be utilized for mapping the basemap.
+#' @return Returns the event origins constraint by the
+#' social configuration of the space
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
 #' @importFrom splancs csr
@@ -132,6 +134,29 @@ constrained_spo <- function(bpoly, p_ratio = 5,
 
     p <- ggplot(data = ran_points_prob) +
       geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
+
+    poly2 %>%
+      mutate(class = as.character(class)) %>%
+      #mutate(landuse_1 = as.character(landuse_1))%>%
+      #ggplot(aes(fill=Median_Prioritization), cex=2) +
+      ggplot(aes(fill=class), cex=2) +
+      theme_bw() +
+      scale_fill_manual(values = c("black","red"), name= "Cluster Group")+ #gets overridden no matter where we put it
+      #geom_sf(colour = alpha("grey20", 0.8), size = 0.05) +
+      geom_sf(colour = "grey20", size = 0.05) +
+      theme(legend.position = "right") +#doe
+
+      # scale_fill_gradientn(colours=rev(viridis(length(uni_value))),
+      #                      #name="Demand\nPrioritization",
+      #                      name="Performance\n(Dem. Priori -\nDep. Grade Achieved)",
+      #                      na.value="white",
+      #                      trans="sqrt",
+      #                      breaks=my_breaks, labels=my_breaks)+
+      scale_fill_distiller(palette = "RdBu", direction = -1, guide = "colorbar") +
+      # scale_fill_gradient2(midpoint = mid_break, low="green", mid="yellow",
+      #                      high="purple")+
+      geom_sf(data=centre_area_, linetype="solid", col="red", fill=NA, color=gray(.5))#+???
+
 
     #flush.console()#
 

@@ -1,6 +1,6 @@
-#' @title Simulate random spatial point patterns
-#' @description Simulate spatial point pattern from
-#' randomly created event origin. Each origin is assigned
+#' @title Simulate random origins for spatial points
+#' @description Simulate point origins for generating the
+#' spatial point across the area. Each origin is assigned
 #' a probability value (representing the intensity) at which
 #' the origin generates events in accordance with a specified
 #' Pareto ratio.
@@ -18,7 +18,7 @@
 #' @usage random_spp(poly, npoints, p_ratio, show.plot=FALSE)
 #' @examples
 #' @details
-#' @return Returns the global temporal pattern
+#' @return Returns random event origins
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
 #' @importFrom splancs csr
