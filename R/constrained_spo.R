@@ -132,43 +132,51 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     # plot(data.frame(poly)$x, data.frame(poly)$y)
     # plot(hull$x, hull$y)
 
-    p <- ggplot(data = ran_points_prob) +
-      geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
+    # p <- ggplot(data = ran_points_prob) +
+    #   geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
+    #
+    # ggplot(data = poly2) +
+    #   geom_sf(aes(fill=c("red","green"))) +
+    #   geom_point(data = ran_points_prob,
+    #              aes(x = x, y = y),
+    #              group = Origins, size = 5) +
+    #   theme_minimal() +
+    #   ggtitle("Event Origins")
 
-    ggplot(data = poly2) +
-      geom_sf(aes(fill=c("red","green"))) +
-      geom_point(data = ran_points_prob,
-                 aes(x = x, y = y),
-                 group = Origins, size = 5) +
-      theme_minimal() +
-      ggtitle("Event Origins")
-
-    # colors to mark the points
-    sol.a = rgb(1,0,0)
-    sol.b = rgb(0,0,1)
-
-    # colors to fill the circles
-    fil.a = adjustcolor(sol.a, alpha.f = .25)
-    fil.b = adjustcolor(sol.b, alpha.f = .25)
-
-    cols.fill = c("Active" = fil.a, "Non-active" = fil.b)
-    cols.sol = c("GROUP A" = sol.a, "GROUP B" = sol.b)
 
     poly3 <- poly2 %>%
-      mutate(class = as.character(class))
+      mutate(class = as.character(class)) %>%
+      mutate(class = if_else(class == "0", paste("Non-active"),
+                             if_else(class == "1", paste("Active"), paste("NA"))))
 
-
-    ggplot() +
-      ## Street
-      geom_sf(data=poly3,aes(fill=class)) +
+    # ggplot() +
+    #   ## Street
+    #   geom_sf(data=poly3,aes(fill=as.character(class))) +
+    #   scale_color_manual(name = "points")
       ## Building
-      geom_point(data=ran_points_prob, aes(x = x, y = y, colour = Origins), color="black",fill="white") +
-      scale_fill_manual(name = "Class", values = cols.fill) +
-      ##scale_color_manual(name = "points", values = cols.sol)
-      ## Centerline
-      ##geom_sf(data=ran_points_prob,aes(color=eval(as.name(field[4])),fill=eval(as.name(field[4])))) +
-      ## App
 
+      ##scale_color_manual(name = "points", values = cols.sol)
+
+
+
+      p <-  ggplot() +
+        geom_sf(data = poly3, aes(fill = class), show.legend = "line") +
+        geom_point(data=ran_points_prob, aes(x = x, y = y, group = Origins), fill="white") +
+        scale_fill_discrete(name="Type of Event  \nOrigin", labels=c("Active - '1'", "Non active - '0'")) +
+
+        theme_minimal()
+
+      geom_point(aes(col=state, size=popdensity))
+
+      ggplot() +
+        geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
+        geom_sf(data = lines_HARV, aes(color = TYPE),
+                show.legend = "line", size = 1) +
+        geom_sf(data = point_HARV, aes(fill = Sub_Type), color = "black") +
+        scale_color_manual(values = road_colors) +
+        scale_fill_manual(values = "black") +
+        ggtitle("NEON Harvard Forest Field Site") +
+        coord_sf()
 
 
       # scale_fill_gradientn(colours=rev(viridis(length(uni_value))),
