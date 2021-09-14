@@ -1,6 +1,6 @@
 # "stppSim"
 
-Socio-spatio and Temporal Point Pattern Simulation for Social Science Research
+Simulation of Socio-spatial and Temporal point patterns for Social Science Research
 
 ## Description
 
