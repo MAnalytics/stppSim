@@ -2,15 +2,15 @@
 #' by the social configuration of the urban space.
 #' @description Simulate event origins (EOs) on a land use map
 #' (contrained space) with binary classes \code{1} and \code{0}, representing
-#' enabled and disabled origins. An `enabled` origin can
-#' generate events while `disabled` origins can not generate
-#' events. Each enabled origin is assigned
+#' active and non-active origins. An `active` origin can
+#' generate events while a `non-active` origin can not generate
+#' events. Each active origin is assigned
 #' a probability value (representing the intensity) at which
 #' the origin generates events in accordance with a specified
 #' Pareto ratio.
-#' @param bpoly (a spatialPolygonDataFrames) with binary attribute
-#' field `class` with values \code{1} and \code{0}, representing
-#' the enabled and disabled origins.
+#' @param bpoly (a spatialPolygonDataFrames) with a binary attribute
+#' field `class`, which includes values \code{1} and \code{0}, representing
+#' the active and non-active origins.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -135,16 +135,41 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     p <- ggplot(data = ran_points_prob) +
       geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
 
-    poly2 %>%
-      mutate(class = as.character(class)) %>%
-      #mutate(landuse_1 = as.character(landuse_1))%>%
-      #ggplot(aes(fill=Median_Prioritization), cex=2) +
-      ggplot(aes(fill=class), cex=2) +
-      theme_bw() +
-      scale_fill_manual(values = c("black","red"), name= "Cluster Group")+ #gets overridden no matter where we put it
-      #geom_sf(colour = alpha("grey20", 0.8), size = 0.05) +
-      geom_sf(colour = "grey20", size = 0.05) +
-      theme(legend.position = "right") +#doe
+    ggplot(data = poly2) +
+      geom_sf(aes(fill=c("red","green"))) +
+      geom_point(data = ran_points_prob,
+                 aes(x = x, y = y),
+                 group = Origins, size = 5) +
+      theme_minimal() +
+      ggtitle("Event Origins")
+
+    # colors to mark the points
+    sol.a = rgb(1,0,0)
+    sol.b = rgb(0,0,1)
+
+    # colors to fill the circles
+    fil.a = adjustcolor(sol.a, alpha.f = .25)
+    fil.b = adjustcolor(sol.b, alpha.f = .25)
+
+    cols.fill = c("Active" = fil.a, "Non-active" = fil.b)
+    cols.sol = c("GROUP A" = sol.a, "GROUP B" = sol.b)
+
+    poly3 <- poly2 %>%
+      mutate(class = as.character(class))
+
+
+    ggplot() +
+      ## Street
+      geom_sf(data=poly3,aes(fill=class)) +
+      ## Building
+      geom_point(data=ran_points_prob, aes(x = x, y = y, colour = Origins), color="black",fill="white") +
+      scale_fill_manual(name = "Class", values = cols.fill) +
+      ##scale_color_manual(name = "points", values = cols.sol)
+      ## Centerline
+      ##geom_sf(data=ran_points_prob,aes(color=eval(as.name(field[4])),fill=eval(as.name(field[4])))) +
+      ## App
+
+
 
       # scale_fill_gradientn(colours=rev(viridis(length(uni_value))),
       #                      #name="Demand\nPrioritization",
