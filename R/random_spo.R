@@ -85,14 +85,17 @@ random_spp <- function(poly, npoints =  50, p_ratio = 30,
       geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
 
     #flush.console()
-    p<-p + geom_polygon(data = hull%>%select(x,y),
+
+    if(show.plot==TRUE){
+    p + geom_polygon(data = hull%>%select(x,y),
                      aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9)+
       theme_bw()
+    }
 
   #}
 
   origins$origins <- ran_points_prob
-  origins$plot <- p
+  #origins$plot <- p
   #Given event count at a temporal bin,
   #simulate walkers to generate the number of event
   #count
