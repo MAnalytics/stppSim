@@ -18,7 +18,8 @@
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
 #' @param show.plot (TRUE or FALSE) To display plot showing
-#' points (origins).
+#' base map (i.e. social configuration of the landscape, in
+#' terms of active and non-active spaces), and the event origins.
 #' @usage constrained_spo(bpoly, p_ratio = 5,
 #' show.plot=FALSE)
 #' @examples
@@ -37,14 +38,14 @@
 #'
 
 constrained_spo <- function(bpoly, p_ratio = 5,
-                          show.plot=FALSE){
+                                      show.plot=FALSE){
 
   Class <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
     sdf <- NULL
   #San_Francisco
 
-    origins <- list()
+  origins <- list()
 
     #convert to simple feature
     poly2 <- st_as_sf(bpoly)
@@ -158,50 +159,24 @@ constrained_spo <- function(bpoly, p_ratio = 5,
       ##scale_color_manual(name = "points", values = cols.sol)
 
 
+    my_sf <- ran_points_prob %>%
+      st_as_sf(coords = c('x', 'y')) %>%
+      st_set_crs(st_crs(poly3))
 
-      p <-  ggplot() +
-        geom_sf(data = poly3, aes(fill = class), show.legend = "line") +
-        geom_point(data=ran_points_prob, aes(x = x, y = y, group = Origins), fill="white") +
-        scale_fill_discrete(name="Type of Event  \nOrigin", labels=c("Active - '1'", "Non active - '0'")) +
+    if(show.plot ==  TRUE){
 
-        theme_minimal()
-
-      geom_point(aes(col=state, size=popdensity))
-
-      ggplot() +
-        geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
-        geom_sf(data = lines_HARV, aes(color = TYPE),
-                show.legend = "line", size = 1) +
-        geom_sf(data = point_HARV, aes(fill = Sub_Type), color = "black") +
-        scale_color_manual(values = road_colors) +
-        scale_fill_manual(values = "black") +
-        ggtitle("NEON Harvard Forest Field Site") +
-        coord_sf()
-
-
-      # scale_fill_gradientn(colours=rev(viridis(length(uni_value))),
-      #                      #name="Demand\nPrioritization",
-      #                      name="Performance\n(Dem. Priori -\nDep. Grade Achieved)",
-      #                      na.value="white",
-      #                      trans="sqrt",
-      #                      breaks=my_breaks, labels=my_breaks)+
-      scale_fill_distiller(palette = "RdBu", direction = -1, guide = "colorbar") +
-      # scale_fill_gradient2(midpoint = mid_break, low="green", mid="yellow",
-      #                      high="purple")+
-      geom_sf(data=centre_area_, linetype="solid", col="red", fill=NA, color=gray(.5))#+???
-
-
-    #flush.console()#
-
-    #plot on the basemap
-    # p<-p + geom_polygon(data = hull%>%select(x,y),
-    #                     aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9)+
-    #   theme_bw()
-
-    #}
+    ggplot() +
+          geom_sf(data = poly3, aes(fill = class), size = 0.05, lwd = 1) +
+          #scale_fill_hue(h = c(150, 80), aesthetics = "fill")+
+          scale_fill_hue(h = c(150, 80), c = 100, l = 100) +
+          #scale_fill_manual(values=cbPalette)+
+          geom_sf(data = my_sf, aes(colour = Origins)) + #, show.legend = "point"
+          scale_colour_brewer(palette = "Set1")+
+          theme_bw()
+    }
 
     origins$origins <- ran_points_prob
-    origins$plot <- p
+
     #Given event count at a temporal bin,
     #simulate walkers to generate the number of event
     #count
@@ -209,13 +184,4 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     return(origins)
 
 
-
-
-
-
-
-
-
-    sdf
-
-  }
+}
