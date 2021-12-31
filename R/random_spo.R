@@ -1,7 +1,7 @@
 #' @title Simulate random origins for spatial points
 #' @description Simulate point origins for generating the
 #' spatial point across the area. Each origin is assigned
-#' a probability value (representing the intensity) at which
+#' a probability value (representing the relative intensity) at which
 #' the origin generates events in accordance with a specified
 #' Pareto ratio.
 #' @param poly (a list or dataframe) A list of spatial boundary
@@ -15,7 +15,7 @@
 #' 30% dominant and 70% non-dominant origins.
 #' @param show.plot (TRUE or FALSE) To display plot showing
 #' points (origins).
-#' @usage random_spp(poly, npoints, p_ratio, show.plot=FALSE)
+#' @usage random_spo(poly, npoints, p_ratio, show.plot=FALSE)
 #' @examples
 #' @details
 #' @return Returns random event origins
@@ -27,7 +27,7 @@
 #' @export
 #'
 
-random_spp <- function(poly, npoints =  50, p_ratio = 30,
+random_spo <- function(poly, npoints =  50, p_ratio = 30,
                         show.plot=FALSE){
 
   origins <- list()

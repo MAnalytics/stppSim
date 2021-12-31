@@ -4,7 +4,7 @@
 \alias{make_grids}
 \title{Make Square Grids System}
 \usage{
-make_grids(poly, gridsize = 200,
+make_grids(poly, size = 200,
 show.output = FALSE, dir=NULL)
 }
 \arguments{
@@ -13,7 +13,7 @@ show.output = FALSE, dir=NULL)
 which the spatial grid is to be overlaid. Needs to be in a
 cartesian CRS.}
 
-\item{gridsize}{Square grid size to be generated.
+\item{size}{Square grid size to be generated.
 To be in the same unit associated with the \code{poly} (e.g.
 metres, feets, etc.). Default: \code{200}.}
 
