@@ -1,25 +1,26 @@
-#' @title Modelling of the global temporal pattern
+#' @title Modeling of the Global Temporal Pattern
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
 #' @param start_date The start date of the study period.
 #' Default value is `"01-01"` (i.e. January 1st). By default
-#' the end date of the study period will be `"12-31"` (i.e.
+#' the end date of the study period is set as `"12-31"` (i.e.
 #' 31st December). A user can specify any start date in the
-#' format `"mm/dd"`. The end date is the following 365th day
+#' format `"mm/dd"`. The end date is the next 365th day
 #' from the specified start date.
-#' @param trend (a character) specifying the direction of
-#' the global linear trend of the point process. Options
-#' are `"decreasing"`, `"stable"`,
-#' and `"increasing"` linear trends, respectively. Default
-#' value is `"stable"`.
-#' @param slope (a character) specifying the type of the slope
-#' if the trend is "increasing" or "decreasing". Options
-#' are: `"gentle"` and `"steep"`. Default value is \code{"gentle"}.
+#' @param trend (a character) Specifying the direction of
+#' the global (linear) trend of the point process. Three options
+#' available are `"decreasing"`, `"stable"`,
+#' and `"increasing"` trends. Default: `"stable"`.
+#' @param slope (a character) Slope angle for an
+#' "increasing" or "decreasing" trend. Two options
+#' are available: `"gentle"` and `"steep"`.
+#' Default value is \code{"NULL"} for the default trend
+#' (i.e. `stable`).
 #' @param first_s_peak Number of days before the first seasonal
 #' peak. Default: \code{90}. This implies a seasonal cycle
 #' of 180 days.
-#' @param scale (an integer) For scaling point count
+#' @param scale (an integer) For scaling point counts. Default: \code{1}
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage gtp(start_date = "01-01", trend = "stable",
@@ -33,7 +34,7 @@
 #'
 
 gtp <- function(start_date="01-01", trend="stable",
-                      slope = "gentle", first_s_peak = 90,
+                      slope = "NULL", first_s_peak = 90,
                       scale = 1, show.plot =FALSE){
 
   output <- list() #output object
@@ -49,15 +50,20 @@ gtp <- function(start_date="01-01", trend="stable",
 
   y <- (y + (-1 * min(y)))  #to remove negatives values and scale
 
+  #if trend is 'stable', slope has to be 'NULL'
   if(trend == "stable"){
-    #Do nothing!
+    if(slope != "NULL"){
+      stop("Slope needs to be 'NULL' for a stable trend!")
+    }
   }
 
   gentle <- ((max(y)/2) - min(y))/(365-0) #slope
   steep <-  ((max(y)) - min(y))/(365-0) #slope
 
   if(trend == "decreasing"){
-
+    if(slope == "NULL"){
+      stop("Slope cannot be NULL for a decreasing trend!")
+    }
     #check slope
     if(slope == "gentle"){
       gentle <- -gentle
@@ -73,6 +79,11 @@ gtp <- function(start_date="01-01", trend="stable",
   }
 
   if(trend == "increasing"){
+
+    if(slope == "NULL"){
+      stop("Slope cannot be NULL for an increasing trend!")
+    }
+
     if(slope == "gentle"){
       trendline <- 0 + gentle * t
   }
