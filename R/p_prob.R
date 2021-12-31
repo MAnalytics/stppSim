@@ -15,7 +15,7 @@
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
-#' @references
+#' @references https://www.google.co.uk/
 #' @importFrom magrittr %>%
 #' @export
 
