@@ -1,11 +1,11 @@
-#' @title Square Grids System
+#' @title Make Square Grids System
 #' @description Generates a system of square grids over a specified
 #' spatial boundary.
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
 #' `simple features`). A spatial polygon over
 #' which the spatial grid is to be overlaid. Needs to be in a
 #' cartesian CRS.
-#' @param gridsize Square grid size to be generated.
+#' @param size Square grid size to be generated.
 #' To be in the same unit associated with the `poly` (e.g.
 #' metres, feets, etc.). Default: \code{200}.
 #' @param dir (character) Specifies the directory to
@@ -14,7 +14,7 @@
 #' directory in the format: "C:/.../folder".
 #' @param show.output (logical) To show the output.
 #' Default: \code{FALSE}
-#' @usage sq_grids(poly, gridsize = 200,
+#' @usage make_grids(poly, size = 200,
 #' show.output = FALSE, dir=NULL)
 #' @examples
 #' @details
@@ -26,8 +26,7 @@
 #' Polygon Polygons over
 #' @importFrom rgdal writeOGR
 #' @export
-
-sq_grids <- function(poly, gridsize = 200, show.output = FALSE,
+make_grids <- function(poly, size = 200, show.output = FALSE,
                        dir=NULL){
 
   as_Spatial <- show.plot <- intersect_grid <- NULL
@@ -54,16 +53,16 @@ sq_grids <- function(poly, gridsize = 200, show.output = FALSE,
   proj_Coods <- proj4string(area_B)
 
   #3.Size of grid unit to create (in metres) e.g. 50m, 100m, 150m, and so on.
-  g_size = gridsize
+  g_size = size
 
   #extracting the bounding coordinates of the boundary
   b_coord <- bbox(area_B)
 
   # Offsetting to create space for enough grids
-  min_x <- round(b_coord[1,1], digits=-2)- (2*gridsize) #
-  min_y <- round(b_coord[2,1], digits=-2)- (2*gridsize)
-  max_x <- round(b_coord[1,2], digits=-2)+ (2*gridsize)
-  max_y <- round(b_coord[2,2], digits=-2)+ (2*gridsize)
+  min_x <- round(b_coord[1,1], digits=-2)- (2*size) #
+  min_y <- round(b_coord[2,1], digits=-2)- (2*size)
+  max_x <- round(b_coord[1,2], digits=-2)+ (2*size)
+  max_y <- round(b_coord[2,2], digits=-2)+ (2*size)
 
   #Creating sequence of grid coordinates...
   x <- seq(min_x,max_x,by=g_size)
@@ -109,20 +108,20 @@ sq_grids <- function(poly, gridsize = 200, show.output = FALSE,
  # Clipping the intersecting grid units with the boundary
  # List of grids that intersect the boundary
  area_B <- spTransform(area_B, CRS(proj_Coods))
- intersect_grids <- polys.df %over% area_B
+ intersect_grids <- over(polys.df, area_B, returnList = FALSE)
  intersect_grids <- polys.df[which(!is.na(intersect_grids[,1])),]
 
  #Visulising the results
- if(show.plot == TRUE){
-    plot(intersect_grid)
+ if(show.output == TRUE){
+    plot(intersect_grids)
  }
 
  #get output directory
- if(dir == "NULL"){
+ if(is.null(dir)){
    dr <- getwd()
  }
 
- if(dir != "NULL"){
+ if(!is.null(dir)){
    dr <-dir
  }
 
@@ -136,11 +135,11 @@ sq_grids <- function(poly, gridsize = 200, show.output = FALSE,
    },
    # Specifying error message
    error = function(e){
-     print("Execution halted! Check the specified output path")
+     print("Execution halted! Check the output path specified!")
    },
 
    finally = {
-     print("finally Executed")
+     print("Output generated!")
    }
  )
 

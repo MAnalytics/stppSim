@@ -24,7 +24,7 @@
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage gtp(start_date = "01-01", trend = "stable",
-#' slope = "gentle", first_s_peak=90, scale = 1, show.plot =FALSE)
+#' slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
