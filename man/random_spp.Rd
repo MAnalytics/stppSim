@@ -2,7 +2,7 @@
 % Please edit documentation in R/random_spo.R
 \name{random_spp}
 \alias{random_spp}
-\title{Simulate random spatial point patterns}
+\title{Simulate random origins for spatial points}
 \usage{
 random_spp(poly, npoints, p_ratio, show.plot=FALSE)
 }
@@ -23,11 +23,11 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 points (origins).}
 }
 \value{
-Returns the global temporal pattern
+Returns random event origins
 }
 \description{
-Simulate spatial point pattern from
-randomly created event origin. Each origin is assigned
+Simulate point origins for generating the
+spatial point across the area. Each origin is assigned
 a probability value (representing the intensity) at which
 the origin generates events in accordance with a specified
 Pareto ratio.

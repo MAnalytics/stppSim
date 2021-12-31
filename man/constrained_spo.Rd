@@ -9,9 +9,9 @@ constrained_spo(bpoly, p_ratio = 5,
 show.plot=FALSE)
 }
 \arguments{
-\item{bpoly}{(a spatialPolygonDataFrames) with binary attribute
-field \code{class} with values \code{1} and \code{0}, representing
-the enabled and disabled origins.}
+\item{bpoly}{(a spatialPolygonDataFrames) with a binary attribute
+field \code{class}, which includes values \code{1} and \code{0}, representing
+the active and non-active origins.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio. For example, for a \code{20:80}
@@ -21,20 +21,26 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 30\% dominant and 70\% non-dominant origins.}
 
 \item{show.plot}{(TRUE or FALSE) To display plot showing
-points (origins).}
+base map (i.e. social configuration of the landscape, in
+terms of active and non-active spaces), and the event origins.}
 }
 \value{
-Returns the global temporal pattern
+Returns the event origins constraint by the
+social configuration of the space
 }
 \description{
 Simulate event origins (EOs) on a land use map
 (contrained space) with binary classes \code{1} and \code{0}, representing
-enabled and disabled origins. An enabled origin can
-generate events while disabled origins can not generate
-events. Each enabled origin is assigned
+active and non-active origins. An \code{active} origin can
+generate events while a \code{non-active} origin can not generate
+events. Each active origin is assigned
 a probability value (representing the intensity) at which
 the origin generates events in accordance with a specified
 Pareto ratio.
+}
+\details{
+Note: The \code{class} field of 'bpoly'
+will be utilized for mapping the basemap.
 }
 \references{
 #https://online.stat.psu.edu/stat510/lesson/6/6.1

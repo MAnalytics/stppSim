@@ -2,7 +2,7 @@
 % Please edit documentation in R/gtp.R
 \name{gtp}
 \alias{gtp}
-\title{Modelling of the global temporal pattern}
+\title{Modeling of the Global Temporal Pattern}
 \usage{
 gtp(start_date = "01-01", trend = "stable",
 slope = "gentle", first_s_peak=90, scale = 1, show.plot =FALSE)
@@ -10,26 +10,27 @@ slope = "gentle", first_s_peak=90, scale = 1, show.plot =FALSE)
 \arguments{
 \item{start_date}{The start date of the study period.
 Default value is \code{"01-01"} (i.e. January 1st). By default
-the end date of the study period will be \code{"12-31"} (i.e.
+the end date of the study period is set as \code{"12-31"} (i.e.
 31st December). A user can specify any start date in the
-format \code{"mm/dd"}. The end date is the following 365th day
+format \code{"mm/dd"}. The end date is the next 365th day
 from the specified start date.}
 
-\item{trend}{(a character) specifying the direction of
-the global linear trend of the point process. Options
-are \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"} linear trends, respectively. Default
-value is \code{"stable"}.}
+\item{trend}{(a character) Specifying the direction of
+the global (linear) trend of the point process. Three options
+available are \code{"decreasing"}, \code{"stable"},
+and \code{"increasing"} trends. Default: \code{"stable"}.}
 
-\item{slope}{(a character) specifying the type of the slope
-if the trend is "increasing" or "decreasing". Options
-are: \code{"gentle"} and \code{"steep"}. Default value is \code{"gentle"}.}
+\item{slope}{(a character) Slope angle for an
+"increasing" or "decreasing" trend. Two options
+are available: \code{"gentle"} and \code{"steep"}.
+Default value is \code{"NULL"} for the default trend
+(i.e. \code{stable}).}
 
 \item{first_s_peak}{Number of days before the first seasonal
 peak. Default: \code{90}. This implies a seasonal cycle
 of 180 days.}
 
-\item{scale}{(an integer) For scaling point count}
+\item{scale}{(an integer) For scaling point counts. Default: \code{1}}
 
 \item{show.plot}{(TRUE or False) To show the time series
 plot. Default is \code{FALSE}.}

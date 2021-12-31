@@ -27,5 +27,5 @@ this function generates an \code{n} probability values
 in accordance with a specified Pareto ratio.
 }
 \references{
-
+https://www.google.co.uk/
 }

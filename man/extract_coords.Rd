@@ -7,7 +7,8 @@
 extract_coords(poly)
 }
 \arguments{
-\item{poly}{(a spatialPolygons, spatialPolygonDataFrames). The polygon object must be in a
+\item{poly}{(a spatialPolygons, spatialPolygonDataFrames).
+The polygon object must be in a
 Cartesian coordinate system.}
 }
 \value{
@@ -18,5 +19,5 @@ Given a polygon object, the goal is to extract
 the coordinates of the edges of the boundary.
 }
 \references{
-
+https://www.google.co.uk/
 }
