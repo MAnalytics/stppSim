@@ -42,7 +42,9 @@ constrained_spo <- function(bpoly, p_ratio = 5,
 
   Class <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
-    sdf <- NULL
+    sdf <- mutate <- if_else <- st_set_crs <-
+    st_crs <- geom_sf <- scale_fill_hue <-
+    scale_colour_brewer <- NULL
   #San_Francisco
 
   origins <- list()
