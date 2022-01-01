@@ -14,7 +14,7 @@
 #' directory in the format: "C:/.../folder".
 #' @param show.output (logical) To show the output.
 #' Default: \code{FALSE}
-#' @usage make_grids(poly, size = 200,
+#' @usage make_grids(poly, size = 250,
 #' show.output = FALSE, dir=NULL)
 #' @examples
 #' @details
@@ -25,10 +25,10 @@
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons over
 #' @importFrom rgdal writeOGR
-#' @importFrom terra linearUnits res
-#' @importFrom raster raster extent rast
+#' @importFrom terra linearUnits res rast
+#' @importFrom raster raster extent
 #' @export
-make_grids <- function(poly, size = 200, show.output = FALSE,
+make_grids <- function(poly, size = 250, show.output = FALSE,
                        dir=NULL){
 
   as_Spatial <- show.plot <- intersect_grid <- NULL
