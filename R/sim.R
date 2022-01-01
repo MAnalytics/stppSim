@@ -21,7 +21,7 @@
 #' peak. Default: \code{90}. This implies a seasonal cycle
 #' of 180 days.
 #' @param scale (an integer) For scaling point counts. Default: \code{1}
-#' #' @param poly (a list or dataframe) A list of spatial boundary
+#' @param poly (a list or dataframe) A list of spatial boundary
 #' coordinates within which the events are confined.
 #' @param npoints (an integer) Number of origins (points) to simulate
 #' @param p_ratio (an integer) The smaller of the
