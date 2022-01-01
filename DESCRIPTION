@@ -1,8 +1,9 @@
 Package: stppSim
 Type: Package
-Title: Spatial and Temporal point patterns Simulation for Social Science Research
+Title: Spatial and Temporal Point Patterns Simulation for Social Science Research
+Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
-    Meng Le Zhang [aut]
+  Meng Le Zhang [aut]
 Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
 Description: Developed for simulating geographical point patterns within a specified spatial
   and temporal configurations. The `stppSim` can be applied in a wide range of 
@@ -24,8 +25,11 @@ Imports:
   sf,
   rgdal,
   sp, 
-  terra
+  terra,
+  raster
 RoxygenNote: 7.1.1
 Suggests:
+    knitr,
+    rmarkdown
 
 
