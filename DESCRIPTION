@@ -23,7 +23,8 @@ Imports:
   utils,
   sf,
   rgdal,
-  sp
+  sp, 
+  terra
 RoxygenNote: 7.1.1
 Suggests:
 

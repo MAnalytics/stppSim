@@ -25,6 +25,8 @@
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons over
 #' @importFrom rgdal writeOGR
+#' @importFrom terra linearUnits res
+#' @importFrom raster raster extent rast
 #' @export
 make_grids <- function(poly, size = 200, show.output = FALSE,
                        dir=NULL){
@@ -47,7 +49,23 @@ make_grids <- function(poly, size = 200, show.output = FALSE,
 
   area_B <- poly
 
-  #check if polygon has the required 'crs'
+  #retrieve crs of polygon and test if
+  #crs is cartesian
+  #need to convert to spatvector class first.
+  area_B.raster <- raster()
+  #Use extent (from raster package) to read
+  #bounds of vector and assign to the raster:
+  extent(area_B.raster) <- extent(area_B)
+  crs(area_B.raster) <- proj4string(area_B)
+  res(area_B.raster) <- size * 2 #doubling to help fast computation
+  #now rasterize
+  area_B.raster.r <- rast(area_B.raster)
+  #now convert spatvector
+  crstype <- linearUnits(area_B.raster.r) #returns zero if in wgs84
+
+  if(crstype == 0){
+    stop("Boundary NOT in linear unit! Operation terminated!!")
+  }
 
   #get coordinates
   proj_Coods <- proj4string(area_B)
