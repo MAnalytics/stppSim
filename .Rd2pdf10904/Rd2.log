@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  31 DEC 2021 20:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  1 JAN 2022 00:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/monsu/Documents/GitHub/stppSim/.Rd2pdf10736/Rd2.tex
-(C:/Users/monsu/Documents/GitHub/stppSim/.Rd2pdf10736/Rd2.tex
+**C:/Users/monsu/Documents/GitHub/stppSim/.Rd2pdf10904/Rd2.tex
+(C:/Users/monsu/Documents/GitHub/stppSim/.Rd2pdf10904/Rd2.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22>
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/base\book.cls
@@ -377,14 +377,20 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 
 
 ]) (Rd2.aux)
-Package rerunfilecheck Info: File `Rd2.out' has not changed.
-(rerunfilecheck)             Checksum: 9D26A2914092FC09750B2AF7387D8D5B;1136.
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Rd2.out':
+(rerunfilecheck)             Before: D0C0488D240B65779FC1DD8D129B22E4;1069
+(rerunfilecheck)             After:  9D26A2914092FC09750B2AF7387D8D5B;1136.
  ) 
 Here is how much of TeX's memory you used:
- 9192 strings out of 478659
- 145310 string characters out of 2845919
- 442330 words of memory out of 3000000
- 27080 multiletter control sequences out of 15000+600000
+ 9191 strings out of 478659
+ 145301 string characters out of 2845919
+ 443346 words of memory out of 3000000
+ 27079 multiletter control sequences out of 15000+600000
  436376 words of font info for 60 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  77i,6n,79p,268b,510s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -399,9 +405,9 @@ KTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/monsu/AppData/Local/Programs
 /MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/monsu/AppData/Local/Programs
 /MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/monsu/AppData/Local/Programs
 /MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (8 pages, 124066 bytes).
+Output written on Rd2.pdf (8 pages, 123027 bytes).
 PDF statistics:
- 226 PDF objects out of 1000 (max. 8388607)
+ 222 PDF objects out of 1000 (max. 8388607)
  75 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
