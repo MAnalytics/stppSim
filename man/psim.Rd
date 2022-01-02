@@ -4,8 +4,17 @@
 \alias{psim}
 \title{Modeling of the Global Temporal Pattern}
 \usage{
-gtp(start_date = "01-01", trend = "stable",
-slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
+psim(
+  start_date,
+  trend,
+  slope,
+  first_s_peak,
+  scale,
+  poly,
+  npoints,
+  p_ratio,
+  show.plot
+)
 }
 \arguments{
 \item{start_date}{The start date of the study period.
