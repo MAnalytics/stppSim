@@ -25,13 +25,16 @@
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons over
 #' @importFrom rgdal writeOGR
-#' @importFrom terra linearUnits res rast
-#' @importFrom raster raster extent
+#' @importFrom terra linearUnits rast
+#' @importFrom raster raster extent res crs
 #' @export
 make_grids <- function(poly, size = 250, show.output = FALSE,
                        dir=NULL){
 
-  as_Spatial <- show.plot <- intersect_grid <- NULL
+  as_Spatial <- show.output <- intersect_grid <- NULL
+
+  extent <- crs <- res <- NULL
+
   # check the crs
   # check area..and minimum are specified..
 

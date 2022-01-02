@@ -4,7 +4,7 @@
 \alias{make_grids}
 \title{Make Square Grids System}
 \usage{
-make_grids(poly, size = 200,
+make_grids(poly, size = 250,
 show.output = FALSE, dir=NULL)
 }
 \arguments{
