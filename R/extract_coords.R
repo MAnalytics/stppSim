@@ -1,9 +1,10 @@
 #' @title Extracting coordinates of a polygon boundary
 #' @description Given a polygon object, the goal is to extract
 #' the coordinates of the edges of the boundary.
-#' @param poly (a spatialPolygons, spatialPolygonDataFrames).
+#' @param poly (a spatialPolygons, spatialPolygonDataFrames, or
+#' an "sf").
 #' The polygon object must be in a
-#' Cartesian coordinate system.
+#' Cartesian coordinate reference system.
 #' @usage extract_coords(poly)
 #' @examples
 #' @details
@@ -20,9 +21,14 @@ extract_coords <- function(poly){
 
     #check the geometry of the input
     if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                             "SpatialPolygons")){
+                             "SpatialPolygons", "sf")){
       stop(paste("Not the required object class!"))
     }
+
+  #convert to as_spatial and retain the crs
+  if(class(poly)[1] == "sf"){
+    poly <- as_Spatial(poly) #convert#poly<- nc
+  }
 
   #convert object class to simple feature (sf)
   poly2 <- st_as_sf(poly)
