@@ -7,9 +7,10 @@
 extract_coords(poly)
 }
 \arguments{
-\item{poly}{(a spatialPolygons, spatialPolygonDataFrames).
+\item{poly}{(a spatialPolygons, spatialPolygonDataFrames, or
+an "sf").
 The polygon object must be in a
-Cartesian coordinate system.}
+Cartesian coordinate reference system.}
 }
 \value{
 Returns the global temporal pattern
