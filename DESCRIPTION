@@ -1,4 +1,4 @@
-Package: stppsim
+Package: stppSim
 Type: Package
 Title: Spatial and Temporal Point Patterns Simulation for Social Science Research
 Version: 1.0.0
