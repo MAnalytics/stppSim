@@ -6,11 +6,13 @@
 \usage{
 psim(
   start_date,
+  poly,
+  s_threshold,
+  t_threshold,
   trend,
   slope,
   first_s_peak,
   scale,
-  poly,
   npoints,
   p_ratio,
   show.plot
@@ -23,6 +25,20 @@ the end date of the study period is set as \code{"12-31"} (i.e.
 31st December). A user can specify any start date in the
 format \code{"mm/dd"}. The end date is the next 365th day
 from the specified start date.}
+
+\item{poly}{(a list or dataframe) A list of spatial boundary
+coordinates (or shapefile) within which the events are confined.}
+
+\item{s_threshold}{(numeric) Spatial threshold value. The
+(assumed) spatial range within which events are
+re-generated (or repeated) by or around the same origin.
+Default: \code{250} (in the same linear unit as the \code{poly})}
+
+\item{t_threshold}{(character) The temporal threshold
+at which events are re-generated (or repeated) by
+the same origin.
+Default:\code{"daily"}. Other values are:
+\code{"weekly", "monthly"}.}
 
 \item{trend}{(a character) Specifying the direction of
 the global (linear) trend of the point process. Three options
@@ -40,9 +56,6 @@ peak. Default: \code{90}. This implies a seasonal cycle
 of 180 days.}
 
 \item{scale}{(an integer) For scaling point counts. Default: \code{1}}
-
-\item{poly}{(a list or dataframe) A list of spatial boundary
-coordinates within which the events are confined.}
 
 \item{npoints}{(an integer) Number of origins (points) to simulate}
 
