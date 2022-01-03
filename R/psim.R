@@ -4,7 +4,6 @@
 #' trend and the seasonality.
 #' @param poly (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
-#' The shapefile can be
 #' @param start_date The start date of the study period.
 #' Default value is `"01-01"` (i.e. January 1st). By default
 #' the end date of the study period is set as `"12-31"` (i.e.
@@ -52,30 +51,26 @@
 #' @export
 #'
 
-psim <- function(start_date, trend, s_threshold, slope, first_s_peak, scale,
-                 poly, npoints, p_ratio, show.plot){
+psim <- function(start_date, poly, s_threshold=50, t_threshold, trend, slope, first_s_peak, scale,
+                npoints, p_ratio, show.plot){
+
+  #simulate the global temporal pattern
+  gtp <- gtp(start_date = "01-01", trend = "stable",
+      slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
 
 
-  LevyWalker <- species(
-    state.RW() + state.CRW(0.99),
-    transitionMatrix(0.005, 0.02))
-
-  levy.walker <- (levy.walker + step_length) * 10 #p_range
-
-  sim <- simulate(LevyWalker, 200)
-  plot(sim, type="l", asp=1)
-
-  length(which(sim[,3]==1))
-
-
-   #simulate movement #750 * 10 = 7.5km covered in two hours in two days.
-  sim.lw.road <- simulate(levy.walker, 365,
-                          resist = landuse_map, coords = init)
-
-  #combine the date of occurence  mode(sim.lw.road)
-  sim.lw.road <- cbind(sim.lw.road, as.data.frame(start_Date))
-  colnames(sim.lw.road) <- c("x", "y", "state", "date")
-
+#
+  # length(which(sim[,3]==1))
+  #
+  #
+  #  #simulate movement #750 * 10 = 7.5km covered in two hours in two days.
+  # sim.lw.road <- simulate(levy.walker, 365,
+  #                         resist = landuse_map, coords = init)
+  #
+  # #combine the date of occurence  mode(sim.lw.road)
+  # sim.lw.road <- cbind(sim.lw.road, as.data.frame(start_Date))
+  # colnames(sim.lw.road) <- c("x", "y", "state", "date")
+  #
 
 
 }
