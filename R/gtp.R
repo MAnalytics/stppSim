@@ -8,6 +8,10 @@
 #' 31st December). A user can specify any start date in the
 #' format `"mm/dd"`. The end date is the next 365th day
 #' from the specified start date.
+#' @param t_resolution (character) The temporal resolution
+#' at which events are re-generated (or repeated). Specified in
+#' number of days. Default:\code{1} (currently the only option
+#' available).
 #' @param trend (a character) Specifying the direction of
 #' the global (linear) trend of the point process. Three options
 #' available are `"decreasing"`, `"stable"`,
@@ -34,10 +38,15 @@
 #'
 
 gtp <- function(start_date="01-01", trend="stable",
-                      slope = "NULL", first_s_peak = 90,
-                      scale = 1, show.plot =FALSE){
+                slope = "NULL", first_s_peak = 90,
+                t_resolution = 1, show.plot =FALSE){
 
   output <- list() #output object
+
+  #check the t resolution
+  if(t_resolution != 1){
+    stop("'t_resolution' needs to be '1'")
+  }
 
   #prepare date
   t1 <- as.Date(paste("2021", start_date, sep="-"))
@@ -46,7 +55,7 @@ gtp <- function(start_date="01-01", trend="stable",
 
   y <- 20 * cos(3 + 2 * pi * t/(2 * first_s_peak)) + 0.2 * sin(-1 * pi * t/15)
 
-  y <- y * scale
+  y <- y #* scale
 
   y <- (y + (-1 * min(y)))  #to remove negatives values and scale
 
