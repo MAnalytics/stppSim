@@ -20,22 +20,24 @@
 #' \code(Landscape Area/Number of origins * 100) for an unconstrained
 #' landscape. Users are encouraged to input a value that
 #' produce a desirable output.
-#'
-
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
-#' @usage gtp(start_date = "01-01", trend = "stable",
-#' slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
+#' @usage walker(n = 5, s_threshold = 250, step_length = 20,
+#' show.plot = FALSE)
 #' @examples
 #' @details
-#' @return Returns the global temporal pattern
+#' @return Returns a trace of walker's path, and the
+#' corresponding events.
 #' @references
-#' #https://online.stat.psu.edu/stat510/lesson/6/6.1
+#' #https://google.co.uk
+#' @importFrom dplyr select
+#' @importFrom SiMRiv species transitionMatrix
+#' state.CRW simulate
 #' @export
 #'
 
 walker <- function(n = 5, s_threshold = 250,
-                   t_threshold = "daily",
+                   step_length = 20,
                    show.plot = FALSE){
 
   Walker <- species(
@@ -45,25 +47,8 @@ walker <- function(n = 5, s_threshold = 250,
   #-6.25679 + 1.26863*log(n) is the
   #power regression that relate x and y (see 'calibra..R')
 
-  t_threshold <- 24 / 7
-
-
-  # #check
-  # if(!t_threshold %in% c("daily", "weekly", "monthly")){
-  #   stop("'t_threshold' can only be 'daily', 'weekly', or 'monthly' ")
-  # }
-  #
-  # #translate temporal threshold
-  # if(t_threshold == "daily"){
-  #   t_threshold <- 24
-  # } else if(t_threshold == "weekly"){
-  #   t_threshold <- 24 * 7
-  # } else {
-  #   t_threshold <- 24 * 30
-  # }
-
   #meaning 1-step/hrs
-  Walker <- (Walker + step_length) *s_threshold
+  Walker <- (Walker + step_length) * s_threshold
   sim <- simulate(Walker, 200)
   #200 (number of steps per origin)..
   #was used in the calibration
@@ -80,5 +65,11 @@ walker <- function(n = 5, s_threshold = 250,
          labels=sim_events_[,4], cex= 0.7, pos=3)
     }
 
+  colnames(sim_events_) <- c("x","y","yes","sn")
+
+  sim_events_ <- as.data.frame(sim_events_) %>%
+    select(sn, x, y)
+
+  return(sim_events_)
 
 }
