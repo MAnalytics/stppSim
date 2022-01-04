@@ -8,9 +8,12 @@
 #' a probability value (representing the intensity) at which
 #' the origin generates events in accordance with a specified
 #' Pareto ratio.
-#' @param bpoly (a spatialPolygonDataFrames) with a binary attribute
-#' field `class`, which includes values \code{1} and \code{0}, representing
-#' the active and non-active origins.
+#' @param bpoly (A dataframe or S4 object) A dataframe of X, Y
+#' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+#' "SpatialPolygons", or "sf") representing the boundary within which
+#' events are to be generated. Must include a field named `class`
+#' with entries \code{1's} and \code{0's} (i.e. binary) representing
+#' the active and non-active origins, respectively.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -46,6 +49,26 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     st_crs <- geom_sf <- scale_fill_hue <-
     scale_colour_brewer <- NULL
   #San_Francisco
+
+  #check the boundary type
+  if(isS4(bpoly)){
+    #check the geometry of the input
+    if(!class(bpoly)[1] %in% c("SpatialPolygonsDataFrame",
+                              "SpatialPolygons", "sf")){
+      stop(paste("Not the required object class!"))
+    }
+
+    #if simple feature is supplied
+    #convert to as_spatial and retain the crs
+    if(class(bpoly)[1] == "sf"){
+      bpoly <- as(bpoly, 'Spatial') #convert#poly<- nc
+    }
+
+    #extract coordinae list
+    bpoly <- extract_coords(bpoly)
+
+  }
+
 
   origins <- list()
 
