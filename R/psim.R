@@ -58,6 +58,13 @@ psim <- function(start_date, poly, s_threshold=50, t_threshold, trend, slope, fi
   gtp <- gtp(start_date = "01-01", trend = "stable",
       slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
 
+  #for 1 location
+  for(k in 1:length(gtp)){ #k<-1
+
+
+
+  }
+
 
 #
   # length(which(sim[,3]==1))
