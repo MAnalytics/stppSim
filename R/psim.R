@@ -14,11 +14,15 @@
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
 #' Default: \code{250} (in the same linear unit as the `poly`)
-#' @param t_threshold (character) The temporal threshold
-#' at which events are re-generated (or repeated) by
-#' the same origin.
 #' Default:\code{"daily"}. Other values are:
 #' \code{"weekly", "monthly"}.
+#' @param step_length (numeric) A maximum step taken at a time
+#' by a walker from one state to the next. Should be a fraction
+#' of the spatial units of the landscape. Default: half the size
+#' of the minimum spatial unit in a landscape
+#' (for a constraint landscape) or
+#' @param show.data (TRUE or FALSE) To show the output data
+#' Default is \code{FALSE}.
 #' @param trend (a character) Specifying the direction of
 #' the global (linear) trend of the point process. Three options
 #' available are `"decreasing"`, `"stable"`,
@@ -31,7 +35,6 @@
 #' @param first_s_peak Number of days before the first seasonal
 #' peak. Default: \code{90}. This implies a seasonal cycle
 #' of 180 days.
-#' @param scale (an integer) For scaling point counts. Default: \code{1}
 #' @param npoints (an integer) Number of origins (points) to simulate
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
@@ -39,8 +42,6 @@
 #' \code{30}. Valid inputs are \code{10}, \code{20},
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
-#' @param show.plot (TRUE or FALSE) To display plot showing
-#' points (origins).
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @examples
@@ -51,17 +52,27 @@
 #' @export
 #'
 
-psim <- function(start_date, poly, s_threshold=50, t_threshold, trend, slope, first_s_peak, scale,
-                npoints, p_ratio, show.plot){
+psim <- function(spo, start_date, s_threshold=50, show.data = TRUE, trend, slope, first_s_peak, scale,
+                npoints, p_ratio){
+  #
+  random_spo
 
   #simulate the global temporal pattern
   gtp <- gtp(start_date = "01-01", trend = "stable",
       slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
 
+  #simulate the event origins
+
+
   #for 1 location
   for(k in 1:length(gtp)){ #k<-1
 
+    walker_1 <- walker(n = gtp$data[k], s_threshold = s_threshold,
+           step_length = 20,
+           show.plot = FALSE)
 
+    #generate data for each location
+    lapply(1:5, function(x) x^2)
 
   }
 
