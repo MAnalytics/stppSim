@@ -4,8 +4,10 @@
 #' a probability value (representing the relative intensity) at which
 #' the origin generates events in accordance with a specified
 #' Pareto ratio.
-#' @param poly (a list or dataframe) A list of spatial boundary
-#' coordinates within which the events are confined.
+#' @param poly (A dataframe or S4 object) A dataframe of X, Y
+#' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+#' "SpatialPolygons", or "sf") representing the boundary within which
+#' events are to be generated.
 #' @param npoints (an integer) Number of origins (points) to simulate
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
@@ -29,6 +31,26 @@
 
 random_spo <- function(poly, npoints =  50, p_ratio = 30,
                         show.plot=FALSE){
+
+  #check the boundary type
+  if(isS4(poly)){
+    #check the geometry of the input
+    if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
+                            "SpatialPolygons", "sf")){
+      stop(paste("Not the required object class!"))
+    }
+
+    #if simple feature is supplied
+    #convert to as_spatial and retain the crs
+    if(class(poly)[1] == "sf"){
+      poly <- as(poly, 'Spatial') #convert#poly<- nc
+    }
+
+    #extract coordinae list
+    poly <- extract_coords(poly)
+
+  }
+
 
   origins <- list()
 
