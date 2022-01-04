@@ -31,7 +31,7 @@
 make_grids <- function(poly, size = 250, show.output = FALSE,
                        dir=NULL){
 
-  as_Spatial <- show.output <- intersect_grid <- NULL
+  show.output <- intersect_grid <- NULL
 
   extent <- crs <- res <- NULL
 
@@ -47,7 +47,7 @@ make_grids <- function(poly, size = 250, show.output = FALSE,
   #if simple feature is supplied
   #convert to as_spatial and retain the crs
   if(class(poly)[1] == "sf"){
-    poly <- as_Spatial(poly) #convert#poly<- nc
+    poly <- as(poly, 'Spatial') #convert#poly<- nc
   }
 
   area_B <- poly
