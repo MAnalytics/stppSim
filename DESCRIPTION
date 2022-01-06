@@ -26,7 +26,10 @@ Imports:
   rgdal,
   sp, 
   terra,
-  raster
+  raster,
+  SiMRiv,
+  ggplot2,
+  chron
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
