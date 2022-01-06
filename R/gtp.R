@@ -23,12 +23,10 @@
 #' (i.e. `stable`).
 #' @param first_s_peak Number of days before the first seasonal
 #' peak. Default: \code{90}. This implies a seasonal cycle
-#' of 180 days.
-#' @param scale (an integer) For scaling point counts. Default: \code{1}
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
-#' @usage gtp(start_date = "01-01", trend = "stable",
-#' slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
+#' @usage gtp(start_date = "01-01", t_resolution = 1, trend = "stable",
+#' slope = "NULL", first_s_peak=90, show.plot =FALSE)
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -37,9 +35,10 @@
 #' @export
 #'
 
-gtp <- function(start_date="01-01", trend="stable",
+gtp <- function(start_date="01-01", t_resolution = 1,
+                trend="stable",
                 slope = "NULL", first_s_peak = 90,
-                t_resolution = 1, show.plot =FALSE){
+                 show.plot =FALSE){
 
   output <- list() #output object
 
