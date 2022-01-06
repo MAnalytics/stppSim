@@ -7,8 +7,10 @@
 random_spo(poly, npoints, p_ratio, show.plot=FALSE)
 }
 \arguments{
-\item{poly}{(a list or dataframe) A list of spatial boundary
-coordinates within which the events are confined.}
+\item{poly}{(A dataframe or S4 object) A dataframe of X, Y
+coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+"SpatialPolygons", or "sf") representing the boundary within which
+events are to be generated.}
 
 \item{npoints}{(an integer) Number of origins (points) to simulate}
 

@@ -5,20 +5,24 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 psim(
+  spo,
   start_date,
-  poly,
-  s_threshold,
-  t_threshold,
+  s_threshold = 50,
+  step_length = 20,
+  show.data = TRUE,
   trend,
   slope,
   first_s_peak,
-  scale,
   npoints,
-  p_ratio,
-  show.plot
+  p_ratio
 )
 }
 \arguments{
+\item{spo}{(a list or dataframe) A list of spatial boundary
+coordinates (or shapefile) within which the events are confined.
+Should be generated using \code{random_spo} or \code{constrained_spo}
+function.}
+
 \item{start_date}{The start date of the study period.
 Default value is \code{"01-01"} (i.e. January 1st). By default
 the end date of the study period is set as \code{"12-31"} (i.e.
@@ -26,19 +30,21 @@ the end date of the study period is set as \code{"12-31"} (i.e.
 format \code{"mm/dd"}. The end date is the next 365th day
 from the specified start date.}
 
-\item{poly}{(a list or dataframe) A list of spatial boundary
-coordinates (or shapefile) within which the events are confined.}
-
 \item{s_threshold}{(numeric) Spatial threshold value. The
 (assumed) spatial range within which events are
 re-generated (or repeated) by or around the same origin.
-Default: \code{250} (in the same linear unit as the \code{poly})}
-
-\item{t_threshold}{(character) The temporal threshold
-at which events are re-generated (or repeated) by
-the same origin.
+Default: \code{250} (in the same linear unit as the \code{poly})
 Default:\code{"daily"}. Other values are:
 \code{"weekly", "monthly"}.}
+
+\item{step_length}{(numeric) A maximum step taken at a time
+by a walker from one state to the next. Should be a fraction
+of the spatial units of the landscape. Default: half the size
+of the minimum spatial unit in a landscape
+(for a constraint landscape) or}
+
+\item{show.data}{(TRUE or FALSE) To show the output data
+Default is \code{FALSE}.}
 
 \item{trend}{(a character) Specifying the direction of
 the global (linear) trend of the point process. Three options
@@ -55,8 +61,6 @@ Default value is \code{"NULL"} for the default trend
 peak. Default: \code{90}. This implies a seasonal cycle
 of 180 days.}
 
-\item{scale}{(an integer) For scaling point counts. Default: \code{1}}
-
 \item{npoints}{(an integer) Number of origins (points) to simulate}
 
 \item{p_ratio}{(an integer) The smaller of the
@@ -65,9 +69,6 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 \code{30}. Valid inputs are \code{10}, \code{20},
 \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 30\% dominant and 70\% non-dominant origins.}
-
-\item{show.plot}{(TRUE or False) To show the time series
-plot. Default is \code{FALSE}.}
 }
 \value{
 Returns the global temporal pattern

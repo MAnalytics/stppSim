@@ -4,8 +4,8 @@
 \alias{gtp}
 \title{Modeling of the Global Temporal Pattern}
 \usage{
-gtp(start_date = "01-01", trend = "stable",
-slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
+gtp(start_date = "01-01", t_resolution = 1, trend = "stable",
+slope = "NULL", first_s_peak=90, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{The start date of the study period.
@@ -14,6 +14,11 @@ the end date of the study period is set as \code{"12-31"} (i.e.
 31st December). A user can specify any start date in the
 format \code{"mm/dd"}. The end date is the next 365th day
 from the specified start date.}
+
+\item{t_resolution}{(character) The temporal resolution
+at which events are re-generated (or repeated). Specified in
+number of days. Default:\code{1} (currently the only option
+available).}
 
 \item{trend}{(a character) Specifying the direction of
 the global (linear) trend of the point process. Three options
@@ -27,10 +32,7 @@ Default value is \code{"NULL"} for the default trend
 (i.e. \code{stable}).}
 
 \item{first_s_peak}{Number of days before the first seasonal
-peak. Default: \code{90}. This implies a seasonal cycle
-of 180 days.}
-
-\item{scale}{(an integer) For scaling point counts. Default: \code{1}}
+peak. Default: \code{90}. This implies a seasonal cycle}
 
 \item{show.plot}{(TRUE or False) To show the time series
 plot. Default is \code{FALSE}.}

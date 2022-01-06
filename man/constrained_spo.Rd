@@ -9,9 +9,12 @@ constrained_spo(bpoly, p_ratio = 5,
 show.plot=FALSE)
 }
 \arguments{
-\item{bpoly}{(a spatialPolygonDataFrames) with a binary attribute
-field \code{class}, which includes values \code{1} and \code{0}, representing
-the active and non-active origins.}
+\item{bpoly}{(A dataframe or S4 object) A dataframe of X, Y
+coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+"SpatialPolygons", or "sf") representing the boundary within which
+events are to be generated. Must include a field named \code{class}
+with entries \code{1's} and \code{0's} (i.e. binary) representing
+the active and non-active origins, respectively.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio. For example, for a \code{20:80}
