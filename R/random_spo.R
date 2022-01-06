@@ -77,11 +77,14 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30,
                 rep("Dominant", no_of_dom))
   }
 
-  if((no_of_non_dom + no_of_dom) == npoints){
-    OriginType <- c(rep("Non-dominant", no_of_non_dom),
-                rep("Dominant", no_of_dom))
+  if(((no_of_non_dom + no_of_dom) != npoints)&((no_of_non_dom + no_of_dom) > npoints)){
+    stop("Process terminated! Increase the value of 'npoints'!")
   }
 
+  if((no_of_non_dom + no_of_dom) == npoints){
+    OriginType <- c(rep("Non-dominant", no_of_non_dom),
+                    rep("Dominant", no_of_dom))
+  }
 
   ran_points_prob <- data.frame(ran_points_prob,
                                 OriginType)
