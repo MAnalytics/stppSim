@@ -6,9 +6,9 @@
 #' which the spatial grid is to be overlaid. Needs to be in a
 #' cartesian CRS.
 #' @param size Square grid size to be generated.
+#' @param dir (character) Specifies the directory to
 #' To be in the same unit associated with the `poly` (e.g.
 #' metres, feets, etc.). Default: \code{200}.
-#' @param dir (character) Specifies the directory to
 #' export the output. Default is `NULL`, indicating the
 #' current working directory (cwd). A user can specify a different
 #' directory in the format: "C:/.../folder".
@@ -35,40 +35,9 @@ make_grids <- function(poly, size = 250, show.output = FALSE,
 
   extent <- crs <- res <- NULL
 
-  # check the crs
-  # check area..and minimum are specified..
-
-  #check the geometry of the input
-  if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                            "SpatialPolygons", "sf")){
-    stop(paste("Not the required object class!"))
-  }
-
-  #if simple feature is supplied
-  #convert to as_spatial and retain the crs
-  if(class(poly)[1] == "sf"){
-    poly <- as(poly, 'Spatial') #convert#poly<- nc
-  }
-
-  area_B <- poly
-
-  #retrieve crs of polygon and test if
-  #crs is cartesian
-  #need to convert to spatvector class first.
-  area_B.raster <- raster()
-  #Use extent (from raster package) to read
-  #bounds of vector and assign to the raster:
-  extent(area_B.raster) <- extent(area_B)
-  crs(area_B.raster) <- proj4string(area_B)
-  res(area_B.raster) <- size * 2 #doubling to help fast computation
-  #now rasterize
-  area_B.raster.r <- rast(area_B.raster)
-  #now convert spatvector
-  crstype <- linearUnits(area_B.raster.r) #returns zero if in wgs84
-
-  if(crstype == 0){
-    stop("Boundary NOT in linear unit! Operation terminated!!")
-  }
+  #-----
+  poly_tester(poly)
+  #-----
 
   #get coordinates
   proj_Coods <- proj4string(area_B)
