@@ -29,7 +29,7 @@
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage walker(n = 5, s_threshold = 250, step_length = 20,
-#' show.plot = FALSE)
+#' poly, coords=c(0,0), show.plot = FALSE)
 #' @examples
 #' @details
 #' @return Returns a trace of walker's path, and the
@@ -40,15 +40,14 @@
 #' @importFrom SiMRiv species transitionMatrix
 #' state.CRW simulate resistanceFromShape
 #' @importFrom chron chron
+#' @importFrom stats time
 #' @export
 
 walker <- function(n = 5, s_threshold = 250,
                    step_length = 20, poly, coords=c(0,0),
                    show.plot = FALSE){
 
-  points <- text <- sn <- x <- y <- NULL
-
-
+  points <- text <- sn <- x <- y <- X3 <- NULL
 
   #-----
   poly_tester(poly)
@@ -65,12 +64,15 @@ walker <- function(n = 5, s_threshold = 250,
   #create boundary
   landscape <- resistanceFromShape(poly, res = 20,
                                    buffer=15, background = 0.95, margin = 10)
+  #plot(landscape)
 
   #meaning 1-step/hrs
   Walker <- (Walker + step_length) * s_threshold
   sim <- simulate(Walker, time=200, resist = landscape, coords)#200 is the no of time.steps to be simulated
   #extract event locations
-  sim_events <- data.frame(sim) %>%
+  sim_events <- data.frame(sim)
+  colnames(sim_events) <- c("X1","X2","X3")
+  sim_events <- sim_events %>%
     filter(X3 == 1)
   #200 (number of steps per origin)..
   #was used in the calibration ##nrow(sim) ##length(which(sim[,3]==1))
@@ -78,7 +80,7 @@ walker <- function(n = 5, s_threshold = 250,
   #create hour sequence
   # hourly unit
   hm <- merge(0:23, seq(0, 0, by = 0))
-  hour_seq <- chron(time = paste(hm$x, ':', hm$y, ':', 0))
+  hour_seq <- chron(times. = paste(hm$x, ':', hm$y, ':', 0))
 
     #if event is present
     if(nrow(sim_events) >= 1){
