@@ -57,13 +57,17 @@
 #' @importFrom raster raster extent
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
+#' @importFrom dplyr mutate bind_rows
 #' @export
 #'
 
 psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_boundary, show.data = TRUE, trend, slope, first_s_peak,
                 npoints, p_ratio){
-  #
-  #spo <- random_spo(poly, npoints, p_ratio, show.plot=TRUE)#deal with showing plot later
+
+  #define global variables
+  x <- y <- NULL
+
+  #spo <- random_spo(poly, npoints=50, p_ratio, show.plot=TRUE)#deal with showing plot later
 
   #test spo object class
   if(spo$Class != "spo"){
@@ -89,6 +93,8 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_
   #each other)
 
 
+  #spo <- spo[2,]
+
   n = gtp$data
 
   stp_All <- NULL
@@ -96,10 +102,10 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_
   #to implement parallelizing later
 
   #loop though each location and simulate point
-  for(loc in 1:length(spo$origins$OriginType)){
+  for(loc in 1:length(spo$origins$OriginType)){ #loc<-2
     pp_allTime <- lapply(n, function(n)
       walker(n, s_threshold = s_threshold,
-             poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
+             poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
                       step_length = 20,
                       show.plot = FALSE))
 
@@ -120,16 +126,21 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_
     stp_All <- stp_All %>%
       bind_rows(pp_allTime)
 
+    #spatial and temporal tightness
+
+
     flush.console()
     print(loc)
   }
 
 # dev.new()
-# kk <- stp_All[1:20, c(3:4)]
+# kk <- stp_All[1:500000, c(3:4)]
 # kk <- bk_[1:20, c(3:4)]
 #
 #   plot(kk, type="l", asp=1, col="gray80")
 #   points(kk, col="red")
+#   ext <- extract_coords(camden_boundary)
+#   points(ext, col="black")
 #   text(sim_events_[,1], sim_events_[,2],
 #        labels=sim_events_[,4], cex= 0.7, pos=3)
 
