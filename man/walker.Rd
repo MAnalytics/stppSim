@@ -5,7 +5,7 @@
 \title{A landscape walker}
 \usage{
 walker(n = 5, s_threshold = 250, step_length = 20,
-show.plot = FALSE)
+poly, coords=c(0,0), show.plot = FALSE)
 }
 \arguments{
 \item{n}{(integer) The number of events
