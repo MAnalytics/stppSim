@@ -26,12 +26,12 @@
 #' Polygon Polygons over
 #' @importFrom rgdal writeOGR
 #' @importFrom terra linearUnits rast
-#' @importFrom raster raster extent res crs
+#' @importFrom raster raster extent<- res<- crs<-
 #' @export
 make_grids <- function(poly, size = 250, show.output = FALSE,
                        dir=NULL){
 
-  show.output <- intersect_grid <- NULL
+  show.output <- intersect_grid <- as <- NULL
 
   extent <- crs <- res <- NULL
 
