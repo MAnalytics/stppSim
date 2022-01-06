@@ -49,25 +49,12 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     scale_colour_brewer <- NULL
   #San_Francisco
 
-  #check the boundary type
-  if(isS4(bpoly)){
-    #check the geometry of the input
-    if(!class(bpoly)[1] %in% c("SpatialPolygonsDataFrame",
-                              "SpatialPolygons", "sf")){
-      stop(paste("Not the required object class!"))
-    }
+  #-----
+  poly_tester(bpoly)
+  #-----
 
-    #if simple feature is supplied
-    #convert to as_spatial and retain the crs
-    if(class(bpoly)[1] == "sf"){
-      bpoly <- as(bpoly, 'Spatial') #convert#poly<- nc
-    }
-
-    #extract coordinae list
-    bpoly <- extract_coords(bpoly)
-
-  }
-
+  #extract coordinae list
+  bpoly <- extract_coords(bpoly)
 
   origins <- list()
 
