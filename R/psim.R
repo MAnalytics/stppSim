@@ -127,6 +127,8 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_
       bind_rows(pp_allTime)
 
     #spatial and temporal tightness
+    stp_All_bb <- stp_All[]
+
 
 
     flush.console()
