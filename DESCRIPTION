@@ -8,9 +8,10 @@ Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
 Description: For generating artificial spatio-temporal 
   point patterns for use in Social Science research. Allows
   specified spatial and temporal signatures be integrated
-  with urban landscape configuration to build a ST point 
-  patterns/cloud for model evaluation. Potential application
-  areas include crime science and epidemiology.
+  with urban landscape configuration to build usable point 
+  patterns/cloud for model building, testing, and evaluation.
+  Notable potential application areas include 
+  crime science and epidemiology.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
