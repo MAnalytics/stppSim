@@ -20,6 +20,12 @@
 #' \code{Landscape Area/Number of origins * 100} for an unconstrained
 #' landscape. Users are encouraged to input a value that
 #' produce a desirable output.
+#' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
+#' `simple features`). A spatial polygon defining the boundary
+#' within which a walker walks.
+#' @param coords a vector of the form c(x, y) giving the
+#' initial coordinates of the walker (e.g. an origin).
+#' Default: \code{c(0,0)}.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage walker(n = 5, s_threshold = 250, step_length = 20,
@@ -32,15 +38,21 @@
 #' #https://google.co.uk
 #' @importFrom dplyr select filter
 #' @importFrom SiMRiv species transitionMatrix
-#' state.CRW simulate
+#' state.CRW simulate resistanceFromShape
 #' @importFrom chron chron
 #' @export
 
 walker <- function(n = 5, s_threshold = 250,
-                   step_length = 20,
+                   step_length = 20, poly, coords=c(0,0),
                    show.plot = FALSE){
 
   points <- text <- sn <- x <- y <- NULL
+
+
+
+  #-----
+  poly_tester(poly)
+  #-----
 
   Walker <- species(
   state.CRW(0.005) + state.CRW(0.99),
@@ -49,9 +61,14 @@ walker <- function(n = 5, s_threshold = 250,
   #-6.25679 + 1.26863*log(n) is the
   #power regression that relate x and y (see 'calibra..R')
 
+  #create the landscape resistance raster
+  #create boundary
+  landscape <- resistanceFromShape(poly, res = 20,
+                                   buffer=15, background = 0.95, margin = 10)
+
   #meaning 1-step/hrs
   Walker <- (Walker + step_length) * s_threshold
-  sim <- simulate(Walker, 200)
+  sim <- simulate(Walker, time=200, resist = landscape, coords)#200 is the no of time.steps to be simulated
   #extract event locations
   sim_events <- data.frame(sim) %>%
     filter(X3 == 1)
