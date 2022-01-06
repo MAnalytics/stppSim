@@ -29,7 +29,8 @@ Imports:
   raster,
   SiMRiv,
   ggplot2,
-  chron
+  chron,
+  data.table
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
