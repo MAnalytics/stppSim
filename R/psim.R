@@ -53,10 +53,14 @@
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
 #' @importFrom data.table rbindlist
+#' @importFrom SiMRiv resistanceFromShape
+#' @importFrom raster raster extent
+#' @importFrom sp proj4string
+#' @importFrom terra crs res linearUnits
 #' @export
 #'
 
-psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly, show.data = TRUE, trend, slope, first_s_peak,
+psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly=camden_boundary, show.data = TRUE, trend, slope, first_s_peak,
                 npoints, p_ratio){
   #
   #spo <- random_spo(poly, npoints, p_ratio, show.plot=TRUE)#deal with showing plot later
@@ -66,41 +70,24 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly, show.d
     stop("The 'spo' object is NOT an 'spo' Class!")
   }
 
+  #next, extract from the spo, the N x 2 matrix or dataframe giving the
+  #coordinates of the event origins (i.e. initial coordinates of the
+  #simulation)
+  coords <- spo$origins %>%
+    select(x, y)
+
   #simulate the global temporal pattern
   gtp <- gtp(start_date = "01-01", trend = "stable",
       slope = "NULL", first_s_peak=90, show.plot =FALSE)
 
 
-  #check the polygon type
-  #and create the boundary
-  if(isS4(poly)){
-    #check the geometry of the input
-    if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                              "SpatialPolygons", "sf")){
-      stop(paste("Not the required object class!"))
-    }
+  #-----
+  poly_tester(poly)
+  #-----
 
-    #if simple feature is supplied
-    #convert to as_spatial and retain the crs
-    if(class(poly)[1] == "sf"){
-      poly <- as(poly, 'Spatial') #convert#poly<- nc
-    }
+  #check if spo and poly covers the same location (or overlap
+  #each other)
 
-    #create boundary
-    landscape <- resistanceFromShape(poly, res = 5,
-                                       buffer=15, background = 0.95, margin = 10)
-    ####for(p in 1:length(prob_def)){#999999999999999999999 p<-1
-    plot(landuse_map)
-
-    # sim.lw.road <- simulate(levy.walker, 365,
-    #                         resist = landuse_map, coords = init)
-
-
-
-  }
-
-  #generate data for each location
-  #lapply(1:5, function(x) x^2)
 
   n = gtp$data
 
@@ -112,6 +99,7 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly, show.d
   for(loc in 1:length(spo$origins$OriginType)){
     pp_allTime <- lapply(n, function(n)
       walker(n, s_threshold = s_threshold,
+             poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
                       step_length = 20,
                       show.plot = FALSE))
 
@@ -125,9 +113,9 @@ psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly, show.d
 
     #append location id
     pp_allTime <- pp_allTime %>%
-      mutate(locid=loc, prob=spo$origins$prob[loc]) %>%
+      mutate(locid=loc, prob=spo$origins$prob[loc]) #%>%
       #append location id and pareto prob
-      mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
+      #mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
 
     stp_All <- stp_All %>%
       bind_rows(pp_allTime)
