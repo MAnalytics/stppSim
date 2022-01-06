@@ -32,7 +32,6 @@
 #' social configuration of the space
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
-#' @importFrom splancs csr
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
 #' @importFrom dplyr rename filter
@@ -43,7 +42,7 @@
 constrained_spo <- function(bpoly, p_ratio = 5,
                                       show.plot=FALSE){
 
-  Class <- filter <- head <- ggplot <- geom_point <-
+  Class <- as <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
     sdf <- mutate <- if_else <- st_set_crs <-
     st_crs <- geom_sf <- scale_fill_hue <-
@@ -126,7 +125,7 @@ constrained_spo <- function(bpoly, p_ratio = 5,
 
     #append pareto prob. values to random points
     #change to 'constr..'
-    ran_points_prob <- data.frame(cbind(xy,
+    const_points_prob <- data.frame(cbind(xy,
                          prob=prob_values_))
 
     no_of_non_dom <- round(nrow(xy)*(100-p_ratio)/100, digits=0)
@@ -136,18 +135,18 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     #check to ensure that the total adds up
     if((no_of_non_dom + no_of_dom) < nrow(xy)){
       no_of_non_dom <- no_of_non_dom + 1
-      Origins <- c(rep("Non-dominant", no_of_non_dom),
+      OriginType <- c(rep("Non-dominant", no_of_non_dom),
                    rep("Dominant", no_of_dom))
     }
 
     if((no_of_non_dom + no_of_dom) == nrow(xy)){
-      Origins <- c(rep("Non-dominant", no_of_non_dom),
+      OriginType <- c(rep("Non-dominant", no_of_non_dom),
                    rep("Dominant", no_of_dom))
     }
 
 
-    ran_points_prob <- data.frame(ran_points_prob,
-                                  Origins)
+    const_points_prob <- data.frame(const_points_prob,
+                                    OriginType)
 
     #if(show.plot==TRUE){
 
@@ -158,12 +157,12 @@ constrained_spo <- function(bpoly, p_ratio = 5,
     # plot(data.frame(poly)$x, data.frame(poly)$y)
     # plot(hull$x, hull$y)
 
-    # p <- ggplot(data = ran_points_prob) +
+    # p <- ggplot(data = const_points_prob) +
     #   geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
     #
     # ggplot(data = poly2) +
     #   geom_sf(aes(fill=c("red","green"))) +
-    #   geom_point(data = ran_points_prob,
+    #   geom_point(data = const_points_prob,
     #              aes(x = x, y = y),
     #              group = Origins, size = 5) +
     #   theme_minimal() +
@@ -184,7 +183,7 @@ constrained_spo <- function(bpoly, p_ratio = 5,
       ##scale_color_manual(name = "points", values = cols.sol)
 
 
-    my_sf <- ran_points_prob %>%
+    my_sf <- const_points_prob %>%
       st_as_sf(coords = c('x', 'y')) %>%
       st_set_crs(st_crs(poly3))
 
@@ -195,12 +194,13 @@ constrained_spo <- function(bpoly, p_ratio = 5,
           #scale_fill_hue(h = c(150, 80), aesthetics = "fill")+
           scale_fill_hue(h = c(150, 80), c = 100, l = 100) +
           #scale_fill_manual(values=cbPalette)+
-          geom_sf(data = my_sf, aes(colour = Origins)) + #, show.legend = "point"
+          geom_sf(data = my_sf, aes(colour = OriginType)) + #, show.legend = "point"
           scale_colour_brewer(palette = "Set1")+
           theme_bw()
     }
 
-    origins$origins <- ran_points_prob
+    origins$origins <- const_points_prob
+    origins$Class <- "spo"
 
     #Given event count at a temporal bin,
     #simulate walkers to generate the number of event
