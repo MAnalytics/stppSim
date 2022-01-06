@@ -18,6 +18,9 @@
 #' @export
 
 poly_tester <- function(poly=camden_boundary){
+
+  as <- NULL
+
 #check the polygon type
 #and create the boundary
     if(isS4(poly)){
