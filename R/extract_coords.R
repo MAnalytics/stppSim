@@ -17,7 +17,7 @@
 
 extract_coords <- function(poly){
 
-  X <- Y <- NULL
+  X <- Y <- as <- asNULL <- NULL
 
     #check the geometry of the input
     if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
@@ -27,7 +27,7 @@ extract_coords <- function(poly){
 
   #convert to as_spatial and retain the crs
   if(class(poly)[1] == "sf"){
-    poly <- as_Spatial(poly) #convert#poly<- nc
+    poly <- as(poly, 'Spatial') #convert#poly<- nc
   }
 
   #convert object class to simple feature (sf)
