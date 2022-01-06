@@ -39,24 +39,11 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30,
     slice <- chull <- x <- y <- ggplot <- geom_point <-
     aes <- geom_polygon <- NULL
 
-  #check the boundary type
-  if(isS4(poly)){
-    #check the geometry of the input
-    if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                            "SpatialPolygons", "sf")){
-      stop(paste("Not the required object class!"))
-    }
+  #-----
+  poly_tester(poly)
+  #-----
 
-    #if simple feature is supplied
-    #convert to as_spatial and retain the crs
-    if(class(poly)[1] == "sf"){
-      poly <- as(poly, 'Spatial') #convert#poly<- nc
-    }
-
-    #extract coordinae list
-    poly <- extract_coords(poly)
-
-  }
+  poly <- extract_coords(poly)
 
   origins <- list()
 
