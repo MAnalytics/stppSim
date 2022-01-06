@@ -2,8 +2,10 @@
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
-#' @param poly (a list or dataframe) A list of spatial boundary
+#' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
+#' Should be generated using `random_spo` or `constrained_spo`
+#' function.
 #' @param start_date The start date of the study period.
 #' Default value is `"01-01"` (i.e. January 1st). By default
 #' the end date of the study period is set as `"12-31"` (i.e.
@@ -21,6 +23,9 @@
 #' of the spatial units of the landscape. Default: half the size
 #' of the minimum spatial unit in a landscape
 #' (for a constraint landscape) or
+#' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
+#' `simple features`). A spatial polygon defining the boundary
+#' within which events are to be generated.
 #' @param show.data (TRUE or FALSE) To show the output data
 #' Default is \code{FALSE}.
 #' @param trend (a character) Specifying the direction of
@@ -42,53 +47,104 @@
 #' \code{30}. Valid inputs are \code{10}, \code{20},
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
-#' @param show.plot (TRUE or False) To show the time series
-#' plot. Default is \code{FALSE}.
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
+#' @importFrom data.table rbindlist
 #' @export
 #'
 
-psim <- function(spo, start_date, s_threshold=50, show.data = TRUE, trend, slope, first_s_peak, scale,
+psim <- function(spo, start_date, s_threshold=50, step_length = 20, poly, show.data = TRUE, trend, slope, first_s_peak,
                 npoints, p_ratio){
   #
-  random_spo
+  #spo <- random_spo(poly, npoints, p_ratio, show.plot=TRUE)#deal with showing plot later
+
+  #test spo object class
+  if(spo$Class != "spo"){
+    stop("The 'spo' object is NOT an 'spo' Class!")
+  }
 
   #simulate the global temporal pattern
   gtp <- gtp(start_date = "01-01", trend = "stable",
-      slope = "NULL", first_s_peak=90, scale = 1, show.plot =FALSE)
-
-  #simulate the event origins
+      slope = "NULL", first_s_peak=90, show.plot =FALSE)
 
 
-  #for 1 location
-  for(k in 1:length(gtp)){ #k<-1
+  #check the polygon type
+  #and create the boundary
+  if(isS4(poly)){
+    #check the geometry of the input
+    if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
+                              "SpatialPolygons", "sf")){
+      stop(paste("Not the required object class!"))
+    }
 
-    walker_1 <- walker(n = gtp$data[k], s_threshold = s_threshold,
-           step_length = 20,
-           show.plot = FALSE)
+    #if simple feature is supplied
+    #convert to as_spatial and retain the crs
+    if(class(poly)[1] == "sf"){
+      poly <- as(poly, 'Spatial') #convert#poly<- nc
+    }
 
-    #generate data for each location
-    lapply(1:5, function(x) x^2)
+    #create boundary
+    landscape <- resistanceFromShape(poly, res = 5,
+                                       buffer=15, background = 0.95, margin = 10)
+    ####for(p in 1:length(prob_def)){#999999999999999999999 p<-1
+    plot(landuse_map)
+
+    # sim.lw.road <- simulate(levy.walker, 365,
+    #                         resist = landuse_map, coords = init)
+
+
 
   }
 
+  #generate data for each location
+  #lapply(1:5, function(x) x^2)
 
+  n = gtp$data
+
+  stp_All <- NULL
+
+  #to implement parallelizing later
+
+  #loop though each location and simulate point
+  for(loc in 1:length(spo$origins$OriginType)){
+    pp_allTime <- lapply(n, function(n)
+      walker(n, s_threshold = s_threshold,
+                      step_length = 20,
+                      show.plot = FALSE))
+
+    #collapse list
+    pp_allTime <- rbindlist(pp_allTime,
+                            use.names=TRUE, fill=TRUE, idcol="tid")
+
+    # if(loc==1){
+    #   bk_ <- pp_allTime
+    # }
+
+    #append location id
+    pp_allTime <- pp_allTime %>%
+      mutate(locid=loc, prob=spo$origins$prob[loc]) %>%
+      #append location id and pareto prob
+      mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
+
+    stp_All <- stp_All %>%
+      bind_rows(pp_allTime)
+
+    flush.console()
+    print(loc)
+  }
+
+# dev.new()
+# kk <- stp_All[1:20, c(3:4)]
+# kk <- bk_[1:20, c(3:4)]
 #
-  # length(which(sim[,3]==1))
-  #
-  #
-  #  #simulate movement #750 * 10 = 7.5km covered in two hours in two days.
-  # sim.lw.road <- simulate(levy.walker, 365,
-  #                         resist = landuse_map, coords = init)
-  #
-  # #combine the date of occurence  mode(sim.lw.road)
-  # sim.lw.road <- cbind(sim.lw.road, as.data.frame(start_Date))
-  # colnames(sim.lw.road) <- c("x", "y", "state", "date")
-  #
+#   plot(kk, type="l", asp=1, col="gray80")
+#   points(kk, col="red")
+#   text(sim_events_[,1], sim_events_[,2],
+#        labels=sim_events_[,4], cex= 0.7, pos=3)
+
 
 
 }
