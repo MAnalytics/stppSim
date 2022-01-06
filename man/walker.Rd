@@ -25,6 +25,14 @@ of the minimum spatial unit in a landscape
 landscape. Users are encouraged to input a value that
 produce a desirable output.}
 
+\item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
+\verb{simple features}). A spatial polygon defining the boundary
+within which a walker walks.}
+
+\item{coords}{a vector of the form c(x, y) giving the
+initial coordinates of the walker (e.g. an origin).
+Default: \code{c(0,0)}.}
+
 \item{show.plot}{(TRUE or False) To show the time series
 plot. Default is \code{FALSE}.}
 }

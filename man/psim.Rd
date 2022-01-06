@@ -9,6 +9,7 @@ psim(
   start_date,
   s_threshold = 50,
   step_length = 20,
+  poly = camden_boundary,
   show.data = TRUE,
   trend,
   slope,
@@ -42,6 +43,10 @@ by a walker from one state to the next. Should be a fraction
 of the spatial units of the landscape. Default: half the size
 of the minimum spatial unit in a landscape
 (for a constraint landscape) or}
+
+\item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
+\verb{simple features}). A spatial polygon defining the boundary
+within which events are to be generated.}
 
 \item{show.data}{(TRUE or FALSE) To show the output data
 Default is \code{FALSE}.}
