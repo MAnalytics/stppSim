@@ -26,11 +26,18 @@
 #' @importFrom splancs csr
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
+#' @importFrom ggplot2 ggplot geom_point
+#' geom_polygon theme_bw
 #' @export
 #'
 
 random_spo <- function(poly, npoints =  50, p_ratio = 30,
                         show.plot=FALSE){
+
+  flush.console <- as <- select <- prob <- theme <- theme_bw <-
+    theme_light <- element_text <-
+    slice <- chull <- x <- y <- ggplot <- geom_point <-
+    aes <- geom_polygon <- NULL
 
   #check the boundary type
   if(isS4(poly)){
@@ -51,16 +58,13 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30,
 
   }
 
-
   origins <- list()
 
-  flush.console <- select <- prob <- theme_bw<-
-    slice <- chull <- x <- y <- ggplot <- geom_point <-
-    aes <- geom_polygon <- NULL
+
 
   set.seed(1234)
   #generate random pints inside the boundary
-  ran_points <- as.data.frame(csr(poly, npoints))
+  ran_points <- as.data.frame(csr(as.matrix(poly,,2), npoints))
   colnames(ran_points) <- c("x", "y")
   #points(ran_points$x,ran_points$y)
 
@@ -82,18 +86,18 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30,
   #check to ensure that the total adds up
   if((no_of_non_dom + no_of_dom) < npoints){
     no_of_non_dom <- no_of_non_dom + 1
-    Origins <- c(rep("Non-dominant", no_of_non_dom),
+    OriginType <- c(rep("Non-dominant", no_of_non_dom),
                 rep("Dominant", no_of_dom))
   }
 
   if((no_of_non_dom + no_of_dom) == npoints){
-    Origins <- c(rep("Non-dominant", no_of_non_dom),
+    OriginType <- c(rep("Non-dominant", no_of_non_dom),
                 rep("Dominant", no_of_dom))
   }
 
 
   ran_points_prob <- data.frame(ran_points_prob,
-                                Origins)
+                                OriginType)
 
   #if(show.plot==TRUE){
 
@@ -104,20 +108,22 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30,
     # plot(hull$x, hull$y)
 
     p <- ggplot(data = ran_points_prob) +
-      geom_point(mapping = aes(x = x, y = y, colour = Origins))#+
+      geom_point(mapping = aes(x = x, y = y, colour = OriginType))#+
 
-    #flush.console()
 
     if(show.plot==TRUE){
-    p + geom_polygon(data = hull%>%select(x,y),
-                     aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9)+
-      theme_bw()
-    }
+      flush.console()
+      p + geom_polygon(data = hull%>%select(x,y),
+                     aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+        theme_light()
+     }
 
   #}
 
   origins$origins <- ran_points_prob
-  #origins$plot <- p
+  origins$plot <- p
+  origins$Class <- "spo"
   #Given event count at a temporal bin,
   #simulate walkers to generate the number of event
   #count
