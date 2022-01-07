@@ -17,7 +17,7 @@
 #' @importFrom terra crs res linearUnits
 #' @export
 
-poly_tester <- function(poly=camden_boundary){
+poly_tester <- function(poly){
 
   as <- NULL
 
