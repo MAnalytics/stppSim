@@ -33,7 +33,8 @@ Imports:
   SiMRiv,
   ggplot2,
   chron,
-  data.table
+  data.table,
+  tibble
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
