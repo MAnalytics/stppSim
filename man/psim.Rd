@@ -11,7 +11,7 @@ psim(
   s_threshold = 50,
   st_skewness = 0.5,
   step_length = 20,
-  poly = camden_boundary,
+  poly,
   show.data = TRUE,
   trend,
   slope,
