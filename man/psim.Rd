@@ -5,9 +5,11 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 psim(
+  n,
   spo,
   start_date,
   s_threshold = 50,
+  st_skewness = 0.5,
   step_length = 20,
   poly = camden_boundary,
   show.data = TRUE,
@@ -19,6 +21,8 @@ psim(
 )
 }
 \arguments{
+\item{n}{(integer) Total Number of events to simulate.}
+
 \item{spo}{(a list or dataframe) A list of spatial boundary
 coordinates (or shapefile) within which the events are confined.
 Should be generated using \code{random_spo} or \code{constrained_spo}
@@ -37,6 +41,12 @@ re-generated (or repeated) by or around the same origin.
 Default: \code{250} (in the same linear unit as the \code{poly})
 Default:\code{"daily"}. Other values are:
 \code{"weekly", "monthly"}.}
+
+\item{st_skewness}{(numeric) The tightness of events in space and time.
+The value ranges from \code{0 - 1}, with event
+volume being skewed towards the dominant origins, as the value tends
+to \code{1}. Default: \code{0.5}. This index also controls the
+total volume of events across space and time.}
 
 \item{step_length}{(numeric) A maximum step taken at a time
 by a walker from one state to the next. Should be a fraction
