@@ -64,11 +64,12 @@
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
 #' @importFrom dplyr mutate bind_rows
+#' @importFrom tibble rownames_to_column
 #' @export
 #'
 
 psim <- function(n, spo, start_date, s_threshold=50, st_skewness = 0.5,
-                 step_length = 20, poly=camden_boundary, show.data = TRUE,
+                 step_length = 20, poly, show.data = TRUE,
                  trend, slope, first_s_peak, npoints, p_ratio){
 
   #test for n value
