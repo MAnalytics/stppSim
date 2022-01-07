@@ -2,6 +2,7 @@
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
+#' @param n (integer) Total Number of events to simulate.
 #' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
 #' Should be generated using `random_spo` or `constrained_spo`
@@ -66,8 +67,14 @@
 #' @export
 #'
 
-psim <- function(spo, start_date, s_threshold=50, st_skewness = 0.5, step_length = 20, poly=camden_boundary, show.data = TRUE, trend, slope, first_s_peak,
-                npoints, p_ratio){
+psim <- function(n, spo, start_date, s_threshold=50, st_skewness = 0.5,
+                 step_length = 20, poly=camden_boundary, show.data = TRUE,
+                 trend, slope, first_s_peak, npoints, p_ratio){
+
+  #test for n value
+  #-----------------------------
+
+  #-----------------------------
 
   #define global variables
   x <- y <- NULL
@@ -124,7 +131,8 @@ psim <- function(spo, start_date, s_threshold=50, st_skewness = 0.5, step_length
 
     #append location id
     pp_allTime <- pp_allTime %>%
-      mutate(locid=loc, prob=spo$origins$prob[loc]) #%>%
+      mutate(locid=loc, prob=spo$origins$prob[loc],
+             OriginType = spo$origins$OriginType[loc]) #%>%
       #append location id and pareto prob
       #mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
 
@@ -137,110 +145,20 @@ psim <- function(spo, start_date, s_threshold=50, st_skewness = 0.5, step_length
   }
 
 
-  #select a uniform % from each group
-  mtcars %>%
-    arrange(cyl)%>%
-    group_by(cyl) %>%
-    mutate(n=n())%>%
-    data.frame()%>%
-    group_by(cyl)%>%
-    slice_sample(prop = 0.5, replace = FALSE) %>%#select 50%
-    arrange(cyl)
+  #length(which(stp_All$OriginType == "Dominant"))
+  #length(which(stp_All$OriginType == "Non-dominant"))
+
 
   #spatial and temporal tightness
-  stp_All %>%
-    group_by()
+  stp_All_ <- stp_All %>%
+    rownames_to_column('ID') #%>% #add row as column
 
+  #sample
+  samp_idx <- as.numeric(sample(stp_All_$ID, size = n, replace = FALSE, prob = stp_All_$prob)) #%>
 
+  stp_All_ <- stp_All_[samp_idx, ]
+
+  #length(which(stp_All_$OriginType == "Dominant"))
+  #length(which(stp_All_$OriginType == "Non-dominant"))
 
 }
-
-# dev.new()
-# kk <- stp_All[1:500000, c(3:4)]
-# kk <- bk_[1:20, c(3:4)]
-#
-#   plot(kk, type="l", asp=1, col="gray80")
-#   points(kk, col="red")
-#   ext <- extract_coords(camden_boundary)
-#   points(ext, col="black")
-#   text(sim_events_[,1], sim_events_[,2],
-#        labels=sim_events_[,4], cex= 0.7, pos=3)
-
-
-#spatial and temporal tightness
-stp_All_bb <- stp_All
-
-#stp_All_bb %>%
-
-library(dplyr)
-
-group<-c(1,1,1,1,2,2,2)
-prob<-c(0.22,0.22,0.1,0.11,0.24,0.32,0.93)
-var1<-c('aa','ab','ac','ba','bb','ca','ce')
-var2<-c('aaa','aba','aca','baa','bba','caa','cba')
-var3<-c('aab','abb','acb','bab','bbb','cab','ceb')
-data<-data.frame(group,prob,var1,var2,var3)
-data
-
-
-mtcars %>%
-  group_by(cyl) %>%
-  do(sample_n(.,2))
-
-
-data %>%
-  group_by(group)%>%
-  mutate(n=n())%>% #per grp
-  filter(sample_n(data, size = 5, weight = group))
-
-
-
-
-
-
-
-probs <- data.frame(
-  group=rep(c(1,2,3), each=4),
-  metric=rep(rep(c("A", "B"), each=2), each=1),
-  measurement=rep(c("HI", "LO"), 6),
-  probability=c(0.8,0.2,0.5,0.5,0.7,0.3,0.4,0.6,0.1,0.9,0.05,0.95)
-)
-
-
-probs %>%
-  tibble::rownames_to_column('ID')%>%
-  mutate(ids=paste(group, ID, sep=""))%>%
-  group_by(group) %>%
-  mutate(sample(ids, size = 2, replace = TRUE, prob = probability)) #
-
-
-
-
-
-data <- data.frame(
-  group=sample(c(1,2), size=12, replace=TRUE),
-  metric=sample(c("A", "B"), replace=TRUE, size=12),
-  measurement=NA  # To be sampled
-)
-
-
-probs %>%
-  group_by(group,metric) %>%
-  mutate(sim_meas = sample(measurement, size = 1, replace = TRUE, prob = probability)) #
-
-
-
-
-
-#solutionl: function that sample by group, by metric
-sim_meas <- function(x,y){
-  bb <- probs %>%
-    group_by(group,metric) %>%
-    mutate(sim_meas = sample(measurement, size = 1, replace = TRUE, prob = probability)) #%>%
-    #filter(group == x & metric == y)
-  return(bb$sim_meas[1])
-}
-
-data$measurement <- apply(data,1,function(x) sim_meas(x[1],x[2]))
-
-
