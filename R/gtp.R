@@ -35,10 +35,8 @@
 #' @export
 #'
 
-gtp <- function(start_date="01-01", t_resolution = 1,
-                trend="stable",
-                slope = "NULL", first_s_peak = 90,
-                 show.plot =FALSE){
+gtp <- function(start_date = "01-01", t_resolution = 1, trend = "stable",
+                slope = "NULL", first_s_peak = 90,show.plot = FALSE){
 
   output <- list() #output object
 
