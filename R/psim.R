@@ -23,10 +23,12 @@
 #' total volume of events across space and time.
 #' @param show.data (TRUE or FALSE) To show the output data
 #' Default is \code{FALSE}.
-#' @param ... additional arguments to pass from both the
-#' \code{gtp} and \code{walker} functions. The latter is
-#' utilized to define the properties of all the event
-#' generators across the landscape.
+#' @param ... additional arguments to pass from
+#' \code{gtp} and \code{walker} functions. Arguments from
+#' \code{gtp} can be used to define the nature of the
+#' temporal trend and pattern over time, while arguments
+#' from \code{walker} can be utilized to define the properties
+#' of event generators (walkers) across the landscape.
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -139,6 +141,19 @@ psim <- function(n_events, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #length(which(stp_All_$OriginType == "Dominant"))
   #length(which(stp_All_$OriginType == "Non-dominant"))
 
+  #-------------------------------------------
+  #Temporal trend and patterns
+  #stp_All_ %>%
+
+  #spatial patterns
+
+  #optimal spatial bandwidth
+
+  #optimal temporal bandwidth
+
+  #combine and add as details
+  #@data
+  #-------------------------------------------
   return(stp_All_)
 
 }
