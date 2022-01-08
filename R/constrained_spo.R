@@ -1,5 +1,5 @@
 #' @title Simulate spatial point origins constrained
-#' by the social configuration of the urban space.
+#' by the landscape (use) configuration of the urban space.
 #' @description Simulate event origins (EOs) on a land use map
 #' (contrained space) with binary classes \code{1} and \code{0}, representing
 #' active and non-active origins. An `active` origin can
@@ -39,8 +39,7 @@
 #' @export
 #'
 
-constrained_spo <- function(bpoly, p_ratio = 5,
-                                      show.plot=FALSE){
+constrained_spo <- function(bpoly, p_ratio = 5, show.plot = FALSE){
 
   Class <- as <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
