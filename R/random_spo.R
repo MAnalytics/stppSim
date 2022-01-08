@@ -31,8 +31,7 @@
 #' @export
 #'
 
-random_spo <- function(poly, npoints =  50, p_ratio = 30,
-                        show.plot=FALSE){
+random_spo <- function(poly, npoints =  50, p_ratio = 30, show.plot=FALSE){
 
   flush.console <- as <- select <- prob <- theme <- theme_bw <-
     theme_light <- element_text <-
