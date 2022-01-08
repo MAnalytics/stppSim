@@ -19,7 +19,7 @@
 #' @importFrom magrittr %>%
 #' @export
 
-p_prob <- function(npoints =  50, p_ratio = 30){
+p_prob <- function(npoints = 50, p_ratio = 30){
 
   mutate <- area <- total <-  NULL
 
