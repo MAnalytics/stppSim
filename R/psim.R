@@ -1,18 +1,15 @@
+#' @include gtp.R
+#' @include walker.R
+#'
 #' @title Modeling of the Global Temporal Pattern
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
-#' @param n (integer) Total Number of events to simulate.
+#' @param n_events (integer) Total Number of events to simulate.
 #' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
 #' Should be generated using `random_spo` or `constrained_spo`
 #' function.
-#' @param start_date The start date of the study period.
-#' Default value is `"01-01"` (i.e. January 1st). By default
-#' the end date of the study period is set as `"12-31"` (i.e.
-#' 31st December). A user can specify any start date in the
-#' format `"mm/dd"`. The end date is the next 365th day
-#' from the specified start date.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
@@ -24,35 +21,12 @@
 #' volume being skewed towards the dominant origins, as the value tends
 #' to \code{1}. Default: \code{0.5}. This index also controls the
 #' total volume of events across space and time.
-#' @param step_length (numeric) A maximum step taken at a time
-#' by a walker from one state to the next. Should be a fraction
-#' of the spatial units of the landscape. Default: half the size
-#' of the minimum spatial unit in a landscape
-#' (for a constraint landscape) or
-#' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
-#' `simple features`). A spatial polygon defining the boundary
-#' within which events are to be generated.
 #' @param show.data (TRUE or FALSE) To show the output data
 #' Default is \code{FALSE}.
-#' @param trend (a character) Specifying the direction of
-#' the global (linear) trend of the point process. Three options
-#' available are `"decreasing"`, `"stable"`,
-#' and `"increasing"` trends. Default: `"stable"`.
-#' @param slope (a character) Slope angle for an
-#' "increasing" or "decreasing" trend. Two options
-#' are available: `"gentle"` and `"steep"`.
-#' Default value is \code{"NULL"} for the default trend
-#' (i.e. `stable`).
-#' @param first_s_peak Number of days before the first seasonal
-#' peak. Default: \code{90}. This implies a seasonal cycle
-#' of 180 days.
-#' @param npoints (an integer) Number of origins (points) to simulate
-#' @param p_ratio (an integer) The smaller of the
-#' two terms of a Pareto ratio. For example, for a \code{20:80}
-#' ratio, `p_ratio` will be \code{20}. Default value is
-#' \code{30}. Valid inputs are \code{10}, \code{20},
-#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-#' 30% dominant and 70% non-dominant origins.
+#' @param ... additional arguments to pass from both the
+#' \code{gtp} and \code{walker} functions. The latter is
+#' utilized to define the properties of all the event
+#' generators across the landscape.
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -68,11 +42,14 @@
 #' @export
 #'
 
-psim <- function(n, spo, start_date, s_threshold=50, st_skewness = 0.5,
-                 step_length = 20, poly, show.data = TRUE,
-                 trend, slope, first_s_peak, npoints, p_ratio){
+psim <- function(n_events, spo, s_threshold=50,
+                 st_skewness = 0.5, ..., show.data=FALSE){
 
-  #test for n value
+  #global variables
+  first_s_peak <- poly <- show.plot <- slope <-
+    trend <- start_date <- NULL
+
+  #test for n_event value
   #-----------------------------
 
   #-----------------------------
@@ -94,8 +71,8 @@ psim <- function(n, spo, start_date, s_threshold=50, st_skewness = 0.5,
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date = "01-01", trend = "stable",
-      slope = "NULL", first_s_peak=90, show.plot =FALSE)
+  gtp <- gtp(start_date, trend, slope, first_s_peak,
+             show.plot)
 
 
   #-----
@@ -155,11 +132,13 @@ psim <- function(n, spo, start_date, s_threshold=50, st_skewness = 0.5,
     rownames_to_column('ID') #%>% #add row as column
 
   #sample
-  samp_idx <- as.numeric(sample(stp_All_$ID, size = n, replace = FALSE, prob = stp_All_$prob)) #%>
+  samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events, replace = FALSE, prob = stp_All_$prob)) #%>
 
   stp_All_ <- stp_All_[samp_idx, ]
 
   #length(which(stp_All_$OriginType == "Dominant"))
   #length(which(stp_All_$OriginType == "Non-dominant"))
+
+  return(stp_All_)
 
 }
