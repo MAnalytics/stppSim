@@ -37,5 +37,14 @@ RoxygenNote: 7.1.1
 Suggests:
     knitr,
     rmarkdown
-
-
+Collate: 
+    'constrained_spo.R'
+    'data.R'
+    'extract_coords.R'
+    'gtp.R'
+    'make_grids.R'
+    'p_prob.R'
+    'poly_tester.R'
+    'walker.R'
+    'psim.R'
+    'random_spo.R'
