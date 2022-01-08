@@ -2,10 +2,10 @@
 #' @description An object capable of walking
 #' across a constraint or unconstrained landscape
 #' landscape, in accordance with a specified
-#' spatial and temporal properties. The object
-#' may or may not generates event(s) while navigating
-#' across the landscape, based on an embedded
-#' transition matrix.
+#' spatial and temporal properties. An embedded
+#' transition matrix defines the movement
+#' characteristics of the walker and its likelihood
+#' to generate an event at any given location.
 #' @param n (integer) The number of events
 #' to be generated. Default: \code{5}.
 #' @param s_threshold (numeric) Spatial threshold value. The
@@ -43,9 +43,8 @@
 #' @importFrom stats time
 #' @export
 
-walker <- function(n = 5, s_threshold = 250,
-                   step_length = 20, poly, coords=c(0,0),
-                   show.plot = FALSE){
+walker <- function(n = 5, s_threshold = 250, step_length = 20,
+                   poly, coords = c(0,0), show.plot = FALSE){
 
   points <- text <- sn <- x <- y <- X3 <- NULL
 
