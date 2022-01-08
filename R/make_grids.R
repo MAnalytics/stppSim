@@ -28,8 +28,7 @@
 #' @importFrom terra linearUnits rast
 #' @importFrom raster raster extent<- res<- crs<-
 #' @export
-make_grids <- function(poly, size = 250, show.output = FALSE,
-                       dir=NULL){
+make_grids <- function(poly, size = 250, show.output = FALSE, dir = NULL){
 
   show.output <- intersect_grid <- as <- NULL
 
