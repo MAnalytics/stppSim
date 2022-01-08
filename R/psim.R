@@ -42,8 +42,8 @@
 #' @export
 #'
 
-psim <- function(n_events, spo, s_threshold=50,
-                 st_skewness = 0.5, ..., show.data=FALSE){
+psim <- function(n_events, spo, s_threshold = 50, st_skewness = 0.5, ...,
+                 show.data=FALSE){
 
   #global variables
   first_s_peak <- poly <- show.plot <- slope <-
