@@ -3,7 +3,7 @@
 \name{constrained_spo}
 \alias{constrained_spo}
 \title{Simulate spatial point origins constrained
-by the social configuration of the urban space.}
+by the landscape (use) configuration of the urban space.}
 \usage{
 constrained_spo(bpoly, p_ratio = 5,
 show.plot=FALSE)
