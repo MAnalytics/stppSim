@@ -44,10 +44,10 @@ corresponding events.
 An object capable of walking
 across a constraint or unconstrained landscape
 landscape, in accordance with a specified
-spatial and temporal properties. The object
-may or may not generates event(s) while navigating
-across the landscape, based on an embedded
-transition matrix.
+spatial and temporal properties. An embedded
+transition matrix defines the movement
+characteristics of the walker and its likelihood
+to generate an event at any given location.
 }
 \references{
 #https://google.co.uk

@@ -34,10 +34,10 @@ volume being skewed towards the dominant origins, as the value tends
 to \code{1}. Default: \code{0.5}. This index also controls the
 total volume of events across space and time.}
 
-\item{...}{a list of time units to be included in the duration and their
-amounts. Seconds, minutes, hours, days, weeks, months and years are
-supported. Durations of months and years assume that year consists of
-365.25 days.}
+\item{...}{additional arguments to pass from both the
+\code{gtp} and \code{walker} functions. The latter is
+utilized to define the properties of all the event
+generators across the landscape.}
 
 \item{show.data}{(TRUE or FALSE) To show the output data
 Default is \code{FALSE}.}
