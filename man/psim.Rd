@@ -5,35 +5,21 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 psim(
-  n,
+  n_events,
   spo,
-  start_date,
   s_threshold = 50,
   st_skewness = 0.5,
-  step_length = 20,
-  poly,
-  show.data = TRUE,
-  trend,
-  slope,
-  first_s_peak,
-  npoints,
-  p_ratio
+  ...,
+  show.data = FALSE
 )
 }
 \arguments{
-\item{n}{(integer) Total Number of events to simulate.}
+\item{n_events}{(integer) Total Number of events to simulate.}
 
 \item{spo}{(a list or dataframe) A list of spatial boundary
 coordinates (or shapefile) within which the events are confined.
 Should be generated using \code{random_spo} or \code{constrained_spo}
 function.}
-
-\item{start_date}{The start date of the study period.
-Default value is \code{"01-01"} (i.e. January 1st). By default
-the end date of the study period is set as \code{"12-31"} (i.e.
-31st December). A user can specify any start date in the
-format \code{"mm/dd"}. The end date is the next 365th day
-from the specified start date.}
 
 \item{s_threshold}{(numeric) Spatial threshold value. The
 (assumed) spatial range within which events are
@@ -48,42 +34,13 @@ volume being skewed towards the dominant origins, as the value tends
 to \code{1}. Default: \code{0.5}. This index also controls the
 total volume of events across space and time.}
 
-\item{step_length}{(numeric) A maximum step taken at a time
-by a walker from one state to the next. Should be a fraction
-of the spatial units of the landscape. Default: half the size
-of the minimum spatial unit in a landscape
-(for a constraint landscape) or}
-
-\item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
-\verb{simple features}). A spatial polygon defining the boundary
-within which events are to be generated.}
+\item{...}{a list of time units to be included in the duration and their
+amounts. Seconds, minutes, hours, days, weeks, months and years are
+supported. Durations of months and years assume that year consists of
+365.25 days.}
 
 \item{show.data}{(TRUE or FALSE) To show the output data
 Default is \code{FALSE}.}
-
-\item{trend}{(a character) Specifying the direction of
-the global (linear) trend of the point process. Three options
-available are \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"} trends. Default: \code{"stable"}.}
-
-\item{slope}{(a character) Slope angle for an
-"increasing" or "decreasing" trend. Two options
-are available: \code{"gentle"} and \code{"steep"}.
-Default value is \code{"NULL"} for the default trend
-(i.e. \code{stable}).}
-
-\item{first_s_peak}{Number of days before the first seasonal
-peak. Default: \code{90}. This implies a seasonal cycle
-of 180 days.}
-
-\item{npoints}{(an integer) Number of origins (points) to simulate}
-
-\item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio. For example, for a \code{20:80}
-ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{30}. Valid inputs are \code{10}, \code{20},
-\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-30\% dominant and 70\% non-dominant origins.}
 }
 \value{
 Returns the global temporal pattern
