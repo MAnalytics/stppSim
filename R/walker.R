@@ -1,8 +1,9 @@
 #' @title A landscape walker
-#' @description An object capable of walking
-#' across a constraint or unconstrained landscape
-#' landscape, in accordance with a specified
-#' spatial and temporal properties. An embedded
+#' @description A dynamic object capable of walking
+#' across a constraint or unconstrained landscape,
+#' in line with an in-built transition matrix, and
+#' specified spatial and temporal properties. The transition
+#' matrix define a two-state An embedded
 #' transition matrix defines the movement
 #' characteristics of the walker and its likelihood
 #' to generate an event at any given location.
