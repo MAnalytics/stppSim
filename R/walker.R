@@ -3,10 +3,9 @@
 #' across a constraint or unconstrained landscape,
 #' in line with an in-built transition matrix, and
 #' specified spatial and temporal properties. The transition
-#' matrix define a two-state An embedded
-#' transition matrix defines the movement
-#' characteristics of the walker and its likelihood
-#' to generate an event at any given location.
+#' matrix defines a two-state status, namely `exploration`
+#' and `action` states, to indicate the states of
+#' reconnaissance and performance, respectively.
 #' @param n (integer) The number of events
 #' to be generated. Default: \code{5}.
 #' @param s_threshold (numeric) Spatial threshold value. The
