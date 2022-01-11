@@ -1,4 +1,4 @@
-#' @title Make Square Grids System
+#' @title Make Square Grids
 #' @description Generates a system of square grids over a specified
 #' spatial boundary.
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
