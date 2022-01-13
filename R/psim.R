@@ -1,6 +1,5 @@
 #' @include gtp.R
 #' @include walker.R
-#'
 #' @title Modeling of the Global Temporal Pattern
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
