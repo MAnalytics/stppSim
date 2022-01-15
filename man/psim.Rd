@@ -5,7 +5,7 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 psim(
-  n_events,
+  n_events = 1000,
   spo,
   s_threshold = 50,
   st_skewness = 0.5,
@@ -14,7 +14,8 @@ psim(
 )
 }
 \arguments{
-\item{n_events}{(integer) Total Number of events to simulate.}
+\item{n_events}{(integer) Total Number of events to simulate.
+Default: \code{1000}.}
 
 \item{spo}{(a list or dataframe) A list of spatial boundary
 coordinates (or shapefile) within which the events are confined.
@@ -34,10 +35,12 @@ volume being skewed towards the dominant origins, as the value tends
 to \code{1}. Default: \code{0.5}. This index also controls the
 total volume of events across space and time.}
 
-\item{...}{additional arguments to pass from both the
-\code{gtp} and \code{walker} functions. The latter is
-utilized to define the properties of all the event
-generators across the landscape.}
+\item{...}{additional arguments to pass from
+\code{gtp} and \code{walker} functions. Arguments from
+\code{gtp} can be used to define the nature of the
+temporal trend and pattern over time, while arguments
+from \code{walker} can be utilized to define the properties
+of event generators (walkers) across the landscape.}
 
 \item{show.data}{(TRUE or FALSE) To show the output data
 Default is \code{FALSE}.}

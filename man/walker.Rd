@@ -41,13 +41,13 @@ Returns a trace of walker's path, and the
 corresponding events.
 }
 \description{
-An object capable of walking
-across a constraint or unconstrained landscape
-landscape, in accordance with a specified
-spatial and temporal properties. An embedded
-transition matrix defines the movement
-characteristics of the walker and its likelihood
-to generate an event at any given location.
+A dynamic object capable of walking
+across a constraint or unconstrained landscape,
+in line with an in-built transition matrix, and
+specified spatial and temporal properties. The transition
+matrix defines a two-state status, namely \code{exploration}
+and \code{action} states, to indicate the states of
+reconnaissance and performance, respectively.
 }
 \references{
 #https://google.co.uk

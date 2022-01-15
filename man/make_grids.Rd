@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_grids.R
 \name{make_grids}
 \alias{make_grids}
-\title{Make Square Grids System}
+\title{Make Square Grids}
 \usage{
 make_grids(poly, size = 250,
 show.output = FALSE, dir=NULL)
