@@ -5,6 +5,7 @@
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
 #' @param n_events (integer) Total Number of events to simulate.
+#' Default: \code{1000}.
 #' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
 #' Should be generated using `random_spo` or `constrained_spo`
@@ -38,12 +39,12 @@
 #' @importFrom raster raster extent
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
-#' @importFrom dplyr mutate bind_rows
+#' @importFrom dplyr mutate bind_rows select
 #' @importFrom tibble rownames_to_column
 #' @export
 #'
 
-psim <- function(n_events, spo, s_threshold = 50, st_skewness = 0.5, ...,
+psim <- function(n_events=1000, spo, s_threshold = 50, st_skewness = 0.5, ...,
                  show.data=FALSE){
 
   #global variables
@@ -72,8 +73,8 @@ psim <- function(n_events, spo, s_threshold = 50, st_skewness = 0.5, ...,
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date, trend, slope, first_s_peak,
-             show.plot)
+  gtp <- gtp(start_date="01-01", trend="stable", slope="NULL", first_s_peak=90,
+             show.plot=TRUE)
 
 
   #-----
@@ -93,12 +94,13 @@ psim <- function(n_events, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #to implement parallelizing later
 
   #loop though each location and simulate point
-  for(loc in 1:length(spo$origins$OriginType)){ #loc<-2
+  for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
     pp_allTime <- lapply(n, function(n)
       walker(n, s_threshold = s_threshold,
              poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
                       step_length = 20,
-                      show.plot = FALSE))
+                      show.plot = FALSE)
+      )
 
     #collapse list
     pp_allTime <- rbindlist(pp_allTime,
