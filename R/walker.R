@@ -24,7 +24,7 @@
 #' `simple features`). A spatial polygon defining the boundary
 #' within which a walker walks.
 #' @param coords a vector of the form c(x, y) giving the
-#' initial coordinates of the walker (e.g. an origin).
+#' initial coordinates of a walker (e.g. an origin).
 #' Default: \code{c(0,0)}.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
@@ -65,6 +65,9 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
                                    buffer=15, background = 0.95, margin = 10)
   #plot(landscape)
 
+  #ensure coord is a coordinate
+  #coords <- as.matrix(coords)
+
   #meaning 1-step/hrs
   Walker <- (Walker + step_length) * s_threshold
   sim <- simulate(Walker, time=200, resist = landscape, coords)#200 is the no of time.steps to be simulated
@@ -99,8 +102,8 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
 
       colnames(sim_events_) <- c("x","y","yes","sn", "time")
 
-      sim_events_ <- as.data.frame(sim_events_) %>%
-      select(sn, x, y, time)
+      sim_events_ <- data.frame(sim_events_) %>%
+        dplyr::select(sn, x, y, time)
 
     return(sim_events_)
     }
