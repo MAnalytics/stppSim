@@ -9,13 +9,12 @@
 #' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
 #' Should be generated using `random_spo` or `constrained_spo`
-#' function.
+#' function. The `spo$poly` output is set as `poly` argument
+#' in this function.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
 #' Default: \code{250} (in the same linear unit as the `poly`)
-#' Default:\code{"daily"}. Other values are:
-#' \code{"weekly", "monthly"}.
 #' @param st_skewness (numeric) The tightness of events in space and time.
 #' The value ranges from \code{0 - 1}, with event
 #' volume being skewed towards the dominant origins, as the value tends
@@ -44,7 +43,7 @@
 #' @export
 #'
 
-psim <- function(n_events=1000, spo, s_threshold = 50, st_skewness = 0.5, ...,
+psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
                  show.data=FALSE){
 
   #global variables
@@ -60,6 +59,9 @@ psim <- function(n_events=1000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   x <- y <- NULL
 
   #spo <- random_spo(poly, npoints=50, p_ratio, show.plot=TRUE)#deal with showing plot later
+
+  #get the poly
+  poly <- spo$poly
 
   #test spo object class
   if(spo$Class != "spo"){
@@ -77,9 +79,16 @@ psim <- function(n_events=1000, spo, s_threshold = 50, st_skewness = 0.5, ...,
              show.plot=TRUE)
 
 
-  #-----
-  poly_tester(poly)
-  #-----
+  # if(is.null(poly)){
+  #
+  # }
+
+  #test polygon geometry
+  if(!is.null(poly)){
+    #-----
+    poly_tester(poly)
+    #-----
+  }
 
   #check if spo and poly covers the same location (or overlap
   #each other)
@@ -95,16 +104,46 @@ psim <- function(n_events=1000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #loop though each location and simulate point
   for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
-    pp_allTime <- lapply(n, function(n)
-      walker(n, s_threshold = s_threshold,
+
+    #if `poly` is provided
+    ##if(is.null(poly)){
+      t1 <- Sys.time()
+      pp_allTime <- lapply(n, function(n)
+        walker(n, s_threshold = s_threshold,
              poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
                       step_length = 20,
                       show.plot = FALSE)
-      )
+        )
+      t2 <- Sys.time()
+      tme <- t2 - t1
+      print(tme)
+    ##}
+
+
+      pp_allTime[[1]][c('intersection')]
+
+    #extract slot 'intersection'
+    intersection <- lapply(pp_allTime, function (x) x[c('intersection')])
 
     #collapse list
-    pp_allTime <- rbindlist(pp_allTime,
+    intersection <- rbindlist(intersection,
                             use.names=TRUE, fill=TRUE, idcol="tid")
+
+    #extract slot 'intersection'
+    p_events <- lapply(pp_allTime, function (x) x[c('p_events')])
+
+    #collapse list
+    pp_allTime <- rbindlist(p_events,
+                            use.names=TRUE, fill=TRUE, idcol="tid")
+
+
+
+
+    lapply(x, mean)
+
+
+
+
 
     # if(loc==1){
     #   bk_ <- pp_allTime
