@@ -62,7 +62,7 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
     #-----
   }
 
-  #poly defined but not coords
+  #poly defined but not coords, then get centroid
   if(!is.null(poly) & coords[1]==0 & coords[2]==0){ #extract centroid coords
     cent_xy <- as.character(st_centroid(st_as_sf(poly)$geometry))
     cent_xy <- str_remove_all(cent_xy, "[(c,)]")
@@ -72,7 +72,6 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
     #set coords
     coords <- cent_xy
   }
-
 
   Walker <- species(
   state.CRW(0.005) + state.CRW(0.99),
