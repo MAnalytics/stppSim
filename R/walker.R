@@ -23,12 +23,13 @@
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
 #' `simple features`). A spatial polygon defining the boundary
 #' within which a walker walks. Default is \code{NULL}, where
-#' a walker navigates an arbitrary square space with
-#' coordinates c(0,0) at the bottom-left corner of the square
-#' space.
+#' a walker navigates an arbitrary square space.
 #' @param coords a vector of the form c(x, y) giving the
 #' initial coordinates of a walker (e.g. an origin).
-#' Default: \code{c(0,0)}.
+#' Default value is \code{c(0,0)} for an arbitrary square space.
+#' If \code{poly} argument is not NULL, then \code{coords}
+#' assumes the centroid point of the polygon,
+#' unless otherwise specified.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage walker(n = 5, s_threshold = 250, step_length = 20,
@@ -44,16 +45,31 @@
 #' state.CRW simulate resistanceFromShape
 #' @importFrom chron chron
 #' @importFrom stats time
+#' @importFrom sf st_intersects st_as_sf st_centroid
+#' @importFrom stringr str_split str_remove_all
+#' st_point
 #' @export
 
 walker <- function(n = 5, s_threshold = 250, step_length = 20,
-                   poly, coords = c(0,0), show.plot = FALSE){
+                   poly=NULL, coords = c(0,0), show.plot = FALSE){
 
   points <- text <- sn <- x <- y <- X3 <- NULL
 
-  #-----
-  poly_tester(poly)
-  #-----
+  #test polygon geometry
+  if(!is.null(poly)){
+    #-----
+    poly_tester(poly)
+    #-----
+  }else{ #extract centroid coords
+    cent_xy <- as.character(st_centroid(st_as_sf(poly)$geometry))
+    cent_xy <- str_remove_all(cent_xy, "[(c,)]")
+    cent_xy_x <-  as.numeric(str_split(cent_xy, " ", 2)[[1]][1])
+    cent_xy_y <-  as.numeric(str_split(cent_xy, " ", 2)[[1]][2])
+    cent_xy <- c(cent_xy_x, cent_xy_y)
+    #set coords
+    coords <- cent_xy
+  }
+
 
   Walker <- species(
   state.CRW(0.005) + state.CRW(0.99),
@@ -71,16 +87,26 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
   #does the point fall within the boundary?
   st_int <- st_intersects(st_as_sf(poly),
                st_point(coords, dim="XY"))
-  st_int <- st_intersects(st_as_sf(poly),
-                          st_point(c(526661.7, 185533.7), dim="XY"))
+  # st_int <- st_intersects(st_as_sf(poly),
+  #                         st_point(coords, dim="XY"))
 
   st_int_yes <- as.numeric(st_int)
 
-  plot(st_point(x = coords, dim = "XY"))
+  #plot(poly)
+  #plot(st_point(x = coords, dim = "XY"))
 
   #meaning 1-step/hrs
   Walker <- (Walker + step_length) * s_threshold
-  sim <- simulate(Walker, time=200, resist = landscape, coords)#200 is the no of time.steps to be simulated
+
+  if(is.null(landscape)){
+    sim <- simulate(Walker, time=200, coords)
+  }
+
+  if(!is.null(landscape)){
+    sim <- simulate(Walker, time=200, resist = landscape, coords)
+  }
+
+  #200 is the no of time.steps to be simulated
   #extract event locations
   sim_events <- data.frame(sim)
   colnames(sim_events) <- c("X1","X2","X3")
