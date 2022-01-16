@@ -32,7 +32,8 @@ Imports:
   ggplot2,
   chron,
   data.table,
-  tibble
+  tibble, 
+  stringr
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
