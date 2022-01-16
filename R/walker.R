@@ -60,7 +60,10 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
     #-----
     poly_tester(poly)
     #-----
-  }else{ #extract centroid coords
+  }
+
+  #poly defined but not coords
+  if(!is.null(poly) & coords[1]==0 & coords[2]==0){ #extract centroid coords
     cent_xy <- as.character(st_centroid(st_as_sf(poly)$geometry))
     cent_xy <- str_remove_all(cent_xy, "[(c,)]")
     cent_xy_x <-  as.numeric(str_split(cent_xy, " ", 2)[[1]][1])
