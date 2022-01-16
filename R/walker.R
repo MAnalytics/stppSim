@@ -46,8 +46,8 @@
 #' @importFrom chron chron
 #' @importFrom stats time
 #' @importFrom sf st_intersects st_as_sf st_centroid
-#' @importFrom stringr str_split str_remove_all
 #' st_point
+#' @importFrom stringr str_split str_remove_all
 #' @export
 
 walker <- function(n = 5, s_threshold = 250, step_length = 20,
