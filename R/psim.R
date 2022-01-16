@@ -104,7 +104,6 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #loop though each location and simulate point
   for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
-
     #if `poly` is provided
     ##if(is.null(poly)){
       t1 <- Sys.time()
@@ -120,29 +119,24 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
     ##}
 
 
-      pp_allTime[[1]][c('intersection')]
+    pp_allTime[[1]][1]
 
     #extract slot 'intersection'
     intersection <- lapply(pp_allTime, function (x) x[c('intersection')])
 
     #collapse list
+    #'intersection' not used beyond this point
     intersection <- rbindlist(intersection,
                             use.names=TRUE, fill=TRUE, idcol="tid")
 
     #extract slot 'intersection'
     p_events <- lapply(pp_allTime, function (x) x[c('p_events')])
-
-    #collapse list
-    pp_allTime <- rbindlist(p_events,
-                            use.names=TRUE, fill=TRUE, idcol="tid")
-
-
-
-
-    lapply(x, mean)
-
-
-
+    #unslot
+    p_events <- sapply(1:length(p_events),
+                       function(i) data.table(p_events[[i]]$p_events))
+    #now, collapse list
+    p_events <- rbindlist(p_events,
+                          use.names=TRUE, fill=TRUE, idcol="tid")
 
 
     # if(loc==1){
@@ -150,14 +144,14 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
     # }
 
     #append location id
-    pp_allTime <- pp_allTime %>%
+    p_events <- p_events %>%
       mutate(locid=loc, prob=spo$origins$prob[loc],
              OriginType = spo$origins$OriginType[loc]) #%>%
       #append location id and pareto prob
       #mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
 
     stp_All <- stp_All %>%
-      bind_rows(pp_allTime)
+      bind_rows(p_events)
 
 
     flush.console()
