@@ -42,6 +42,9 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30, show.plot = FALSE){
   poly_tester(poly)
   #-----
 
+  #backup
+  backup_poly <- poly
+
   poly <- extract_coords(poly)
 
   origins <- list()
@@ -112,6 +115,7 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30, show.plot = FALSE){
 
   origins$origins <- ran_points_prob
   origins$plot <- p
+  origins$poly <- backup_poly
   origins$Class <- "spo"
   #Given event count at a temporal bin,
   #simulate walkers to generate the number of event
