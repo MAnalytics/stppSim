@@ -22,7 +22,10 @@
 #' produce a desirable output.
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
 #' `simple features`). A spatial polygon defining the boundary
-#' within which a walker walks.
+#' within which a walker walks. Default is \code{NULL}, where
+#' a walker navigates an arbitrary square space with
+#' coordinates c(0,0) at the bottom-left corner of the square
+#' space.
 #' @param coords a vector of the form c(x, y) giving the
 #' initial coordinates of a walker (e.g. an origin).
 #' Default: \code{c(0,0)}.
@@ -65,8 +68,15 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
                                    buffer=15, background = 0.95, margin = 10)
   #plot(landscape)
 
-  #ensure coord is a coordinate
-  #coords <- as.matrix(coords)
+  #does the point fall within the boundary?
+  st_int <- st_intersects(st_as_sf(poly),
+               st_point(coords, dim="XY"))
+  st_int <- st_intersects(st_as_sf(poly),
+                          st_point(c(526661.7, 185533.7), dim="XY"))
+
+  st_int_yes <- as.numeric(st_int)
+
+  plot(st_point(x = coords, dim = "XY"))
 
   #meaning 1-step/hrs
   Walker <- (Walker + step_length) * s_threshold
