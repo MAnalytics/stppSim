@@ -13,7 +13,7 @@
 #' "SpatialPolygons", or "sf") representing the boundary within which
 #' events are to be generated. Must include a field named `class`
 #' with entries \code{1's} and \code{0's} (i.e. binary) representing
-#' the active and non-active origins, respectively.
+#' the `dominant` and `non-dominant` origins, respectively.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -51,6 +51,9 @@ constrained_spo <- function(bpoly, p_ratio = 5, show.plot = FALSE){
   #-----
   poly_tester(bpoly)
   #-----
+
+  #backup
+  backup_poly <- bpoly
 
   #extract coordinae list
   bpoly <- extract_coords(bpoly)
@@ -186,6 +189,7 @@ constrained_spo <- function(bpoly, p_ratio = 5, show.plot = FALSE){
     }
 
     origins$origins <- const_points_prob
+    origins$poly <- backup_poly
     origins$Class <- "spo"
 
     #Given event count at a temporal bin,
