@@ -96,7 +96,7 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #spo <- spo[2,]
 
-  n = gtp$data
+  n = gtp$data #[1:3]
 
   stp_All <- NULL
 
@@ -133,70 +133,21 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #stop the cluster
   stopCluster(myCluster)
 
-
-  library(foreach)
-  d <- data.frame(x=1:10, y=rnorm(10))
-  s <- foreach(d=iter(d, by='row')) %dopar% sum(as.numeric(as.vector(d)))
+  length(pp_allTime)
 
 
-
-  #loop though each location and simulate point
-  ##for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
-    #if `poly` is provided
-      ##t1 <- Sys.time()
-      # pp_allTime <- lapply(n, function(n)
-      #   walker(n, s_threshold = s_threshold,
-      #        poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
-      #                 step_length = 20,
-      #                 show.plot = FALSE)
-      #   )
-      ##t2 <- Sys.time()
-      ##tme <- t2 - t1
-      ##print(tme)
+  #unlist the result..
 
 
 
 
 
+  ##keep1 <- pp_allTime
 
-
-
-    #extract slot 'intersection'
-    intersection <- lapply(pp_allTime, function (x) x[c('intersection')])
-
-    #collapse list
-    #'intersection' not used beyond this point
-    intersection <- rbindlist(intersection,
-                            use.names=TRUE, fill=TRUE, idcol="tid")
-
-    #extract slot 'intersection'
-    p_events <- lapply(pp_allTime, function (x) x[c('p_events')])
-    #unslot
-    p_events <- sapply(1:length(p_events),
-                       function(i) data.table(p_events[[i]]$p_events))
-    #now, collapse list
-    p_events <- rbindlist(p_events,
-                          use.names=TRUE, fill=TRUE, idcol="tid")
-
-
-    # if(loc==1){
-    #   bk_ <- pp_allTime
-    # }
-
-    #append location id
-    p_events <- p_events %>%
-      mutate(locid=loc, prob=spo$origins$prob[loc],
-             OriginType = spo$origins$OriginType[loc]) #%>%
-      #append location id and pareto prob
-      #mutate(x = spo$origins$x[loc] + x, y = spo$origins$y[loc] + y)#update coordinates
-
-    stp_All <- stp_All %>%
-      bind_rows(p_events)
-
-
-    flush.console()
-    print(loc)
-  ##}
+  # library(foreach)
+  # d <- data.frame(x=1:10, y=rnorm(10))
+  # s <- foreach(d=iter(d, by='row')) %dopar% sum(as.numeric(as.vector(d)))
+  #
 
 
   #length(which(stp_All$OriginType == "Dominant"))
