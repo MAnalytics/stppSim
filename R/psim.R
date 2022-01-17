@@ -110,18 +110,34 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #register cluster with foreach
   registerDoParallel(myCluster)
 
-  result <- foreach(x = c(4,9,16)) %dopar% sqrt(x)
+  ##result <- foreach(x = c(4,9,16)) %dopar% sqrt(x)
 
+  #subset xy columns
   spo_xy <- spo$origins %>%
     select(x, y)
 
-  pp_allTime <- foreach(idx = c(spo$origins[])
+  t1 <- Sys.time()
+
+  pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
-    walker(n, s_threshold = s_threshold,
-         poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
+    stppSim::walker(n, s_threshold = s_threshold,
+         poly=poly, coords=as.numeric(as.vector(idx)),
                   step_length = 20,
                   show.plot = FALSE)
     )
+
+  t2 <- Sys.time()
+  tme <- t2 - t1
+  print(tme)
+
+  #stop the cluster
+  stopCluster(myCluster)
+
+
+  library(foreach)
+  d <- data.frame(x=1:10, y=rnorm(10))
+  s <- foreach(d=iter(d, by='row')) %dopar% sum(as.numeric(as.vector(d)))
+
 
 
   #loop though each location and simulate point
@@ -139,7 +155,11 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
       ##print(tme)
 
 
-    pp_allTime[[1]][1]
+
+
+
+
+
 
     #extract slot 'intersection'
     intersection <- lapply(pp_allTime, function (x) x[c('intersection')])
