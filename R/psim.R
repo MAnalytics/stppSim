@@ -101,9 +101,18 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   stp_All <- NULL
 
   #to implement parallelizing later
+  no_of_clusters <- detectCores()
+
+  #create clusters (use n-1 cores)
+  myCluster <- makeCluster((no_of_clusters-1), # number of cores to use
+                           type = "PSOCK") # type of cluster
+
+  #register cluster with foreach
+  registerDoParallel(myCluster)
+
 
   #loop though each location and simulate point
-  for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
+  ##for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
     #if `poly` is provided
     ##if(is.null(poly)){
       t1 <- Sys.time()
@@ -156,7 +165,7 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
     flush.console()
     print(loc)
-  }
+  ##}
 
 
   #length(which(stp_All$OriginType == "Dominant"))
