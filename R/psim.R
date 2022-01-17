@@ -110,22 +110,33 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #register cluster with foreach
   registerDoParallel(myCluster)
 
+  result <- foreach(x = c(4,9,16)) %dopar% sqrt(x)
+
+  spo_xy <- spo$origins %>%
+    select(x, y)
+
+  pp_allTime <- foreach(idx = c(spo$origins[])
+    lapply(n, function(n)
+    walker(n, s_threshold = s_threshold,
+         poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
+                  step_length = 20,
+                  show.plot = FALSE)
+    )
+
 
   #loop though each location and simulate point
   ##for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
     #if `poly` is provided
-    ##if(is.null(poly)){
-      t1 <- Sys.time()
-      pp_allTime <- lapply(n, function(n)
-        walker(n, s_threshold = s_threshold,
-             poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
-                      step_length = 20,
-                      show.plot = FALSE)
-        )
-      t2 <- Sys.time()
-      tme <- t2 - t1
-      print(tme)
-    ##}
+      ##t1 <- Sys.time()
+      # pp_allTime <- lapply(n, function(n)
+      #   walker(n, s_threshold = s_threshold,
+      #        poly=poly, coords=c(spo$origins$x[loc],spo$origins$y[loc]),
+      #                 step_length = 20,
+      #                 show.plot = FALSE)
+      #   )
+      ##t2 <- Sys.time()
+      ##tme <- t2 - t1
+      ##print(tme)
 
 
     pp_allTime[[1]][1]
