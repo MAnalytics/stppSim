@@ -164,8 +164,9 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
         dplyr::select(sn, x, y, time)
 
 
-    output$intersection <- st_int_yes  #poly-point intersection
-    output$p_events <- sim_events_
+    #output$intersection <- st_int_yes  #poly-point intersection
+    #output$p_events <- sim_events_
+    output <- sim_events_
 
     return(output)
     }
