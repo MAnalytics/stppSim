@@ -43,7 +43,7 @@
 #' @export
 #'
 
-psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
+psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
                  show.data=FALSE){
 
   #global variables
@@ -96,9 +96,7 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #spo <- spo[2,]
 
-  n = gtp$data #[1:3]
-
-  stp_All <- NULL
+  n = gtp$data#[1:4]
 
   #to implement parallelizing later
   no_of_clusters <- detectCores()
@@ -133,33 +131,35 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #stop the cluster
   stopCluster(myCluster)
 
+
   length(pp_allTime)
-
-
   #unlist the result..
 
+  stp_All <- NULL
 
 
+  #combine all results by
+  for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
+    #extract slot 'intersection'
+    p_events <- rbindlist(pp_allTime[[loc]],
+                            use.names=TRUE, fill=TRUE, idcol="tid")
 
+    p_events <- p_events %>%
+      mutate(locid=loc, prob=spo$origins$prob[loc],
+           OriginType = spo$origins$OriginType[loc]) #%>%
 
-  ##keep1 <- pp_allTime
+  stp_All <- stp_All %>%
+    bind_rows(p_events)
 
-  # library(foreach)
-  # d <- data.frame(x=1:10, y=rnorm(10))
-  # s <- foreach(d=iter(d, by='row')) %dopar% sum(as.numeric(as.vector(d)))
-  #
+  }
 
-
-  #length(which(stp_All$OriginType == "Dominant"))
-  #length(which(stp_All$OriginType == "Non-dominant"))
-
-
-  #spatial and temporal tightness
+  #add idx
   stp_All_ <- stp_All %>%
     rownames_to_column('ID') #%>% #add row as column
 
-  #sample
-  samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events, replace = FALSE, prob = stp_All_$prob)) #%>
+  #sample to derive required number
+  samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events,
+                                replace = FALSE, prob = stp_All_$prob)) #%>
 
   stp_All_ <- stp_All_[samp_idx, ]
 
@@ -171,10 +171,23 @@ psim <- function(n_events=10000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #stp_All_ %>%
 
   #spatial patterns
+  plot(stp_All_$x, stp_All_$y,
+       main = "Spatial point distribution",
+       xlab = "x",
+       ylab = "y")
+  legend("topleft",
+         legend = c("Events"),
+              col = c("black"),
+              pch = c(1))
 
-  #optimal spatial bandwidth
+  #temporal pattern
+  plot(t, y, 'l')
 
-  #optimal temporal bandwidth
+
+
+  #Resulting global spatial bandwidth
+
+  #Resulting global temporal bandwidth
 
   #combine and add as details
   #@data
