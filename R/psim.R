@@ -192,29 +192,17 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #temporal pattern
   #get t holder
-  all_t <- data.frame(tid=unique(stp_All$tid), count = 0)
+  all_t <- data.frame(tid=unique(stp_All$tid))
 
   temp_p <- stp_All_ %>%
-    group_by() %>%
+    group_by(tid) %>%
+    summarise(ct = n())
 
-  plot(t, y, 'l')
+  temp_pattern <- all_t %>%
+    left_join(temp_p)%>%
+    replace(is.na(.), 0)
 
-
-
-  group <- rbinom(500, 1, 0.3) + 1
-
-  group_pch <- group
-  group_pch[group_pch == 1] <- 16
-  group_pch[group_pch == 2] <- 8
-
-  group_col <- group
-  group_col[group_col == 1] <- "red"
-  group_col[group_col == 2] <- "green"
-
-  plot(x, y,                                        # Scatterplot with two groups
-       pch = group_pch,
-       col = group_col)
-
+  plot(temp_pattern$tid, temp_pattern$ct, 'l')
 
   #Resulting global spatial bandwidth
 
