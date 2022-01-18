@@ -175,14 +175,45 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
        main = "Spatial point distribution",
        xlab = "x",
        ylab = "y")
-  legend("topleft",
-         legend = c("Events"),
-              col = c("black"),
-              pch = c(1))
+
+  #add origins
+  spo_forPlot <- spo$origins %>%
+    mutate(pch = as.numeric(if_else(OriginType == "Dominant",
+                         paste("20"), paste("1"))))
+
+  points(spo_forPlot$x, spo_forPlot$y,
+         add=TRUE, pch=spo_forPlot$pch, col="red",
+         cex=1.2)
+
+  legend("bottomleft",
+         legend = c("Events", "Origin (D)", "Origin (N)"),
+              col = c("black","red","red"),
+              pch = c(1, 20, 1))
 
   #temporal pattern
+  #get t holder
+  all_t <- data.frame(tid=unique(stp_All$tid), count = 0)
+
+  temp_p <- stp_All_ %>%
+    group_by() %>%
+
   plot(t, y, 'l')
 
+
+
+  group <- rbinom(500, 1, 0.3) + 1
+
+  group_pch <- group
+  group_pch[group_pch == 1] <- 16
+  group_pch[group_pch == 2] <- 8
+
+  group_col <- group
+  group_col[group_col == 1] <- "red"
+  group_col[group_col == 2] <- "green"
+
+  plot(x, y,                                        # Scatterplot with two groups
+       pch = group_pch,
+       col = group_col)
 
 
   #Resulting global spatial bandwidth
