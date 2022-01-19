@@ -4,7 +4,7 @@
 \alias{date_checker}
 \title{Date Format Checker}
 \usage{
-is_date(x, format="%Y-%m-%d")
+date_checker(x, format=NULL)
 }
 \arguments{
 \item{x}{A date input}
@@ -15,11 +15,6 @@ Returns TRUE or FALSE
 \description{
 Checks if date is in the correct format, i.e.
 \code{yyyy-mm-dd}
-}
-\details{
-Returns TRUE or FALSE, to indicate
-that the date input is in the correct or incorrect
-format, respectively
 }
 \references{
 #https://online.stat.psu.edu/stat510/lesson/6/6.1
