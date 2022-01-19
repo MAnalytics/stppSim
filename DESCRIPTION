@@ -33,7 +33,12 @@ Imports:
   chron,
   data.table,
   tibble, 
-  stringr
+  stringr,
+  doParallel,
+  parallel,
+  foreach,
+  iterators,
+  graphics
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
