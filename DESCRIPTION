@@ -41,6 +41,7 @@ Suggests:
 Collate: 
     'constrained_spo.R'
     'data.R'
+    'date_checker.R'
     'extract_coords.R'
     'gtp.R'
     'make_grids.R'
