@@ -2,9 +2,9 @@
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
-#' @param start_date The start date of simulation. The date should
+#' @param start_date (Date) The start date of simulation. The date should
 #' be in the format `"yyyy-mm-dd"`. Default value is
-#' `"2000-01-01"`. A specified date can be earlier or later
+#' `"2020-01-01"`. A specified date can be earlier or later
 #' than the default value. By default, a 1-year worth of
 #' date is simulated. In other words, the end date of
 #' simulation is the next 365th day
@@ -22,9 +22,12 @@
 #' are available: `"gentle"` and `"steep"`.
 #' Default value is \code{"NULL"} for the default trend
 #' (i.e. `stable`).
-#' @param first_s_peak Number of days before the first seasonal
-#' peak of the time series. Default: \code{90}, implying
-#' a seasonal cycle of 180 days.
+#' @param first_s_peak (Date) The date that marks the
+#' first seasonal peak of the time series.
+#' Default value is `2000-03-30`, ~90th day after the
+#' default `start_date` (implying a seasonal cycle of
+#' 180 days. The date should
+#' be in the format: `"yyyy-mm-dd"`.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage gtp(start_date = "01-01", t_resolution = 1, trend = "stable",
@@ -37,8 +40,31 @@
 #' @export
 #'
 
-gtp <- function(start_date = "01-01", t_resolution = 1, trend = "stable",
-                slope = "NULL", first_s_peak = 90,show.plot = FALSE){
+gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
+                slope = "NULL", first_s_peak = "2020-03-30", show.plot = FALSE){
+
+  #function to check if start_date & first_s_peak are
+  #in correct format
+  is_date = function(x, format = NULL) {
+    formatted = try(as.Date(x, format), silent = TRUE)
+    is_date = as.character(formatted) == x & !is.na(formatted)  # valid and identical to input
+    is_date[is.na(x)] = NA  # Insert NA for NA in x
+    return(is_date)
+  }
+
+  if(is_date(c(start_date), format = "%Y-%m-%d") == FALSE){
+    stop("The 'start_date' specified is not in the correct format!")
+  }
+
+  if(is_date(c(first_s_peak), format = "%Y-%m-%d") == FALSE){
+    stop("The 'first_s_peak' specified is not in the correct format!")
+  }
+
+  #check if first_s_peak is greater than start date
+  if(as.numeric(as.Date(first_s_peak) - as.Date(start_date)) <= 0){
+    stop("The 'start_date' cannot be a later date than 'first_s_peak' ")
+  }
+
 
   output <- list() #output object
 
@@ -48,11 +74,14 @@ gtp <- function(start_date = "01-01", t_resolution = 1, trend = "stable",
   }
 
   #prepare date
-  t1 <- as.Date(paste("2021", start_date, sep="-"))
+  t1 <- as.Date(start_date)
   t <- seq(0, 365, by = 1)
   t2 <- t1 + t
 
-  y <- 20 * cos(3 + 2 * pi * t/(2 * first_s_peak)) + 0.2 * sin(-1 * pi * t/15)
+  #n-th day of peak since start_date
+  nth_day <- as.numeric(as.Date(first_s_peak) - as.Date(start_date))
+
+  y <- 20 * cos(3 + 2 * pi * t/(2 * nth_day)) + 0.2 * sin(-1 * pi * t/15)
 
   y <- y #* scale
 
