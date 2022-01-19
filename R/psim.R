@@ -39,7 +39,14 @@
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
 #' @importFrom dplyr mutate bind_rows select
+#' summarise left_join
 #' @importFrom tibble rownames_to_column
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
+#' @importFrom iterators iter
+#' @importFrom graphics points, legend
+#'
 #' @export
 #'
 
@@ -48,7 +55,9 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
   #global variables
   first_s_peak <- poly <- show.plot <- slope <-
-    trend <- start_date <- NULL
+    trend <- start_date <- OriginType <- axis <-
+    group_by <- idx <- . <- if_else <-
+    tid <- NULL
 
   #test for n_event value
   #-----------------------------
