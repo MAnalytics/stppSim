@@ -75,9 +75,14 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date="01-01", trend="stable", slope="NULL", first_s_peak=90,
-             show.plot=TRUE)
+  gtp <- gtp(start_date=start_date, trend="stable", slope="NULL", first_s_peak=90,
+             show.plot=TRUE) #"01-01"
 
+
+  #prepare date
+  t1 <- as.Date(paste("2021", start_date, sep="-"))
+  t <- seq(0, 365, by = 1)
+  t2 <- t1 + t #list of dates
 
   # if(is.null(poly)){
   #
@@ -202,7 +207,16 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
     left_join(temp_p)%>%
     replace(is.na(.), 0)
 
-  plot(temp_pattern$tid, temp_pattern$ct, 'l')
+  plot(temp_pattern$tid, temp_pattern$ct, 'l', xaxt = "n")
+
+  ticks <- seq(temp_pattern$tid[1],
+               temp_pattern$tid[length(temp_pattern$tid)])
+  ix <- seq(temp_pattern$tid[1],
+            temp_pattern$tid[length(temp_pattern$tid)], by=30)#every 60 days
+
+  dates_list <- t2[ix]
+  ticks <- ticks[ix]
+  axis(1, at = ticks, labels = dates_list, tcl = -0.2)
 
   #Resulting global spatial bandwidth
 
