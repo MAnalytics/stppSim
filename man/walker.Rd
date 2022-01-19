@@ -5,7 +5,7 @@
 \title{A landscape walker}
 \usage{
 walker(n = 5, s_threshold = 250, step_length = 20,
-poly, coords=c(0,0), show.plot = FALSE)
+poly, coords=c(0,0), pt_itx = TRUE, show.plot = FALSE)
 }
 \arguments{
 \item{n}{(integer) The number of events
@@ -28,7 +28,9 @@ produce a desirable output.}
 \item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
 \verb{simple features}). A spatial polygon defining the boundary
 within which a walker walks. Default is \code{NULL}, where
-a walker navigates an arbitrary square space.}
+a walker navigates an arbitrary square space.Providing
+a \code{poly} object increases the computational time.
+slow down the computational time.}
 
 \item{coords}{a vector of the form c(x, y) giving the
 initial coordinates of a walker (e.g. an origin).
@@ -36,6 +38,11 @@ Default value is \code{c(0,0)} for an arbitrary square space.
 If \code{poly} argument is not NULL, then \code{coords}
 assumes the centroid point of the polygon,
 unless otherwise specified.}
+
+\item{pt_itx}{(logical) To check whether the
+specified initial coordinates (i.e. origin)
+falls within the boundary (i.e. \code{poly} object).
+Default: \code{TRUE}.}
 
 \item{show.plot}{(TRUE or False) To show the time series
 plot. Default is \code{FALSE}.}

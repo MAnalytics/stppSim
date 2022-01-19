@@ -5,7 +5,7 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 psim(
-  n_events = 1000,
+  n_events = 2000,
   spo,
   s_threshold = 50,
   st_skewness = 0.5,
@@ -20,14 +20,13 @@ Default: \code{1000}.}
 \item{spo}{(a list or dataframe) A list of spatial boundary
 coordinates (or shapefile) within which the events are confined.
 Should be generated using \code{random_spo} or \code{constrained_spo}
-function.}
+function. The \code{spo$poly} output is set as \code{poly} argument
+in this function.}
 
 \item{s_threshold}{(numeric) Spatial threshold value. The
 (assumed) spatial range within which events are
 re-generated (or repeated) by or around the same origin.
-Default: \code{250} (in the same linear unit as the \code{poly})
-Default:\code{"daily"}. Other values are:
-\code{"weekly", "monthly"}.}
+Default: \code{250} (in the same linear unit as the \code{poly})}
 
 \item{st_skewness}{(numeric) The tightness of events in space and time.
 The value ranges from \code{0 - 1}, with event
