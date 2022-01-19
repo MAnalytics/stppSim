@@ -30,8 +30,8 @@
 #' be in the format: `"yyyy-mm-dd"`.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
-#' @usage gtp(start_date = "01-01", t_resolution = 1, trend = "stable",
-#' slope = "NULL", first_s_peak=90, show.plot =FALSE)
+#' @usage gtp(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
+#' slope = "NULL", first_s_peak="2020-03-30", show.plot =FALSE)
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -45,18 +45,12 @@ gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
 
   #function to check if start_date & first_s_peak are
   #in correct format
-  is_date = function(x, format = NULL) {
-    formatted = try(as.Date(x, format), silent = TRUE)
-    is_date = as.character(formatted) == x & !is.na(formatted)  # valid and identical to input
-    is_date[is.na(x)] = NA  # Insert NA for NA in x
-    return(is_date)
-  }
 
-  if(is_date(c(start_date), format = "%Y-%m-%d") == FALSE){
+  if(date_checker(c(start_date), format = "%Y-%m-%d") == FALSE){
     stop("The 'start_date' specified is not in the correct format!")
   }
 
-  if(is_date(c(first_s_peak), format = "%Y-%m-%d") == FALSE){
+  if(date_checker(c(first_s_peak), format = "%Y-%m-%d") == FALSE){
     stop("The 'first_s_peak' specified is not in the correct format!")
   }
 
