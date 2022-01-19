@@ -8,6 +8,9 @@ date_checker(x, format=NULL)
 }
 \arguments{
 \item{x}{A date input}
+
+\item{format}{The date format required.
+Default: NULL.}
 }
 \value{
 Returns TRUE or FALSE
