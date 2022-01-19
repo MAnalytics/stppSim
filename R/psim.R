@@ -75,8 +75,8 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date=start_date, trend="stable", slope="NULL", first_s_peak=90,
-             show.plot=TRUE) #"01-01"
+  gtp <- gtp(start_date=start_date, trend=trend, slope=slope, first_s_peak=first_s_peak,
+             show.plot=show.plot) #"01-01"
 
 
   #prepare date
