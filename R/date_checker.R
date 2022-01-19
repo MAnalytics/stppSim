@@ -2,8 +2,8 @@
 #' @description Checks if date is in the correct format, i.e.
 #' `yyyy-mm-dd`
 #' @param x A date input
-#' @param format The date format required, e.g.,
-#' \code{"%Y-%m-%d"}.
+#' @param format The date format required.
+#' Default: NULL.
 #' @usage date_checker(x, format=NULL)
 #' @examples
 #' @details
