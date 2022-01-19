@@ -45,7 +45,7 @@
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom foreach foreach %dopar%
 #' @importFrom iterators iter
-#' @importFrom graphics points, legend
+#' @importFrom graphics points legend
 #'
 #' @export
 #'
