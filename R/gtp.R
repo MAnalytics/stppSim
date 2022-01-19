@@ -2,18 +2,19 @@
 #' @description Models the global temporal pattern (of
 #' the point process) as consisting of the global linear
 #' trend and the seasonality.
-#' @param start_date The start date of the study period.
-#' Default value is `"01-01"` (i.e. January 1st). By default
-#' the end date of the study period is set as `"12-31"` (i.e.
-#' 31st December). A user can specify any start date in the
-#' format `"mm/dd"`. The end date is the next 365th day
+#' @param start_date The start date of simulation. The date should
+#' be in the format `"yyyy-mm-dd"`. Default value is
+#' `"2000-01-01"`. A specified date can be earlier or later
+#' than the default value. By default, a 1-year worth of
+#' date is simulated. In other words, the end date of
+#' simulation is the next 365th day
 #' from the specified start date.
 #' @param t_resolution (character) The temporal resolution
-#' at which events are re-generated (or repeated). Specified in
-#' number of days. Default:\code{1} (currently the only option
-#' available).
+#' of the simulated dataset. Default:\code{"seconds"}
+#' (currently the only available argument).
 #' @param trend (a character) Specifying the direction of
-#' the global (linear) trend of the point process. Three options
+#' the global (linear) trend of the simulated time series.
+#' Three options
 #' available are `"decreasing"`, `"stable"`,
 #' and `"increasing"` trends. Default: `"stable"`.
 #' @param slope (a character) Slope angle for an
@@ -22,7 +23,8 @@
 #' Default value is \code{"NULL"} for the default trend
 #' (i.e. `stable`).
 #' @param first_s_peak Number of days before the first seasonal
-#' peak. Default: \code{90}. This implies a seasonal cycle
+#' peak of the time series. Default: \code{90}, implying
+#' a seasonal cycle of 180 days.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage gtp(start_date = "01-01", t_resolution = 1, trend = "stable",
