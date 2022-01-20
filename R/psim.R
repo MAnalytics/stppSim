@@ -62,8 +62,6 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #test for n_event value
   #-----------------------------
 
-  #-----------------------------
-
   #define global variables
   x <- y <- NULL
 
