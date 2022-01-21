@@ -65,7 +65,8 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   #define global variables
   x <- y <- NULL
 
-  #spo <- random_spo(poly, npoints=50, p_ratio, show.plot=TRUE)#deal with showing plot later
+  #spo <- random_spo(poly, npoints=50, p_ratio, show.plot=TRUE)
+
 
   #get the poly
   poly <- spo$poly
