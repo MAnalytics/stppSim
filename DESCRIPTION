@@ -38,12 +38,14 @@ Imports:
   parallel,
   foreach,
   iterators,
-  graphics
+  graphics,
+  grDevices
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
     rmarkdown
 Collate: 
+    'chull_poly.R'
     'constrained_spo.R'
     'data.R'
     'date_checker.R'
@@ -55,3 +57,4 @@ Collate:
     'walker.R'
     'psim.R'
     'random_spo.R'
+    'stp_learner.R'
