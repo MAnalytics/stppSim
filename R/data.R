@@ -37,3 +37,12 @@
 #'   that lack the ability to generate points ('0').
 #'     }
 "San_Francisco"
+
+#' A sample point data of a part of San Francisco city
+#'
+#' @format A matrix containing two variables
+#' \itemize{
+#'   \item x: x coordinate
+#'   \item y: y coordinate
+#'     }
+"SanF_sample"
