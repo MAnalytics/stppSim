@@ -38,11 +38,14 @@
 #'     }
 "San_Francisco"
 
-#' A sample point data of a part of San Francisco city
+#' A complete point data of a portion of
+#' San Francisco city.
 #'
 #' @format A matrix containing two variables
 #' \itemize{
 #'   \item x: x coordinate
 #'   \item y: y coordinate
+#'   \item t: t time
 #'     }
-"SanF_sample"
+"SanF_fulldata"
+
