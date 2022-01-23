@@ -4,31 +4,46 @@
 \alias{stp_learner}
 \title{Learning the spatiao-temporal properties of sample data}
 \usage{
-stp_learner(ppt, poly = NULL)
+stp_learner(ppt, start_date = NULL, poly = NULL)
 }
 \arguments{
-\item{ppt}{(dataframe)
-Spatiotemporal point samples - whose first three attributes
-(\code{fields}) are: \code{x} - the eastings, \code{y} - the northing,
-and \code{t}, the time of occurence (in the format: `yyyy-mm-dd').
-A minimum of (first) three-month worth of data is required. The
-longer the data duration, the better the approximations.}
+\item{ppt}{(matrix) coordinates (and time) vectors of points.
+A 3-column matrix or list: \code{x} - eastings,
+\code{y} - northing, and \code{t} - time of occurrence
+(in the format: `yyyy-mm-dd'). The sample needs to
+cover the one year period being investigated.}
+
+\item{start_date}{(string) Specify the start date of
+the sample point supplied (i.e. \code{ppt}),
+in the format \code{yyyy-mm-dd}. If \code{NULL}, the earliest date
+from the \code{ppt} is utilized. The end date is the 365th day
+from the specified start date (by default).}
 
 \item{poly}{(as \code{spatialPolygons},
 \code{spatialPolygonDataFrames}, or
 \verb{simple features}). The boundary (a spatial polygon) surrounding
-the extent of the sample points. Both \code{stps} and \code{poly} must be
+the sample points. Both \code{stps} and \code{poly} must be
 in the same coordinate reference system. The default is \code{NULL},
-meaning that the function creates an arbitrary boundary around
-the points.}
+wherein an arbitrary boundary is created around the sample
+points.}
 }
 \description{
 Learns all the spatial and temporal
 properties (required to build events' population)
-from a sample point dataset.
+from a sample points.
 }
 \details{
 Returns the spatiotemporal details of point datasets
+}
+\examples{
+data(SanF_fulldata)
+#get a sample data
+set.seed(1000)
+sample_size <- 500
+dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
+sample_size, replace=FALSE),]
+stp_learner(dat_sample,
+start_date = NULL, poly = NULL)
 }
 \references{
 https://www.google.co.uk/

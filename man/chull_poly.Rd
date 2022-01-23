@@ -8,7 +8,7 @@ chull_poly (xycoords,
 crsys = NULL)
 }
 \arguments{
-\item{xycoords}{(dataframe) coordinate vectors of points.
+\item{xycoords}{(matrix) coordinate vectors of points.
 A 2-column matrix or list: \code{x} - the eastings,
 and \code{y} - the northing.}
 
@@ -23,6 +23,12 @@ a set of sample points, using Convex Hull technique.
 }
 \details{
 The algorithm is that given by Eddy (1977).
+}
+\examples{
+data(SanF_fulldata)
+SanF_fulldata_xy <-
+matrix(as.numeric(SanF_fulldata[,1:2]),,2)
+bry <- chull_poly(SanF_fulldata_xy, crsys = NULL)
 }
 \references{
 Eddy, W. F. (1977).
