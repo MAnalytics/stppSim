@@ -22,6 +22,8 @@
 #' @export
 chull_poly <- function(xycoords, crsys = NULL){
 
+  proj4string <- NULL
+
   set.seed(1)
   dat <- xycoords
   ch <- chull(dat)
