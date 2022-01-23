@@ -1,7 +1,7 @@
 #' @title Generate boundary around a Set of Points
 #' @description Generate a boundary (polygon) around
 #' a set of sample points, using Convex Hull technique.
-#' @param xycoords (dataframe) coordinate vectors of points.
+#' @param xycoords (matrix) coordinate vectors of points.
 #' A 2-column matrix or list: `x` - the eastings,
 #' and `y` - the northing.
 #' @param crsys (string) coordinate reference system of
@@ -11,6 +11,17 @@
 #' @usage chull_poly (xycoords,
 #' crsys = NULL)
 #' @examples
+#' data(SanF_fulldata)
+#' #define the crs
+#' crs <- "+proj=longlat +datum=WGS84"
+#' SanF_fulldata_xy <-
+#' matrix(as.numeric(SanF_fulldata[,1:2]),,2)
+#' boundary <- chull_poly(SanF_fulldata_xy, crsys = NULL)
+#' plot(boundary)
+#' #convert coordinates to point
+#' points <- SpatialPoints(SanF_fulldata_xy)
+#' #overlay points
+#' plot(points, add=TRUE, pch=20, col="blue")
 #' @details The algorithm is that given by Eddy (1977).
 #' @references Eddy, W. F. (1977).
 #' A new convex hull algorithm for planar sets.
