@@ -12,16 +12,9 @@
 #' crsys = NULL)
 #' @examples
 #' data(SanF_fulldata)
-#' #define the crs
-#' crs <- "+proj=longlat +datum=WGS84"
 #' SanF_fulldata_xy <-
 #' matrix(as.numeric(SanF_fulldata[,1:2]),,2)
-#' boundary <- chull_poly(SanF_fulldata_xy, crsys = NULL)
-#' plot(boundary)
-#' #convert coordinates to point
-#' points <- SpatialPoints(SanF_fulldata_xy)
-#' #overlay points
-#' plot(points, add=TRUE, pch=20, col="blue")
+#' bry <- chull_poly(SanF_fulldata_xy, crsys = NULL)
 #' @details The algorithm is that given by Eddy (1977).
 #' @references Eddy, W. F. (1977).
 #' A new convex hull algorithm for planar sets.
@@ -29,7 +22,7 @@
 #' 3, 398--403.10.1145/355759.355766.
 #' @importFrom grDevices chull
 #' @importFrom sp SpatialPolygons Polygons
-#' proj4string SpatialPolygonsDataFrame CRS
+#' proj4string<- SpatialPolygonsDataFrame CRS
 #' @export
 chull_poly <- function(xycoords, crsys = NULL){
 
@@ -61,6 +54,8 @@ chull_poly <- function(xycoords, crsys = NULL){
   #spoint<-SpatialPoints(xycoords)
   #plot(spoint, add=TRUE)
   #writeOGR(sp_poly_df, "chull", layer="chull", driver="ESRI Shapefile")
+  #flush.console()
+  #plot(sp_poly_df)
 
   return(sp_poly_df)
 }
