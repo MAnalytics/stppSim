@@ -12,10 +12,10 @@
 #' export the output. Default is `NULL`, indicating the
 #' current working directory (cwd). A user can specify a different
 #' directory in the format: "C:/.../folder".
-#' @param show.output (logical) To show the output.
+#' @param show_output (logical) To show the output.
 #' Default: \code{FALSE}
 #' @usage make_grids(poly, size = 250,
-#' show.output = FALSE, dir=NULL)
+#' show_output = FALSE, dir=NULL)
 #' @examples
 #' @details
 #' @return Returns a spatial square grid system
@@ -28,11 +28,13 @@
 #' @importFrom terra linearUnits rast
 #' @importFrom raster raster extent<- res<- crs<-
 #' @export
-make_grids <- function(poly, size = 250, show.output = FALSE, dir = NULL){
+make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
 
   show.output <- intersect_grid <- as <- NULL
 
   extent <- crs <- res <- NULL
+
+  area_B <- poly
 
   #-----
   poly_tester(poly)
@@ -101,7 +103,7 @@ make_grids <- function(poly, size = 250, show.output = FALSE, dir = NULL){
  intersect_grids <- polys.df[which(!is.na(intersect_grids[,1])),]
 
  #Visulising the results
- if(show.output == TRUE){
+ if(show_output == TRUE){
     plot(intersect_grids)
  }
 
@@ -112,25 +114,26 @@ make_grids <- function(poly, size = 250, show.output = FALSE, dir = NULL){
 
  if(!is.null(dir)){
    dr <-dir
- }
+ #}
 
- tryCatch(
+  tryCatch(
 
-   # Specifying expression
-   expr = {
-     #Exporting the grids created
-     writeOGR(intersect_grids, dr, 'spatial_grid_system', 'ESRI Shapefile', overwrite_layer=T)
-     print("Execution completed!")
-   },
-   # Specifying error message
-   error = function(e){
-     print("Execution halted! Check the output path specified!")
-   },
+    #Specifying expression
+    expr = {
+      #Exporting the grids created
+      writeOGR(intersect_grids, dr, 'spatial_grid_system', 'ESRI Shapefile', overwrite_layer=T)
+      print("Execution completed!")
+    },
+    # Specifying error message
+    error = function(e){
+      print("Execution halted! Check the output path specified!")
+    },
 
-   finally = {
-     print("Output generated!")
-   }
- )
+    finally = {
+      print("Output generated!")
+    }
+  )
+  }
 
-
+ return(intersect_grids)
 }
