@@ -14,11 +14,16 @@
 #' from the specified start date (by default).
 #' @param poly (as `spatialPolygons`,
 #' `spatialPolygonDataFrames`, or
-#' `simple features`). The boundary (a spatial polygon) surrounding
-#' the sample points. Both `stps` and `poly` must be
-#' in the same coordinate reference system. The default is `NULL`,
-#' wherein an arbitrary boundary is created around the sample
-#' points.
+#' `simple features`). The boundary (spatial polygon) surrounding
+#' the sample points. The default is `NULL` - meaning that an
+#' arbitrary boundary is drawn to cover the spatial
+#' point distribution. The 'poly' object must have a projection
+#' system (crs) when not NULL.
+#' @param crsys (string) The projection ('crs') system to utilize
+#' when 'poly' argument is not NULL. You can obtain CRS string
+#' from "http://spatialreference.org/". The `crs` can be set using
+#' `proj4string(poly) <- "CRS string"
+#' Default: \code{NULL}.
 #' @usage stp_learner(ppt, start_date = NULL, poly = NULL)
 #' @examples
 #' data(SanF_fulldata)
@@ -33,29 +38,189 @@
 #' @references https://www.google.co.uk/
 #' @importFrom dplyr select
 #' @export
-stp_learner <- function(ppt=dat_sample, start_date = NULL, poly = NULL){
-
-  #check if boundary is supplied,
-  #if null, create an arbitrary boundary
-  if(is.null(poly)){
-    ppt_xy <-
-      matrix(as.numeric(ppt[,1:2]),,2)
-    boundary_ppt <- chull_poly(ppt_xy)
-  } else {
-    boundary_ppt <- poly
-  }
+stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
 
   #check if start_date is supplied, if not
   #extract from the point data.
   if(is.null(start_date)){
+    #min time
+    min_t <- min(as.Date(ppt[,3]))
+
+    ppt_df <- data.frame(ppt)
+    colnames(ppt_df) <- c("x","y","t")
+
+    #check the date field too
+    t_format <- length(which(date_checker(c(ppt[,3]),
+                                          format = "%Y-%m-%d")==FALSE))
+    #check time column
+    if(t_format > 0){
+      stop("At least one entry of the 'time' column is not in the correct format!")
+    }
+
+    #ensuring data does not exceed 1-year length
+    if(as.numeric(difftime(max(ppt_df$t), min(ppt_df$t), units="days")) > 365){
+      stop(paste("Data length is greater than 365 days!",
+                 "Less than or equal to 1-year data length is required!"))
+    }
+
+
+  } else{
+    if(date_checker(c(start_date), format = "%Y-%m-%d") == FALSE){
+      stop("The 'start_date' specified is not in the correct format!")
+    }
+
+    #check the date field too
+    t_format <- length(which(date_checker(c(ppt[,3]),
+                                   format = "%Y-%m-%d")==FALSE))
+    #check time column
+    if(t_format > 0){
+      stop("At least one entry of the 'time' column is not in the correct format!")
+    }
+
+    #compared start time with min time
+    min_t <- min(as.Date(ppt[,3]))
+    start_date <- as.Date(start_date)
+
+    min_compared <- length(which(as.Date(ppt[,3]) < start_date))
+
+    if(min_compared > 0){
+      stop(paste("One or more entry(s) in the time column of 'ppt'",
+          "is less than the 'start_date'! Consider setting 'start_date = NULL'!", sep=" "))
+    }
+
+    ppt_df <- data.frame(ppt)
+    colnames(ppt_df) <- c("x","y","t")
+
+    min_x <- min(ppt_df$x)
+    min_y <- min(ppt_df$y)
+
+    min_xyt <- data.frame(x=min_x,
+                                y=min_y,
+                                t=start_date) #start_date = "2014-12-31"
+    #combine
+    ppt_df <- data.frame(rbind(min_xyt, ppt_df))
+
+    max_t <- max(ppt_df$t)
+
+    #diff between min and max
+    #ensuring data does not exceed 1-year length
+    if(as.numeric(difftime(max(ppt_df$t), min(ppt_df$t), units="days")) > 365){
+      stop(paste("Data length is greater than 365 days!",
+                 "Less than or equal to 1-year data length is required!"))
+    }
 
   }
-  # else{
-  #   if(date_checker(start_date)==FALSE)
-  # }
+
+  #Now, learn the temporal pattern and trend from
+  #the sample dataset
+
+  dat_sample_p <- ppt_df %>%
+      group_by(t) %>%
+      summarise(n = n())%>%
+      mutate(time = round(as.numeric(difftime(t, as.Date(min(t)), units="days")),
+             digits = 0))%>%
+      as.data.frame()
+
+    #create a sub table
+    time <- data.frame(time=1:365)
+
+    dat_sample_p <- time %>%
+      left_join(dat_sample_p) %>%
+      dplyr::mutate(n = replace_na(n, 0))
+
+    #unique(dat_sample_p$time)
+
+    #plot(dat_sample_p$time, dat_sample_p$n, 'l')
+    #head(datxy)
+
+    #--------------------------------
+    #smoothen and plot
+    loessData <- data.frame(
+      x = 1:nrow(dat_sample_p),
+      y = predict(loess(n~time, dat_sample_p, span = 0.3)),
+      method = "loess()"
+    )
+
+    #scaling by a factor of 10
+    #for high intensity data
+    s_factor <- 10
+    #--------------------
+    loessData$y <- loessData$y * s_factor
+    #--------------------
+
+    #data to plot
+    # dat_sample_p$n <-
+    #   dat_sample_p$n * s_factor
+    #library(ggplot2)
+    # ggplot(loessData, aes(x, y)) +
+    #   geom_point(dat = dat_sample_p,
+    #              aes(time, n), alpha = 0.2, col = "red") +
+    #   geom_line(col = "blue") +
+    #   facet_wrap(~method) +
+    #   ggtitle("Interpolation and smoothing functions in R") +
+    #   theme_bw(16)
+
+    #----------------------------------
+    #learn the spatial pattern
+    #import square grid
+    #----------------------------------
+    #check if boundary is supplied,
+    #if null, create an arbitrary boundary
+    if(is.null(poly)){
+      ppt_xy <-
+        matrix(as.numeric(ppt[,1:2]),,2)
+      boundary_ppt <- chull_poly(ppt_xy)
+      #then define the crs
+      if(is.null(crsys)){
+        stop(paste("The 'crsys' argument cannot be NULL",
+             "while 'poly' argument is NULL!!",
+             "Needs to define the 'crsys' argument", sep=" "))
+      } else {
+        proj4string(boundary_ppt) <- CRS(crsys)
+        #proj4string(boundary_ppt) <-
+        #"+proj=utm +zone=10 +ellps=GRS80 +to_meter=0.3048006096012192 +no_defs"
+      }
+
+    } else {
+      #first check that 'poly' has
+      #a projection
+      if(!is.null(crsys)){
+        flush.console()
+        print(paste("Warning: The projection system (crs) of 'poly'",
+              "object is utilized!!", sep=" "))
+      }
+      if(is.na(proj4string(poly))){
+        stop(paste("'poly' object must have a projection!"))
+      }
+      boundary_ppt <- poly
+    }
+
+    #determine if projection is in metres or feet
+    #if metres, use 500m2
+    #if feet, 5000ft2
+    s4_proj <- proj4string(poly)
+    s4_proj_TRUE <- grepl(s4_proj, "+units=m", fixed = TRUE)
+
+    if(s4_proj_TRUE == TRUE){
+
+      grid_size <- 500
+
+    } ifelse(
+      s4_proj_TRUE){
+      s4_proj_TRUE <- grepl(s4_proj, "+units=us-ft", fixed = TRUE)
+    }
+
+
+    #create regular grids
+    #default 250 square metres
+    grid_sys <- make_grids(poly=boundary_ppt, size = 500, show_output = FALSE,
+               dir=NULL)
+
+  }
   #
   # date_checker(as.Date("2000-01-01"))
 
+  #..then(create square grid)
   #learn spatial properties
   #1.
   #2. derive spatial origins
@@ -63,4 +228,4 @@ stp_learner <- function(ppt=dat_sample, start_date = NULL, poly = NULL){
   #is boundary supplied yes
   #if no create chull poly..
 
-}
+#}
