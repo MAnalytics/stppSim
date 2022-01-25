@@ -2,7 +2,7 @@
 #' @description Simulate point origins for generating the
 #' spatial point across the area. Each origin is assigned
 #' a probability value (representing the relative intensity) at which
-#' the origin generates events in accordance with a specified
+#' the origin generates events with respect to a specified
 #' Pareto ratio.
 #' @param poly (A dataframe or S4 object) A dataframe of X, Y
 #' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
@@ -19,7 +19,9 @@
 #' points (origins).
 #' @usage random_spo(poly, npoints, p_ratio, show.plot=FALSE)
 #' @examples
-#' @details
+#' @details Returns an object of the class `artif_spo`,
+#' detailing the properties of artificial (simulated) spatial point
+#' origins.
 #' @return Returns random event origins
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
@@ -116,7 +118,7 @@ random_spo <- function(poly, npoints =  50, p_ratio = 30, show.plot = FALSE){
   origins$origins <- ran_points_prob
   origins$plot <- p
   origins$poly <- backup_poly
-  origins$Class <- "spo"
+  origins$Class <- "artif_spo"
   #Given event count at a temporal bin,
   #simulate walkers to generate the number of event
   #count
