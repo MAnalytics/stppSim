@@ -34,11 +34,15 @@
 #' sample_size, replace=FALSE),]
 #' stp_learner(dat_sample,
 #' start_date = NULL, poly = NULL)
-#' @details Returns the spatiotemporal details of point datasets
+#' @details Returns an object of the class `real_spo`,
+#' detailing the spatiotemporal properties of a real
+#' sample dataset
 #' @references https://www.google.co.uk/
 #' @importFrom dplyr select
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
+
+  origins <- list()
 
   #check if start_date is supplied, if not
   #extract from the point data.
@@ -148,18 +152,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
     loessData$y <- loessData$y * s_factor
     #--------------------
 
-    #data to plot
-    # dat_sample_p$n <-
-    #   dat_sample_p$n * s_factor
-    #library(ggplot2)
-    # ggplot(loessData, aes(x, y)) +
-    #   geom_point(dat = dat_sample_p,
-    #              aes(time, n), alpha = 0.2, col = "red") +
-    #   geom_line(col = "blue") +
-    #   facet_wrap(~method) +
-    #   ggtitle("Interpolation and smoothing functions in R") +
-    #   theme_bw(16)
-
     #----------------------------------
     #learn the spatial pattern
     #import square grid
@@ -199,24 +191,84 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
     #if metres, use 500m2
     #if feet, 5000ft2
     s4_proj <- proj4string(poly)
-    s4_proj_TRUE <- grepl(s4_proj, "+units=m", fixed = TRUE)
 
-    if(s4_proj_TRUE == TRUE){
-
+    if(grepl("+units=m", s4_proj, fixed = TRUE) == TRUE){
       grid_size <- 500
-
-    } ifelse(
-      s4_proj_TRUE){
-      s4_proj_TRUE <- grepl(s4_proj, "+units=us-ft", fixed = TRUE)
     }
+    if(grepl("+units=us-ft", s4_proj, fixed = TRUE)==TRUE){
+      grid_size <- 1700
+      }
 
+    if((grepl("+units=m", s4_proj, fixed = TRUE) == FALSE)&
+       (grepl("+units=us-ft", s4_proj, fixed = TRUE)==FALSE)){
+      stop(paste("Specified 'crs' not recognized!",
+                 "A 'Metre-based' projection is preferred", sep=" "))
+    }
 
     #create regular grids
     #default 250 square metres
-    grid_sys <- make_grids(poly=boundary_ppt, size = 500, show_output = FALSE,
+    set.seed(1000)
+    grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE,
                dir=NULL)
+    grid_sys$grid_id <- 1:length(grid_sys)
 
-  }
+    #plot(grid_sys)
+
+    #Now overlay points on the grids
+    ppt_df <- ppt_df %>%
+      rownames_to_column("id")
+
+    #id <- as.numeric(ppt_df$id)
+    x <- as.numeric(ppt_df$x)
+    y <- as.numeric(ppt_df$y)
+    t <- as.Date(ppt_df$t)
+    xyid_ <- cbind(x, y)
+    #ppt_df$x <- as.numeric(ppt_df$x)
+    xyid_ppt <- SpatialPoints(xyid_)
+    proj4string(xyid_ppt) <- crs(grid_sys)
+    #plot(xyid_ppt, add=TRUE)
+
+    grid_sys <- st_as_sf(grid_sys)
+    xyid_ppt <- st_as_sf(xyid_ppt)
+    #convert
+    pnt_grid_intsct <- st_intersects(xyid_ppt, grid_sys, sparse = TRUE)
+    pnt_grid_intsct <- data.frame(pnt_grid_intsct)
+    colnames(pnt_grid_intsct) <- c("id", "grid_id")
+    pnt_grid_intsct$id <- as.character(pnt_grid_intsct$id)
+
+    #join
+    #Assign the probability value to each grid
+    #based on its historical events
+    ppt_df_join_count <- ppt_df %>%
+      left_join(pnt_grid_intsct)%>%
+      group_by(grid_id) %>%
+      summarise(count = n()) %>%
+      arrange(desc(count))%>%
+      mutate(prob = round(count/sum(count),
+                          digits=10))
+
+
+    # #extract centroid coord of grids
+    # grid_sys_xy <- cbind(grid_sys$grid_id,
+    #                      extract_coords(grid_sys))
+    #
+    #
+    # #Assign the probability value
+    # #based on pareto ratio
+    # grid_sys %>%
+    #   leppt_df_join_count
+    #
+    # origins$origins <- ran_points_prob
+    # origins$plot <- p
+    # origins$poly <- backup_poly
+    # origins$Class <- "artif_spo"
+    #
+    # origins$gtp <-
+    # origins$gtp <-
+    # origins$Class <- "real_spo"
+    #NEXT
+
+}
   #
   # date_checker(as.Date("2000-01-01"))
 
