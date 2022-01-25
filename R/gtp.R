@@ -33,7 +33,8 @@
 #' @usage gtp(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
 #' slope = "NULL", first_s_peak="2020-03-30", show.plot =FALSE)
 #' @examples
-#' @details
+#' @details Returns an object of the class `artif_gtp`,
+#' describing an artificial global temporal patterns.
 #' @return Returns the global temporal pattern
 #' @references
 #' #https://online.stat.psu.edu/stat510/lesson/6/6.1
