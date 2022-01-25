@@ -72,8 +72,8 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   poly <- spo$poly
 
   #test spo object class
-  if(spo$Class != "spo"){
-    stop("The 'spo' object is NOT an 'spo' Class!")
+  if(spo$Class != "artif_spo"){
+    stop("The 'spo' object is NOT an 'artif_spo' Class!")
   }
 
   #next, extract from the spo, the N x 2 matrix or dataframe giving the
