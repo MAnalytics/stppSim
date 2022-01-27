@@ -21,11 +21,17 @@ from the specified start date (by default).}
 
 \item{poly}{(as \code{spatialPolygons},
 \code{spatialPolygonDataFrames}, or
-\verb{simple features}). The boundary (a spatial polygon) surrounding
-the sample points. Both \code{stps} and \code{poly} must be
-in the same coordinate reference system. The default is \code{NULL},
-wherein an arbitrary boundary is created around the sample
-points.}
+\verb{simple features}). The boundary (spatial polygon) surrounding
+the sample points. The default is \code{NULL} - meaning that an
+arbitrary boundary is drawn to cover the spatial
+point distribution. The 'poly' object must have a projection
+system (crs) when not NULL.}
+
+\item{crsys}{(string) The projection ('crs') system to utilize
+when 'poly' argument is not NULL. You can obtain CRS string
+from "http://spatialreference.org/". The \code{crs} can be set using
+`proj4string(poly) <- "CRS string"
+Default: \code{NULL}.}
 }
 \description{
 Learns all the spatial and temporal
@@ -33,7 +39,9 @@ properties (required to build events' population)
 from a sample points.
 }
 \details{
-Returns the spatiotemporal details of point datasets
+Returns an object of the class \code{real_spo},
+detailing the spatiotemporal properties of a real
+sample dataset
 }
 \examples{
 data(SanF_fulldata)

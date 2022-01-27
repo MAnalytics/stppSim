@@ -31,8 +31,13 @@ Returns random event origins
 Simulate point origins for generating the
 spatial point across the area. Each origin is assigned
 a probability value (representing the relative intensity) at which
-the origin generates events in accordance with a specified
+the origin generates events with respect to a specified
 Pareto ratio.
+}
+\details{
+Returns an object of the class \code{artif_spo},
+detailing the properties of artificial (simulated) spatial point
+origins.
 }
 \references{
 #https://online.stat.psu.edu/stat510/lesson/6/6.1

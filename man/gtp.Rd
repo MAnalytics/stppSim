@@ -50,6 +50,10 @@ Models the global temporal pattern (of
 the point process) as consisting of the global linear
 trend and the seasonality.
 }
+\details{
+Returns an object of the class \code{artif_gtp},
+describing an artificial global temporal patterns.
+}
 \references{
 #https://online.stat.psu.edu/stat510/lesson/6/6.1
 }

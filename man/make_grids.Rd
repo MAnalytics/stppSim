@@ -5,7 +5,7 @@
 \title{Make Square Grids}
 \usage{
 make_grids(poly, size = 250,
-show.output = FALSE, dir=NULL)
+show_output = FALSE, dir=NULL)
 }
 \arguments{
 \item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
@@ -15,7 +15,7 @@ cartesian CRS.}
 
 \item{size}{Square grid size to be generated.}
 
-\item{show.output}{(logical) To show the output.
+\item{show_output}{(logical) To show the output.
 Default: \code{FALSE}}
 
 \item{dir}{(character) Specifies the directory to
