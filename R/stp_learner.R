@@ -38,7 +38,10 @@
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
 #' @references https://www.google.co.uk/
-#' @importFrom dplyr select
+#' @importFrom dplyr select group_by
+#' mutate summarise left_join
+#' @importFrom tidyr replace_na
+#' @importFrom sp SpatialPoints proj4string
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
 
