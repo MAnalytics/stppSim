@@ -39,7 +39,7 @@
 #' @export
 #'
 
-constrained_spo <- function(bpoly, p_ratio = 5, show.plot = FALSE){
+constrained_spo <- function(bpoly=San_Francisco, p_ratio = 20, show.plot = FALSE){
 
   Class <- as <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
@@ -61,7 +61,7 @@ constrained_spo <- function(bpoly, p_ratio = 5, show.plot = FALSE){
   origins <- list()
 
     #convert to simple feature
-    poly2 <- st_as_sf(bpoly)
+    poly2 <- st_as_sf(backup_poly)
 
     #check if 'class' field is named incorrectly
     #check that a binary 'class' field exist
