@@ -21,6 +21,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
   splancs,
   dplyr,
+  tidyr,
   magrittr,
   utils,
   sf,
