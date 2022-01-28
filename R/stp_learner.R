@@ -193,7 +193,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
         print(paste("Warning: The projection system (crs) of 'poly'",
               "object is utilized!!", sep=" "))
       }
-      if(is.na(proj4string(poly))){
+      if(is.na(crs(poly))){
         stop(paste("'poly' object must have a projection!"))
       }
       boundary_ppt <- poly
@@ -202,7 +202,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     #determine if projection is in metres or feet
     #if metres, use 500m2
     #if feet, 5000ft2
-    s4_proj <- proj4string(poly)
+    s4_proj <- proj4string(boundary_ppt)
 
     if(grepl("+units=m", s4_proj, fixed = TRUE) == TRUE){
       grid_size <- 500
