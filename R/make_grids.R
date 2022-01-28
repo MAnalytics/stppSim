@@ -21,9 +21,12 @@
 #' @return Returns a spatial square grid system
 #' in a shapefile format
 #' @references https://www.google.co.uk/
-#' @importFrom sp spTransform proj4string bbox
+#' @importFrom sp pTransform proj4string bbox
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
-#' Polygon Polygons over
+#' Polygon Polygons
+#' @importFrom sf st_as_sf as_Spatial
+#' st_intersection
+#' @importFrom dplyr select
 #' @importFrom rgdal writeOGR
 #' @importFrom terra linearUnits rast
 #' @importFrom raster raster extent<- res<- crs<-
@@ -99,8 +102,13 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
  # Clipping the intersecting grid units with the boundary
  # List of grids that intersect the boundary
  area_B <- spTransform(area_B, CRS(proj_Coods))
- intersect_grids <- over(polys.df, area_B, returnList = FALSE)
- intersect_grids <- polys.df[which(!is.na(intersect_grids[,1])),]
+ intersect_grids <- st_intersection(st_as_sf(polys.df),
+                                    st_as_sf(area_B))
+ intersect_grids <- intersect_grids %>%
+   select(id)
+
+ #convert back to polygon dataframe
+ intersect_grids <- as_Spatial(intersect_grids)
 
  #Visulising the results
  if(show_output == TRUE){
