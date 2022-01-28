@@ -42,12 +42,16 @@
 #' sample dataset
 #' @references https://www.google.co.uk/
 #' @importFrom dplyr select group_by
-#' mutate summarise left_join n
+#' mutate summarise left_join n arrange
+#' desc
 #' @importFrom tidyr replace_na
 #' @importFrom sp SpatialPoints proj4string
+#' @importFrom stats predict loess
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string"){
 
+  #global var
+  grid_id <- count <- NULL
   origins <- list()
 
   #check if start_date is supplied, if not
@@ -258,6 +262,11 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
       arrange(desc(count))%>%
       mutate(prob = round(count/sum(count),
                           digits=10))
+
+
+    #Now arrange the result how I want it to
+    #look
+
 
 
     # #extract centroid coord of grids
