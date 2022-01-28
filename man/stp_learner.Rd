@@ -4,7 +4,8 @@
 \alias{stp_learner}
 \title{Learning the spatiao-temporal properties of sample data}
 \usage{
-stp_learner(ppt, start_date = NULL, poly = NULL)
+stp_learner(ppt, start_date = NULL, poly = NULL,
+crsys = "CRS_string")
 }
 \arguments{
 \item{ppt}{(matrix) coordinates (and time) vectors of points.
@@ -30,8 +31,8 @@ system (crs) when not NULL.}
 \item{crsys}{(string) The projection ('crs') system to utilize
 when 'poly' argument is not NULL. You can obtain CRS string
 from "http://spatialreference.org/". The \code{crs} can be set using
-`proj4string(poly) <- "CRS string"
-Default: \code{NULL}.}
+\verb{proj4string(poly) <- "CRS string", where }CRS string\verb{defines the projection of}ppt\verb{. When both }poly\code{and}crsys`
+are not NULL, the function utilizes the crs of the former}
 }
 \description{
 Learns all the spatial and temporal
@@ -45,13 +46,14 @@ sample dataset
 }
 \examples{
 data(SanF_fulldata)
+data(SanF_CRS_string)
 #get a sample data
 set.seed(1000)
 sample_size <- 500
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
 stp_learner(dat_sample,
-start_date = NULL, poly = NULL, crsys = NULL)
+start_date = NULL, poly = NULL, crsys = SanF_CRS_string)
 }
 \references{
 https://www.google.co.uk/
