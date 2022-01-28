@@ -51,7 +51,7 @@ sample_size <- 500
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
 stp_learner(dat_sample,
-start_date = NULL, poly = NULL)
+start_date = NULL, poly = NULL, crsys = NULL)
 }
 \references{
 https://www.google.co.uk/
