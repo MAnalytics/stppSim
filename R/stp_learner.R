@@ -22,18 +22,21 @@
 #' @param crsys (string) The projection ('crs') system to utilize
 #' when 'poly' argument is not NULL. You can obtain CRS string
 #' from "http://spatialreference.org/". The `crs` can be set using
-#' `proj4string(poly) <- "CRS string", where `CRS string` is
-#' appropriate crs string define the projection of the `ppt`.
-#' @usage stp_learner(ppt, start_date = NULL, poly = "crs_string")
+#' `proj4string(poly) <- "CRS string", where `CRS string` defines
+#' the projection of `ppt`. When both `poly` and `crsys`
+#' are not NULL, the function utilizes the crs of the former
+#' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
+#' crsys = "CRS_string")
 #' @examples
 #' data(SanF_fulldata)
+#' data(SanF_CRS_string)
 #' #get a sample data
 #' set.seed(1000)
 #' sample_size <- 500
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
 #' stp_learner(dat_sample,
-#' start_date = NULL, poly = NULL, crsys = NULL)
+#' start_date = NULL, poly = NULL, crsys = SanF_CRS_string)
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
@@ -164,11 +167,12 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     if(is.null(poly)){
       ppt_xy <-
         matrix(as.numeric(ppt[,1:2]),,2)
+      #create boundary from points
       boundary_ppt <- chull_poly(ppt_xy)
       #then define the crs
       if(is.null(crsys)){
         stop(paste("The 'crsys' argument cannot be NULL",
-             "while 'poly' argument is NULL!!",
+             "while 'poly' argument is also NULL!!",
              "Needs to define the 'crsys' argument", sep=" "))
       } else {
         proj4string(boundary_ppt) <- CRS(crsys)
@@ -177,6 +181,11 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
       }
 
     } else {
+
+      if(is.na(crs(poly))){
+        stop("The 'poly' object has no projection, i.e. crs")
+      }
+
       #first check that 'poly' has
       #a projection
       if(!is.null(crsys)){
