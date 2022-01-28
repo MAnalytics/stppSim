@@ -21,7 +21,7 @@
 #' @return Returns a spatial square grid system
 #' in a shapefile format
 #' @references https://www.google.co.uk/
-#' @importFrom sp pTransform proj4string bbox
+#' @importFrom sp spTransform proj4string bbox
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons
 #' @importFrom sf st_as_sf as_Spatial
