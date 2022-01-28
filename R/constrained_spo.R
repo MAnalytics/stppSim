@@ -39,7 +39,7 @@
 #' @export
 #'
 
-constrained_spo <- function(bpoly=San_Francisco, p_ratio = 20, show.plot = FALSE){
+constrained_spo <- function(bpoly, p_ratio = 20, show.plot = FALSE){
 
   Class <- as <- filter <- head <- ggplot <- geom_point <-
     aes <- x <- y <- geom_polygon <- hull <- theme_bw <-
