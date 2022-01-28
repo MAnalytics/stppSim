@@ -22,9 +22,9 @@
 #' @param crsys (string) The projection ('crs') system to utilize
 #' when 'poly' argument is not NULL. You can obtain CRS string
 #' from "http://spatialreference.org/". The `crs` can be set using
-#' `proj4string(poly) <- "CRS string"
-#' Default: \code{NULL}.
-#' @usage stp_learner(ppt, start_date = NULL, poly = NULL)
+#' `proj4string(poly) <- "CRS string", where `CRS string` is
+#' appropriate crs string define the projection of the `ppt`.
+#' @usage stp_learner(ppt, start_date = NULL, poly = "crs_string")
 #' @examples
 #' data(SanF_fulldata)
 #' #get a sample data
@@ -33,17 +33,17 @@
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
 #' stp_learner(dat_sample,
-#' start_date = NULL, poly = NULL)
+#' start_date = NULL, poly = NULL, crsys = NULL)
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
 #' @references https://www.google.co.uk/
 #' @importFrom dplyr select group_by
-#' mutate summarise left_join
+#' mutate summarise left_join n
 #' @importFrom tidyr replace_na
 #' @importFrom sp SpatialPoints proj4string
 #' @export
-stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = NULL){
+stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string"){
 
   origins <- list()
 
