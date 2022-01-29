@@ -23,7 +23,7 @@
 #' @param show.plot (TRUE or FALSE) To display plot showing
 #' base map (i.e. social configuration of the landscape, in
 #' terms of active and non-active spaces), and the event origins.
-#' @usage constrained_spo(bpoly, p_ratio = 5,
+#' @usage constrained_spo(bpoly, p_ratio = 20,
 #' show.plot=FALSE)
 #' @examples
 #' @details Note: The `class` field of 'bpoly'

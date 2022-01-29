@@ -265,7 +265,14 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
 
 
     #Now arrange the result how I want it to
-    #look
+    #look, for spo
+    #nam convention..
+
+
+
+
+
+
 
 
 
