@@ -6,6 +6,13 @@
 #' trend and the seasonality.
 #' @param n_events (integer) Total Number of events to simulate.
 #' Default: \code{1000}.
+#' @param start_date (Date) The start date of simulation. The date should
+#' be in the format `"yyyy-mm-dd"`. Default value is
+#' `"2000-01-01"`. A specified date can be earlier or later
+#' than this stated default value. By default, a 1-year worth of
+#' date is simulated. In other words, the end date of
+#' simulation is the next 365th day
+#' from the specified start date.
 #' @param spo (a list or dataframe) A list of spatial boundary
 #' coordinates (or shapefile) within which the events are confined.
 #' Should be generated using `random_spo` or `constrained_spo`
@@ -50,12 +57,13 @@
 #' @export
 #'
 
-psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
+psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50, st_skewness = 0.5, ...,
                  show.data=FALSE){
 
   #global variables
-  first_s_peak <- poly <- show.plot <- slope <-
-    trend <- start_date <- OriginType <- axis <-
+  # first_s_peak <- poly <- show.plot <- slope <-
+  #   trend <- start_date <- OriginType <-
+  #   axis <-
     group_by <- idx <- . <- if_else <-
     tid <- NULL
 
@@ -72,8 +80,8 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   poly <- spo$poly
 
   #test spo object class
-  if(spo$Class != "artif_spo"){
-    stop("The 'spo' object is NOT an 'artif_spo' Class!")
+  if(!spo$Class %in% c("artif_spo", "real_spo")){
+    stop("The 'spo' object is NOT of correct 'artif_spo' Class!")
   }
 
   #next, extract from the spo, the N x 2 matrix or dataframe giving the
@@ -88,7 +96,7 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
 
 
   #prepare date
-  t1 <- as.Date(paste("2021", start_date, sep="-"))
+  t1 <- as.Date(start_date)
   t <- seq(0, 365, by = 1)
   t2 <- t1 + t #list of dates
 
@@ -127,7 +135,7 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
   spo_xy <- spo$origins %>%
     select(x, y)
 
-  t1 <- Sys.time()
+  #t1 <- Sys.time()
 
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
@@ -137,9 +145,9 @@ psim <- function(n_events=2000, spo, s_threshold = 50, st_skewness = 0.5, ...,
                   show.plot = FALSE)
     )
 
-  t2 <- Sys.time()
-  tme <- t2 - t1
-  print(tme)
+  # t2 <- Sys.time()
+  # tme <- t2 - t1
+  # print(tme)
 
   #stop the cluster
   stopCluster(myCluster)
