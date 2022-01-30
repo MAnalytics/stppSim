@@ -27,6 +27,16 @@
 #' volume being skewed towards the dominant origins, as the value tends
 #' to \code{1}. Default: \code{0.5}. This index also controls the
 #' total volume of events across space and time.
+#' @param trend (a character) Specifying the direction of
+#' the global (linear) trend of the simulated time series.
+#' Three options
+#' available are `"decreasing"`, `"stable"`,
+#' and `"increasing"` trends. Default: `"stable"`.
+#' @param slope (a character) Slope angle for an
+#' "increasing" or "decreasing" trend. Two options
+#' are available: `"gentle"` and `"steep"`.
+#' Default value is \code{"NULL"} for the default trend
+#' (i.e. `stable`).
 #' @param show.data (TRUE or FALSE) To show the output data
 #' Default is \code{FALSE}.
 #' @param ... additional arguments to pass from
@@ -57,8 +67,11 @@
 #' @export
 #'
 
-psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50, st_skewness = 0.5, ...,
+psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50,
+                 st_skewness = 0.5, trend = "stable", slope = NULL,...,
                  show.data=FALSE){
+
+  start_date <- as.Date(start_date)
 
   #global variables
   # first_s_peak <- poly <- show.plot <- slope <-
@@ -91,7 +104,7 @@ psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date=start_date, trend=trend, slope=slope, first_s_peak=first_s_peak,
+  gtp <- gtp(start_date=start_date, trend, slope=slope, first_s_peak,
              show.plot=show.plot) #"01-01"
 
 
