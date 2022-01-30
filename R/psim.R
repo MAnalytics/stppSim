@@ -32,6 +32,13 @@
 #' Three options
 #' available are `"decreasing"`, `"stable"`,
 #' and `"increasing"` trends. Default: `"stable"`.
+#' @param first_s_peak (Date) The date that marks the
+#' first seasonal peak of the time series.
+#' Default value is \code{as.Date("2000-01-01")+90},
+#' i.e. 90 days after the
+#' specified `start_date` (implying a seasonal cycle of
+#' 180 days. The date should
+#' be in the format: `"yyyy-mm-dd"`.
 #' @param slope (a character) Slope angle for an
 #' "increasing" or "decreasing" trend. Two options
 #' are available: `"gentle"` and `"steep"`.

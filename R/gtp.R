@@ -40,7 +40,7 @@
 #'
 
 gtp <- function(start_date = "2000-01-01", trend = "stable",
-                slope = NULL, first_s_peak,
+                slope = NULL, first_s_peak=as.Date("2000-01-01")+90,
                 show.plot = FALSE){
 
   #function to check if start_date & first_s_peak are
