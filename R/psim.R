@@ -68,8 +68,7 @@
 #'
 
 psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50,
-                 st_skewness = 0.5, trend = "stable", slope = NULL,...,
-                 show.data=FALSE){
+                 st_skewness = 0.5, trend = "stable", slope = NULL, ..., show.data=FALSE){
 
   start_date <- as.Date(start_date)
 
