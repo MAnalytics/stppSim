@@ -5,7 +5,7 @@
 \title{Simulate spatial point origins constrained
 by the landscape (use) configuration of the urban space.}
 \usage{
-constrained_spo(bpoly, p_ratio = 5,
+constrained_spo(bpoly, p_ratio = 20,
 show.plot=FALSE)
 }
 \arguments{

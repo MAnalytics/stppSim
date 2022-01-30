@@ -4,14 +4,11 @@
 #' trend and the seasonality.
 #' @param start_date (Date) The start date of simulation. The date should
 #' be in the format `"yyyy-mm-dd"`. Default value is
-#' `"2020-01-01"`. A specified date can be earlier or later
-#' than the default value. By default, a 1-year worth of
+#' `"2000-01-01"`. A specified date can be earlier or later
+#' than this stated default value. By default, a 1-year worth of
 #' date is simulated. In other words, the end date of
 #' simulation is the next 365th day
 #' from the specified start date.
-#' @param t_resolution (character) The temporal resolution
-#' of the simulated dataset. Default:\code{"seconds"}
-#' (currently the only available argument).
 #' @param trend (a character) Specifying the direction of
 #' the global (linear) trend of the simulated time series.
 #' Three options
@@ -24,14 +21,15 @@
 #' (i.e. `stable`).
 #' @param first_s_peak (Date) The date that marks the
 #' first seasonal peak of the time series.
-#' Default value is `2000-03-30`, ~90th day after the
-#' default `start_date` (implying a seasonal cycle of
+#' Default value is \code{as.Date("2000-01-01")+90},
+#' i.e. 90 days after the
+#' specified `start_date` (implying a seasonal cycle of
 #' 180 days. The date should
 #' be in the format: `"yyyy-mm-dd"`.
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
-#' @usage gtp(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
-#' slope = "NULL", first_s_peak="2020-03-30", show.plot =FALSE)
+#' @usage gtp(start_date = "2000-01-01", trend = "stable",
+#' slope = "NULL", first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
 #' @examples
 #' @details Returns an object of the class `artif_gtp`,
 #' describing an artificial global temporal patterns.
@@ -41,19 +39,20 @@
 #' @export
 #'
 
-gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
-                slope = "NULL", first_s_peak = "2020-03-30", show.plot = FALSE){
+gtp <- function(start_date = "2000-01-01", trend = "stable",
+                slope = NULL, first_s_peak,
+                show.plot = FALSE){
 
   #function to check if start_date & first_s_peak are
   #in correct format
 
-  if(date_checker(c(start_date), format = "%Y-%m-%d") == FALSE){
-    stop("The 'start_date' specified is not in the correct format!")
-  }
-
-  if(date_checker(c(first_s_peak), format = "%Y-%m-%d") == FALSE){
-    stop("The 'first_s_peak' specified is not in the correct format!")
-  }
+  # if(date_checker(c(start_date), format == "%Y-%m-%d") == FALSE){
+  #   stop("The 'start_date' specified is not in the correct format!")
+  # }
+  #
+  # if(date_checker(c(first_s_peak), format == "%Y-%m-%d") == FALSE){
+  #   stop("The 'first_s_peak' specified is not in the correct format!")
+  # }
 
   #check if first_s_peak is greater than start date
   if(as.numeric(as.Date(first_s_peak) - as.Date(start_date)) <= 0){
@@ -64,9 +63,9 @@ gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
   output <- list() #output object
 
   #check the t resolution
-  if(t_resolution != 1){
-    stop("'t_resolution' needs to be '1'")
-  }
+  #if(t_resolution != 1){
+   # stop("'t_resolution' needs to be set as '1'")
+  #}
 
   #prepare date
   t1 <- as.Date(start_date)
@@ -84,7 +83,7 @@ gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
 
   #if trend is 'stable', slope has to be 'NULL'
   if(trend == "stable"){
-    if(slope != "NULL"){
+    if(!is.null(slope)){
       stop("Slope needs to be 'NULL' for a stable trend!")
     }
   }
@@ -93,7 +92,7 @@ gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
   steep <-  ((max(y)) - min(y))/(365-0) #slope
 
   if(trend == "decreasing"){
-    if(slope == "NULL"){
+    if(is.null(slope)){
       stop("Slope cannot be NULL for a decreasing trend!")
     }
     #check slope
@@ -112,7 +111,7 @@ gtp <- function(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
 
   if(trend == "increasing"){
 
-    if(slope == "NULL"){
+    if(is.null(slope)){
       stop("Slope cannot be NULL for an increasing trend!")
     }
 

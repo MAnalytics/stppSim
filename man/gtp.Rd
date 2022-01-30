@@ -4,21 +4,17 @@
 \alias{gtp}
 \title{Modeling of the Global Temporal Pattern}
 \usage{
-gtp(start_date = "2020-01-01", t_resolution = 1, trend = "stable",
-slope = "NULL", first_s_peak="2020-03-30", show.plot =FALSE)
+gtp(start_date = "2000-01-01", trend = "stable",
+slope = "NULL", first_s_peak=as.Date(start_date)+90, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{(Date) The start date of simulation. The date should
 be in the format \code{"yyyy-mm-dd"}. Default value is
-\code{"2020-01-01"}. A specified date can be earlier or later
-than the default value. By default, a 1-year worth of
+\code{"2000-01-01"}. A specified date can be earlier or later
+than this stated default value. By default, a 1-year worth of
 date is simulated. In other words, the end date of
 simulation is the next 365th day
 from the specified start date.}
-
-\item{t_resolution}{(character) The temporal resolution
-of the simulated dataset. Default:\code{"seconds"}
-(currently the only available argument).}
 
 \item{trend}{(a character) Specifying the direction of
 the global (linear) trend of the simulated time series.
@@ -34,8 +30,8 @@ Default value is \code{"NULL"} for the default trend
 
 \item{first_s_peak}{(Date) The date that marks the
 first seasonal peak of the time series.
-Default value is \code{2000-03-30}, ~90th day after the
-default \code{start_date} (implying a seasonal cycle of
+Default value is \code{as.Date(start_date)+90}, i.e. 90 days after the
+specified \code{start_date} (implying a seasonal cycle of
 180 days. The date should
 be in the format: \code{"yyyy-mm-dd"}.}
 

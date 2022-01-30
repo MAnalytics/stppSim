@@ -6,9 +6,12 @@
 \usage{
 psim(
   n_events = 2000,
+  start_date = "2000-01-01",
   spo,
   s_threshold = 50,
   st_skewness = 0.5,
+  trend = "stable",
+  slope = NULL,
   ...,
   show.data = FALSE
 )
@@ -16,6 +19,14 @@ psim(
 \arguments{
 \item{n_events}{(integer) Total Number of events to simulate.
 Default: \code{1000}.}
+
+\item{start_date}{(Date) The start date of simulation. The date should
+be in the format \code{"yyyy-mm-dd"}. Default value is
+\code{"2000-01-01"}. A specified date can be earlier or later
+than this stated default value. By default, a 1-year worth of
+date is simulated. In other words, the end date of
+simulation is the next 365th day
+from the specified start date.}
 
 \item{spo}{(a list or dataframe) A list of spatial boundary
 coordinates (or shapefile) within which the events are confined.
@@ -33,6 +44,18 @@ The value ranges from \code{0 - 1}, with event
 volume being skewed towards the dominant origins, as the value tends
 to \code{1}. Default: \code{0.5}. This index also controls the
 total volume of events across space and time.}
+
+\item{trend}{(a character) Specifying the direction of
+the global (linear) trend of the simulated time series.
+Three options
+available are \code{"decreasing"}, \code{"stable"},
+and \code{"increasing"} trends. Default: \code{"stable"}.}
+
+\item{slope}{(a character) Slope angle for an
+"increasing" or "decreasing" trend. Two options
+are available: \code{"gentle"} and \code{"steep"}.
+Default value is \code{"NULL"} for the default trend
+(i.e. \code{stable}).}
 
 \item{...}{additional arguments to pass from
 \code{gtp} and \code{walker} functions. Arguments from
