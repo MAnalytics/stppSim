@@ -11,6 +11,7 @@ psim(
   s_threshold = 50,
   st_skewness = 0.5,
   trend = "stable",
+  first_s_peak,
   slope = NULL,
   ...,
   show.data = FALSE
@@ -50,6 +51,14 @@ the global (linear) trend of the simulated time series.
 Three options
 available are \code{"decreasing"}, \code{"stable"},
 and \code{"increasing"} trends. Default: \code{"stable"}.}
+
+\item{first_s_peak}{(Date) The date that marks the
+first seasonal peak of the time series.
+Default value is \code{as.Date("2000-01-01")+90},
+i.e. 90 days after the
+specified \code{start_date} (implying a seasonal cycle of
+180 days. The date should
+be in the format: \code{"yyyy-mm-dd"}.}
 
 \item{slope}{(a character) Slope angle for an
 "increasing" or "decreasing" trend. Two options

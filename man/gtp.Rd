@@ -5,7 +5,7 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 gtp(start_date = "2000-01-01", trend = "stable",
-slope = "NULL", first_s_peak=as.Date(start_date)+90, show.plot =FALSE)
+slope = "NULL", first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{(Date) The start date of simulation. The date should
@@ -30,7 +30,8 @@ Default value is \code{"NULL"} for the default trend
 
 \item{first_s_peak}{(Date) The date that marks the
 first seasonal peak of the time series.
-Default value is \code{as.Date(start_date)+90}, i.e. 90 days after the
+Default value is \code{as.Date("2000-01-01")+90},
+i.e. 90 days after the
 specified \code{start_date} (implying a seasonal cycle of
 180 days. The date should
 be in the format: \code{"yyyy-mm-dd"}.}
