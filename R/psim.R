@@ -63,13 +63,14 @@
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
 #' @importFrom dplyr mutate bind_rows select
-#' summarise left_join
+#' summarise left_join rename
 #' @importFrom tibble rownames_to_column
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom foreach foreach %dopar%
 #' @importFrom iterators iter
 #' @importFrom graphics points legend
+#' @importFrom lubridate hms
 #'
 #' @export
 #'
@@ -94,7 +95,7 @@ psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50
   #define global variables
   x <- y <- NULL
 
-  #spo <- random_spo(poly, npoints=50, p_ratio, show.plot=TRUE)
+  #spo <- random_spo(poly, npoints=5, p_ratio, show.plot=TRUE)
 
 
   #get the poly
@@ -188,8 +189,10 @@ psim <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50
 
     p_events <- p_events %>%
       mutate(locid=loc, prob=spo$origins$prob[loc],
-           OriginType = spo$origins$OriginType[loc]) #%>%
-
+           OriginType = spo$origins$OriginType[loc]) %>%
+      mutate(time=format(((tid-1) + start_date + hms(time)),
+                         "%Y-%m-%d %H:%M:%S"))%>%
+      rename(datetime=time)
   stp_All <- stp_All %>%
     bind_rows(p_events)
 

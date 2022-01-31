@@ -29,7 +29,7 @@
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage gtp(start_date = "2000-01-01", trend = "stable",
-#' slope = "NULL", first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
+#' slope = NULL, first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
 #' @examples
 #' @details Returns an object of the class `artif_gtp`,
 #' describing an artificial global temporal patterns.
@@ -61,11 +61,6 @@ gtp <- function(start_date = "2000-01-01", trend = "stable",
 
 
   output <- list() #output object
-
-  #check the t resolution
-  #if(t_resolution != 1){
-   # stop("'t_resolution' needs to be set as '1'")
-  #}
 
   #prepare date
   t1 <- as.Date(start_date)

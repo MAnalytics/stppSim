@@ -5,7 +5,7 @@
 \title{Modeling of the Global Temporal Pattern}
 \usage{
 gtp(start_date = "2000-01-01", trend = "stable",
-slope = "NULL", first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
+slope = NULL, first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{(Date) The start date of simulation. The date should
