@@ -41,7 +41,8 @@ Imports:
   foreach,
   iterators,
   graphics,
-  grDevices
+  grDevices,
+  lubridate
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
