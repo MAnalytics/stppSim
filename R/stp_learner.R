@@ -19,6 +19,13 @@
 #' arbitrary boundary is drawn to cover the spatial
 #' point distribution. The 'poly' object must have a projection
 #' system (crs) when not NULL.
+#' @param npoints (an integer) Number of origins (points) to simulate
+#' @param p_ratio (an integer) The smaller of the
+#' two terms of the Pareto ratio. For example, for a \code{20:80}
+#' ratio, `p_ratio` will be \code{20}. Default value is
+#' \code{30}. Valid inputs are \code{10}, \code{20},
+#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
+#' 30% dominant and 70% non-dominant origins.
 #' @param crsys (string) The projection ('crs') system to utilize
 #' when 'poly' argument is not NULL. You can obtain CRS string
 #' from "http://spatialreference.org/". The `crs` can be set using
@@ -48,7 +55,9 @@
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
 #' @export
-stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string"){
+stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio, crsys = "CRS_string"){
+
+  output <- list()
 
   #global var
   grid_id <- count <- NULL
@@ -74,7 +83,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     #ensuring data does not exceed 1-year length
     if(as.numeric(difftime(max(ppt_df$t), min(ppt_df$t), units="days")) > 365){
       stop(paste("Data length is greater than 365 days!",
-                 "Less than or equal to 1-year data length is required!"))
+                 "Data length has to be less than or equal to 1-year!"))
     }
 
 
@@ -218,7 +227,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     if((grepl("+units=m", s4_proj, fixed = TRUE) == FALSE)&
        (grepl("+units=us-ft", s4_proj, fixed = TRUE)==FALSE)){
       stop(paste("Specified 'crs' not recognized!",
-                 "A 'Metre-based' projection is preferred", sep=" "))
+                 "A 'Metre- or Feet-based' projection is preferred", sep=" "))
     }
 
     #create regular grids
@@ -227,7 +236,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE,
                dir=NULL)
     grid_sys$grid_id <- 1:length(grid_sys)
-
     #plot(grid_sys)
 
     #Now overlay points on the grids
@@ -252,28 +260,34 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     colnames(pnt_grid_intsct) <- c("id", "grid_id")
     pnt_grid_intsct$id <- as.character(pnt_grid_intsct$id)
 
+    grid_sys %>%
+      st_centroid() %>%
+      st_geometry()
+
+    stc <- st_centroid(grid_sys)
+    ptsxy <- data.frame(cbind(do.call(rbind, st_geometry(stc)),
+                              stc$grid_id))
+    colnames(ptsxy) <- c("x","y","grid_id")
+
+
     #join
     #Assign the probability value to each grid
     #based on its historical events
-    ppt_df_join_count <- ppt_df %>%
+    spo <- ppt_df %>%
       left_join(pnt_grid_intsct)%>%
       group_by(grid_id) %>%
       summarise(count = n()) %>%
       arrange(desc(count))%>%
       mutate(prob = round(count/sum(count),
-                          digits=10))
+                          digits=10)) %>%
+      left_join(ptsxy) %>%
+      arrange(desc(prob))
+      #randomly select...50..OriginType, plot the curve...elbow
 
 
     #Now arrange the result how I want it to
     #look, for spo
     #nam convention..
-
-
-
-
-
-
-
 
 
     # #extract centroid coord of grids
@@ -295,6 +309,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, crsys = "CRS_string
     # origins$gtp <-
     # origins$Class <- "real_spo"
     #NEXT
+    output$origin <- spo
+
+    return(output)
 
 }
   #
