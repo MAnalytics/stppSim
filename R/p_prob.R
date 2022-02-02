@@ -2,7 +2,7 @@
 #' @description Given a specified number of points \code{n},
 #' this function generates an \code{n} probability values
 #' in accordance with a specified Pareto ratio.
-#' @param npoints (an integer) Number of points. Default is
+#' @param n_origin (an integer) Number of origins. Default is
 #' \code{50}.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio. For instance, for a
@@ -11,7 +11,7 @@
 #' \code{30}, or \code{40}. The 'p_ratio'
 #' determines the proportion of points that are the most
 #' dominant event generators.
-#' @usage p_prob(npoints,  p_ratio = 30)
+#' @usage p_prob(n_origin,  p_ratio = 30)
 #' @examples
 #' @details
 #' @return Returns the global temporal pattern
@@ -19,7 +19,7 @@
 #' @importFrom magrittr %>%
 #' @export
 
-p_prob <- function(npoints = 50, p_ratio = 30){
+p_prob <- function(n_origin = 50, p_ratio = 30){
 
   mutate <- area <- total <-  NULL
 
@@ -38,7 +38,7 @@ p_prob <- function(npoints = 50, p_ratio = 30){
 
 #}
 
-  n <- npoints
+  n <- n_origin
 
   #get the constant
   constant<-exp_param_table[which(exp_param_table$ratio == p_ratio),
