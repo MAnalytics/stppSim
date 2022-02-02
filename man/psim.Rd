@@ -2,7 +2,7 @@
 % Please edit documentation in R/psim.R
 \name{psim}
 \alias{psim}
-\title{Modeling of the Global Temporal Pattern}
+\title{Point Pattern Simulation}
 \usage{
 psim(
   n_events = 2000,
@@ -18,8 +18,10 @@ psim(
 )
 }
 \arguments{
-\item{n_events}{(integer) Total Number of events to simulate.
-Default: \code{1000}.}
+\item{n_events}{(integer) Value of the total
+number of points (events) to simulate. Default: \code{2000}.
+A vector of integer values can also be inputted, such as
+\code{c(a1, a2, ....)}, where a1, a2, ... represent different values.}
 
 \item{start_date}{(Date) The start date of simulation. The date should
 be in the format \code{"yyyy-mm-dd"}. Default value is
@@ -80,9 +82,13 @@ Default is \code{FALSE}.}
 Returns the global temporal pattern
 }
 \description{
-Models the global temporal pattern (of
-the point process) as consisting of the global linear
-trend and the seasonality.
+Generate point pattern in space and time
+based on a specified global temporal pattern and
+spatial properties.
+}
+\details{
+A list containing \code{k} entries,
+where \code{k} is the length of \code{n_events} (see above).
 }
 \references{
 #https://online.stat.psu.edu/stat510/lesson/6/6.1
