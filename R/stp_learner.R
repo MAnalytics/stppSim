@@ -19,7 +19,9 @@
 #' arbitrary boundary is drawn to cover the spatial
 #' point distribution. The 'poly' object must have a projection
 #' system (crs) when not NULL.
-#' @param npoints (an integer) Number of origins (points) to simulate
+#' @param n_origin (an integer) Number of origins to simulate.
+#' Default:\code{50}. This is the parameter that has the greatest
+#' influence on the computational time.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of the Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -55,7 +57,8 @@
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
 #' @export
-stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio, crsys = "CRS_string"){
+stp_learner <- function(ppt, start_date = NULL, poly = NULL,
+                        n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE){
 
   output <- list()
 
@@ -86,6 +89,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
                  "Data length has to be less than or equal to 1-year!"))
     }
 
+    final_start_date <- min_t
 
   } else{
     if(date_checker(c(start_date), format = "%Y-%m-%d") == FALSE){
@@ -132,7 +136,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
                  "Less than or equal to 1-year data length is required!"))
     }
 
+    final_start_date <- start_date
   }
+
 
   #Now, learn the temporal pattern and trend from
   #the sample dataset
@@ -146,10 +152,12 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
 
     #create a sub table
     time <- data.frame(time=1:365)
+    t <- as.vector(unlist(time))
 
     dat_sample_p <- time %>%
       left_join(dat_sample_p) %>%
       dplyr::mutate(n = replace_na(n, 0))
+
 
     #unique(dat_sample_p$time)
 
@@ -169,6 +177,12 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
     s_factor <- 10
     #--------------------
     loessData$y <- loessData$y * s_factor
+
+    gtp <- loessData$y
+    # if(show.plot == TRUE){
+    #   flush.console()
+    #   plot(t, gtp, 'l')
+    # }
     #--------------------
 
     #----------------------------------
@@ -217,11 +231,18 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
     #if feet, 5000ft2
     s4_proj <- proj4string(boundary_ppt)
 
+    #determine grid size by dividing the area
+    #by n_origin
+    m_square <- as.numeric(st_area(st_as_sf(boundary_ppt))) / n_origin
+
+
     if(grepl("+units=m", s4_proj, fixed = TRUE) == TRUE){
-      grid_size <- 500
+      #grid_size <- 500
+      grid_size <- m_square^(1/2)
     }
     if(grepl("+units=us-ft", s4_proj, fixed = TRUE)==TRUE){
-      grid_size <- 1700
+      #grid_size <- 1700
+      grid_size <- m_square^(1/2)
       }
 
     if((grepl("+units=m", s4_proj, fixed = TRUE) == FALSE)&
@@ -235,6 +256,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
     set.seed(1000)
     grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE,
                dir=NULL)
+    #plot(grid_sys)
     grid_sys$grid_id <- 1:length(grid_sys)
     #plot(grid_sys)
 
@@ -260,16 +282,17 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
     colnames(pnt_grid_intsct) <- c("id", "grid_id")
     pnt_grid_intsct$id <- as.character(pnt_grid_intsct$id)
 
-    grid_sys %>%
-      st_centroid() %>%
-      st_geometry()
-
     stc <- st_centroid(grid_sys)
     ptsxy <- data.frame(cbind(do.call(rbind, st_geometry(stc)),
                               stc$grid_id))
     colnames(ptsxy) <- c("x","y","grid_id")
 
-
+    #select n_origin grids
+    #based on the prob field
+    # set.seed(2000)
+    # pt_origin_sample <- as.numeric(sample(1:length(ptsxy$grid_id),
+    #                                       size = n_origin, replace=FALSE,
+    #                                       prob = ptsxy$prob))
     #join
     #Assign the probability value to each grid
     #based on its historical events
@@ -281,35 +304,54 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL, npoints=5, p_ratio,
       mutate(prob = round(count/sum(count),
                           digits=10)) %>%
       left_join(ptsxy) %>%
-      arrange(desc(prob))
+      arrange(prob)#%>%
+
+    #----------------------------------
+    #Append origin type
+    #----------------------------------
+    no_of_non_dom <- round(nrow(spo)*(100-p_ratio)/100, digits=0)
+    no_of_dom <- round(nrow(spo)*(p_ratio)/100, digits = 0)
+
+    #create labels
+    #check to ensure that the total adds up
+    if((no_of_non_dom + no_of_dom) < nrow(spo)){
+      no_of_non_dom <- no_of_non_dom + 1
+      OriginType <- c(rep("Non-dominant", no_of_non_dom),
+                      rep("Dominant", no_of_dom))
+    }
+
+    if(((no_of_non_dom + no_of_dom) != nrow(spo))&((no_of_non_dom + no_of_dom) > nrow(spo))){
+      stop("Process terminated! Increase the value of 'n_origin'!")
+    }
+
+    if((no_of_non_dom + no_of_dom) == nrow(spo)){
+      OriginType <- c(rep("Non-dominant", no_of_non_dom),
+                      rep("Dominant", no_of_dom))
+    }
+
+    spo <- data.frame(spo, OriginType)
       #randomly select...50..OriginType, plot the curve...elbow
 
-
-    #Now arrange the result how I want it to
-    #look, for spo
-    #nam convention..
+    p <- ggplot(data = spo) +
+      geom_point(mapping = aes(x = x, y = y, colour = OriginType))#+
 
 
-    # #extract centroid coord of grids
-    # grid_sys_xy <- cbind(grid_sys$grid_id,
-    #                      extract_coords(grid_sys))
-    #
-    #
-    # #Assign the probability value
-    # #based on pareto ratio
-    # grid_sys %>%
-    #   leppt_df_join_count
-    #
-    # origins$origins <- ran_points_prob
-    # origins$plot <- p
-    # origins$poly <- backup_poly
-    # origins$Class <- "artif_spo"
-    #
-    # origins$gtp <-
-    # origins$gtp <-
-    # origins$Class <- "real_spo"
-    #NEXT
-    output$origin <- spo
+    if(show.plot==TRUE){
+      flush.console()
+      p + geom_polygon(data = hull%>%select(x,y),
+                       aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+        theme_light()
+    }
+
+    #}
+
+
+    origins$origins <- spo
+    origins$gtp <- gtp
+    origins$plot <- p
+    origins$poly <- boundary_ppt
+    origins$Class <- "real_spo"
 
     return(output)
 
