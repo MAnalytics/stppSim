@@ -48,8 +48,8 @@ Suggests:
     knitr,
     rmarkdown
 Collate: 
+    'artif_spo.R'
     'chull_poly.R'
-    'constrained_spo.R'
     'data.R'
     'date_checker.R'
     'extract_coords.R'
@@ -58,6 +58,6 @@ Collate:
     'p_prob.R'
     'poly_tester.R'
     'walker.R'
-    'psim.R'
-    'random_spo.R'
+    'psim_artif.R'
+    'psim_real.R'
     'stp_learner.R'
