@@ -34,8 +34,10 @@
 #' `proj4string(poly) <- "CRS string", where `CRS string` defines
 #' the projection of `ppt`. When both `poly` and `crsys`
 #' are not NULL, the function utilizes the crs of the former
+#' @param show.plot (TRUE or FALSE) Whether to display
+#' the plots after execution.
 #' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
-#' crsys = "CRS_string")
+#' n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE)
 #' @examples
 #' data(SanF_fulldata)
 #' data(SanF_CRS_string)
@@ -45,7 +47,8 @@
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
 #' stp_learner(dat_sample,
-#' start_date = NULL, poly = NULL, crsys = SanF_CRS_string)
+#' start_date = NULL, poly = NULL, n_origin=50, p_ratio,
+#' crsys = SanF_CRS_string,  show.plot = FALSE)
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
@@ -56,9 +59,14 @@
 #' @importFrom tidyr replace_na
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
+#' @importFrom sf st_area st_geometry st_centroid
+#' @importFrom ggplot2 aes theme element_text
+#' theme_light
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE){
+
+  prob <- NULL
 
   output <- list()
 
