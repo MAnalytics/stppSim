@@ -32,7 +32,7 @@
 #' `proj4string(poly) <- "CRS string", where `CRS string` defines
 #' the projection of `ppt`. When both `poly` and `crsys`
 #' are not NULL, the function utilizes the crs of the former
-#' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
+#' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' crsys = "CRS_string")
 #' @examples
 #' data(SanF_fulldata)
@@ -42,7 +42,7 @@
 #' sample_size <- 1000
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
-#' stp_learner(dat_sample,
+#' psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, crsys = SanF_CRS_string)
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
@@ -56,8 +56,9 @@
 #' @importFrom stats predict loess
 #' @export
 
-psim_artif <- function(ppt, n_events=2000, start_date = NULL, poly = NULL,
+psim_real <- function(n_events=2000, ppt, start_date = NULL, poly = NULL,
                        crsys = SanF_CRS_string){
+
 
   output <- list()
 
