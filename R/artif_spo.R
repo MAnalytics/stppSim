@@ -19,7 +19,7 @@
 #' 30% dominant and 70% non-dominant origins.
 #' @param show.plot (TRUE or FALSE) To display plot showing
 #' origins.
-#' @usage random_spo(poly, n_origin, p_ratio, show.plot=FALSE)
+#' @usage artif_spo(poly, n_origin, p_ratio, show.plot=FALSE)
 #' @examples
 #' @details Returns an object of the class `artif_spo`,
 #' detailing the properties of artificial (simulated) spatial point
