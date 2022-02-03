@@ -46,6 +46,8 @@
 #' are available: `"gentle"` and `"steep"`.
 #' Default value is \code{"NULL"} for the default trend
 #' (i.e. `stable`).
+#' @param show.plot (TRUE or FALSE) Whether to display
+#' the plots after execution.
 #' @param show.data (TRUE or FALSE) To show the output data
 #' Default is \code{FALSE}.
 #' @param ... additional arguments to pass from

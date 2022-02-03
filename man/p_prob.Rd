@@ -4,10 +4,10 @@
 \alias{p_prob}
 \title{Pareto Probability distribution}
 \usage{
-p_prob(npoints,  p_ratio = 30)
+p_prob(n_origin,  p_ratio = 30)
 }
 \arguments{
-\item{npoints}{(an integer) Number of points. Default is
+\item{n_origin}{(an integer) Number of origins. Default is
 \code{50}.}
 
 \item{p_ratio}{(an integer) The smaller of the
