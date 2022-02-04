@@ -75,6 +75,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
   st_properties <- stp_learner(ppt=dat_sample, start_date = start_date,
                                poly = poly, n_origin=50,
                                p_ratio = p_ratio, crsys = crsys)
+  #return start_date
 
   #names(st_properties)
 
@@ -136,20 +137,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
 
   stp_All <- NULL
 
-.
-.
-.
-
-
   #combine all results by
-  for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
+  for(loc in 1:length(st_properties$origins$OriginType)){ #loc<-1
     #extract slot 'intersection'
     p_events <- rbindlist(pp_allTime[[loc]],
                           use.names=TRUE, fill=TRUE, idcol="tid")
 
     p_events <- p_events %>%
-      mutate(locid=loc, prob=spo$origins$prob[loc],
-             OriginType = spo$origins$OriginType[loc]) %>%
+      mutate(locid=loc, prob=st_properties$origins$prob[loc],
+             OriginType = st_properties$origins$OriginType[loc]) %>%
       #mutate(time=(tid-1) + as.Date(start_date))
 
       mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
@@ -233,7 +229,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
   #Resulting global temporal bandwidth
 
   #combine and add as details
-  @data
   #-------------------------------------------
   return(output)
 
