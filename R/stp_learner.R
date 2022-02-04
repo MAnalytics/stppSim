@@ -47,7 +47,7 @@
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
 #' stp_learner(dat_sample,
-#' start_date = NULL, poly = NULL, n_origin=50, p_ratio,
+#' start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
 #' crsys = SanF_CRS_string,  show.plot = FALSE)
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
@@ -61,7 +61,7 @@
 #' @importFrom stats predict loess
 #' @importFrom sf st_area st_geometry st_centroid
 #' @importFrom ggplot2 aes theme element_text
-#' theme_light
+#' theme_light geom_sf
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE){
@@ -340,26 +340,40 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     spo <- data.frame(spo, OriginType)
       #randomly select...50..OriginType, plot the curve...elbow
 
-    p <- ggplot(data = spo) +
-      geom_point(mapping = aes(x = x, y = y, colour = OriginType))#+
+    spo_xy <- spo %>%
+      select(x, y) %>%
+      as.matrix()
 
+    spo_xy_point <- SpatialPoints(spo_xy)
+    spo_xy_point$OriginType <- spo$OriginType
+    proj4string(spo_xy_point) <- crs(boundary_ppt)
+    spo_xy_point <- st_as_sf(spo_xy_point)
+    spo_xy_point$x <- st_coordinates(spo_xy_point)[,1]
+    spo_xy_point$y <- st_coordinates(spo_xy_point)[,2]
+
+    p <- NULL
 
     if(show.plot==TRUE){
       flush.console()
-      p + geom_polygon(data = hull%>%select(x,y),
-                       aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9) +
+      p <- st_as_sf(boundary_ppt) %>%
+        ggplot() + geom_sf(aes(), fill="NA") +
+        geom_point(st_as_sf(spo_xy_point),
+                   mapping = aes(x = x, y = y, colour = OriginType)) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
         theme_light()
+
+      p
     }
 
     #}
 
 
-    origins$origins <- spo
-    origins$gtp <- gtp
-    origins$plot <- p
-    origins$poly <- boundary_ppt
-    origins$Class <- "real_spo"
+    output$origins <- spo
+    output$gtp <- gtp
+    #s_threshold..
+    output$plot <- p
+    output$poly <- boundary_ppt
+    output$Class <- "real_spo"
 
     return(output)
 
