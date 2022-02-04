@@ -5,7 +5,7 @@
 \title{Point Pattern Simulation from real origins}
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-crsys = "CRS_string")
+n_origin=50, p_ratio=20, crsys = "CRS_string")
 }
 \arguments{
 \item{n_events}{(integer) Value of the total
@@ -33,6 +33,17 @@ arbitrary boundary is drawn to cover the spatial
 point distribution. The 'poly' object must have a projection
 system (crs) when not NULL.}
 
+\item{n_origin}{(an integer) Number of origins to simulate.
+Default:\code{50}. This is the parameter that has the greatest
+influence on the computational time.}
+
+\item{p_ratio}{(an integer) The smaller of the
+two terms of the Pareto ratio. For example, for a \code{20:80}
+ratio, \code{p_ratio} will be \code{20}. Default value is
+\code{30}. Valid inputs are \code{10}, \code{20},
+\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
+30\% dominant and 70\% non-dominant origins.}
+
 \item{crsys}{(string) The projection ('crs') system to utilize
 when 'poly' argument is not NULL. You can obtain CRS string
 from "http://spatialreference.org/". The \code{crs} can be set using
@@ -59,7 +70,8 @@ sample_size <- 1000
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
 psim_real(n_events=2000, ppt=dat_sample,
-start_date = NULL, poly = NULL, crsys = SanF_CRS_string)
+start_date = NULL, poly = NULL,
+n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
 }
 \references{
 https://www.google.co.uk/

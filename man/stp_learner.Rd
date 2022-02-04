@@ -67,7 +67,7 @@ sample_size <- 500
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
 stp_learner(dat_sample,
-start_date = NULL, poly = NULL, n_origin=50, p_ratio,
+start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
 crsys = SanF_CRS_string,  show.plot = FALSE)
 }
 \references{
