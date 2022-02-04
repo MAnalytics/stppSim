@@ -370,6 +370,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     output$origins <- spo
     output$gtp <- gtp
+    Output$start_date <- start_date
     #s_threshold..
     output$plot <- p
     output$poly <- boundary_ppt
