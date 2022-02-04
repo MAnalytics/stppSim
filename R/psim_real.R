@@ -69,6 +69,7 @@
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
                       n_origin=50, p_ratio=20, crsys = "CRS_string"){
 
+  idx <- tid <-
 
   output <- list()
 
@@ -124,9 +125,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
                       show.plot = FALSE)
     )
 
-  t2 <- Sys.time()
-  tme <- t2 - t1
-  print(tme)
+  #t2 <- Sys.time()
+  #tme <- t2 - t1
+  #print(tme)
 
   #stop the cluster
   stopCluster(myCluster)
@@ -188,9 +189,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
        ylab = "y")
 
   #add origins
-  spo_forPlot <- spo$origins %>%
+  spo_forPlot <- st_properties$origins %>%
     mutate(pch = as.numeric(if_else(OriginType == "Dominant",
-                         paste("20"), paste("1"))))
+                   paste("20"), paste("1")))) #'20' is point type
 
   points(spo_forPlot$x, spo_forPlot$y,
          add=TRUE, pch=spo_forPlot$pch, col="red",
