@@ -44,6 +44,7 @@
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' n_origin=50, p_ratio=20, crsys = "CRS_string")
 #' @examples
+#' \dontrun{
 #' data(SanF_fulldata)
 #' data(SanF_CRS_string)
 #' #get a sample data
@@ -51,9 +52,10 @@
 #' sample_size <- 1000
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
-#' psim_real(n_events=2000, ppt=dat_sample,
+#' result <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL,
 #' n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
+#' }
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
