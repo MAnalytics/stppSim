@@ -62,6 +62,7 @@ detailing the spatiotemporal properties of a real
 sample dataset
 }
 \examples{
+\dontrun{
 data(SanF_fulldata)
 data(SanF_CRS_string)
 #get a sample data
@@ -69,9 +70,10 @@ set.seed(1000)
 sample_size <- 1000
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
-psim_real(n_events=2000, ppt=dat_sample,
+result <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL,
 n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
+}
 }
 \references{
 https://www.google.co.uk/
