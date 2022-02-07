@@ -234,6 +234,20 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       boundary_ppt <- poly
     }
 
+    #calculate spatial bandwidth
+    #boundary coord
+    x_min <- min(extract_coords(boundary_ppt)$X)
+    x_max <- max(extract_coords(boundary_ppt)$X)
+
+    y_min <- min(extract_coords(boundary_ppt)$Y)
+    y_max <- max(extract_coords(boundary_ppt)$Y)
+
+    ppt_df_ppp <- ppp(x=as.numeric(ppt_df$x),
+        y=as.numeric(ppt_df$y),
+        window = owin(c(x_min, x_max),
+                      c(y_min, y_max)))
+
+
     #determine if projection is in metres or feet
     #if metres, use 500m2
     #if feet, 5000ft2
