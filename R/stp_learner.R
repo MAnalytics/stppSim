@@ -62,6 +62,8 @@
 #' @importFrom sf st_area st_geometry st_centroid
 #' @importFrom ggplot2 aes theme element_text
 #' theme_light geom_sf
+#' @importFrom spatstat.geom ppp owin
+#' @importFrom sparr OS
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE){
@@ -247,6 +249,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
         window = owin(c(x_min, x_max),
                       c(y_min, y_max)))
 
+    sbw <- OS(ppt_df_ppp)/4
 
     #determine if projection is in metres or feet
     #if metres, use 500m2
@@ -385,7 +388,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     output$origins <- spo
     output$gtp <- gtp
     output$start_date <- start_date
-    #s_threshold..
+    output$s_threshold <- sbw
     output$plot <- p
     output$poly <- boundary_ppt
     output$Class <- "real_spo"
