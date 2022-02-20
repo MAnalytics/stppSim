@@ -1,4 +1,3 @@
-#' @include resistanceFromShape
 #' @title Space (landscape) resistance raster
 #' @description Build a space resistance map
 #' from one or more shapefiles. Function builds
@@ -13,7 +12,7 @@
 #' @param binary if TRUE, the shapefile will be rasterized
 #' so that any feature is assigned a value of 0,
 #' and the background 1.
-#' @param field either a number in the range [0-1], in
+#' @param field either a number in the range 0 to 1sa, in
 #' which case it will be assigned to all pixels covered
 #' by features of the shapefile; or the name of the numeric
 #' shapefile field from which to extract such number; or
@@ -39,6 +38,7 @@
 #' Movements in River Networks and Heterogeneous Landscapes_.
 #' R package version 1.0.4, <URL:
 #' https://CRAN.R-project.org/package=SiMRiv>.
+#' @importFrom SiMRiv resistanceFromShape
 #' @export
 
 space_resistance <- function(shp, baseRaster, res, binary = is.na(field),
@@ -48,9 +48,9 @@ space_resistance <- function(shp, baseRaster, res, binary = is.na(field),
 
   space_res <- resistanceFromShape(shp, baseRaster, res, binary = is.na(field)
                       , field = NA, background = 1, buffer = NA, margin = 0
-                      , mapvalues = NA, extend = TRUE, ...)
+                      , mapvalues = NA, extend = TRUE)
 
-  return(output)
+  return(space_res)
 
 
 }
