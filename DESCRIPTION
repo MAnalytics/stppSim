@@ -4,7 +4,7 @@ Title: Spatial and Temporal Point Patterns Simulation for Social Science Researc
 Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
   Meng Le Zhang [aut]
-Maintainer: MOnsuru Adepeju <monsuur2010@yahoo.com>
+Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: For generating artificial spatio-temporal point patterns for use 
   in Social Science research. Allows specified spatial and temporal signatures 
   be integrated with urban landscape configuration to build usable point 
@@ -42,7 +42,9 @@ Imports:
   iterators,
   graphics,
   grDevices,
-  lubridate
+  lubridate,
+  spatstat.geom,
+  sparr
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
@@ -50,6 +52,7 @@ Suggests:
 Collate: 
     'artif_spo.R'
     'chull_poly.R'
+    'compare.R'
     'data.R'
     'date_checker.R'
     'extract_coords.R'
@@ -60,4 +63,5 @@ Collate:
     'walker.R'
     'psim_artif.R'
     'psim_real.R'
+    'space_resistance.R'
     'stp_learner.R'
