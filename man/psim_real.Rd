@@ -5,7 +5,7 @@
 \title{Point Pattern Simulation from real origins}
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-n_origin=50, p_ratio=20, crsys = "CRS_string")
+s_threshold = NULL, n_origin=50, p_ratio=20, crsys = "CRS_string")
 }
 \arguments{
 \item{n_events}{(integer) Value of the total
@@ -32,6 +32,13 @@ the sample points. The default is \code{NULL} - meaning that an
 arbitrary boundary is drawn to cover the spatial
 point distribution. The 'poly' object must have a projection
 system (crs) when not NULL.}
+
+\item{s_threshold}{(numeric) Spatial threshold value. The
+(assumed) spatial range within which events are
+re-generated (or repeated) by or around the same origin.
+Default: \code{NULL}, in which the spatial bandwidth
+is estimated from \code{ppp}. If not \code{NULL}, a numerical value
+based on prior or expert knowledge is expected.}
 
 \item{n_origin}{(an integer) Number of origins to simulate.
 Default:\code{50}. This is the parameter that has the greatest
@@ -71,10 +78,15 @@ sample_size <- 1000
 dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 sample_size, replace=FALSE),]
 result <- psim_real(n_events=2000, ppt=dat_sample,
-start_date = NULL, poly = NULL,
+start_date = NULL, poly = NULL, s_threshold = NULL,
 n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
 }
 }
 \references{
-https://www.google.co.uk/
+Davies, T.M. and Hazelton, M.L. (2010), Adaptive
+kernel estimation of spatial relative risk,
+Statistics in Medicine, 29(23) 2423-2437.
+Terrell, G.R. (1990), The maximal smoothing principle
+in density estimation, Journal of the
+American Statistical Association, 85, 470-477.
 }
