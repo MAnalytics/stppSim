@@ -26,6 +26,12 @@
 #' arbitrary boundary is drawn to cover the spatial
 #' point distribution. The 'poly' object must have a projection
 #' system (crs) when not NULL.
+#' @param s_threshold (numeric) Spatial threshold value. The
+#' (assumed) spatial range within which events are
+#' re-generated (or repeated) by or around the same origin.
+#' Default: \code{NULL}, in which the spatial bandwidth
+#' is estimated from `ppp`. If not `NULL`, a numerical value
+#' based on prior or expert knowledge is expected.
 #' @param n_origin (an integer) Number of origins to simulate.
 #' Default:\code{50}. This is the parameter that has the greatest
 #' influence on the computational time.
@@ -42,7 +48,7 @@
 #' the projection of `ppt`. When both `poly` and `crsys`
 #' are not NULL, the function utilizes the crs of the former
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-#' n_origin=50, p_ratio=20, crsys = "CRS_string")
+#' s_threshold = NULL, n_origin=50, p_ratio=20, crsys = "CRS_string")
 #' @examples
 #' \dontrun{
 #' data(SanF_fulldata)
@@ -53,13 +59,19 @@
 #' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
 #' sample_size, replace=FALSE),]
 #' result <- psim_real(n_events=2000, ppt=dat_sample,
-#' start_date = NULL, poly = NULL,
+#' start_date = NULL, poly = NULL, s_threshold = NULL,
 #' n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
 #' }
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
-#' @references https://www.google.co.uk/
+#' @references
+#'Davies, T.M. and Hazelton, M.L. (2010), Adaptive
+#'kernel estimation of spatial relative risk,
+#'Statistics in Medicine, 29(23) 2423-2437.
+#'Terrell, G.R. (1990), The maximal smoothing principle
+#'in density estimation, Journal of the
+#'American Statistical Association, 85, 470-477.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
@@ -68,7 +80,8 @@
 #' @importFrom stats predict loess
 #' @export
 
-psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
+psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
+                      s_threshold = NULL,
                       n_origin=50, p_ratio=20, crsys = "CRS_string"){
 
   idx <- tid <-
@@ -119,13 +132,23 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,
 
   #t1 <- Sys.time()
 
+  if(is.null(s_threshold)){
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
-      stppSim::walker(n, s_threshold = 50, #jsut example for now..
+      stppSim::walker(n, s_threshold = st_properties$s_threshold, #jsut example for now..
                       poly=poly, coords=as.numeric(as.vector(idx)),
                       step_length = 20,
                       show.plot = FALSE)
-    )
+    )}
+
+  if(is.null(s_threshold)){
+  pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
+    lapply(n, function(n)
+      stppSim::walker(n, s_threshold = s_threshold, #jsut example for now..
+                      poly=poly, coords=as.numeric(as.vector(idx)),
+                      step_length = 20,
+                      show.plot = FALSE)
+    )}
 
   #t2 <- Sys.time()
   #tme <- t2 - t1
