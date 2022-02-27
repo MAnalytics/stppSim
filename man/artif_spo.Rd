@@ -16,6 +16,15 @@ events are to be generated.}
 Default:\code{50}. This is the parameter that has the greatest
 influence on the computational time.}
 
+\item{n_foci}{(an integer) A value indicating the number of
+focal points amongst event origins.}
+
+\item{foci_separation}{(an integer) A value between \code{0} and \code{10}
+indicating the nearness of focal points from one another. A \code{0}
+separation indicates all focal points located in a close proximity
+while \code{10} indicates focal points that are evenly distributed across
+space.}
+
 \item{p_ratio}{(an integer) The smaller of the
 two terms of the Pareto ratio. For example, for a \code{20:80}
 ratio, \code{p_ratio} will be \code{20}. Default value is

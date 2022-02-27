@@ -2,14 +2,13 @@
 % Please edit documentation in R/space_resistance.R
 \name{space_resistance}
 \alias{space_resistance}
-\title{Space (landscape) resistance raster}
+\title{Space Resistance Raster}
 \usage{
 space_resistance(shp, baseRaster, res, binary = is.na(field),
-field = NA, mapvalues = NA, extend = TRUE)
+field = NA, mapvalues = NA)
 }
 \arguments{
-\item{shp}{either a character string specifying
-the shapefile filename or a shapefile object itself.}
+\item{shp}{polygon shapefile object.}
 
 \item{baseRaster}{if provided, a raster onto which
 to stack the given rasterized shapefile.}
@@ -21,28 +20,24 @@ raster to be created, when baseRaster is not provided.}
 so that any feature is assigned a value of 0,
 and the background 1.}
 
-\item{field}{either a number in the range 0 to 1, in
+\item{field}{either a value in the range 0 to 1sa, in
 which case it will be assigned to all pixels covered
 by features of the shapefile; or the name of the numeric
-shapefile field from which to extract such number; or
+field from which to extract such value; or
 the name of the factor shapefile field containing classes
-to map to resistance values (see mapvalues).}
+to map to resistance values.}
 
 \item{mapvalues}{a named vector specifying the resistance
 value mapping from the classes of field.}
-
-\item{extend}{set to TRUE to extend baseRaster if the shapefile
-has a larger extent. If FALSE, the shapefile will be clipped
-to baseRaster's extent.}
 }
 \value{
-Returns a trace of walker's path, and the
-corresponding events.
+Returns a raster showing space resistance levels
+or intensity to event occurrences.
 }
 \description{
 Build a space resistance map
 from one or more shapefiles. Function builds
-on functions from package raster- and
+on raster- and
 SimRIv-packages.
 }
 \references{
