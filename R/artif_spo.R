@@ -11,6 +11,11 @@
 #' @param n_origin (an integer) Number of origins to simulate.
 #' Default:\code{50}. This is the parameter that has the greatest
 #' influence on the computational time.
+#' @param  n_foci (an integer) A value indicating the number of
+#' focal points amongst event origins.
+#' @param foci_separation (an integer) A value between `0` and `10`
+#' indicating the nearness of focal points from one another. A `0`
+#' separation indicates
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of the Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -35,7 +40,20 @@
 #' @export
 #'
 
-artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
+
+artif_spo <- function(poly, n_origin =  52, n_foci=5,
+                      foci_separation = 0, p_ratio = 30,
+                      show.plot = FALSE){
+
+  #check values of focal point and
+  #foci separations
+  if(n_foci >= n_origin){
+    stop("focal point cannot be greater than the number of origins!")
+  }
+
+  if(!foci_separation %in% 0:10){
+    stop("Foci separation should be an integer value between 0 and 10")
+  }
 
   flush.console <- as <- select <- prob <- theme <- theme_bw <-
     theme_light <- element_text <-
@@ -52,7 +70,6 @@ artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
   poly <- extract_coords(poly)
 
   origins <- list()
-
 
   set.seed(1234)
   #generate random points inside the boundary
@@ -72,16 +89,17 @@ artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
 
   o_dist <- dist(ran_points, method = "euclidean", upper=TRUE, diag = TRUE)
 
-  #randomly pick one point
+  #randomly pick one point as the
+  #main focus
   set.seed(1000)
   idx <- sample(1:nrow(ran_points), 1, replace=FALSE)
   #now sort the dist matrix from selected points
   dist_to_main_focus <- as.matrix(o_dist)[,idx]
   #order of proximity
-  dist_to_main_focus <- dist_to_main_focus[order(dist_to_main_focus)][2:length(dist_to_main_focus)]
-  idx_others <- names(dist_to_main_focus)[2:length(names(dist_to_main_focus))]
+  dist_to_main_focus <- dist_to_main_focus[order(dist_to_main_focus)]#[2:length(dist_to_main_focus)]
+  idx_others <- names(dist_to_main_focus)#[2:length(names(dist_to_main_focus))]
 
-  #get the foci_separation and determine  #n_foci=5; foci_separation <- 5
+  #get the foci_separation and determine  #n_foci=5; foci_separation <- 0
   #where the n_foci points fall
   #then use pareto ratio to assign prob points,
   #looping through foci.
@@ -91,56 +109,58 @@ artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
   list_to_pick_from <- length(dist_to_main_focus) -
     (floor(length(dist_to_main_focus)/11)*separation_list[which(separation_list$sn == foci_separation),2])
   #10 is the max. foci separation
+  #list_to_pick_from
 
   #then pick random 'n_foci' from the 'list_to_p....'
+  set.seed(2000)
   n_foci_centre <- sample(idx_others[1:list_to_pick_from], n_foci, replace =FALSE)
 
   #group with 1 iteration
   groups <- kmeans(ran_points, ran_points[as.numeric(n_foci_centre),], iter.max = 1, nstart = 1,
          algorithm = "Lloyd", trace=FALSE)
 
-  #now assign probablity value
-  for()
+  #now collate members of each group
+  #assign probablity value
 
-  #first calculate the distance between points
+  groups_clusters <- data.frame(cbind(ran_points, group=groups$cluster))
 
-  names(groups$cluster)
+  #append origin category
+  groups_clusters <- groups_clusters %>%
+    mutate(category = if_else(row_number() %in% as.numeric(n_foci_centre),
+                              paste("focal_pt"), paste("others")))
 
 
 
-  #assign prob. values in accord. with pareto
-  #(x/10 * sqrt(A) = x') (Courtesy: Odekadzo)
-  prob_values <- p_prob(n_origin=n_origin, p_ratio = p_ratio)
-  #check
-  #sum(prob_values[1:round(n_origin*.8, digits=0),4])
-  #sum(prob_values[round(n_origin*.8, digits=0):nrow(prob_values),4])
+  #now sort in order of proximity to
+  #main focal point
+  groups_clusters <- groups_clusters[as.numeric(idx_others),]
+
+  #go through member of each group and
+  #arrange them in order of proximity
+  #to the main focus
+  #then assign probability
+  #based on pareto ratio
+
+  grp_bind <- NULL
+
+  for(g in 1:length(unique(groups$cluster))){ #g<-1
+    #
+    grp_sub <- groups_clusters[which(groups_clusters$group == g),]
+
+    prob_grp_sub <- p_prob(n_origin=nrow(grp_sub), p_ratio = p_ratio)
+
+    #join
+    grp_sub <- data.frame(cbind(grp_sub,
+                       prob=rev(unlist(prob_grp_sub%>%select(prob)))))
+
+    grp_bind <- rbind(grp_bind, grp_sub)
+
+  }
+
 
   #append pareto prob. values to random points
-  ran_points_prob <- data.frame(cbind(ran_points,
-                          prob=prob_values%>%select(prob)))
+  ran_points_prob <- grp_bind
 
-  no_of_non_dom <- round(n_origin*(100-p_ratio)/100, digits=0)
-  no_of_dom <- round(n_origin*(p_ratio)/100, digits = 0)
-
-  #create labels
-  #check to ensure that the total adds up
-  if((no_of_non_dom + no_of_dom) < n_origin){
-    no_of_non_dom <- no_of_non_dom + 1
-    OriginType <- c(rep("Non-dominant", no_of_non_dom),
-                rep("Dominant", no_of_dom))
-  }
-
-  if(((no_of_non_dom + no_of_dom) != n_origin)&((no_of_non_dom + no_of_dom) > n_origin)){
-    stop("Process terminated! Increase the value of 'n_origin'!")
-  }
-
-  if((no_of_non_dom + no_of_dom) == n_origin){
-    OriginType <- c(rep("Non-dominant", no_of_non_dom),
-                    rep("Dominant", no_of_dom))
-  }
-
-  ran_points_prob <- data.frame(ran_points_prob,
-                                OriginType)
 
   #if(show.plot==TRUE){
 
@@ -151,7 +171,7 @@ artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
     # plot(hull$x, hull$y)
 
     p <- ggplot(data = ran_points_prob) +
-      geom_point(mapping = aes(x = x, y = y, colour = OriginType))#+
+      geom_point(mapping = aes(x = x, y = y, color = category))#+
 
 
     if(show.plot==TRUE){
