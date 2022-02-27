@@ -9,21 +9,21 @@
 #' A vector of integer values can also be inputted, such as
 #' `c(a1, a2, ....)`, where a1, a2, ... represent different values.
 #' @param start_date (Date) The start date of simulation. The date should
-#' be in the format `"yyyy-mm-dd"`. Default value is
-#' `"2000-01-01"`. A specified date can be earlier or later
+#' be in the format `"yyyy-mm-dd"`. A specified date can be earlier or later
 #' than this stated default value. By default, a 1-year worth of
 #' date is simulated. In other words, the end date of
 #' simulation is the next 365th day
 #' from the specified start date.
-#' @param spo (a list or dataframe) A list of spatial boundary
-#' coordinates (or shapefile) within which the events are confined.
-#' Should be generated using `random_spo` or `constrained_spo`
-#' function. The `spo$poly` output is set as `poly` argument
-#' in this function.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
 #' Default: \code{250} (in the same linear unit as the `poly`)
+#' @param p_ratio (an integer) The smaller of the
+#' two terms of the Pareto ratio. For example, for a \code{20:80}
+#' ratio, `p_ratio` will be \code{20}. Default value is
+#' \code{30}. Valid inputs are \code{10}, \code{20},
+#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
+#' 30% dominant and 70% non-dominant origins.
 #' @param st_skewness (numeric) The tightness of events in space and time.
 #' The value ranges from \code{0 - 1}, with event
 #' volume being skewed towards the dominant origins, as the value tends
@@ -34,13 +34,12 @@
 #' Three options
 #' available are `"decreasing"`, `"stable"`,
 #' and `"increasing"` trends. Default: `"stable"`.
-#' @param first_s_peak (Date) The date that marks the
+#' @param first_s_peak (also in `"yyyy-mm-dd"` format).
+#' The date that marks the
 #' first seasonal peak of the time series.
-#' Default value is \code{as.Date("2000-01-01")+90},
-#' i.e. 90 days after the
-#' specified `start_date` (implying a seasonal cycle of
-#' 180 days. The date should
-#' be in the format: `"yyyy-mm-dd"`.
+#' Default value is \code{NULL}, in which a
+#' seasonal cycle of 180 days is utilized. That is,
+#' a first seasonal peak of 90 days.
 #' @param slope (a character) Slope angle for an
 #' "increasing" or "decreasing" trend. Two options
 #' are available: `"gentle"` and `"steep"`.
@@ -80,10 +79,24 @@
 #' @export
 #'
 
-psim_artif <- function(n_events=2000, start_date = "2000-01-01", spo, s_threshold = 50,
-                 st_skewness = 0.5, trend = "stable",
-                 first_s_peak=as.Date("2000-01-01")+90,
+psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd", poly, s_threshold = 50,
+                 p_ratio = 20, st_skewness = 0.5, trend = "stable",
+                 first_s_peak=NULL,
                  slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
+
+  #first derive the spo object
+  spo <- artif_spo(poly, n_origin, p_ratio, show.plot=FALSE)
+
+
+  #check that start_date has value
+  if(start_date == "yyyy-mm-dd"){
+    stop("Error! 'start_date' argument has to be a real date!")
+  }
+
+  #check first peak value
+  if(is.null(first_s_peak)){
+    first_s_peak <- as.Date(start_date) + 90
+  }
 
   output <- list()
 
