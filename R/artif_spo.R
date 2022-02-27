@@ -54,12 +54,59 @@ artif_spo <- function(poly, n_origin =  50, p_ratio = 30, show.plot = FALSE){
   origins <- list()
 
 
-
   set.seed(1234)
-  #generate random pints inside the boundary
+  #generate random points inside the boundary
   ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
   colnames(ran_points) <- c("x", "y")
-  #points(ran_points$x,ran_points$y)
+  #plot(ran_points$x,ran_points$y)
+
+  #--------------
+  #utilize 'n_foci' - number of foci
+  #'foci_separation' - distances of foci points
+  #'from one another. levels: 1(low) - 10(high)
+  #' to assign
+  #probability values based on the specified pareto ratio
+  #--------------
+  #randomly select 'n_foci' points, based on foci
+  #proximities
+
+  o_dist <- dist(ran_points, method = "euclidean", upper=TRUE, diag = TRUE)
+
+  #randomly pick one point
+  set.seed(1000)
+  idx <- sample(1:nrow(ran_points), 1, replace=FALSE)
+  #now sort the dist matrix from selected points
+  dist_to_main_focus <- as.matrix(o_dist)[,idx]
+  #order of proximity
+  dist_to_main_focus <- dist_to_main_focus[order(dist_to_main_focus)][2:length(dist_to_main_focus)]
+  idx_others <- names(dist_to_main_focus)[2:length(names(dist_to_main_focus))]
+
+  #get the foci_separation and determine  #n_foci=5; foci_separation <- 5
+  #where the n_foci points fall
+  #then use pareto ratio to assign prob points,
+  #looping through foci.
+
+  separation_list <- data.frame(cbind(sn=0:10, val=10:0))
+
+  list_to_pick_from <- length(dist_to_main_focus) -
+    (floor(length(dist_to_main_focus)/11)*separation_list[which(separation_list$sn == foci_separation),2])
+  #10 is the max. foci separation
+
+  #then pick random 'n_foci' from the 'list_to_p....'
+  n_foci_centre <- sample(idx_others[1:list_to_pick_from], n_foci, replace =FALSE)
+
+  #group with 1 iteration
+  groups <- kmeans(ran_points, ran_points[as.numeric(n_foci_centre),], iter.max = 1, nstart = 1,
+         algorithm = "Lloyd", trace=FALSE)
+
+  #now assign probablity value
+  for()
+
+  #first calculate the distance between points
+
+  names(groups$cluster)
+
+
 
   #assign prob. values in accord. with pareto
   #(x/10 * sqrt(A) = x') (Courtesy: Odekadzo)
