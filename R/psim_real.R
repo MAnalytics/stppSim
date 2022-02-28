@@ -84,7 +84,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL,
                       n_origin=50, p_ratio=20, crsys = "CRS_string"){
 
-  idx <- tid <-
+  idx <- tid <- x <- y <- if_else <- t2 <- axis <- NULL
 
   output <- list()
 
