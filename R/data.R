@@ -25,6 +25,19 @@
 #'     }
 "camden_boundary"
 
+#' A land use shapefile of Camden
+#' Borough of London, United Kingdom
+#'
+#' @format A boundary file (ESRI format)
+#' \itemize{
+#'   \item value: Values indicating
+#'   the level of resistance of each
+#'   feature. Ranges from 0 (low resistance)
+#'   to 1 (high resistance).
+#'   \item type: Landuse type
+#'     }
+"camden_landuse"
+
 #' A land use shapefile of a portion of
 #' San Francisco City, United States
 #'
