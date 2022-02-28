@@ -1,6 +1,9 @@
-#' @title Generate artificial (random) spatial point origins
+#' @title Artificial (random) spatial point origins
 #' @description Simulate artificial point origin across a
-#' defined spatial boundary.Each origin is assigned
+#' defined spatial boundary. If resistance vector map
+#' is supplied, the space occupied by the vector map is
+#' ignored. In other words, no point origin is simulated inside
+#' the resistance space. Each origin is assigned
 #' a probability value (representing the relative intensity) at which
 #' the origin generates events with respect to a specified
 #' Pareto ratio.
@@ -11,20 +14,25 @@
 #' @param n_origin (an integer) Number of origins to simulate.
 #' Default:\code{50}. This is the parameter that has the greatest
 #' influence on the computational time.
+#' @param space_resist ("SpatialPolygonsDataFrame",
+#' "SpatialPolygons", or "sf") Optional features showing
+#' spaces across landscape within which spatial
+#' points (origins) are not allowed. Default: \code{NULL}.
 #' @param  n_foci (an integer) A value indicating the number of
 #' focal points amongst event origins.
 #' @param foci_separation (an integer) A value between `0` and `10`
 #' indicating the nearness of focal points from one another. A `0`
-#' separation indicates
+#' separation indicates all focal points located in a close proximity
+#' while `10` indicates focal points that are evenly distributed across
+#' space.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of the Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
 #' \code{30}. Valid inputs are \code{10}, \code{20},
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
-#' @param show.plot (TRUE or FALSE) To display plot showing
-#' origins.
-#' @usage artif_spo(poly, n_origin, p_ratio, show.plot=FALSE)
+#' @usage artif_spo(poly, n_origin, space_resist, n_foci=5,
+#' foci_separation = 0, p_ratio)
 #' @examples
 #' @details Returns an object of the class `artif_spo`,
 #' detailing the properties of artificial (simulated) spatial point
@@ -36,14 +44,25 @@
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
 #' @importFrom ggplot2 ggplot geom_point
+#' @importFrom stats dist kmeans
 #' geom_polygon theme_bw
 #' @export
 #'
 
 
-artif_spo <- function(poly, n_origin =  52, n_foci=5,
-                      foci_separation = 0, p_ratio = 30,
-                      show.plot = FALSE){
+artif_spo <- function(poly, n_origin =  52, space_resist = NULL,
+                      n_foci=5,
+                      foci_separation = 0, p_ratio = 30){
+
+  #define global variables
+  data_frame <- dist <- kmeans <-
+    if_else <- row_number <- category <- NULL
+
+
+  #check the inputs
+  if(n_origin <= 0){
+    stop("Number of origin points need to be specified!")
+  }
 
   #check values of focal point and
   #foci separations
@@ -71,11 +90,60 @@ artif_spo <- function(poly, n_origin =  52, n_foci=5,
 
   origins <- list()
 
-  set.seed(1234)
-  #generate random points inside the boundary
-  ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
-  colnames(ran_points) <- c("x", "y")
-  #plot(ran_points$x,ran_points$y)
+    set.seed(1234)
+    #generate random points inside the boundary
+    ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
+    colnames(ran_points) <- c("x", "y")
+    #plot(ran_points$x,ran_points$y)
+
+    final_ran_points_pt <- ran_points
+
+  if(!is.null(space_resist)){
+
+    #loop through
+    camden_landuse <- st_as_sf(camden_landuse)
+    #convert xy to points
+    ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
+                                proj4string = crs(camden_landuse)))
+    #check those intersecting land use
+    pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, camden_landuse))[,1])
+    new_ran_points_pt <- ran_points_pt[-pt_intersect,]
+    #---------------------------
+    #check if any of the point intersects
+    #resistance feature across the space.
+    final_ran_points_pt <- new_ran_points_pt
+
+    #loop until there is exactly number
+    #of specified origin points
+    while(nrow(final_ran_points_pt) < n_origin){
+
+      #simulate another set of points
+      #generate random points inside the boundary
+      ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
+      colnames(ran_points) <- c("x", "y")
+      #convert to points and check intersection
+      ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
+                                              proj4string = crs(camden_landuse)))
+      #check those not intersecting land use
+      pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, camden_landuse))[,1])
+      new_ran_points_pt <- ran_points_pt[-pt_intersect,]
+
+      #add to existing list
+      final_ran_points_pt <- rbind(final_ran_points_pt, new_ran_points_pt)
+    }
+
+    #check if the number of point is greater
+    #than specified number
+    if(nrow(final_ran_points_pt) > n_origin){
+      final_ran_points_pt <- final_ran_points_pt[1:(nrow(final_ran_points_pt) -
+                                          ((nrow(final_ran_points_pt) - n_origin))),]
+    }
+  }
+  #---------------------------
+
+  ##plot(as_Spatial(final_ran_points_pt), add=TRUE)
+  ##plot(as_Spatial(camden_landuse))
+
 
   #--------------
   #utilize 'n_foci' - number of foci
@@ -87,12 +155,20 @@ artif_spo <- function(poly, n_origin =  52, n_foci=5,
   #randomly select 'n_foci' points, based on foci
   #proximities
 
-  o_dist <- dist(ran_points, method = "euclidean", upper=TRUE, diag = TRUE)
+  #add x, y coordinates
+  final_ran_points_pt$x <- st_coordinates(final_ran_points_pt)[,1]
+  final_ran_points_pt$y <- st_coordinates(final_ran_points_pt)[,2]
+
+  final_ran_points_pt <- final_ran_points_pt %>%
+    data_frame() %>%
+    dplyr::select(c(x, y))
+
+  o_dist <- dist(final_ran_points_pt, method = "euclidean", upper=TRUE, diag = TRUE)
 
   #randomly pick one point as the
   #main focus
   set.seed(1000)
-  idx <- sample(1:nrow(ran_points), 1, replace=FALSE)
+  idx <- sample(1:nrow(final_ran_points_pt), 1, replace=FALSE)
   #now sort the dist matrix from selected points
   dist_to_main_focus <- as.matrix(o_dist)[,idx]
   #order of proximity
@@ -115,14 +191,15 @@ artif_spo <- function(poly, n_origin =  52, n_foci=5,
   set.seed(2000)
   n_foci_centre <- sample(idx_others[1:list_to_pick_from], n_foci, replace =FALSE)
 
+  #set as kmean centroids
   #group with 1 iteration
-  groups <- kmeans(ran_points, ran_points[as.numeric(n_foci_centre),], iter.max = 1, nstart = 1,
+  groups <- kmeans(final_ran_points_pt, final_ran_points_pt[as.numeric(n_foci_centre),], iter.max = 1, nstart = 1,
          algorithm = "Lloyd", trace=FALSE)
 
   #now collate members of each group
   #assign probablity value
 
-  groups_clusters <- data.frame(cbind(ran_points, group=groups$cluster))
+  groups_clusters <- data.frame(cbind(final_ran_points_pt, group=groups$cluster))
 
   #append origin category
   groups_clusters <- groups_clusters %>%
@@ -135,31 +212,22 @@ artif_spo <- function(poly, n_origin =  52, n_foci=5,
   #main focal point
   groups_clusters <- groups_clusters[as.numeric(idx_others),]
 
-  #go through member of each group and
-  #arrange them in order of proximity
-  #to the main focus
-  #then assign probability
-  #based on pareto ratio
+  #move the main 'focal_pt' to the top
+  #main focal pts
+  groups_clusters_focal <- groups_clusters %>%
+    filter(category == "focal_pt")
+  #others
+  groups_clusters_others <- groups_clusters %>%
+    filter(category == "others")
 
-  grp_bind <- NULL
+  groups_clusters <-
+    rbind(groups_clusters_focal, groups_clusters_others)
 
-  for(g in 1:length(unique(groups$cluster))){ #g<-1
-    #
-    grp_sub <- groups_clusters[which(groups_clusters$group == g),]
-
-    prob_grp_sub <- p_prob(n_origin=nrow(grp_sub), p_ratio = p_ratio)
-
-    #join
-    grp_sub <- data.frame(cbind(grp_sub,
-                       prob=rev(unlist(prob_grp_sub%>%select(prob)))))
-
-    grp_bind <- rbind(grp_bind, grp_sub)
-
-  }
-
+  grp_p <- p_prob(n_origin=nrow(groups_clusters), p_ratio = p_ratio)
 
   #append pareto prob. values to random points
-  ran_points_prob <- grp_bind
+  final_ran_points_pt_prob <-
+    cbind(groups_clusters, prob=rev(grp_p$prob))
 
 
   #if(show.plot==TRUE){
@@ -170,21 +238,21 @@ artif_spo <- function(poly, n_origin =  52, n_foci=5,
     # plot(data.frame(poly)$x, data.frame(poly)$y)
     # plot(hull$x, hull$y)
 
-    p <- ggplot(data = ran_points_prob) +
+    p <- ggplot(data = final_ran_points_pt_prob) +
       geom_point(mapping = aes(x = x, y = y, color = category))#+
 
 
-    if(show.plot==TRUE){
-      flush.console()
-      p + geom_polygon(data = hull%>%select(x,y),
-                     aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9) +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-        theme_light()
-     }
+    # if(show.plot==TRUE){
+    #   flush.console()
+    #   p + geom_polygon(data = hull%>%dplyr::select(x,y),
+    #                  aes(x=x, y=y), col="gray80",fill="NA",alpha = 0.9) +
+    #     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+    #     theme_light()
+    #  }
 
   #}
 
-  origins$origins <- ran_points_prob
+  origins$origins <- final_ran_points_pt_prob
   origins$plot <- p
   origins$poly <- backup_poly
   origins$Class <- "artif_spo"
