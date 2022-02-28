@@ -22,8 +22,6 @@ Imports:
   splancs,
   dplyr,
   tidyr,
-  magrittr,
-  utils,
   sf,
   rgdal,
   sp,
@@ -32,23 +30,25 @@ Imports:
   raster,
   SiMRiv,
   ggplot2,
-  chron,
-  data.table,
-  tibble, 
   stringr,
-  doParallel,
-  parallel,
-  foreach,
-  iterators,
-  graphics,
-  grDevices,
   lubridate,
   spatstat.geom,
   sparr
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    graphics,
+    grDevices,
+    utils,
+    data.table,
+    tibble, 
+    chron,
+    magrittr,
+    doParallel,
+    parallel,
+    foreach,
+    iterators
 Collate: 
     'artif_spo.R'
     'chull_poly.R'
