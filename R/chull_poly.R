@@ -1,4 +1,4 @@
-#' @title Generate boundary around a Set of Points
+#' @title Generate boundary around a set of Points
 #' @description Generate a boundary (polygon) around
 #' a set of sample points, using Convex Hull technique.
 #' @param xycoords (matrix) coordinate vectors of points.
