@@ -2,9 +2,10 @@
 % Please edit documentation in R/artif_spo.R
 \name{artif_spo}
 \alias{artif_spo}
-\title{Generate artificial (random) spatial point origins}
+\title{Artificial (random) spatial point origins}
 \usage{
-artif_spo(poly, n_origin, p_ratio, show.plot=FALSE)
+artif_spo(poly, n_origin, space_resist, p_ratio, n_foci=5,
+foci_separation = 0, show.plot=FALSE)
 }
 \arguments{
 \item{poly}{(A dataframe or S4 object) A dataframe of X, Y
@@ -15,6 +16,11 @@ events are to be generated.}
 \item{n_origin}{(an integer) Number of origins to simulate.
 Default:\code{50}. This is the parameter that has the greatest
 influence on the computational time.}
+
+\item{space_resist}{("SpatialPolygonsDataFrame",
+"SpatialPolygons", or "sf") Optional features showing
+spaces across landscape within which spatial
+points (origins) are not allowed. Default: \code(NULL).}
 
 \item{n_foci}{(an integer) A value indicating the number of
 focal points amongst event origins.}
@@ -40,7 +46,10 @@ Returns random event origins
 }
 \description{
 Simulate artificial point origin across a
-defined spatial boundary.Each origin is assigned
+defined spatial boundary. If resistance vector map
+is supplied, the space occupied by the vector map is
+ignored. In other words, no point origin is simulated inside
+the resistance space. Each origin is assigned
 a probability value (representing the relative intensity) at which
 the origin generates events with respect to a specified
 Pareto ratio.

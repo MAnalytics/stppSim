@@ -2,7 +2,7 @@
 % Please edit documentation in R/chull_poly.R
 \name{chull_poly}
 \alias{chull_poly}
-\title{Generate boundary around a Set of Points}
+\title{Generate boundary around a set of Points}
 \usage{
 chull_poly (xycoords,
 crsys = NULL)
