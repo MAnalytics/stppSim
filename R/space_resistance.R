@@ -1,8 +1,9 @@
-#' @title Space Resistance Raster
-#' @description Build a space resistance map
-#' from one or more shapefiles. Function builds
-#' on raster- and
-#' SimRIv-packages.
+#' @title Base (restriction) map (raster)
+#' @description Build a base (restriction) map
+#' from one or more shapefiles. A base (restriction) map
+#' (raster) shows restriction features across
+#' space. Function builds
+#' on raster- and SimRIv-packages.
 #' @param shp	polygon shapefile object.
 #' @param baseRaster if provided, a raster onto which
 #' to stack the given rasterized shapefile.
@@ -19,7 +20,7 @@
 #' to map to resistance values.
 #' @param mapvalues a named vector specifying the resistance
 #' value mapping from the classes of field.
-#' @usage space_resistance(shp, baseRaster, res, binary = is.na(field),
+#' @usage basemap(shp, baseRaster, res, binary = is.na(field),
 #' field = NA, mapvalues = NA)
 #' @examples
 #' @details
@@ -37,7 +38,7 @@
 #' @importFrom SiMRiv resistanceFromShape
 #' @export
 
-space_resistance <- function(shp, baseRaster, res=100, binary = is.na(field),
+basemap <- function(shp, baseRaster, res=100, binary = is.na(field),
                              field = NA,
                              mapvalues = NA){
 
