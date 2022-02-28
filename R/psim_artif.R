@@ -14,6 +14,10 @@
 #' date is simulated. In other words, the end date of
 #' simulation is the next 365th day
 #' from the specified start date.
+#' @param poly (A dataframe or S4 object) A dataframe of X, Y
+#' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+#' "SpatialPolygons", or "sf") representing the boundary within which
+#' events are to be generated.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
@@ -24,11 +28,6 @@
 #' \code{30}. Valid inputs are \code{10}, \code{20},
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
-#' @param st_skewness (numeric) The tightness of events in space and time.
-#' The value ranges from \code{0 - 1}, with event
-#' volume being skewed towards the dominant origins, as the value tends
-#' to \code{1}. Default: \code{0.5}. This index also controls the
-#' total volume of events across space and time.
 #' @param trend (a character) Specifying the direction of
 #' the global (linear) trend of the simulated time series.
 #' Three options
@@ -79,13 +78,22 @@
 #' @export
 #'
 
-psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd", poly, s_threshold = 50,
-                 p_ratio = 20, st_skewness = 0.5, trend = "stable",
-                 first_s_peak=NULL,
-                 slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
+psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
+                       poly, n_origin, space_resist = space_resist,
+                       n_foci,
+                       foci_separation, p_ratio,
+                       s_threshold = 50,
+                       p_ratio, trend = "stable",
+                       first_s_peak=NULL,
+                       slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
+
+  #define global variables...
+
 
   #first derive the spo object
-  spo <- artif_spo(poly, n_origin, p_ratio, show.plot=FALSE)
+  spo <- artif_spo(poly, n_origin =  n_origin, space_resist = space_resist,
+                   n_foci=5,
+                   foci_separation = foci_separation, p_ratio = p_ratio)
 
 
   #check that start_date has value
@@ -202,7 +210,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd", poly, s_thresho
 
 
   #combine all results by
-  for(loc in 1:length(spo$origins$OriginType)){ #loc<-1
+  for(loc in 1:nrowh(spo$origins)){ #loc<-1
     #extract slot 'intersection'
     p_events <- rbindlist(pp_allTime[[loc]],
                             use.names=TRUE, fill=TRUE, idcol="tid")
