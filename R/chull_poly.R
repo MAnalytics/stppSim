@@ -1,21 +1,27 @@
-#' @title Generate boundary around a set of Points
-#' @description Generate a boundary (polygon) around
-#' a set of sample points, using Convex Hull technique.
-#' @param xycoords (matrix) coordinate vectors of points.
-#' A 2-column matrix or list: `x` - the eastings,
+#' @title Boundary surrounding a set of points
+#' @description Generates a boundary (polygon) around
+#' a set of points, using Convex Hull technique
+#' (Eddy, W. F, 1977).
+#' @param xycoords (matrix) A 2-column
+#' coordinate vectors of points: `x` - the eastings,
 #' and `y` - the northing.
-#' @param crsys (string) coordinate reference system of
-#' the resulting polygon. e.g.,
-#' "+proj=longlat +datum=WGS84".
-#' Default: \code{NULL}.
-#' @usage chull_poly (xycoords,
+#' @param crsys Optional string specifying the coordinate
+#' reference system (crs) of the resulting boundary, e.g.,
+#' the crs string "+proj=longlat +datum=WGS84" transform
+#' the resulting boundary to wgs84 system.
+#' @usage chull_poly(xycoords,
 #' crsys = NULL)
 #' @examples
-#' data(SanF_fulldata)
-#' SanF_fulldata_xy <-
-#' matrix(as.numeric(SanF_fulldata[,1:2]),,2)
-#' bry <- chull_poly(SanF_fulldata_xy, crsys = NULL)
-#' @details The algorithm is that given by Eddy (1977).
+#' data(xyt_data)
+#' #extract xy coordinates only
+#' xy <- matrix(as.numeric(xyt_data[,1:2]),,2)
+#' bry <- chull_poly(xy, crsys = NULL)
+#' #visualise result
+#' plot(bry)
+#' points(xy[,1], xy[,2], add=TRUE)
+#' @details Draw an arbitrary boundary around
+#' by joining the outer-most
+#' points amongst the spatial data points
 #' @references Eddy, W. F. (1977).
 #' A new convex hull algorithm for planar sets.
 #' ACM Transactions on Mathematical Software,
@@ -33,10 +39,7 @@ chull_poly <- function(xycoords, crsys = NULL){
   ch <- chull(dat)
   coords <- dat[c(ch, ch[1]), ]  # closed polygon
 
-  # plot(dat, pch=19)
-  # lines(coords, col="red")
-
-  if(is.null(crsys)){
+   if(is.null(crsys)){
     sp_poly <- SpatialPolygons(list(Polygons(list(Polygon(coords)), ID=1)))
   }
 
