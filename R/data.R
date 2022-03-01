@@ -38,21 +38,9 @@
 #'     }
 "camden_landuse"
 
-#' A land use shapefile of a portion of
-#' San Francisco City, United States
-#'
-#' @format A boundary file (ESRI format)
-#' \itemize{
-#'   \item landuse_1: land use categories denoting
-#'   the social configuration of the urban space
-#'   \item class: a binary field indicating origins that
-#'   have the ability to generate events ('1') and origins
-#'   that lack the ability to generate points ('0').
-#'     }
-"San_Francisco"
-
-#' A complete point data of a portion of
-#' San Francisco city.
+#' A spatiotemporal point data
+#' of a part of San Francisco City,
+#' California, US
 #'
 #' @format A matrix containing two variables
 #' \itemize{
@@ -60,7 +48,7 @@
 #'   \item y: y coordinate
 #'   \item t: t time
 #'     }
-"SanF_fulldata"
+"xyt_data"
 
 #' CRS string of San Francisco Area
 #' Source: http://spatialreference.org/
