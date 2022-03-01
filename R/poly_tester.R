@@ -16,7 +16,8 @@
 #' @return Returns error messages, or mute
 #' @importFrom raster raster extent
 #' @importFrom sp proj4string
-#' @importFrom terra crs res linearUnits
+#' @importFrom terra crs res
+#' linearUnits
 #' @export
 
 poly_tester <- function(poly){
