@@ -17,8 +17,8 @@
 #' xy <- matrix(as.numeric(xyt_data[,1:2]),,2)
 #' bry <- chull_poly(xy, crsys = NULL)
 #' #visualise result
-#' plot(bry)
-#' points(xy[,1], xy[,2], add=TRUE)
+#' #plot(bry) #to plot
+#' #points(xy[,1], xy[,2], add=TRUE)
 #' @details Draw an arbitrary boundary around
 #' by joining the outer-most
 #' points amongst the spatial data points
