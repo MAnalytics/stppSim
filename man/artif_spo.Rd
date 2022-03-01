@@ -4,8 +4,8 @@
 \alias{artif_spo}
 \title{Artificial (random) spatial point origins}
 \usage{
-artif_spo(poly, n_origin, space_resist, p_ratio, n_foci=5,
-foci_separation = 0, show.plot=FALSE)
+artif_spo(poly, n_origin, space_resist, n_foci=5,
+foci_separation = 0, p_ratio)
 }
 \arguments{
 \item{poly}{(A dataframe or S4 object) A dataframe of X, Y
@@ -20,7 +20,7 @@ influence on the computational time.}
 \item{space_resist}{("SpatialPolygonsDataFrame",
 "SpatialPolygons", or "sf") Optional features showing
 spaces across landscape within which spatial
-points (origins) are not allowed. Default: \code(NULL).}
+points (origins) are not allowed. Default: \code{NULL}.}
 
 \item{n_foci}{(an integer) A value indicating the number of
 focal points amongst event origins.}
@@ -37,9 +37,6 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 \code{30}. Valid inputs are \code{10}, \code{20},
 \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 30\% dominant and 70\% non-dominant origins.}
-
-\item{show.plot}{(TRUE or FALSE) To display plot showing
-origins.}
 }
 \value{
 Returns random event origins

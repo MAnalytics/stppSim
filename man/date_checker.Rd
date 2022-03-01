@@ -2,23 +2,34 @@
 % Please edit documentation in R/date_checker.R
 \name{date_checker}
 \alias{date_checker}
-\title{Date Format Checker}
+\title{Date (Format) Checker}
 \usage{
-date_checker(x, format=NULL)
+date_checker(x)
 }
 \arguments{
-\item{x}{A date input}
-
-\item{format}{The date format required.
-Default: NULL.}
+\item{x}{A vector of date values}
 }
 \value{
 Returns TRUE or FALSE
 }
 \description{
-Checks if date is in the correct format, i.e.
-\code{yyyy-mm-dd}
+Checks if date is in the correct
+format.
 }
-\references{
-#https://online.stat.psu.edu/stat510/lesson/6/6.1
+\details{
+Returns \code{"TRUE"} if all
+entries of a vector are date values and
+\code{FALSE} if any entries of a vector
+is not a date value. The date vector
+needs to be in the format: \code{"yyyy-mm-dd"}.
+}
+\examples{
+date_list_1 <- c("2021-09-12", "2016-xx-02",
+"09/08/2012")
+date_checker(date_list_1)
+#> FALSE (Entries 2 and 3
+#are incorrect date inputs)
+date_list_2 <- c("2021-09-12", "1998-03-09")
+date_checker(date_list_2)
+#> TRUE
 }

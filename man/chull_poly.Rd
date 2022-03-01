@@ -2,33 +2,38 @@
 % Please edit documentation in R/chull_poly.R
 \name{chull_poly}
 \alias{chull_poly}
-\title{Generate boundary around a set of Points}
+\title{Boundary surrounding a set of points}
 \usage{
-chull_poly (xycoords,
+chull_poly(xycoords,
 crsys = NULL)
 }
 \arguments{
-\item{xycoords}{(matrix) coordinate vectors of points.
-A 2-column matrix or list: \code{x} - the eastings,
+\item{xycoords}{(matrix) A 2-column
+coordinate vectors of points: \code{x} - the eastings,
 and \code{y} - the northing.}
 
-\item{crsys}{(string) coordinate reference system of
-the resulting polygon. e.g.,
-"+proj=longlat +datum=WGS84".
-Default: \code{NULL}.}
+\item{crsys}{Optional string specifying the coordinate
+reference system (crs) of the resulting boundary, e.g.,
+"+proj=longlat +datum=WGS84".}
 }
 \description{
-Generate a boundary (polygon) around
-a set of sample points, using Convex Hull technique.
+Generates a boundary (polygon) around
+a set of points, using Convex Hull technique
+(Eddy, W. F, 1977).
 }
 \details{
-The algorithm is that given by Eddy (1977).
+Draw an arbitrary boundary around
+by joining the outer-most
+points amongst the spatial data points
 }
 \examples{
-data(SanF_fulldata)
-SanF_fulldata_xy <-
-matrix(as.numeric(SanF_fulldata[,1:2]),,2)
-bry <- chull_poly(SanF_fulldata_xy, crsys = NULL)
+data(xyt_data)
+#extract xy coordinates only
+xy <- matrix(as.numeric(xyt_data[,1:2]),,2)
+bry <- chull_poly(xy, crsys = NULL)
+#visualise result
+plot(bry)
+points(xy[,1], xy[,2], add=TRUE)
 }
 \references{
 Eddy, W. F. (1977).

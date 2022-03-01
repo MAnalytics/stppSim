@@ -8,9 +8,12 @@ psim_artif(
   n_events = 2000,
   start_date = "yyyy-mm-dd",
   poly,
+  n_origin,
+  space_resist = space_resist,
+  n_foci,
+  foci_separation,
+  p_ratio,
   s_threshold = 50,
-  p_ratio = 20,
-  st_skewness = 0.5,
   trend = "stable",
   first_s_peak = NULL,
   slope = NULL,
@@ -32,10 +35,28 @@ date is simulated. In other words, the end date of
 simulation is the next 365th day
 from the specified start date.}
 
-\item{s_threshold}{(numeric) Spatial threshold value. The
-(assumed) spatial range within which events are
-re-generated (or repeated) by or around the same origin.
-Default: \code{250} (in the same linear unit as the \code{poly})}
+\item{poly}{(A dataframe or S4 object) A dataframe of X, Y
+coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
+"SpatialPolygons", or "sf") representing the boundary within which
+events are to be generated.}
+
+\item{n_origin}{(an integer) Number of origins to simulate.
+Default:\code{50}. This is the parameter that has the greatest
+influence on the computational time.}
+
+\item{space_resist}{("SpatialPolygonsDataFrame",
+"SpatialPolygons", or "sf") Optional features showing
+spaces across landscape within which spatial
+points (origins) are not allowed. Default: \code{NULL}.}
+
+\item{n_foci}{(an integer) A value indicating the number of
+focal points amongst event origins.}
+
+\item{foci_separation}{(an integer) A value between \code{0} and \code{10}
+indicating the nearness of focal points from one another. A \code{0}
+separation indicates all focal points located in a close proximity
+while \code{10} indicates focal points that are evenly distributed across
+space.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of the Pareto ratio. For example, for a \code{20:80}
@@ -44,11 +65,10 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 30\% dominant and 70\% non-dominant origins.}
 
-\item{st_skewness}{(numeric) The tightness of events in space and time.
-The value ranges from \code{0 - 1}, with event
-volume being skewed towards the dominant origins, as the value tends
-to \code{1}. Default: \code{0.5}. This index also controls the
-total volume of events across space and time.}
+\item{s_threshold}{(numeric) Spatial threshold value. The
+(assumed) spatial range within which events are
+re-generated (or repeated) by or around the same origin.
+Default: \code{250} (in the same linear unit as the \code{poly})}
 
 \item{trend}{(a character) Specifying the direction of
 the global (linear) trend of the simulated time series.

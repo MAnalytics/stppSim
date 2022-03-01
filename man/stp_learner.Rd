@@ -59,12 +59,12 @@ detailing the spatiotemporal properties of a real
 sample dataset
 }
 \examples{
-data(SanF_fulldata)
+data(xyt_data)
 data(SanF_CRS_string)
 #get a sample data
 set.seed(1000)
 sample_size <- 500
-dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
+dat_sample <- xyt_data[sample(1:nrow(xyt_data),
 sample_size, replace=FALSE),]
 stp_learner(dat_sample,
 start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
