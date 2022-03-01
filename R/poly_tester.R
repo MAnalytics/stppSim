@@ -1,17 +1,19 @@
-#' @title Test the geometry and CRS of a polygon
-#' @description To test that a polygon has the correct
-#' geometry as well as a linear or Cartesian CRS.
+#' @title Geometry and crs of a polygon
+#' @description Test whether an input polygon
+#' has the correct geometry,
+#' namely `S4` or `sf`. Further, to test
+#' that there is a valid projection attached to
+#' the polygon.
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
-#' `simple features`). A spatial polygon representing a
-#' landscape coverage.
+#' `simple features`). A spatial polygon
 #' @usage poly_tester(poly)
 #' @examples
+#' poly_tester(poly=camden_boundary)
 #' @details
-#' @return Returns error messages if
+#' Returns an error message if
 #' the polygon is not in correct geometry
 #' or CRS.
-#' @references
-#' #https://google.co.uk
+#' @return Returns error messages, or mute
 #' @importFrom raster raster extent
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
@@ -21,8 +23,7 @@ poly_tester <- function(poly){
 
   as <- NULL
 
-#check the polygon type
-#and create the boundary
+  #check the polygon geometry
     if(isS4(poly)){
       #check the geometry of the input
       if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
@@ -40,7 +41,6 @@ poly_tester <- function(poly){
       area_B <- poly
       #retrieve crs of polygon and test if
       #crs is cartesian
-      #need to convert to spatvector class first.
       area_B.raster <- raster()
       #Use extent (from raster package) to read
       #bounds of vector and assign to the raster:
@@ -55,7 +55,7 @@ poly_tester <- function(poly){
       if(crstype == 0){
         stop("Boundary's crs NOT in linear unit! Operation terminated!!")
       }
-}
+  }
 
 }
 
