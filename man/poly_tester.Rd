@@ -2,24 +2,29 @@
 % Please edit documentation in R/poly_tester.R
 \name{poly_tester}
 \alias{poly_tester}
-\title{Test the geometry and CRS of a polygon}
+\title{Geometry and crs of a polygon}
 \usage{
 poly_tester(poly)
 }
 \arguments{
 \item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
-\verb{simple features}). A spatial polygon representing a
-landscape coverage.}
+\verb{simple features}). A spatial polygon}
 }
 \value{
-Returns error messages if
+Returns error messages, or mute
+}
+\description{
+Test whether an input polygon
+has the correct geometry,
+namely \code{S4} or \code{sf}. Further, to test
+that there is a valid projection attached to
+the polygon.
+}
+\details{
+Returns an error message if
 the polygon is not in correct geometry
 or CRS.
 }
-\description{
-To test that a polygon has the correct
-geometry as well as a linear or Cartesian CRS.
-}
-\references{
-#https://google.co.uk
+\examples{
+poly_tester(poly=camden_boundary)
 }

@@ -14,7 +14,8 @@ and \code{y} - the northing.}
 
 \item{crsys}{Optional string specifying the coordinate
 reference system (crs) of the resulting boundary, e.g.,
-"+proj=longlat +datum=WGS84".}
+the crs string "+proj=longlat +datum=WGS84" transform
+the resulting boundary to wgs84 system.}
 }
 \description{
 Generates a boundary (polygon) around
@@ -32,8 +33,8 @@ data(xyt_data)
 xy <- matrix(as.numeric(xyt_data[,1:2]),,2)
 bry <- chull_poly(xy, crsys = NULL)
 #visualise result
-plot(bry)
-points(xy[,1], xy[,2], add=TRUE)
+#plot(bry) #to plot
+#points(xy[,1], xy[,2], add=TRUE)
 }
 \references{
 Eddy, W. F. (1977).

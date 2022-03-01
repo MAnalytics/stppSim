@@ -2,23 +2,28 @@
 % Please edit documentation in R/extract_coords.R
 \name{extract_coords}
 \alias{extract_coords}
-\title{Extracting coordinates of a polygon boundary}
+\title{Coordinates extraction}
 \usage{
 extract_coords(poly)
 }
 \arguments{
-\item{poly}{(a spatialPolygons, spatialPolygonDataFrames, or
-an "sf").
-The polygon object must be in a
-Cartesian coordinate reference system.}
+\item{poly}{(a spatialPolygons,
+spatialPolygonDataFrames, or an "sf" object).
+The polygon object must be in a}
 }
 \value{
-Returns the global temporal pattern
+Returns 2-column xy coordinates
 }
 \description{
-Given a polygon object, the goal is to extract
-the coordinates of the edges of the boundary.
+Extracts the bounding (edges) coordinates
+of a polygon object.
 }
-\references{
-https://www.google.co.uk/
+\details{
+Given a spatial polygon object,
+the function extracts the bounding coordinates
+of the object.
+}
+\examples{
+data(camden_boundary)
+extract_coords(poly=camden_boundary)
 }

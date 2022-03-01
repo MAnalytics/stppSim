@@ -2,30 +2,37 @@
 % Please edit documentation in R/p_prob.R
 \name{p_prob}
 \alias{p_prob}
-\title{Pareto Probability distribution}
+\title{Pareto (probability) distribution}
 \usage{
-p_prob(n_origin,  p_ratio = 30)
+p_prob(n,  p_ratio = 20)
 }
 \arguments{
-\item{n_origin}{(an integer) Number of origins. Default is
-\code{50}.}
+\item{n}{(an integer) Number of data points.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio. For instance, for a
-\code{20:80} ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{20}. Input values must be \code{5}, \code{10}, \code{20},
-\code{30}, or \code{40}. The 'p_ratio'
-determines the proportion of points that are the most
-dominant event generators.}
+terms of a Pareto ratio. For instance, for a
+\code{20:80} ratio, \code{p_ratio} is \code{20}.
+Default value is set as
+\code{20}. Acceptable \code{p_ratio} values
+are: (\code{5, 10, 20, 30, 40}).}
 }
 \value{
-Returns the global temporal pattern
+Returns a vector of probability values
 }
 \description{
-Given a specified number of points \code{n},
-this function generates an \code{n} probability values
-in accordance with a specified Pareto ratio.
+Generates an \code{n} probability
+values in accordance with a specified Pareto ratio.
 }
-\references{
-https://www.google.co.uk/
+\details{
+Produces a list probability values
+based on the specified Pareto ratio. Each ratio
+term is assigned the proportion of area under
+an exponential curve that is equal to
+the value of the other ratio term. For example,
+for a \code{20:80} ratio, 20\% of data points
+covers 80\% of areas under the curve, and vice
+versa.
+}
+\examples{
+p_prob(n = 15,  p_ratio = 20)
 }
