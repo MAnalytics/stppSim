@@ -44,8 +44,8 @@
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
 #' @importFrom ggplot2 ggplot geom_point
-#' @importFrom stats dist kmeans
 #' geom_polygon theme_bw
+#' @importFrom stats dist kmeans
 #' @export
 #'
 
