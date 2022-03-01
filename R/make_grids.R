@@ -111,47 +111,43 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
  # Clipping the intersecting grid units with the boundary
  # List of grids that intersect the boundary
  area_B <- spTransform(area_B, CRS(proj_Coods))
- intersect_grids <- st_intersection(st_as_sf(polys.df),
-                                    st_as_sf(area_B))
- intersect_grids <- intersect_grids %>%
-   select(id)
 
- #convert back to polygon dataframe
- intersect_grids <- as_Spatial(intersect_grids)
+ int_idx <- data.frame(st_intersects(st_as_sf(polys.df),
+                 st_as_sf(area_B)))
+
+ int_idx <- int_idx[,1]
+
+ intersect_grids <- st_as_sf(polys.df[int_idx, ])
+
+ intersect_grids <- intersect_grids %>%
+   dplyr::select(id)
 
  #Visulising the results
  if(show_output == TRUE){
-    plot(intersect_grids)
+   plot(intersect_grids, col="white")
  }
+
+ #convert back to polygon dataframe
+ #to export
+ intersect_grids <- as_Spatial(intersect_grids)
 
  #get output directory
  if(is.null(dir)){
    dr <- getwd()
+   writeOGR(intersect_grids, dr, 'spatial_grid_system',
+            'ESRI Shapefile', overwrite_layer=T)
+   flush.console()
+   print("Output generated!")
  }
 
  if(!is.null(dir)){
-   dr <-dir
- #}
-
-  tryCatch(
-
-    #Specifying expression
-    expr = {
-      #Exporting the grids created
-      writeOGR(intersect_grids, dr, 'spatial_grid_system',
-               'ESRI Shapefile', overwrite_layer=T)
-      print("Execution completed!")
-    },
-    # Specifying error message
-    error = function(e){
-      print("Execution halted! Check the output path specified!")
-    },
-
-    finally = {
-      print("Output generated!")
-    }
-  )
-  }
+   dr <- dir
+   writeOGR(intersect_grids, dr, 'spatial_grid_system',
+            'ESRI Shapefile', overwrite_layer=T)
+   flush.console()
+   print("Output generated!")
+ }
 
  return(intersect_grids)
+
 }
