@@ -86,8 +86,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     colnames(ppt_df) <- c("x","y","t")
 
     #check the date field too
-    t_format <- length(which(date_checker(c(ppt[,3]),
-                                          format = "%Y-%m-%d")==FALSE))
+    t_format <- length(which(date_checker(c(ppt[,3]))==FALSE))
     #check time column
     if(t_format > 0){
       stop("At least one entry of the 'time' column is not in the correct format!")
@@ -102,13 +101,12 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     final_start_date <- min_t
 
   } else{
-    if(date_checker(c(start_date), format = "%Y-%m-%d") == FALSE){
+    if(date_checker(c(start_date)) == FALSE){
       stop("The 'start_date' specified is not in the correct format!")
     }
 
     #check the date field too
-    t_format <- length(which(date_checker(c(ppt[,3]),
-                                   format = "%Y-%m-%d")==FALSE))
+    t_format <- length(which(date_checker(c(ppt[,3]))==FALSE))
     #check time column
     if(t_format > 0){
       stop("At least one entry of the 'time' column is not in the correct format!")
