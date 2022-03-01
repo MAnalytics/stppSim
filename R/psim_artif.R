@@ -18,6 +18,20 @@
 #' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
 #' "SpatialPolygons", or "sf") representing the boundary within which
 #' events are to be generated.
+#' @param n_origin (an integer) Number of origins to simulate.
+#' Default:\code{50}. This is the parameter that has the greatest
+#' influence on the computational time.
+#' @param space_resist ("SpatialPolygonsDataFrame",
+#' "SpatialPolygons", or "sf") Optional features showing
+#' spaces across landscape within which spatial
+#' points (origins) are not allowed. Default: \code{NULL}.
+#' @param  n_foci (an integer) A value indicating the number of
+#' focal points amongst event origins.
+#' @param foci_separation (an integer) A value between `0` and `10`
+#' indicating the nearness of focal points from one another. A `0`
+#' separation indicates all focal points located in a close proximity
+#' while `10` indicates focal points that are evenly distributed across
+#' space.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
@@ -83,12 +97,12 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
                        n_foci,
                        foci_separation, p_ratio,
                        s_threshold = 50,
-                       p_ratio, trend = "stable",
+                       trend = "stable",
                        first_s_peak=NULL,
                        slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
 
   #define global variables...
-
+  nrowh <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, space_resist = space_resist,
