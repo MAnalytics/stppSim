@@ -66,12 +66,12 @@
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
 #' @references
-#'Davies, T.M. and Hazelton, M.L. (2010), Adaptive
-#'kernel estimation of spatial relative risk,
-#'Statistics in Medicine, 29(23) 2423-2437.
-#'Terrell, G.R. (1990), The maximal smoothing principle
-#'in density estimation, Journal of the
-#'American Statistical Association, 85, 470-477.
+#' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
+#' kernel estimation of spatial relative risk,
+#' Statistics in Medicine, 29(23) 2423-2437.
+#' Terrell, G.R. (1990), The maximal smoothing principle
+#' in density estimation, Journal of the
+#' American Statistical Association, 85, 470-477.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
@@ -84,11 +84,12 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL,
                       n_origin=50, p_ratio=20, crsys = "CRS_string"){
 
-  idx <- tid <- x <- y <- if_else <- t2 <- axis <- NULL
+  idx <- tid <- x <- y <- if_else <- t2 <-
+    axis <- . <- OriginType <- NULL
 
   output <- list()
 
-  st_properties <- stp_learner(ppt=dat_sample, start_date = start_date,
+  st_properties <- stp_learner(ppt=ppt, start_date = start_date,
                                poly = poly, n_origin=50,
                                p_ratio = p_ratio, crsys = crsys)
   #return start_date
@@ -164,7 +165,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   stp_All <- NULL
 
   #combine all results by
-  for(loc in 1:length(st_properties$origins$OriginType)){ #loc<-1
+  for(loc in 1:nrow(st_properties$origins)){ #loc<-1
     #extract slot 'intersection'
     p_events <- rbindlist(pp_allTime[[loc]],
                           use.names=TRUE, fill=TRUE, idcol="tid")
