@@ -223,7 +223,7 @@ artif_spo <- function(poly, n_origin =  52, space_resist = NULL,
   groups_clusters <-
     rbind(groups_clusters_focal, groups_clusters_others)
 
-  grp_p <- p_prob(n_origin=nrow(groups_clusters), p_ratio = p_ratio)
+  grp_p <- p_prob(n=nrow(groups_clusters), p_ratio = p_ratio)
 
   #append pareto prob. values to random points
   final_ran_points_pt_prob <-
