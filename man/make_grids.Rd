@@ -2,37 +2,45 @@
 % Please edit documentation in R/make_grids.R
 \name{make_grids}
 \alias{make_grids}
-\title{Make Square Grids}
+\title{Make square grids}
 \usage{
 make_grids(poly, size = 250,
 show_output = FALSE, dir=NULL)
 }
 \arguments{
-\item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
-\verb{simple features}). A spatial polygon over
-which the spatial grid is to be overlaid. Needs to be in a
-cartesian CRS.}
+\item{poly}{(as \code{spatialPolygons},
+\code{spatialPolygonDataFrames}, or
+\verb{simple features}). A polygon object over
+which square grids are to be overlaid.}
 
-\item{size}{Square grid size to be generated.}
+\item{size}{Size of square grids to be
+created. For example, the input \code{size}
+for a 250 by 250 square grids is \code{250}.}
 
-\item{show_output}{(logical) To show the output.
+\item{show_output}{(logical) Display the output.
 Default: \code{FALSE}}
 
-\item{dir}{(character) Specifies the directory to
-To be in the same unit associated with the \code{poly} (e.g.
-metres, feets, etc.). Default: \code{200}.
-export the output. Default is \code{NULL}, indicating the
-current working directory (cwd). A user can specify a different
-directory in the format: "C:/.../folder".}
+\item{dir}{(string) Specifies the directory to
+export the resuting output into.
+The default directory is \code{NULL} in which
+the output is exported into the working directory.
+A \code{dir} string should be in the format:
+"\verb{C:/.../folder}".}
 }
 \value{
 Returns a spatial square grid system
 in a shapefile format
 }
 \description{
-Generates a system of square grids over a specified
-spatial boundary.
+Generates a system of square grids
+across a specified spatial polygon (boundary).
 }
-\references{
-https://www.google.co.uk/
+\details{
+Exports a grid system in a shapefile
+format (in the same crs as the input \code{poly})
+}
+\examples{
+data(camden_boundary)
+make_grids(poly=camden_boundary, size = 250,
+show_output = FALSE, dir=NULL)
 }
