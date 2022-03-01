@@ -1,15 +1,17 @@
-#' @title Extracting coordinates of a polygon boundary
-#' @description Given a polygon object, the goal is to extract
-#' the coordinates of the edges of the boundary.
-#' @param poly (a spatialPolygons, spatialPolygonDataFrames, or
-#' an "sf").
+#' @title Coordinates extraction
+#' @description Extracts the bounding (edges) coordinates
+#' of a polygon object.
+#' @param poly (a spatialPolygons,
+#' spatialPolygonDataFrames, or an "sf" object).
 #' The polygon object must be in a
-#' Cartesian coordinate reference system.
 #' @usage extract_coords(poly)
 #' @examples
-#' @details
-#' @return Returns the global temporal pattern
-#' @references https://www.google.co.uk/
+#' data(camden_boundary)
+#' extract_coords(poly=camden_boundary)
+#' @details Given a spatial polygon object,
+#' the function extracts the bounding coordinates
+#' of the object.
+#' @return Returns 2-column xy coordinates
 #' @importFrom magrittr %>%
 #' @importFrom sf st_as_sf st_coordinates
 #' @importFrom dplyr select
