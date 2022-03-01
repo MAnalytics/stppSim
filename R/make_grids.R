@@ -1,26 +1,31 @@
-#' @title Make Square Grids
-#' @description Generates a system of square grids over a specified
-#' spatial boundary.
-#' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
-#' `simple features`). A spatial polygon over
-#' which the spatial grid is to be overlaid. Needs to be in a
-#' cartesian CRS.
-#' @param size Square grid size to be generated.
-#' @param dir (character) Specifies the directory to
-#' To be in the same unit associated with the `poly` (e.g.
-#' metres, feets, etc.). Default: \code{200}.
-#' export the output. Default is `NULL`, indicating the
-#' current working directory (cwd). A user can specify a different
-#' directory in the format: "C:/.../folder".
-#' @param show_output (logical) To show the output.
+#' @title Make square grids
+#' @description Generates a system of square grids
+#' across a specified spatial polygon (boundary).
+#' @param poly (as `spatialPolygons`,
+#' `spatialPolygonDataFrames`, or
+#' `simple features`). A polygon object over
+#' which square grids are to be overlaid.
+#' @param size Size of square grids to be
+#' created. For example, the input `size`
+#' for a 250 by 250 square grids is \code{250}.
+#' @param dir (string) Specifies the directory to
+#' export the resuting output into.
+#' The default directory is \code{NULL} in which
+#' the output is exported into the working directory.
+#' A `dir` string should be in the format:
+#' "`C:/.../folder`".
+#' @param show_output (logical) Display the output.
 #' Default: \code{FALSE}
 #' @usage make_grids(poly, size = 250,
 #' show_output = FALSE, dir=NULL)
 #' @examples
-#' @details
+#' data(camden_boundary)
+#' make_grids(poly=camden_boundary, size = 250,
+#' show_output = FALSE, dir=NULL)
+#' @details Exports a grid system in a shapefile
+#' format (in the same crs as the input `poly`)
 #' @return Returns a spatial square grid system
 #' in a shapefile format
-#' @references https://www.google.co.uk/
 #' @importFrom sp spTransform proj4string bbox
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons
@@ -46,7 +51,8 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
   #get coordinates
   proj_Coods <- proj4string(area_B)
 
-  #3.Size of grid unit to create (in metres) e.g. 50m, 100m, 150m, and so on.
+  #3.Size of grid unit to create (in metres)
+  #e.g. 50m, 100m, 150m, and so on.
   g_size = size
 
   #extracting the bounding coordinates of the boundary
@@ -87,16 +93,19 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
  ID=centroid_points$id
 
  # Combining the edge coordinates for each unit
- square=cbind(xMinus,yPlus, xPlus,yPlus, xPlus,yMinus, xMinus,yMinus,xMinus,yPlus,xMinus,yPlus)
+ square=cbind(xMinus,yPlus, xPlus,yPlus, xPlus,yMinus,
+              xMinus,yMinus,xMinus,yPlus,xMinus,yPlus)
 
- # Create spatial grid unit system (polygons)---this requires WGS84 CRS as input below
+ # Create spatial grid unit system (polygons)---
+ #this requires WGS84 CRS as input below
  polys <- SpatialPolygons(mapply(function(poly, id) {
    xy <- matrix(poly, ncol=2, byrow=TRUE)
    Polygons(list(Polygon(xy)), ID=id)
  }, split(square, row(square)), ID), proj4string=CRS(proj_Coods) )
 
 
- # Create SpatialPolygonDataFrame -- this step is required to output multiple polygons.
+ # Create SpatialPolygonDataFrame --
+ #this step is required to output multiple polygons.
  polys.df <- SpatialPolygonsDataFrame(polys, data.frame(id=ID, row.names=ID))
 
  # Clipping the intersecting grid units with the boundary
@@ -129,7 +138,8 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
     #Specifying expression
     expr = {
       #Exporting the grids created
-      writeOGR(intersect_grids, dr, 'spatial_grid_system', 'ESRI Shapefile', overwrite_layer=T)
+      writeOGR(intersect_grids, dr, 'spatial_grid_system',
+               'ESRI Shapefile', overwrite_layer=T)
       print("Execution completed!")
     },
     # Specifying error message
