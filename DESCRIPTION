@@ -66,5 +66,5 @@ Collate:
     'walker.R'
     'psim_artif.R'
     'psim_real.R'
-    'space_resistance.R'
+    'space_restriction.R'
     'stp_learner.R'
