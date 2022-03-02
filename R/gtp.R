@@ -1,62 +1,64 @@
-#' @title Modeling of the Global Temporal Pattern
-#' @description Models the global temporal pattern (of
-#' the point process) as consisting of the global linear
-#' trend and the seasonality.
-#' @param start_date (Date) The start date of simulation. The date should
-#' be in the format `"yyyy-mm-dd"`. Default value is
-#' `"2000-01-01"`. A specified date can be earlier or later
-#' than this stated default value. By default, a 1-year worth of
-#' date is simulated. In other words, the end date of
-#' simulation is the next 365th day
-#' from the specified start date.
-#' @param trend (a character) Specifying the direction of
-#' the global (linear) trend of the simulated time series.
-#' Three options
-#' available are `"decreasing"`, `"stable"`,
-#' and `"increasing"` trends. Default: `"stable"`.
-#' @param slope (a character) Slope angle for an
-#' "increasing" or "decreasing" trend. Two options
-#' are available: `"gentle"` and `"steep"`.
-#' Default value is \code{"NULL"} for the default trend
-#' (i.e. `stable`).
-#' @param first_s_peak (Date) The date that marks the
+#' @title Global temporal pattern (GTP)
+#' @description Models the global temporal pattern,
+#' as combining long-term trend and seasonality.
+#' @param start_date The start date of temporal pattern.
+#' The date should be in the format `"yyyy-mm-dd"`.
+#' The GTP will usually covers a 1-year period.
+#' @param trend (string) Specify the trend direction of
+#' the GTP. Values are: `"decreasing"`, `"stable"`,
+#' and `"increasing"`. Default is: `"stable"`.
+#' @param slope (string) Slope GTP trend if
+#' "increasing" or "decreasing" trend is specified.
+#' Values: `"gentle"` or `"steep"`.
+#' Default value is \code{NULL} (i.e., for `stable` trend).
+#' @param first_pDate (in `"yyyy-mm-dd"` format).
+#' Date of the
 #' first seasonal peak of the time series.
-#' Default value is \code{as.Date("2000-01-01")+90},
-#' i.e. 90 days after the
-#' specified `start_date` (implying a seasonal cycle of
-#' 180 days. The date should
-#' be in the format: `"yyyy-mm-dd"`.
-#' @param show.plot (TRUE or False) To show the time series
-#' plot. Default is \code{FALSE}.
-#' @usage gtp(start_date = "2000-01-01", trend = "stable",
-#' slope = NULL, first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
+#' Default value is \code{NULL}, in which a
+#' seasonal cycle of 180 days is utilized. That is,
+#' a first seasonal peak of 90 days.
+#' @param show.plot (logical) Shows GTP.
+#' Default is \code{FALSE}.
+#' @usage gtp(start_date, trend = "stable",
+#' slope = NULL, first_pDate = NULL, show.plot =FALSE)
 #' @examples
-#' @details Returns an object of the class `artif_gtp`,
-#' describing an artificial global temporal patterns.
-#' @return Returns the global temporal pattern
-#' @references
-#' #https://online.stat.psu.edu/stat510/lesson/6/6.1
+#' gtp(start_date = "2020-01-01", trend = "stable",
+#' slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
+#' @details Models the GTP which could be utilize for simulating
+#' artifical point pattern across space.
+#' @return Returns a vector of 365 data points representing
+#' the global temporal pattern
 #' @export
 #'
 
-gtp <- function(start_date = "2000-01-01", trend = "stable",
-                slope = NULL, first_s_peak=as.Date("2000-01-01")+90,
+gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
+                slope = NULL, first_pDate=NULL,
                 show.plot = FALSE){
 
-  #function to check if start_date & first_s_peak are
+  #function to check if start_date & first_pDate are
   #in correct format
 
-  # if(date_checker(c(start_date), format == "%Y-%m-%d") == FALSE){
-  #   stop("The 'start_date' specified is not in the correct format!")
-  # }
-  #
-  # if(date_checker(c(first_s_peak), format == "%Y-%m-%d") == FALSE){
-  #   stop("The 'first_s_peak' specified is not in the correct format!")
-  # }
+  #check that start_date has value
+  if(start_date == "yyyy-mm-dd"){
+    stop("Error! 'start_date' argument has to be a real date!")
+  }
 
-  #check if first_s_peak is greater than start date
-  if(as.numeric(as.Date(first_s_peak) - as.Date(start_date)) <= 0){
-    stop("The 'start_date' cannot be a later date than 'first_s_peak' ")
+  #check first peak value
+  if(is.null(first_pDate)){
+    first_pDate <- as.Date(start_date) + 90
+  }
+
+  if(date_checker(c(start_date)) == FALSE){
+    stop("The 'start_date' specified is not in the correct format!")
+  }
+
+  if(date_checker(c(first_pDate)) == FALSE){
+    stop("The 'first_pDate' specified is not in the correct format!")
+  }
+
+  #check if first_pDate is greater than start date
+  if(as.numeric(as.Date(first_pDate) - as.Date(start_date)) <= 0){
+    stop("The 'start_date' cannot be a later date than 'first_pDate' ")
   }
 
 
@@ -68,7 +70,7 @@ gtp <- function(start_date = "2000-01-01", trend = "stable",
   t2 <- t1 + t
 
   #n-th day of peak since start_date
-  nth_day <- as.numeric(as.Date(first_s_peak) - as.Date(start_date))
+  nth_day <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
 
   y <- 20 * cos(3 + 2 * pi * t/(2 * nth_day)) + 0.2 * sin(-1 * pi * t/15)
 
