@@ -2,55 +2,44 @@
 % Please edit documentation in R/gtp.R
 \name{gtp}
 \alias{gtp}
-\title{Modeling of the Global Temporal Pattern}
+\title{Global temporal pattern (GTP)}
 \usage{
-gtp(start_date = "2000-01-01", trend = "stable",
-slope = NULL, first_s_peak=as.Date("2000-01-01")+90, show.plot =FALSE)
+gtp(start_date, trend = "stable",
+slope = NULL, first_pDate = NULL, show.plot =FALSE)
 }
 \arguments{
-\item{start_date}{(Date) The start date of simulation. The date should
-be in the format \code{"yyyy-mm-dd"}. Default value is
-\code{"2000-01-01"}. A specified date can be earlier or later
-than this stated default value. By default, a 1-year worth of
-date is simulated. In other words, the end date of
-simulation is the next 365th day
-from the specified start date.}
+\item{start_date}{The start date of temporal pattern.
+The date should be in the format \code{"yyyy-mm-dd"}.
+The GTP will usually covers a 1-year period.}
 
-\item{trend}{(a character) Specifying the direction of
-the global (linear) trend of the simulated time series.
-Three options
-available are \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"} trends. Default: \code{"stable"}.}
+\item{trend}{(string) Specify the trend direction of
+the GTP. Values are: \code{"decreasing"}, \code{"stable"},
+and \code{"increasing"}. Default is: \code{"stable"}.}
 
-\item{slope}{(a character) Slope angle for an
-"increasing" or "decreasing" trend. Two options
-are available: \code{"gentle"} and \code{"steep"}.
-Default value is \code{"NULL"} for the default trend
-(i.e. \code{stable}).}
+\item{slope}{(string) Slope GTP trend if
+"increasing" or "decreasing" trend is specified.
+Values: \code{"gentle"} or \code{"steep"}.
+Default value is \code{NULL} (i.e., for \code{stable} trend).}
 
-\item{first_s_peak}{(Date) The date that marks the
+\item{first_pDate}{(in \code{"yyyy-mm-dd"} format).
+Date of the
 first seasonal peak of the time series.
-Default value is \code{as.Date("2000-01-01")+90},
-i.e. 90 days after the
-specified \code{start_date} (implying a seasonal cycle of
-180 days. The date should
-be in the format: \code{"yyyy-mm-dd"}.}
+Default value is \code{NULL}, in which a
+seasonal cycle of 180 days is utilized. That is,
+a first seasonal peak of 90 days.}
 
-\item{show.plot}{(TRUE or False) To show the time series
-plot. Default is \code{FALSE}.}
+\item{show.plot}{(logical) Shows GTP.
+Default is \code{FALSE}.}
 }
 \value{
-Returns the global temporal pattern
+Returns a vector of 365 points representing
+the global temporal pattern
 }
 \description{
-Models the global temporal pattern (of
-the point process) as consisting of the global linear
-trend and the seasonality.
+Models the global temporal pattern,
+as combining long-term trend and seasonality.
 }
 \details{
-Returns an object of the class \code{artif_gtp},
-describing an artificial global temporal patterns.
-}
-\references{
-#https://online.stat.psu.edu/stat510/lesson/6/6.1
+Models the GTP which could be utilize for simulating
+artifical point pattern across space.
 }

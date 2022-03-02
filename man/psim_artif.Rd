@@ -15,7 +15,7 @@ psim_artif(
   p_ratio,
   s_threshold = 50,
   trend = "stable",
-  first_s_peak = NULL,
+  first_pDate = NULL,
   slope = NULL,
   ...,
   show.plot = FALSE,
@@ -70,24 +70,21 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 re-generated (or repeated) by or around the same origin.
 Default: \code{250} (in the same linear unit as the \code{poly})}
 
-\item{trend}{(a character) Specifying the direction of
-the global (linear) trend of the simulated time series.
-Three options
-available are \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"} trends. Default: \code{"stable"}.}
+\item{trend}{(string) Specify the trend direction of
+the GTP. Values are: \code{"decreasing"}, \code{"stable"},
+and \code{"increasing"}. Default is: \code{"stable"}.}
 
-\item{first_s_peak}{(also in \code{"yyyy-mm-dd"} format).
-The date that marks the
+\item{first_pDate}{(in \code{"yyyy-mm-dd"} format).
+Date of the
 first seasonal peak of the time series.
 Default value is \code{NULL}, in which a
 seasonal cycle of 180 days is utilized. That is,
 a first seasonal peak of 90 days.}
 
-\item{slope}{(a character) Slope angle for an
-"increasing" or "decreasing" trend. Two options
-are available: \code{"gentle"} and \code{"steep"}.
-Default value is \code{"NULL"} for the default trend
-(i.e. \code{stable}).}
+\item{slope}{(string) Slope GTP trend if
+"increasing" or "decreasing" trend is specified.
+Values: \code{"gentle"} or \code{"steep"}.
+Default value is \code{NULL} (i.e., for \code{stable} trend).}
 
 \item{...}{additional arguments to pass from
 \code{gtp} and \code{walker} functions. Arguments from
