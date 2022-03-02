@@ -42,22 +42,19 @@
 #' \code{30}. Valid inputs are \code{10}, \code{20},
 #' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 #' 30% dominant and 70% non-dominant origins.
-#' @param trend (a character) Specifying the direction of
-#' the global (linear) trend of the simulated time series.
-#' Three options
-#' available are `"decreasing"`, `"stable"`,
-#' and `"increasing"` trends. Default: `"stable"`.
-#' @param first_s_peak (also in `"yyyy-mm-dd"` format).
-#' The date that marks the
+#' @param trend (string) Specify the trend direction of
+#' the GTP. Values are: `"decreasing"`, `"stable"`,
+#' and `"increasing"`. Default is: `"stable"`.
+#' @param first_pDate (in `"yyyy-mm-dd"` format).
+#' Date of the
 #' first seasonal peak of the time series.
 #' Default value is \code{NULL}, in which a
 #' seasonal cycle of 180 days is utilized. That is,
 #' a first seasonal peak of 90 days.
-#' @param slope (a character) Slope angle for an
-#' "increasing" or "decreasing" trend. Two options
-#' are available: `"gentle"` and `"steep"`.
-#' Default value is \code{"NULL"} for the default trend
-#' (i.e. `stable`).
+#' @param slope (string) Slope GTP trend if
+#' "increasing" or "decreasing" trend is specified.
+#' Values: `"gentle"` or `"steep"`.
+#' Default value is \code{NULL} (i.e., for `stable` trend).
 #' @param show.plot (TRUE or FALSE) Whether to display
 #' the plots after execution.
 #' @param show.data (TRUE or FALSE) To show the output data
@@ -88,7 +85,6 @@
 #' @importFrom iterators iter
 #' @importFrom graphics points legend
 #' @importFrom lubridate hms
-#'
 #' @export
 #'
 
@@ -98,7 +94,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
                        foci_separation, p_ratio,
                        s_threshold = 50,
                        trend = "stable",
-                       first_s_peak=NULL,
+                       first_pDate=NULL,
                        slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
 
   #define global variables...
@@ -116,8 +112,8 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   }
 
   #check first peak value
-  if(is.null(first_s_peak)){
-    first_s_peak <- as.Date(start_date) + 90
+  if(is.null(first_pDate)){
+    first_pDate <- as.Date(start_date) + 90
   }
 
   output <- list()
@@ -125,7 +121,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   start_date <- as.Date(start_date)
 
   #global variables
-  # first_s_peak <- poly <- show.plot <- slope <-
+  # first_pDate <- poly <- show.plot <- slope <-
   #   trend <- start_date <- OriginType <-
   #   axis <-
     group_by <- idx <- . <- if_else <-
@@ -155,7 +151,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date=start_date, trend, slope=slope, first_s_peak=first_s_peak,
+  gtp <- gtp(start_date=start_date, trend, slope=slope, first_pDate=first_pDate,
              show.plot=show.plot) #"01-01"
 
 
