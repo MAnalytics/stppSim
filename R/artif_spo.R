@@ -65,9 +65,12 @@
 #' geom_polygon theme_bw
 #' @importFrom stats dist kmeans
 #' @export
+
 artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
                       n_foci=5, foci_separation = 10,
                       conc_type = "nucleated", p_ratio = 20){
+
+  origins <- list()
 
   #define global variables
   data_frame <- dist <- kmeans <-
@@ -98,16 +101,12 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     stop("Foci separation should be a value between 1 and 100!")
   }
 
-  #-----
   poly_tester(poly)
-  #-----
 
   #backup
   backup_poly <- poly
 
   poly <- extract_coords(poly)
-
-  origins <- list()
 
     #set.seed(1234)
     #generate random points inside the boundary
@@ -115,7 +114,13 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     colnames(ran_points) <- c("x", "y")
     #plot(ran_points$x,ran_points$y)
 
+
+
+  if(is.null(resistance_feat)){
+
     final_ran_points_pt <- ran_points
+
+    }
 
   if(!is.null(resistance_feat)){
 
@@ -127,7 +132,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     #check those intersecting land use
     pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, resistance_feat))[,1])
     new_ran_points_pt <- ran_points_pt[-pt_intersect,]
-    #---------------------------
+
     #check if any of the point intersects
     #resistance feature across the space.
     final_ran_points_pt <- new_ran_points_pt
@@ -157,9 +162,10 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
       final_ran_points_pt <- final_ran_points_pt[1:(nrow(final_ran_points_pt) -
                                           ((nrow(final_ran_points_pt) - n_origin))),]
     }
+
   }
 
-  #add x, y coordinates
+
   final_ran_points_pt$x <- st_coordinates(final_ran_points_pt)[,1]
   final_ran_points_pt$y <- st_coordinates(final_ran_points_pt)[,2]
 
@@ -231,6 +237,12 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
       o_dist_gr <- as.matrix(o_dist_gr)[1,]
 
       o_dist_gr <- o_dist_gr[order(o_dist_gr)]
+
+      #in case of 1 row
+      if(length(o_dist_gr)==1){
+        names(o_dist_gr) <- 1
+      }
+
       #sort the main data
       gr_cut_bk <- cbind(gr_cut_bk[as.numeric(names(o_dist_gr)),],
                          idx=1:nrow(gr_cut_bk))
@@ -285,4 +297,8 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
   return(origins)
 
 }
+
+
+
+
 
