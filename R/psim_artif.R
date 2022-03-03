@@ -14,24 +14,25 @@
 #' date is simulated. In other words, the end date of
 #' simulation is the next 365th day
 #' from the specified start date.
-#' @param poly (A dataframe or S4 object) A dataframe of X, Y
-#' coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
-#' "SpatialPolygons", or "sf") representing the boundary within which
-#' events are to be generated.
-#' @param n_origin (an integer) Number of origins to simulate.
-#' Default:\code{50}. This is the parameter that has the greatest
+#' @param poly (An sf or S4 object)
+#' A polygon shapefile within which
+#' event origins are to be situated.
+#' @param n_origin (an integer) Value specifying
+#' the number of event origins to synthetize.
+#' Default:\code{50}. Value specified here has the greatest
 #' influence on the computational time.
-#' @param space_resist ("SpatialPolygonsDataFrame",
-#' "SpatialPolygons", or "sf") Optional features showing
-#' spaces across landscape within which spatial
-#' points (origins) are not allowed. Default: \code{NULL}.
-#' @param  n_foci (an integer) A value indicating the number of
-#' focal points amongst event origins.
-#' @param foci_separation (an integer) A value between `0` and `10`
-#' indicating the nearness of focal points from one another. A `0`
-#' separation indicates all focal points located in a close proximity
-#' while `10` indicates focal points that are evenly distributed across
-#' space.
+#' @param resistance_feat (An S4 object) Optional
+#' shapefile representing spaces across landscape
+#' within which event
+#' origins are not allowed. Default: \code{NULL}.
+#' @param  n_foci (an integer) Value indicating the number of
+#' focal points amongst event origins. `n_foci` will usually be
+#' smaller than `n_origin` (see @details).
+#' @param foci_separation (an integer) A percentage value indicating
+#' indicating the nearness of focal points from one another. A `"0%"`
+#' separation indicates that focal points are in close proximity
+#' of one another, while `"100%"` indicates focal points being
+#' evenly distributed across space.
 #' @param s_threshold (numeric) Spatial threshold value. The
 #' (assumed) spatial range within which events are
 #' re-generated (or repeated) by or around the same origin.
@@ -66,11 +67,16 @@
 #' from \code{walker} can be utilized to define the properties
 #' of event generators (walkers) across the landscape.
 #' @examples
-#' @details A list containing `k` entries,
-#' where `k` is the length of `n_events` (see above).
-#' @return Returns the global temporal pattern
-#' @references
-#' #https://online.stat.psu.edu/stat510/lesson/6/6.1
+#' @details
+#' If `resistance_feat` is null, only the `poly` is used
+#' to create the base (restriction) map, delineating
+#' the boundaries
+#' within which the `walkers` operate. If not NULL,
+#' `resistance_feat` is stacked onto the basemap derived
+#' from `poly` to create additional restrictions
+#' across landscape.
+#' @return Returns a simulated spatiotemporal
+#' point patters.
 #' @importFrom data.table rbindlist
 #' @importFrom SiMRiv resistanceFromShape
 #' @importFrom raster raster extent
@@ -89,7 +95,7 @@
 #'
 
 psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
-                       poly, n_origin, space_resist = space_resist,
+                       poly, n_origin, resistance_feat,
                        n_foci,
                        foci_separation, p_ratio,
                        s_threshold = 50,
@@ -101,7 +107,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   nrowh <- NULL
 
   #first derive the spo object
-  spo <- artif_spo(poly, n_origin =  n_origin, space_resist = space_resist,
+  spo <- artif_spo(poly, n_origin =  n_origin, resistance_feat = resistance_feat,
                    n_foci=5,
                    foci_separation = foci_separation, p_ratio = p_ratio)
 
