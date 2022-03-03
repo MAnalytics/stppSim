@@ -1,6 +1,6 @@
-#' @title Artificial Event Origins
-#' @description Simulate points to serve as event
-#' origins across space. If provided, resistance features
+#' @title Artificial spatial event origins
+#' @description Simulate spatial points to serve as event
+#' origins across the space. If provided, resistance features
 #' are to be avoided. Each final
 #' event origin point is assigned a probability value
 #' indicating the strength of the origin.
@@ -23,18 +23,23 @@
 #' separation indicates that focal points are in close proximity
 #' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
+#' @param conc_type (string) Specifies the spatial pattern
+#' of non-focal origin (strengths) in relation to
+#' to their nearest focal origins. Value is either
+#' \code{"nucleated"} or \code{"dispersed"}.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio.
 #' For example, a value of \code{20}
 #' implies a \code{20:80} Pareto ratio.
 #' @usage artif_spo(poly, n_origin=50, resistance_feat = NULL,
-#' n_foci=5, foci_separation = 10, p_ratio)
+#' n_foci=5, foci_separation = 10,
+#' conc_type = "nucleated", p_ratio)
 #' @examples
 #' data(camden_boundary)
 #' data(camden_landuse)
 #' spo <- artif_spo(poly = camden_boundary, n_origin = 50,
 #' resistance_feat = camden_landuse, n_foci=5,
-#' foci_separation = 0, p_ratio=20)
+#' foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 #' @details Details of events origins:
 #' {x,y locations, categories (i.e. focal and non-focal (others)
 #' origins), and the probability values.
@@ -42,7 +47,10 @@
 #' The focal origins (`n_foci`) serve as the more dominant
 #' origins (e.g. city centres), while the non-focal origins
 #' (i.e. non-dominant) origin. The `foci_separation` indicates
-#' how close (to one another) the dominant origins are.
+#' the nearness of dominant origins from one another.
+#' The `conc_type` argument allows a user to specify
+#' the type of spatial patterns exhibited by the non-focal
+#' points around the focal points (See vignette for details).
 #' If `resistance_feat` is provided, the features help
 #' to prevent event origins from being
 #' situated in the same locations occupied by the features.
@@ -58,8 +66,8 @@
 #' @importFrom stats dist kmeans
 #' @export
 artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
-                      n_foci=5,
-                      foci_separation = 10, p_ratio = 20){
+                      n_foci=5, foci_separation = 10,
+                      conc_type = "nucleated", p_ratio = 20){
 
   #define global variables
   data_frame <- dist <- kmeans <-
@@ -150,7 +158,6 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
                                           ((nrow(final_ran_points_pt) - n_origin))),]
     }
   }
-  #---------------------------
 
   #add x, y coordinates
   final_ran_points_pt$x <- st_coordinates(final_ran_points_pt)[,1]
@@ -158,7 +165,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
 
   final_ran_points_pt <- final_ran_points_pt %>%
     as.data.frame() %>%
-    select(c(x, y))
+    dplyr::select(c(x, y))
 
   #calculate distances between points
   o_dist <- dist(final_ran_points_pt, method = "euclidean", upper=TRUE, diag = TRUE)
@@ -198,31 +205,74 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     mutate(category = if_else(row_number() %in% as.numeric(n_foci_centre),
                               paste("focal_pt"), paste("others")))
 
-  #Sort in order of proximity to
-  #main focal point
-  groups_clusters <- groups_clusters[as.numeric(idx_others),]
+  #if concentration type is "dispersed"
+  if(conc_type == "dispersed"){
+    #pick each of the focal point
+    #and sort their respective 'others'
+    #according to the proximity
+    group_combined <- NULL
 
-  #move the main 'focal_pts' to the top
-  groups_clusters_focal <- groups_clusters %>%
-    filter(category == "focal_pt")
-  #others
-  groups_clusters_others <- groups_clusters %>%
-    filter(category == "others")
+    for(z in 1:length(unique(groups_clusters$group))){ #z<-1
 
-  groups_clusters <-
-    rbind(groups_clusters_focal, groups_clusters_others)
+      gr_cut <- groups_clusters %>%
+        filter(group == z)
 
-  grp_p <- p_prob(n=nrow(groups_clusters), p_ratio = p_ratio)
+      gr_cut_bk <- gr_cut %>%
+        as.data.frame() %>%
+        arrange(category)
 
-  #append prob. values to random points
-  final_ran_points_pt_prob <-
-    cbind(groups_clusters, prob=rev(grp_p$prob))
+      #sort to bring the foca_pt up
+      gr_cut <- gr_cut %>%
+        as.data.frame() %>%
+        arrange(category)%>%
+        dplyr::select(x, y)
+      #dist
+      o_dist_gr <- dist(gr_cut, method = "euclidean", upper=TRUE, diag = TRUE)
+      o_dist_gr <- as.matrix(o_dist_gr)[1,]
 
+      o_dist_gr <- o_dist_gr[order(o_dist_gr)]
+      #sort the main data
+      gr_cut_bk <- cbind(gr_cut_bk[as.numeric(names(o_dist_gr)),],
+                         idx=1:nrow(gr_cut_bk))
 
-  #if(show.plot==TRUE){
+      group_combined <- rbind(group_combined, gr_cut_bk)
+    }
 
-  # hull <- data.frame(poly) %>%
-  #   slice(chull(x, y))
+    #create prob
+    grp_p <- p_prob(n=nrow(group_combined),
+                    p_ratio = p_ratio)
+    prob <- rev(grp_p$prob)
+
+    #sort
+    final_ran_points_pt_prob <- group_combined %>%
+      arrange(idx) %>%
+      bind_cols(prob=prob) %>%
+      dplyr::select(-c(idx))
+
+  }
+
+  #if concentration type is "nucleated"
+  if(conc_type == "nucleated"){
+    #Sort in order of proximity to
+    #main focal point
+    groups_clusters <- groups_clusters[as.numeric(idx_others),]
+
+    #move the main 'focal_pts' to the top
+    groups_clusters_focal <- groups_clusters %>%
+      filter(category == "focal_pt")
+    #others
+    groups_clusters_others <- groups_clusters %>%
+      filter(category == "others")
+
+    groups_clusters <-
+      rbind(groups_clusters_focal, groups_clusters_others)
+
+    grp_p <- p_prob(n=nrow(groups_clusters), p_ratio = p_ratio)
+
+    #append prob. values to random points
+    final_ran_points_pt_prob <-
+      cbind(groups_clusters, prob=rev(grp_p$prob))
+  }
 
   p <- ggplot(data = final_ran_points_pt_prob) +
     geom_point(mapping = aes(x = x, y = y, color = category))#+
