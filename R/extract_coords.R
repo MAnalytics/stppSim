@@ -1,9 +1,8 @@
 #' @title Coordinates extraction
 #' @description Extracts the bounding (edges) coordinates
 #' of a polygon object.
-#' @param poly (a spatialPolygons,
-#' spatialPolygonDataFrames, or an "sf" object).
-#' The polygon object must be in a
+#' @param poly (An sf or S4 object)
+#' A polygon shapefile.
 #' @usage extract_coords(poly)
 #' @examples
 #' data(camden_boundary)
