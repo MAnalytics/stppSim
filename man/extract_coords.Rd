@@ -7,9 +7,8 @@
 extract_coords(poly)
 }
 \arguments{
-\item{poly}{(a spatialPolygons,
-spatialPolygonDataFrames, or an "sf" object).
-The polygon object must be in a}
+\item{poly}{(An sf or S4 object)
+A polygon shapefile.}
 }
 \value{
 Returns 2-column xy coordinates

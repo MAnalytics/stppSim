@@ -2,60 +2,69 @@
 % Please edit documentation in R/artif_spo.R
 \name{artif_spo}
 \alias{artif_spo}
-\title{Artificial (random) spatial point origins}
+\title{Artificial Event Origins}
 \usage{
-artif_spo(poly, n_origin, space_resist, n_foci=5,
-foci_separation = 0, p_ratio)
+artif_spo(poly, n_origin=50, resistance_feat = NULL,
+n_foci=5, foci_separation = 10, p_ratio)
 }
 \arguments{
-\item{poly}{(A dataframe or S4 object) A dataframe of X, Y
-coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
-"SpatialPolygons", or "sf") representing the boundary within which
-events are to be generated.}
+\item{poly}{(An sf or S4 object)
+A polygon shapefile within which
+event origins are to be situated.}
 
-\item{n_origin}{(an integer) Number of origins to simulate.
-Default:\code{50}. This is the parameter that has the greatest
+\item{n_origin}{(an integer) Value specifying
+the number of event origins to synthetize.
+Default:\code{50}. Value specified here has the greatest
 influence on the computational time.}
 
-\item{space_resist}{("SpatialPolygonsDataFrame",
-"SpatialPolygons", or "sf") Optional features showing
-spaces across landscape within which spatial
-points (origins) are not allowed. Default: \code{NULL}.}
+\item{resistance_feat}{(An S4 object) Optional
+shapefile representing spaces across landscape
+within which event
+origins are not allowed. Default: \code{NULL}.}
 
-\item{n_foci}{(an integer) A value indicating the number of
-focal points amongst event origins.}
+\item{n_foci}{(an integer) Value indicating the number of
+focal points amongst event origins. \code{n_foci} will usually be
+smaller than \code{n_origin}.}
 
-\item{foci_separation}{(an integer) A value between \code{0} and \code{10}
+\item{foci_separation}{(an integer) A percentage value indicating
 indicating the nearness of focal points from one another. A \code{0}
-separation indicates all focal points located in a close proximity
-while \code{10} indicates focal points that are evenly distributed across
-space.}
+separation indicates that focal points are in close proximity
+of one another, while a \code{100} indicates focal points being
+evenly distributed across space.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of the Pareto ratio. For example, for a \code{20:80}
-ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{30}. Valid inputs are \code{10}, \code{20},
-\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-30\% dominant and 70\% non-dominant origins.}
+two terms of a Pareto ratio.
+For example, a value of \code{20}
+implies a \code{20:80} Pareto ratio.}
 }
 \value{
-Returns random event origins
+Returns event origins with their respective
+strength (probability) values.
 }
 \description{
-Simulate artificial point origin across a
-defined spatial boundary. If resistance vector map
-is supplied, the space occupied by the vector map is
-ignored. In other words, no point origin is simulated inside
-the resistance space. Each origin is assigned
-a probability value (representing the relative intensity) at which
-the origin generates events with respect to a specified
-Pareto ratio.
+Simulate points to serve as event
+origins across space. If provided, resistance features
+are to be avoided. Each final
+event origin point is assigned a probability value
+indicating the strength of the origin.
 }
 \details{
-Returns an object of the class \code{artif_spo},
-detailing the properties of artificial (simulated) spatial point
-origins.
+Details of events origins:
+{x,y locations, categories (i.e. focal and non-focal (others)
+origins), and the probability values.
+and non-focal point}.
+The focal origins (\code{n_foci}) serve as the more dominant
+origins (e.g. city centres), while the non-focal origins
+(i.e. non-dominant) origin. The \code{foci_separation} indicates
+how close (to one another) the dominant origins are.
+If \code{resistance_feat} is provided, the features help
+to prevent event origins from being
+situated in the same locations occupied by the features.
 }
-\references{
-#https://online.stat.psu.edu/stat510/lesson/6/6.1
+\examples{
+data(camden_boundary)
+data(camden_landuse)
+spo <- artif_spo(poly = camden_boundary, n_origin = 50,
+resistance_feat = camden_landuse, n_foci=5,
+foci_separation = 0, p_ratio=20)
 }

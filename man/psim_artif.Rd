@@ -9,7 +9,7 @@ psim_artif(
   start_date = "yyyy-mm-dd",
   poly,
   n_origin,
-  space_resist = space_resist,
+  resistance_feat,
   n_foci,
   foci_separation,
   p_ratio,
@@ -35,28 +35,29 @@ date is simulated. In other words, the end date of
 simulation is the next 365th day
 from the specified start date.}
 
-\item{poly}{(A dataframe or S4 object) A dataframe of X, Y
-coordinates or a spatial boundary (as "SpatialPolygonsDataFrame",
-"SpatialPolygons", or "sf") representing the boundary within which
-events are to be generated.}
+\item{poly}{(An sf or S4 object)
+A polygon shapefile within which
+event origins are to be situated.}
 
-\item{n_origin}{(an integer) Number of origins to simulate.
-Default:\code{50}. This is the parameter that has the greatest
+\item{n_origin}{(an integer) Value specifying
+the number of event origins to synthetize.
+Default:\code{50}. Value specified here has the greatest
 influence on the computational time.}
 
-\item{space_resist}{("SpatialPolygonsDataFrame",
-"SpatialPolygons", or "sf") Optional features showing
-spaces across landscape within which spatial
-points (origins) are not allowed. Default: \code{NULL}.}
+\item{resistance_feat}{(An S4 object) Optional
+shapefile representing spaces across landscape
+within which event
+origins are not allowed. Default: \code{NULL}.}
 
-\item{n_foci}{(an integer) A value indicating the number of
-focal points amongst event origins.}
+\item{n_foci}{(an integer) Value indicating the number of
+focal points amongst event origins. \code{n_foci} will usually be
+smaller than \code{n_origin} (see @details).}
 
-\item{foci_separation}{(an integer) A value between \code{0} and \code{10}
-indicating the nearness of focal points from one another. A \code{0}
-separation indicates all focal points located in a close proximity
-while \code{10} indicates focal points that are evenly distributed across
-space.}
+\item{foci_separation}{(an integer) A percentage value indicating
+indicating the nearness of focal points from one another. A \code{"0\%"}
+separation indicates that focal points are in close proximity
+of one another, while \code{"100\%"} indicates focal points being
+evenly distributed across space.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of the Pareto ratio. For example, for a \code{20:80}
@@ -100,7 +101,8 @@ the plots after execution.}
 Default is \code{FALSE}.}
 }
 \value{
-Returns the global temporal pattern
+Returns a simulated spatiotemporal
+point patters.
 }
 \description{
 Generate point pattern in space and time
@@ -108,9 +110,11 @@ from scratch based on a specified temporal pattern and
 spatial properties.
 }
 \details{
-A list containing \code{k} entries,
-where \code{k} is the length of \code{n_events} (see above).
-}
-\references{
-#https://online.stat.psu.edu/stat510/lesson/6/6.1
+If \code{resistance_feat} is null, only the \code{poly} is used
+to create the base (restriction) map, delineating
+the boundaries
+within which the \code{walkers} operate. If not NULL,
+\code{resistance_feat} is stacked onto the basemap derived
+from \code{poly} to create additional restrictions
+across landscape.
 }

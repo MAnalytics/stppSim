@@ -32,7 +32,7 @@ a first seasonal peak of 90 days.}
 Default is \code{FALSE}.}
 }
 \value{
-Returns a vector of 365 points representing
+Returns a vector of 365 data points representing
 the global temporal pattern
 }
 \description{
@@ -42,4 +42,8 @@ as combining long-term trend and seasonality.
 \details{
 Models the GTP which could be utilize for simulating
 artifical point pattern across space.
+}
+\examples{
+gtp(start_date = "2020-01-01", trend = "stable",
+slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
 }
