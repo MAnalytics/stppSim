@@ -57,7 +57,7 @@
 #' @return Returns event origins with their respective
 #' strength (probability) values.
 #' @importFrom dplyr if_else mutate filter
-#' row_number select
+#' row_number select bind_cols
 #' @importFrom splancs csr
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
@@ -73,7 +73,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
   origins <- list()
 
   #define global variables
-  data_frame <- dist <- kmeans <-
+  group <- bind_cols <- data_frame <- dist <- kmeans <-
     if_else <- row_number <- category <-
     flush.console <- as <- select <- prob <-
     theme <- theme_bw <-
@@ -118,8 +118,10 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
 
   if(is.null(resistance_feat)){
 
-    final_ran_points_pt <- ran_points
+    ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
+                           proj4string = crs(backup_poly)))
 
+    final_ran_points_pt <- ran_points_pt
     }
 
   if(!is.null(resistance_feat)){
@@ -178,7 +180,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
 
   #randomly pick one point as the
   #main focal point
-  set.seed(1000)
+  ##set.seed(1000)
   idx <- sample(1:nrow(final_ran_points_pt), 1, replace=FALSE)
   #now sort the dist matrix from selected points
   dist_to_main_focus <- as.matrix(o_dist)[,idx]
@@ -192,7 +194,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     (floor(length(dist_to_main_focus)/11)*separation_list[which(separation_list$sn ==
                              round(perc_sep/10, digits=0)),2])
   #then pick random 'n_foci' from the 'list_to_p....'
-  set.seed(2000)
+  ##set.seed(2000)
   n_foci_centre <- sample(idx_others[1:list_to_pick_from], n_foci, replace =FALSE)
 
   #set as kmean centroids
