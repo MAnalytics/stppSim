@@ -1,19 +1,16 @@
 #' @include gtp.R
 #' @include walker.R
-#' @title Point Pattern Simulation from artificial origins
-#' @description Generate point pattern in space and time
-#' from scratch based on a specified temporal pattern and
-#' spatial properties.
-#' @param n_events (integer) Value of the total
-#' number of points (events) to simulate. Default: \code{2000}.
-#' A vector of integer values can also be inputted, such as
-#' `c(a1, a2, ....)`, where a1, a2, ... represent different values.
-#' @param start_date (Date) The start date of simulation. The date should
-#' be in the format `"yyyy-mm-dd"`. A specified date can be earlier or later
-#' than this stated default value. By default, a 1-year worth of
-#' date is simulated. In other words, the end date of
-#' simulation is the next 365th day
-#' from the specified start date.
+#' @title Artificial spatiotemporal point pattern
+#' @description Generate artificial spatiotemporal
+#' point pattern from synthesized origins.
+#' @param n_events (integer) Number of points
+#' (events) to simulate. Default: \code{2000}.
+#' A vector of integer values can be supplied, in the
+#' format `c(a1, a2, ....)`, where a1, a2, ...
+#' represent different values.
+#' @param start_date The start date of temporal pattern.
+#' The date should be in the format `"yyyy-mm-dd"`.
+#' The GTP will usually covers a 1-year period.
 #' @param poly (An sf or S4 object)
 #' A polygon shapefile within which
 #' event origins are to be situated.
@@ -27,16 +24,16 @@
 #' origins are not allowed. Default: \code{NULL}.
 #' @param  n_foci (an integer) Value indicating the number of
 #' focal points amongst event origins. `n_foci` will usually be
-#' smaller than `n_origin` (see @details).
+#' smaller than `n_origin`.
 #' @param foci_separation (an integer) A percentage value indicating
-#' indicating the nearness of focal points from one another. A `"0%"`
+#' indicating the nearness of focal points from one another. A `0`
 #' separation indicates that focal points are in close proximity
-#' of one another, while `"100%"` indicates focal points being
+#' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
-#' @param s_threshold (numeric) Spatial threshold value. The
-#' (assumed) spatial range within which events are
-#' re-generated (or repeated) by or around the same origin.
-#' Default: \code{250} (in the same linear unit as the `poly`)
+#' @param conc_type (string) Specifies the spatial pattern
+#' of non-focal origin (strengths) in relation to
+#' to their nearest focal origins. Value is either
+#' \code{"nucleated"} or \code{"dispersed"}.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of the Pareto ratio. For example, for a \code{20:80}
 #' ratio, `p_ratio` will be \code{20}. Default value is
@@ -46,37 +43,57 @@
 #' @param trend (string) Specify the trend direction of
 #' the GTP. Values are: `"decreasing"`, `"stable"`,
 #' and `"increasing"`. Default is: `"stable"`.
+#' @param slope (string) Slope GTP trend if
+#' "increasing" or "decreasing" trend is specified.
+#' Values: `"gentle"` or `"steep"`.
+#' Default value is \code{NULL} (i.e., for `stable` trend).
 #' @param first_pDate (in `"yyyy-mm-dd"` format).
 #' Date of the
 #' first seasonal peak of the time series.
 #' Default value is \code{NULL}, in which a
 #' seasonal cycle of 180 days is utilized. That is,
 #' a first seasonal peak of 90 days.
-#' @param slope (string) Slope GTP trend if
-#' "increasing" or "decreasing" trend is specified.
-#' Values: `"gentle"` or `"steep"`.
-#' Default value is \code{NULL} (i.e., for `stable` trend).
-#' @param show.plot (TRUE or FALSE) Whether to display
-#' the plots after execution.
-#' @param show.data (TRUE or FALSE) To show the output data
+#' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
+#' @param s_threshold (numeric) Spatial threshold
+#' value. This is the spatial range within which
+#' a walker perceives it's environment at any
+#' instant. Default: \code{250} (in the same linear unit
+#' as the `poly` - polygon shapefile).
+#' @param step_length (numeric) A maximum step taken at a time
+#' by a walker from one state to the next.
+#' @param show.data (TRUE or FALSE) To show the output
+#' data. Default is \code{FALSE}.
 #' @param ... additional arguments to pass from
-#' \code{gtp} and \code{walker} functions. Arguments from
-#' \code{gtp} can be used to define the nature of the
-#' temporal trend and pattern over time, while arguments
-#' from \code{walker} can be utilized to define the properties
-#' of event generators (walkers) across the landscape.
+#' \code{gtp}, \code{walker} and \code{artif_spo}
+#' functions.
+#' @usage psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
+#' poly, n_origin, resistance_feat,
+#' n_foci, foci_separation, conc_type = "dispersed",
+#' p_ratio, s_threshold = 50, step_length = 20,
+#' trend = "stable", first_pDate=NULL,
+#' slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 #' @examples
+#' \dontrun{
+#' data(camden_boundary)
+#' data(camden_landuse)
+#' artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+#' poly=camden_boundary, n_origin=50,, resistance_feat = camden_landuse,
+#' n_foci=5, foci_separation = 10, conc_type = "dispersed",
+#' p_ratio = 20, s_threshold = 50, step_length = 20,
+#' trend = "stable", first_pDate=NULL,
+#' slope = NULL,show.plot=FALSE, show.data=FALSE)
+#' }
 #' @details
-#' If `resistance_feat` is null, only the `poly` is used
-#' to create the base (restriction) map, delineating
-#' the boundaries
-#' within which the `walkers` operate. If not NULL,
-#' `resistance_feat` is stacked onto the basemap derived
-#' from `poly` to create additional restrictions
-#' across landscape.
-#' @return Returns a simulated spatiotemporal
-#' point patters.
+#' Produces artificial spatiotemporal point
+#' patterns based on the behaviours of a set of
+#' `walkers` within a configured landscape. See the
+#' `walker` function on how to define the properties of
+#' a walker, and see `gtp` and `artif_spo`
+#' functions on how to configure the temporal and spatial
+#' domain within which walkers operate.
+#' @return Returns a list of artificial spatiotemporal
+#' point patterns.
 #' @importFrom data.table rbindlist
 #' @importFrom SiMRiv resistanceFromShape
 #' @importFrom raster raster extent
@@ -97,8 +114,9 @@
 psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
                        poly, n_origin, resistance_feat,
                        n_foci,
-                       foci_separation, p_ratio,
-                       s_threshold = 50,
+                       foci_separation, conc_type = "dispersed",
+                       p_ratio,
+                       s_threshold = 50, step_length = 20,
                        trend = "stable",
                        first_pDate=NULL,
                        slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
@@ -108,9 +126,9 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, resistance_feat = resistance_feat,
-                   n_foci=5,
-                   foci_separation = foci_separation, p_ratio = p_ratio)
-
+                   n_foci=n_foci,
+                   foci_separation = foci_separation,
+                   conc_type = conc_type, p_ratio = p_ratio)
 
   #check that start_date has value
   if(start_date == "yyyy-mm-dd"){
@@ -127,20 +145,11 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   start_date <- as.Date(start_date)
 
   #global variables
-  # first_pDate <- poly <- show.plot <- slope <-
-  #   trend <- start_date <- OriginType <-
-  #   axis <-
     group_by <- idx <- . <- if_else <-
     tid <- NULL
 
-  #test for n_event value
-  #-----------------------------
-
   #define global variables
   x <- y <- NULL
-
-  #spo <- random_spo(poly, npoints=5, p_ratio, show.plot=TRUE)
-
 
   #get the poly
   poly <- spo$poly
@@ -157,7 +166,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date=start_date, trend, slope=slope, first_pDate=first_pDate,
+  gtp <- gtp(start_date = start_date, trend, slope=slope, first_pDate=first_pDate,
              show.plot=show.plot) #"01-01"
 
 
@@ -166,22 +175,12 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   t <- seq(0, 365, by = 1)
   t2 <- t1 + t #list of dates
 
-  # if(is.null(poly)){
-  #
-  # }
-
-  #test polygon geometry
+   #test polygon geometry
   if(!is.null(poly)){
     #-----
     poly_tester(poly)
     #-----
   }
-
-  #check if spo and poly covers the same location (or overlap
-  #each other)
-
-
-  #spo <- spo[2,]
 
   n = gtp$data#[1:4]
 
@@ -195,38 +194,35 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
   #register cluster with foreach
   registerDoParallel(myCluster)
 
-  ##result <- foreach(x = c(4,9,16)) %dopar% sqrt(x)
-
   #subset xy columns
   spo_xy <- spo$origins %>%
     select(x, y)
 
-  #t1 <- Sys.time()
+  #tme1 <- Sys.time()
 
+  #simulate walkers
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
     stppSim::walker(n, s_threshold = s_threshold,
-         poly=poly, coords=as.numeric(as.vector(idx)),
-                  step_length = 20,
+         poly=poly, resistance_feat = resistance_feat,
+         coords=as.numeric(as.vector(idx)),
+                  step_length = step_length ,
                   show.plot = FALSE)
     )
 
-  # t2 <- Sys.time()
-  # tme <- t2 - t1
+  # tme2 <- Sys.time()
+  # tme <- tme2 - tme1
   # print(tme)
-
   #stop the cluster
   stopCluster(myCluster)
-
 
   length(pp_allTime)
   #unlist the result..
 
   stp_All <- NULL
 
-
   #combine all results by
-  for(loc in 1:nrowh(spo$origins)){ #loc<-1
+  for(loc in 1:nrow(spo$origins)){ #loc<-1
     #extract slot 'intersection'
     p_events <- rbindlist(pp_allTime[[loc]],
                             use.names=TRUE, fill=TRUE, idcol="tid")
@@ -241,10 +237,8 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
       rename(datetime=time)
   stp_All <- stp_All %>%
     bind_rows(p_events)
-
   }
 
-#n_events <- c(2000, 3000)
   #generate all the results
   for(h in seq_len(length(n_events))){
 
@@ -261,64 +255,10 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
     output[h] <- list(stp_All_)
   }
 
-  #length(which(stp_All_$OriginType == "Dominant"))
-  #length(which(stp_All_$OriginType == "Non-dominant"))
+  #add the origins
+  output$origins <- spo$origins
+  output$poly <- spo$poly
+  output$resist <- resistance_feat
 
-  # #-------------------------------------------
-  # #Temporal trend and patterns
-  # #stp_All_ %>%
-  #
-  # #create window to plot frou
-  # #spatial patterns
-  # plot(stp_All_$x, stp_All_$y,
-  #      main = "Spatial point distribution",
-  #      xlab = "x",
-  #      ylab = "y")
-  #
-  # #add origins
-  # spo_forPlot <- spo$origins %>%
-  #   mutate(pch = as.numeric(if_else(OriginType == "Dominant",
-  #                        paste("20"), paste("1"))))
-  #
-  # points(spo_forPlot$x, spo_forPlot$y,
-  #        add=TRUE, pch=spo_forPlot$pch, col="red",
-  #        cex=1.2)
-  #
-  # legend("bottomleft",
-  #        legend = c("Events", "Origin (D)", "Origin (N)"),
-  #             col = c("black","red","red"),
-  #             pch = c(1, 20, 1))
-  #
-  # #temporal pattern
-  # #get t holder
-  # all_t <- data.frame(tid=unique(stp_All$tid))
-  #
-  # temp_p <- stp_All_ %>%
-  #   group_by(tid) %>%
-  #   summarise(ct = n())
-  #
-  # temp_pattern <- all_t %>%
-  #   left_join(temp_p)%>%
-  #   replace(is.na(.), 0)
-  #
-  # plot(temp_pattern$tid, temp_pattern$ct, 'l', xaxt = "n")
-  #
-  # ticks <- seq(temp_pattern$tid[1],
-  #              temp_pattern$tid[length(temp_pattern$tid)])
-  # ix <- seq(temp_pattern$tid[1],
-  #           temp_pattern$tid[length(temp_pattern$tid)], by=30)#every 60 days
-  #
-  # dates_list <- t2[ix]
-  # ticks <- ticks[ix]
-  # axis(1, at = ticks, labels = dates_list, tcl = -0.2)
-  #
-  # #Resulting global spatial bandwidth
-  #
-  # #Resulting global temporal bandwidth
-  #
-  # #combine and add as details
-  #@data
-  #-------------------------------------------
   return(output)
-
 }
