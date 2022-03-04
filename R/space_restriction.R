@@ -26,7 +26,7 @@
 #' @examples
 #' data(camden_boundary)
 #' restrct_space <- space_restriction(shp = camden_boundary,
-#' res = 100, binary = TRUE)
+#' res = 20, binary = TRUE)
 #' #plot the result
 #' #plot(restrct_space)
 #' #Setting 'restrct_space' raster as basemap, the landuse
@@ -34,7 +34,7 @@
 #' data(camden_landuse)
 #' restrct_Landuse <- space_restriction(shp = camden_landuse,
 #' baseMap = restrct_space,
-#' res = 100, field = "type", mapvalues = c("Green" = 0.8,
+#' res = 20, field = "type", mapvalues = c("Green" = 0.8,
 #' "Leisure" = 1, "Sports" = 0.7), background = 1)
 #' #plot(restrct_Landuse)
 #' @details Help to create a complete space restriction map
@@ -56,7 +56,7 @@
 #' @importFrom SiMRiv resistanceFromShape
 #' @export
 
-space_restriction <- function(shp, baseMap, res=100, binary = is.na(field),
+space_restriction <- function(shp, baseMap, res=20, binary = is.na(field),
                              field = NA,
                              mapvalues = NA, background = 1){
 
