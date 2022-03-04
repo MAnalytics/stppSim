@@ -39,7 +39,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   #in correct format
 
   #check that start_date has value
-  if(start_date == "yyyy-mm-dd"){
+  if(start_date %in% "yyyy-mm-dd"){
     stop("Error! 'start_date' argument has to be a real date!")
   }
 
