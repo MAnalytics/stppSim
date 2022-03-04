@@ -7,15 +7,6 @@
 #'     }
 "poly"
 
-#' A rectangular boundary coordinates
-#'
-#' @format A dataframe containing one variable:
-#' \itemize{
-#'   \item x: x coordinate
-#'   \item y: y coordinate
-#'     }
-"regular_poly"
-
 #' A boundary shapefile
 #'
 #' @format A boundary file (ESRI format)
@@ -42,7 +33,7 @@
 #' of a part of San Francisco City,
 #' California, US
 #'
-#' @format A matrix containing two variables
+#' @format A matrix containing three variables
 #' \itemize{
 #'   \item x: x coordinate
 #'   \item y: y coordinate
