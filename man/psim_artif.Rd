@@ -2,38 +2,25 @@
 % Please edit documentation in R/psim_artif.R
 \name{psim_artif}
 \alias{psim_artif}
-\title{Point Pattern Simulation from artificial origins}
+\title{Artificial spatiotemporal point pattern}
 \usage{
-psim_artif(
-  n_events = 2000,
-  start_date = "yyyy-mm-dd",
-  poly,
-  n_origin,
-  resistance_feat,
-  n_foci,
-  foci_separation,
-  p_ratio,
-  s_threshold = 50,
-  trend = "stable",
-  first_pDate = NULL,
-  slope = NULL,
-  ...,
-  show.plot = FALSE,
-  show.data = FALSE
-)
+psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
+poly, n_origin, resistance_feat,
+n_foci, foci_separation, conc_type = "dispersed",
+p_ratio, s_threshold = 50, step_length = 20,
+trend = "stable", first_pDate=NULL,
+slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 }
 \arguments{
-\item{n_events}{(integer) Value of the total
-number of points (events) to simulate. Default: \code{2000}.
-A vector of integer values can also be inputted, such as
-\code{c(a1, a2, ....)}, where a1, a2, ... represent different values.}
+\item{n_events}{(integer) Number of points
+(events) to simulate. Default: \code{2000}.
+A vector of integer values can be supplied, in the
+format \code{c(a1, a2, ....)}, where a1, a2, ...
+represent different values.}
 
-\item{start_date}{(Date) The start date of simulation. The date should
-be in the format \code{"yyyy-mm-dd"}. A specified date can be earlier or later
-than this stated default value. By default, a 1-year worth of
-date is simulated. In other words, the end date of
-simulation is the next 365th day
-from the specified start date.}
+\item{start_date}{The start date of temporal pattern.
+The date should be in the format \code{"yyyy-mm-dd"}.
+The GTP will usually covers a 1-year period.}
 
 \item{poly}{(An sf or S4 object)
 A polygon shapefile within which
@@ -51,13 +38,18 @@ origins are not allowed. Default: \code{NULL}.}
 
 \item{n_foci}{(an integer) Value indicating the number of
 focal points amongst event origins. \code{n_foci} will usually be
-smaller than \code{n_origin} (see @details).}
+smaller than \code{n_origin}.}
 
 \item{foci_separation}{(an integer) A percentage value indicating
-indicating the nearness of focal points from one another. A \code{"0\%"}
+indicating the nearness of focal points from one another. A \code{0}
 separation indicates that focal points are in close proximity
-of one another, while \code{"100\%"} indicates focal points being
+of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
+
+\item{conc_type}{(string) Specifies the spatial pattern
+of non-focal origin (strengths) in relation to
+to their nearest focal origins. Value is either
+\code{"nucleated"} or \code{"dispersed"}.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of the Pareto ratio. For example, for a \code{20:80}
@@ -66,10 +58,14 @@ ratio, \code{p_ratio} will be \code{20}. Default value is
 \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
 30\% dominant and 70\% non-dominant origins.}
 
-\item{s_threshold}{(numeric) Spatial threshold value. The
-(assumed) spatial range within which events are
-re-generated (or repeated) by or around the same origin.
-Default: \code{250} (in the same linear unit as the \code{poly})}
+\item{s_threshold}{(numeric) Spatial threshold
+value. This is the spatial range within which
+a walker perceives it's environment at any
+instant. Default: \code{250} (in the same linear unit
+as the \code{poly} - polygon shapefile).}
+
+\item{step_length}{(numeric) A maximum step taken at a time
+by a walker from one state to the next.}
 
 \item{trend}{(string) Specify the trend direction of
 the GTP. Values are: \code{"decreasing"}, \code{"stable"},
@@ -88,33 +84,41 @@ Values: \code{"gentle"} or \code{"steep"}.
 Default value is \code{NULL} (i.e., for \code{stable} trend).}
 
 \item{...}{additional arguments to pass from
-\code{gtp} and \code{walker} functions. Arguments from
-\code{gtp} can be used to define the nature of the
-temporal trend and pattern over time, while arguments
-from \code{walker} can be utilized to define the properties
-of event generators (walkers) across the landscape.}
+\code{gtp}, \code{walker} and \code{artif_spo}
+functions.}
 
-\item{show.plot}{(TRUE or FALSE) Whether to display
-the plots after execution.}
-
-\item{show.data}{(TRUE or FALSE) To show the output data
+\item{show.plot}{(logical) Shows GTP.
 Default is \code{FALSE}.}
+
+\item{show.data}{(TRUE or FALSE) To show the output
+data. Default is \code{FALSE}.}
 }
 \value{
-Returns a simulated spatiotemporal
-point patters.
+Returns a list of artificial spatiotemporal
+point patterns.
 }
 \description{
-Generate point pattern in space and time
-from scratch based on a specified temporal pattern and
-spatial properties.
+Generate artificial spatiotemporal
+point pattern from synthesized origins.
 }
 \details{
-If \code{resistance_feat} is null, only the \code{poly} is used
-to create the base (restriction) map, delineating
-the boundaries
-within which the \code{walkers} operate. If not NULL,
-\code{resistance_feat} is stacked onto the basemap derived
-from \code{poly} to create additional restrictions
-across landscape.
+Produces artificial spatiotemporal point
+patterns based on the behaviours of a set of
+\code{walkers} within a configured landscape. See the
+\code{walker} function on how to define the properties of
+a walker, and see \code{gtp} and \code{artif_spo}
+functions on how to configure the temporal and spatial
+domain within which walkers operate.
+}
+\examples{
+\dontrun{
+data(camden_boundary)
+data(camden_landuse)
+artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+poly=camden_boundary, n_origin=50,, resistance_feat = camden_landuse,
+n_foci=5, foci_separation = 10, conc_type = "dispersed",
+p_ratio = 20, s_threshold = 50, step_length = 20,
+trend = "stable", first_pDate=NULL,
+slope = NULL,show.plot=FALSE, show.data=FALSE)
+}
 }

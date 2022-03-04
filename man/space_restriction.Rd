@@ -53,7 +53,7 @@ the remaining areas retain the original values of \code{baseMap}.
 \examples{
 data(camden_boundary)
 restrct_space <- space_restriction(shp = camden_boundary,
-res = 100, binary = TRUE)
+res = 20, binary = TRUE)
 #plot the result
 #plot(restrct_space)
 #Setting 'restrct_space' raster as basemap, the landuse
@@ -61,7 +61,7 @@ res = 100, binary = TRUE)
 data(camden_landuse)
 restrct_Landuse <- space_restriction(shp = camden_landuse,
 baseMap = restrct_space,
-res = 100, field = "type", mapvalues = c("Green" = 0.8,
+res = 20, field = "type", mapvalues = c("Green" = 0.8,
 "Leisure" = 1, "Sports" = 0.7), background = 1)
 #plot(restrct_Landuse)
 }

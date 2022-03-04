@@ -7,7 +7,7 @@
 of a part of San Francisco City,
 California, US}
 \format{
-A matrix containing two variables
+A matrix containing three variables
 \itemize{
 \item x: x coordinate
 \item y: y coordinate

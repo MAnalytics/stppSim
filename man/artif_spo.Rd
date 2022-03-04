@@ -2,10 +2,11 @@
 % Please edit documentation in R/artif_spo.R
 \name{artif_spo}
 \alias{artif_spo}
-\title{Artificial Event Origins}
+\title{Artificial spatial event origins}
 \usage{
 artif_spo(poly, n_origin=50, resistance_feat = NULL,
-n_foci=5, foci_separation = 10, p_ratio)
+n_foci=5, foci_separation = 10,
+conc_type = "nucleated", p_ratio)
 }
 \arguments{
 \item{poly}{(An sf or S4 object)
@@ -32,6 +33,11 @@ separation indicates that focal points are in close proximity
 of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
 
+\item{conc_type}{(string) Specifies the spatial pattern
+of non-focal origin (strengths) in relation to
+to their nearest focal origins. Value is either
+\code{"nucleated"} or \code{"dispersed"}.}
+
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio.
 For example, a value of \code{20}
@@ -42,8 +48,8 @@ Returns event origins with their respective
 strength (probability) values.
 }
 \description{
-Simulate points to serve as event
-origins across space. If provided, resistance features
+Simulate spatial points to serve as event
+origins across the space. If provided, resistance features
 are to be avoided. Each final
 event origin point is assigned a probability value
 indicating the strength of the origin.
@@ -56,7 +62,10 @@ and non-focal point}.
 The focal origins (\code{n_foci}) serve as the more dominant
 origins (e.g. city centres), while the non-focal origins
 (i.e. non-dominant) origin. The \code{foci_separation} indicates
-how close (to one another) the dominant origins are.
+the nearness of dominant origins from one another.
+The \code{conc_type} argument allows a user to specify
+the type of spatial patterns exhibited by the non-focal
+points around the focal points (See vignette for details).
 If \code{resistance_feat} is provided, the features help
 to prevent event origins from being
 situated in the same locations occupied by the features.
@@ -66,5 +75,5 @@ data(camden_boundary)
 data(camden_landuse)
 spo <- artif_spo(poly = camden_boundary, n_origin = 50,
 resistance_feat = camden_landuse, n_foci=5,
-foci_separation = 0, p_ratio=20)
+foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 }
