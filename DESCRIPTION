@@ -54,7 +54,6 @@ Suggests:
 Collate: 
     'artif_spo.R'
     'chull_poly.R'
-    'compare.R'
     'data.R'
     'date_checker.R'
     'extract_coords.R'
