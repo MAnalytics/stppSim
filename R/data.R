@@ -7,6 +7,19 @@
 #'     }
 "poly"
 
+#' A spatiotemporal point data
+#' ('theft-from-person' crime)
+#' of Camden Borough of London, UK
+#' for the year 2021
+#'
+#' @format A matrix containing three variables
+#' \itemize{
+#'   \item x: x coordinate
+#'   \item y: y coordinate
+#'   \item t: t time
+#'     }
+"camden_theft"
+
 #' A boundary shapefile
 #'
 #' @format A boundary file (ESRI format)
@@ -18,16 +31,16 @@
 
 #' A land use shapefile of Camden
 #' Borough of London, United Kingdom
-#'
 #' @format A boundary file (ESRI format)
 #' \itemize{
-#'   \item value: Values indicating
-#'   the level of resistance of each
-#'   feature. Ranges from 0 (low resistance)
-#'   to 1 (high resistance).
 #'   \item type: Landuse type
+#'   \item rValues1: Field specifying a uniform resistance
+#'   for all features (Value = 1)
+#'   for all features
+#'   \item rValues2: Field specifying varying resistance
+#'   values for different feature classes.
 #'     }
-"camden_landuse"
+"landuse"
 
 #' A spatiotemporal point data
 #' of a part of San Francisco City,
