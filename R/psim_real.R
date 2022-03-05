@@ -1,70 +1,88 @@
 #' @include gtp.R
 #' @include walker.R
-#' @title Point Pattern Simulation from real origins
-#' @description Generate point pattern in space and time
-#' from real sample dataset, based on the
-#' temporal pattern and
-#' spatial properties learnt from the sample dataset.
-#' @param n_events (integer) Value of the total
-#' number of points (events) to simulate. Default: \code{2000}.
-#' A vector of integer values can also be inputted, such as
-#' `c(a1, a2, ....)`, where a1, a2, ... represent different values.
-#' @param ppt (matrix) coordinates (and time) vectors of points.
-#' A 3-column matrix or list: `x` - eastings,
-#' `y` - northing, and `t` - time of occurrence
-#' (in the format: `yyyy-mm-dd'). The sample needs to
-#' cover the one year period being investigated.
-#' @param start_date (string) Specify the start date of
-#' the sample point supplied (i.e. `ppt`),
-#' in the format `yyyy-mm-dd`. If `NULL`, the earliest date
-#' from the `ppt` is utilized. The end date is the 365th day
-#' from the specified start date (by default).
-#' @param poly (as `spatialPolygons`,
-#' `spatialPolygonDataFrames`, or
-#' `simple features`). The boundary (spatial polygon) surrounding
-#' the sample points. The default is `NULL` - meaning that an
-#' arbitrary boundary is drawn to cover the spatial
-#' point distribution. The 'poly' object must have a projection
-#' system (crs) when not NULL.
-#' @param s_threshold (numeric) Spatial threshold value. The
-#' (assumed) spatial range within which events are
-#' re-generated (or repeated) by or around the same origin.
-#' Default: \code{NULL}, in which the spatial bandwidth
-#' is estimated from `ppp`. If not `NULL`, a numerical value
-#' based on prior or expert knowledge is expected.
-#' @param n_origin (an integer) Number of origins to simulate.
-#' Default:\code{50}. This is the parameter that has the greatest
-#' influence on the computational time.
+#' @title Stpp from real (sample) origins
+#' @description Generate spatiotemporal point pattern
+#' from origins sampled based on real dataset.
+#' @param n_events (integer) Number of points
+#' (events) to simulate. Default: \code{1000}.
+#' A vector of integer values can be supplied, in the
+#' format `c(a1, a2, ....)`, where a1, a2, ...
+#' represent different values.
+#' @param ppt A 3-column matrix or list containing
+#' `x` - eastings, `y` - northing, and `t` - time of occurrence
+#' (in the format: `yyyy-mm-dd').
+#' @param start_date Specifies the start date of
+#' the sample data provided (format: `yyyy-mm-dd`).
+#' If `NULL`, the earliest date
+#' of the `t` field of `ppt` is utilized.
+#' The end date is automatically set as the 365th day
+#' from the start date.
+#' @param poly (An sf or S4 object)
+#' Spatial (administrative) boundary covering the area
+#' under study. The default is `NULL`, in which an
+#' arbitrary boundary is drawn to cover the spatial extent
+#' of the data. The projection system of `poly` is assume
+#' for `ppt`, therefore, a user needs to ensure that both
+#' `poly` and `ppt`(-xy cordinates) are in the same
+#' reference system for accurate result.
+#' @param s_threshold (numeric) Spatial range
+#' from the origin within
+#' which a walker re-generate events.
+#' Default: \code{NULL}, in which the value is
+#' automatically estimated from the sample data (i.e., `ppt`).
+#' @param n_origin (an integer) Number of
+#' locations to serve as origins for walkers. The value has
+#' largest impacts on the computational time.
+#' @param resistance_feat (An S4 object) Optional
+#' shapefile representing spaces across landscape
+#' within which event
+#' @param field A number in the range of \code{[0-1]}
+#' (i.e. resistance values) to
+#' assign to all features covered by `resistance_feat`; or
+#' the name of a numeric field to extract such
+#' resistance values for different feature classes.
+#' The resistance value `0` and `1` indicate the
+#' lowest and the highest restrictions, respectively,
+#' to an event occuring within the space occupied
+#' by a feature.
+#' origins are not allowed. Default: \code{NULL}.
 #' @param p_ratio (an integer) The smaller of the
-#' two terms of the Pareto ratio. For example, for a \code{20:80}
-#' ratio, `p_ratio` will be \code{20}. Default value is
-#' \code{30}. Valid inputs are \code{10}, \code{20},
-#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-#' 30% dominant and 70% non-dominant origins.
-#' @param crsys (string) The projection ('crs') system to utilize
-#' when 'poly' argument is not NULL. You can obtain CRS string
-#' from "http://spatialreference.org/". The `crs` can be set using
-#' `proj4string(poly) <- "CRS string", where `CRS string` defines
-#' the projection of `ppt`. When both `poly` and `crsys`
-#' are not NULL, the function utilizes the crs of the former
+#' two terms of a Pareto ratio.
+#' For example, a value of \code{20}
+#' implies a \code{20:80} Pareto ratio.
+#' @param crsys (string) The EPSG projection code that defines
+#' the xy coordinates (of `ppt`). This will be utilized
+#' if `poly` argument is \code{NULL}.
+#' See "http://spatialreference.org/" for the list of
+#' EPSG codes for different regions of the world.
+#' As an example, the EPSG code for the British National Grid
+#' projection system is: \code{"EPSG:27700"}.
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-#' s_threshold = NULL, n_origin=50, p_ratio=20, crsys = "CRS_string")
+#' s_threshold = NULL, n_origin=50, resistance_feat, field=NA,
+#' p_ratio=20, crsys = NULL)
 #' @examples
 #' \dontrun{
-#' data(SanF_fulldata)
-#' data(SanF_CRS_string)
-#' #get a sample data
+#' data(camden_theft)
+#' #specify the proportion of full data to use
+#' sample_size <- 0.2
 #' set.seed(1000)
-#' sample_size <- 1000
-#' dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
-#' sample_size, replace=FALSE),]
+#' dat_sample <- camden_theft[sample(1:nrow(camden_theft),
+#' round((sample_size * nrow(camden_theft)), digits=0),
+#' replace=FALSE),]
+#' #plot(dat_sample$x, dat_sample$y) #preview
 #' result <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
-#' n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
+#' n_origin=50, resistance_feat, field=NA,
+#' p_ratio=20, crsys = "EPSG:27700")
 #' }
 #' @details Returns an object of the class `real_spo`,
 #' detailing the spatiotemporal properties of a real
 #' sample dataset
+#'
+#' #' If not `NULL`, a numerical value
+#' based on prior or expert knowledge is expected.
+#'
+#'
 #' @references
 #' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
 #' kernel estimation of spatial relative risk,
@@ -82,7 +100,7 @@
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL,
-                      n_origin=50, p_ratio=20, crsys = "CRS_string"){
+                      n_origin=50, p_ratio=20, crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
     axis <- . <- OriginType <- NULL
@@ -137,20 +155,24 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
       stppSim::walker(n, s_threshold = st_properties$s_threshold, #jsut example for now..
-                      poly=poly, coords=as.numeric(as.vector(idx)),
-                      step_length = 20,
+                      poly=poly,resistance_feat = resistance_feat,
+                      field = field,
+                      coords=as.numeric(as.vector(idx)),
+                      step_length = step_length,
                       show.plot = FALSE)
     )}
 
-  if(is.null(s_threshold)){
+  if(!is.null(s_threshold)){
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
       stppSim::walker(n, s_threshold = s_threshold, #jsut example for now..
-                      poly=poly, coords=as.numeric(as.vector(idx)),
-                      step_length = 20,
+                      poly=poly, resistance_feat = resistance_feat,
+                      field = field,
+                      coords=as.numeric(as.vector(idx)),
+                      step_length = step_length,
                       show.plot = FALSE)
     )}
-
+  #)
   #t2 <- Sys.time()
   #tme <- t2 - t1
   #print(tme)
@@ -171,8 +193,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                           use.names=TRUE, fill=TRUE, idcol="tid")
 
     p_events <- p_events %>%
-      mutate(locid=loc, prob=st_properties$origins$prob[loc],
-             OriginType = st_properties$origins$OriginType[loc]) %>%
+      mutate(locid=loc, prob=st_properties$origins$prob[loc])%>%#,
+             #OriginType = st_properties$origins$OriginType[loc]) %>%
       #mutate(time=(tid-1) + as.Date(start_date))
 
       mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
@@ -200,8 +222,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     output[h] <- list(stp_All_)
   }
 
-  length(which(stp_All_$OriginType == "Dominant"))
-  length(which(stp_All_$OriginType == "Non-dominant"))
+  #length(which(stp_All_$OriginType == "Dominant"))
+  #length(which(stp_All_$OriginType == "Non-dominant"))
 
   #-------------------------------------------
   #Temporal trend and patterns
@@ -209,54 +231,54 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #create window to plot frou
   #spatial patterns
-  plot(stp_All_$x, stp_All_$y,
-       main = "Spatial point distribution",
-       xlab = "x",
-       ylab = "y")
-
-  #add origins
-  spo_forPlot <- st_properties$origins %>%
-    mutate(pch = as.numeric(if_else(OriginType == "Dominant",
-                   paste("20"), paste("1")))) #'20' is point type
-
-  points(spo_forPlot$x, spo_forPlot$y,
-         add=TRUE, pch=spo_forPlot$pch, col="red",
-         cex=1.2)
-
-  legend("bottomleft",
-         legend = c("Events", "Origin (D)", "Origin (N)"),
-              col = c("black","red","red"),
-              pch = c(1, 20, 1))
+  # plot(stp_All_$x, stp_All_$y,
+  #      main = "Spatial point distribution",
+  #      xlab = "x",
+  #      ylab = "y")
+  #
+  # #add origins
+  # spo_forPlot <- st_properties$origins %>%
+  #   mutate(pch = as.numeric(if_else(OriginType == "Dominant",
+  #                  paste("20"), paste("1")))) #'20' is point type
+  #
+  # points(spo_forPlot$x, spo_forPlot$y,
+  #        add=TRUE, pch=spo_forPlot$pch, col="red",
+  #        cex=1.2)
+  #
+  # legend("bottomleft",
+  #        legend = c("Events", "Origin (D)", "Origin (N)"),
+  #             col = c("black","red","red"),
+  #             pch = c(1, 20, 1))
 
   #temporal pattern
   #get t holder
-  all_t <- data.frame(tid=unique(stp_All$tid))
-
-  temp_p <- stp_All_ %>%
-    group_by(tid) %>%
-    summarise(ct = n())
-
-  temp_pattern <- all_t %>%
-    left_join(temp_p)%>%
-    replace(is.na(.), 0)
-
-  plot(temp_pattern$tid, temp_pattern$ct, 'l', xaxt = "n")
-
-  ticks <- seq(temp_pattern$tid[1],
-               temp_pattern$tid[length(temp_pattern$tid)])
-  ix <- seq(temp_pattern$tid[1],
-            temp_pattern$tid[length(temp_pattern$tid)], by=30)#every 60 days
-
-  dates_list <- t2[ix]
-  ticks <- ticks[ix]
-  axis(1, at = ticks, labels = dates_list, tcl = -0.2)
-
-  #Resulting global spatial bandwidth
-
-  #Resulting global temporal bandwidth
+  # all_t <- data.frame(tid=unique(stp_All$tid))
+  #
+  # temp_p <- stp_All_ %>%
+  #   group_by(tid) %>%
+  #   summarise(ct = n())
+  #
+  # temp_pattern <- all_t %>%
+  #   left_join(temp_p)%>%
+  #   replace(is.na(.), 0)
+  #
+  # plot(temp_pattern$tid, temp_pattern$ct, 'l', xaxt = "n")
+  #
+  # ticks <- seq(temp_pattern$tid[1],
+  #              temp_pattern$tid[length(temp_pattern$tid)])
+  # ix <- seq(temp_pattern$tid[1],
+  #           temp_pattern$tid[length(temp_pattern$tid)], by=30)#every 60 days
+  #
+  # dates_list <- t2[ix]
+  # ticks <- ticks[ix]
+  # axis(1, at = ticks, labels = dates_list, tcl = -0.2)
 
   #combine and add as details
   #-------------------------------------------
+  #add the origins
+  output$origins <- st_properties$origins
+  output$poly <- st_properties$poly
+  output$resist <- resistance_feat
   return(output)
 
 }
