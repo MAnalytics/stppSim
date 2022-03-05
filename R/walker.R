@@ -20,6 +20,15 @@
 #' shapefile representing spaces across landscape
 #' within which event
 #' origins are not allowed. Default: \code{NULL}.
+#' @param field A number in the range of \code{[0-1]}
+#' (i.e. resistance values) to
+#' assign to all features covered by `shp`; or
+#' the name of a numeric field to extract such
+#' resistance values for different feature classes.
+#' The resistance value `0` and `1` indicate the
+#' lowest and the highest restrictions, respectively,
+#' to an event occuring within the space occupied
+#' by a feature.
 #' @param coords a vector of the form c(x, y) giving the
 #' initial coordinates of a walker (i.e., coordinates
 #' of origins).
@@ -32,10 +41,18 @@
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage walker(n = 5, s_threshold = 250, step_length = 20,
-#' poly = NULL, resistance_feat=NULL, coords=c(0,0),
+#' poly = NULL, resistance_feat=NULL, field = NA, coords=c(0,0),
 #' pt_itx = TRUE, show.plot = FALSE)
 #' @examples
+#' data(camden_boundary)
+#' path <- walker(n = 5, s_threshold = 250, step_length = 20,
+#' poly=camden_boundary, resistance_feat=NULL, field = NA,
+#' coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
+#' #plot(path)
 #' @details
+#' Walks freely in all directions in accordance with a
+#' transition matrix, but avoids obstacles (i.e., the
+#' `resistance_feat`, if provided) along the way.
 #' @return Returns a trace of walker's path, and the
 #' corresponding events.
 #' @references
@@ -52,6 +69,7 @@
 
 walker <- function(n = 5, s_threshold = 250, step_length = 20,
                    poly=NULL, resistance_feat=NULL,
+                   field = NA,
                    coords = c(0,0), pt_itx = TRUE, show.plot = FALSE){
 
   #output holder
@@ -83,7 +101,7 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
     }
   }
 
-
+  #configure walker
   Walker <- species(
   state.CRW(0.005) + state.CRW(0.99),
   transitionMatrix(exp(-6.25679 + 1.26863*log(n)), #
@@ -102,8 +120,9 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
     if(!is.null(resistance_feat)){
       landscape <- space_restriction(shp = resistance_feat,
                                      baseMap = landscape,
-                                    res = 50, binary = TRUE)
+                                    res = 50, field = field)
     }
+    #plot(landscape)
     #check point polygon intersection
     if(pt_itx == TRUE){
       st_int <- st_intersects(st_as_sf(poly),
