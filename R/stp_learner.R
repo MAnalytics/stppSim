@@ -19,26 +19,28 @@
 #' `poly` and `ppt`(-xy cordinates) are in the same
 #' reference system for accurate result.
 #' @param n_origin (an integer) Number of
-#' event origins to utilize.
+#' event origins to simulate/utilize.
 #' Default:\code{50}. This parameter has the greatest
 #' influence on the computational time.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio.
 #' For example, a value of \code{20}
 #' implies a \code{20:80} Pareto ratio.
-#' @param crsys (string) The projection system (crs)
-#' of xy coordinates (of `ppt`) when `poly` argument is \code{NULL}.
+#' @param crsys (string) The EPSG projection code that defines
+#' the xy coordinates (of `ppt`). This will be utilized
+#' if `poly` argument is \code{NULL}.
 #' See "http://spatialreference.org/" for the list of
-#' crs strings for different regions of the world.
+#' EPSG codes for different regions of the world.
+#' As an example, the EPSG code for the British National Grid
+#' projection system is: \code{"EPSG:27700"}.
 #' @param show.plot (TRUE or FALSE) Whether to show
 #' some displays.
 #' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
 #' n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
 #' @examples
 #' data(camden_theft)
-#' data(SanF_CRS_string)
 #' #specify the proportion of full data to use
-#' sample_size <- 0.4
+#' sample_size <- 0.2
 #' set.seed(1000)
 #' dat_sample <- camden_theft[sample(1:nrow(camden_theft),
 #' round((sample_size * nrow(camden_theft)), digits=0),
@@ -61,7 +63,9 @@
 #' theme_light geom_sf
 #' @importFrom spatstat.geom ppp owin
 #' @importFrom sparr OS
+#' @importFrom tibble rownames_to_column
 #' @export
+#'
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE){
 
@@ -90,7 +94,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     }
 
     #ensuring data does not exceed 1-year length
-    if(as.numeric(difftime(max(ppt_df$t), min(ppt_df$t), units="days")) > 365){
+    if(as.numeric(difftime(max(ppt_df$t), min(ppt_df$t), units="days")) > 366){
       stop(paste("Data length is greater than 365 days!",
                  "Data length has to be less than or equal to 1-year!"))
     }
@@ -183,7 +187,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #--------------------
     loessData$y <- loessData$y * s_factor
 
-    gtp <- loessData$y
+    gtp <- round(loessData$y, digits = 0)
     # if(show.plot == TRUE){
     #   flush.console()
     #   plot(t, gtp, 'l')
@@ -197,19 +201,17 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #check if boundary is supplied,
     #if null, create an arbitrary boundary
     if(is.null(poly)){
-      ppt_xy <-
-        matrix(as.numeric(ppt[,1:2]),,2)
+      ppt_xy <- ppt[,1:2]
       #create boundary from points
       boundary_ppt <- chull_poly(ppt_xy)
       #then define the crs
       if(is.null(crsys)){
-        stop(paste("The 'crsys' argument cannot be NULL",
-             "while 'poly' argument is also NULL!!",
+        stop(paste("'crsys' argument cannot be NULL",
+             "when 'poly' argument is NULL!!",
              "Needs to define the 'crsys' argument", sep=" "))
       } else {
         proj4string(boundary_ppt) <- CRS(crsys)
-        #proj4string(boundary_ppt) <-
-        #"+proj=utm +zone=10 +ellps=GRS80 +to_meter=0.3048006096012192 +no_defs"
+        #warning msg
       }
 
     } else {
@@ -250,9 +252,10 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #if metres, use 500m2
     #if feet, 5000ft2
     s4_proj <- proj4string(boundary_ppt)
+    #warning
 
     #determine grid size by dividing the area
-    #by n_origin
+    #by n_origin #(work to do)
     m_square <- as.numeric(st_area(st_as_sf(boundary_ppt))) / n_origin
 
 
@@ -265,6 +268,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       grid_size <- m_square^(1/2)
       }
 
+    #check the crs
     if((grepl("+units=m", s4_proj, fixed = TRUE) == FALSE)&
        (grepl("+units=us-ft", s4_proj, fixed = TRUE)==FALSE)){
       stop(paste("Specified 'crs' not recognized!",
@@ -274,8 +278,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #create regular grids
     #default 250 square metres
     set.seed(1000)
-    grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE,
-               dir=NULL)
+    grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE)
+    #warning msg
+
     #plot(grid_sys)
     grid_sys$grid_id <- 1:length(grid_sys)
     #plot(grid_sys)
@@ -283,8 +288,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #Now overlay points on the grids
     ppt_df <- ppt_df %>%
       rownames_to_column("id")
-
-    #id <- as.numeric(ppt_df$id)
     x <- as.numeric(ppt_df$x)
     y <- as.numeric(ppt_df$y)
     t <- as.Date(ppt_df$t)
@@ -303,16 +306,12 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     pnt_grid_intsct$id <- as.character(pnt_grid_intsct$id)
 
     stc <- st_centroid(grid_sys)
+    #warning msg
     ptsxy <- data.frame(cbind(do.call(rbind, st_geometry(stc)),
                               stc$grid_id))
     colnames(ptsxy) <- c("x","y","grid_id")
 
-    #select n_origin grids
-    #based on the prob field
-    # set.seed(2000)
-    # pt_origin_sample <- as.numeric(sample(1:length(ptsxy$grid_id),
-    #                                       size = n_origin, replace=FALSE,
-    #                                       prob = ptsxy$prob))
+
     #join
     #Assign the probability value to each grid
     #based on its historical events
@@ -332,61 +331,74 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     no_of_non_dom <- round(nrow(spo)*(100-p_ratio)/100, digits=0)
     no_of_dom <- round(nrow(spo)*(p_ratio)/100, digits = 0)
 
-    #create labels
-    #check to ensure that the total adds up
-    if((no_of_non_dom + no_of_dom) < nrow(spo)){
-      no_of_non_dom <- no_of_non_dom + 1
-      OriginType <- c(rep("Non-dominant", no_of_non_dom),
-                      rep("Dominant", no_of_dom))
-    }
-
-    if(((no_of_non_dom + no_of_dom) != nrow(spo))&((no_of_non_dom + no_of_dom) > nrow(spo))){
-      stop("Process terminated! Increase the value of 'n_origin'!")
-    }
-
-    if((no_of_non_dom + no_of_dom) == nrow(spo)){
-      OriginType <- c(rep("Non-dominant", no_of_non_dom),
-                      rep("Dominant", no_of_dom))
-    }
-
-    spo <- data.frame(spo, OriginType)
+    # #create labels
+    # #check to ensure that the total adds up
+    # if((no_of_non_dom + no_of_dom) < nrow(spo)){
+    #   no_of_non_dom <- no_of_non_dom + 1
+    #   OriginType <- c(rep("Non-dominant", no_of_non_dom),
+    #                   rep("Dominant", no_of_dom))
+    # }
+    #
+    # if(((no_of_non_dom + no_of_dom) != nrow(spo))&((no_of_non_dom + no_of_dom) > nrow(spo))){
+    #   stop("Process terminated! Increase the value of 'n_origin'!")
+    # }
+    #
+    # if((no_of_non_dom + no_of_dom) == nrow(spo)){
+    #   OriginType <- c(rep("Non-dominant", no_of_non_dom),
+    #                   rep("Dominant", no_of_dom))
+    # }
+    #
+    # spo <- as.data.frame(cbind(spo, OriginType))
       #randomly select...50..OriginType, plot the curve...elbow
 
-    spo_xy <- spo %>%
-      select(x, y) %>%
-      as.matrix()
+    # spo_xy <- spo %>%
+    #   dplyr::select(x, y) %>%
+    #   as.matrix()
 
-    spo_xy_point <- SpatialPoints(spo_xy)
-    spo_xy_point$OriginType <- spo$OriginType
-    proj4string(spo_xy_point) <- crs(boundary_ppt)
-    spo_xy_point <- st_as_sf(spo_xy_point)
-    spo_xy_point$x <- st_coordinates(spo_xy_point)[,1]
-    spo_xy_point$y <- st_coordinates(spo_xy_point)[,2]
+    x <- as.numeric(spo$x)
+    y <- as.numeric(spo$y)
 
-    p <- NULL
+    spo_xy <- data.frame(cbind(x,y))
+    colnames(spo_xy) <- c("x","y")
 
-    if(show.plot==TRUE){
-      flush.console()
-      p <- st_as_sf(boundary_ppt) %>%
-        ggplot() + geom_sf(aes(), fill="NA") +
-        geom_point(st_as_sf(spo_xy_point),
-                   mapping = aes(x = x, y = y, colour = OriginType)) +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-        theme_light()
+    #spo_xy_point <- SpatialPoints(spo_xy)
 
-      p
-    }
+    # spo_xy_point <- st_as_sf(spo,
+    #                          coords = c("x", "y"),
+    #                          crs = crs(boundary_ppt))
+    # spo_xy_point <- spo_xy
+    # #spo_xy_point$OriginType <- spo$OriginType
+    # #proj4string(spo_xy_point) <- crs(boundary_ppt)
+    # #spo_xy_point <- st_as_sf(spo_xy_point)
+    # spo_xy_point$x <- st_coordinates(spo_xy_point)[,1]
+    # spo_xy_point$y <- st_coordinates(spo_xy_point)[,2]
+    #
+    #  p <- NULL
+    #
+    #  if(show.plot==TRUE){
+    #    p <- st_as_sf(boundary_ppt) %>%
+    #      ggplot() + geom_sf(aes(), fill="NA") +
+    #      geom_point(st_as_sf(spo_xy_point),
+    #                 mapping = aes(x = x, y = y, colour = OriginType)) +
+    #      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+    #      theme_light()
+    #    flush.console()
+    #    p
+    #
+    # }
 
     #}
-
 
     output$origins <- spo
     output$gtp <- gtp
     output$start_date <- start_date
     output$s_threshold <- sbw
-    output$plot <- p
+    #output$plot <- p
     output$poly <- boundary_ppt
     output$Class <- "real_spo"
+
+    output$origins <- spo
+
 
     return(output)
 
