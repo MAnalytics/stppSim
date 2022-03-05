@@ -21,6 +21,15 @@
 #' @param resistance_feat (An S4 object) Optional
 #' shapefile representing spaces across landscape
 #' within which event
+#' @param field A number in the range of \code{[0-1]}
+#' (i.e. resistance values) to
+#' assign to all features covered by `resistance_feat`; or
+#' the name of a numeric field to extract such
+#' resistance values for different feature classes.
+#' The resistance value `0` and `1` indicate the
+#' lowest and the highest restrictions, respectively,
+#' to an event occuring within the space occupied
+#' by a feature.
 #' origins are not allowed. Default: \code{NULL}.
 #' @param  n_foci (an integer) Value indicating the number of
 #' focal points amongst event origins. `n_foci` will usually be
@@ -35,11 +44,9 @@
 #' to their nearest focal origins. Value is either
 #' \code{"nucleated"} or \code{"dispersed"}.
 #' @param p_ratio (an integer) The smaller of the
-#' two terms of the Pareto ratio. For example, for a \code{20:80}
-#' ratio, `p_ratio` will be \code{20}. Default value is
-#' \code{30}. Valid inputs are \code{10}, \code{20},
-#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-#' 30% dominant and 70% non-dominant origins.
+#' two terms of a Pareto ratio.
+#' For example, a value of \code{20}
+#' implies a \code{20:80} Pareto ratio.
 #' @param trend (string) Specify the trend direction of
 #' the GTP. Values are: `"decreasing"`, `"stable"`,
 #' and `"increasing"`. Default is: `"stable"`.
@@ -68,7 +75,7 @@
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
 #' @usage psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
-#' poly, n_origin, resistance_feat,
+#' poly, n_origin, resistance_feat, field,
 #' n_foci, foci_separation, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
@@ -76,9 +83,10 @@
 #' @examples
 #' \dontrun{
 #' data(camden_boundary)
-#' data(camden_landuse)
+#' data(landuse)
 #' artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-#' poly=camden_boundary, n_origin=50,, resistance_feat = camden_landuse,
+#' poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+#' field = "rValue1",
 #' n_foci=5, foci_separation = 10, conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
@@ -112,7 +120,7 @@
 #'
 
 psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
-                       poly, n_origin, resistance_feat,
+                       poly, n_origin, resistance_feat, field=NA,
                        n_foci,
                        foci_separation, conc_type = "dispersed",
                        p_ratio,
@@ -205,6 +213,7 @@ psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
     lapply(n, function(n)
     stppSim::walker(n, s_threshold = s_threshold,
          poly=poly, resistance_feat = resistance_feat,
+         field = field,
          coords=as.numeric(as.vector(idx)),
                   step_length = step_length ,
                   show.plot = FALSE)
