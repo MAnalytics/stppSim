@@ -1,10 +1,10 @@
 #' @include gtp.R
 #' @include walker.R
-#' @title Artificial spatiotemporal point pattern
-#' @description Generate artificial spatiotemporal
+#' @title Stpp from synthetic origins
+#' @description Generate spatiotemporal
 #' point pattern from synthesized origins.
 #' @param n_events (integer) Number of points
-#' (events) to simulate. Default: \code{2000}.
+#' (events) to simulate. Default: \code{1000}.
 #' A vector of integer values can be supplied, in the
 #' format `c(a1, a2, ....)`, where a1, a2, ...
 #' represent different values.
@@ -74,7 +74,7 @@
 #' @param ... additional arguments to pass from
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
-#' @usage psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
+#' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 #' poly, n_origin, resistance_feat, field,
 #' n_foci, foci_separation, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
@@ -119,7 +119,7 @@
 #' @export
 #'
 
-psim_artif <- function(n_events=2000, start_date = "yyyy-mm-dd",
+psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        poly, n_origin, resistance_feat, field=NA,
                        n_foci,
                        foci_separation, conc_type = "dispersed",
