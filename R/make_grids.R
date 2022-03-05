@@ -8,20 +8,14 @@
 #' @param size Size of square grids to be
 #' created. For example, the input `size`
 #' for a 250 by 250 square grids is \code{250}.
-#' @param dir (string) Specifies the directory to
-#' export the resuting output into.
-#' The default directory is \code{NULL} in which
-#' the output is exported into the working directory.
-#' A `dir` string should be in the format:
-#' "`C:/.../folder`".
 #' @param show_output (logical) Display the output.
 #' Default: \code{FALSE}
 #' @usage make_grids(poly, size = 250,
-#' show_output = FALSE, dir=NULL)
+#' show_output = FALSE)
 #' @examples
 #' data(camden_boundary)
 #' make_grids(poly=camden_boundary, size = 250,
-#' show_output = FALSE, dir=NULL)
+#' show_output = FALSE)
 #' @details Exports a grid system in a shapefile
 #' format (in the same crs as the input `poly`)
 #' @return Returns a spatial square grid system
@@ -36,7 +30,7 @@
 #' @importFrom terra linearUnits rast
 #' @importFrom raster raster extent<- res<- crs<-
 #' @export
-make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
+make_grids <- function(poly, size = 250, show_output = FALSE){
 
   show.output <- intersect_grid <- as <- NULL
 
@@ -131,22 +125,22 @@ make_grids <- function(poly, size = 250, show_output = FALSE, dir = NULL){
  #to export
  intersect_grids <- as_Spatial(intersect_grids)
 
- #get output directory
- if(is.null(dir)){
-   dr <- getwd()
-   writeOGR(intersect_grids, dr, 'spatial_grid_system',
-            'ESRI Shapefile', overwrite_layer=T)
-   flush.console()
-   print("Output generated!")
- }
+ # #get output directory
+ # if(is.null(dir)){
+ #   dr <- getwd()
+ #   writeOGR(intersect_grids, dr, 'spatial_grid_system',
+ #            'ESRI Shapefile', overwrite_layer=T)
+ #   flush.console()
+ #   print("Output generated!")
+ # }
 
- if(!is.null(dir)){
-   dr <- dir
-   writeOGR(intersect_grids, dr, 'spatial_grid_system',
-            'ESRI Shapefile', overwrite_layer=T)
-   flush.console()
-   print("Output generated!")
- }
+ # if(!is.null(dir)){
+ #   dr <- dir
+ #   writeOGR(intersect_grids, dr, 'spatial_grid_system',
+ #            'ESRI Shapefile', overwrite_layer=T)
+ #   flush.console()
+ #   print("Output generated!")
+ # }
 
  return(intersect_grids)
 
