@@ -1,58 +1,55 @@
-#' @title Learning the spatiao-temporal properties of sample data
-#' @description Learns all the spatial and temporal
-#' properties (required to build events' population)
-#' from a sample points.
-#' @param ppt (matrix) coordinates (and time) vectors of points.
-#' A 3-column matrix or list: `x` - eastings,
-#' `y` - northing, and `t` - time of occurrence
-#' (in the format: `yyyy-mm-dd'). The sample needs to
-#' cover the one year period being investigated.
-#' @param start_date (string) Specify the start date of
-#' the sample point supplied (i.e. `ppt`),
-#' in the format `yyyy-mm-dd`. If `NULL`, the earliest date
-#' from the `ppt` is utilized. The end date is the 365th day
-#' from the specified start date (by default).
-#' @param poly (as `spatialPolygons`,
-#' `spatialPolygonDataFrames`, or
-#' `simple features`). The boundary (spatial polygon) surrounding
-#' the sample points. The default is `NULL` - meaning that an
-#' arbitrary boundary is drawn to cover the spatial
-#' point distribution. The 'poly' object must have a projection
-#' system (crs) when not NULL.
-#' @param n_origin (an integer) Number of origins to simulate.
-#' Default:\code{50}. This is the parameter that has the greatest
+#' @title Learning spatiotemporal properties
+#' @description Learns both spatial and temporal
+#' properties of a real sample dataset.
+#' @param ppt A 3-column matrix or list containing
+#' `x` - eastings, `y` - northing, and `t` - time of occurrence
+#' (in the format: `yyyy-mm-dd').
+#' @param start_date Specifies the start date of
+#' the sample data provided (format: `yyyy-mm-dd`).
+#' If `NULL`, the earliest date
+#' of the `t` field of `ppt` is utilized.
+#' The end date is automatically set as the 365th day
+#' from the start date.
+#' @param poly (An sf or S4 object)
+#' Spatial (administrative) boundary covering the area
+#' under study. The default is `NULL`, in which an
+#' arbitrary boundary is drawn to cover the spatial extent
+#' of the data. The projection system of `poly` is assume
+#' for `ppt`, therefore, a user needs to ensure that both
+#' `poly` and `ppt`(-xy cordinates) are in the same
+#' reference system for accurate result.
+#' @param n_origin (an integer) Number of
+#' event origins to utilize.
+#' Default:\code{50}. This parameter has the greatest
 #' influence on the computational time.
 #' @param p_ratio (an integer) The smaller of the
-#' two terms of the Pareto ratio. For example, for a \code{20:80}
-#' ratio, `p_ratio` will be \code{20}. Default value is
-#' \code{30}. Valid inputs are \code{10}, \code{20},
-#' \code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-#' 30% dominant and 70% non-dominant origins.
-#' @param crsys (string) The projection ('crs') system to utilize
-#' when 'poly' argument is not NULL. You can obtain CRS string
-#' from "http://spatialreference.org/". The `crs` can be set using
-#' `proj4string(poly) <- "CRS string", where `CRS string` defines
-#' the projection of `ppt`. When both `poly` and `crsys`
-#' are not NULL, the function utilizes the crs of the former
-#' @param show.plot (TRUE or FALSE) Whether to display
-#' the plots after execution.
+#' two terms of a Pareto ratio.
+#' For example, a value of \code{20}
+#' implies a \code{20:80} Pareto ratio.
+#' @param crsys (string) The projection system (crs)
+#' of xy coordinates (of `ppt`) when `poly` argument is \code{NULL}.
+#' See "http://spatialreference.org/" for the list of
+#' crs strings for different regions of the world.
+#' @param show.plot (TRUE or FALSE) Whether to show
+#' some displays.
 #' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
-#' n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE)
+#' n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
 #' @examples
-#' data(xyt_data)
+#' data(camden_theft)
 #' data(SanF_CRS_string)
-#' #get a sample data
+#' #specify the proportion of full data to use
+#' sample_size <- 0.4
 #' set.seed(1000)
-#' sample_size <- 500
-#' dat_sample <- xyt_data[sample(1:nrow(xyt_data),
-#' sample_size, replace=FALSE),]
+#' dat_sample <- camden_theft[sample(1:nrow(camden_theft),
+#' round((sample_size * nrow(camden_theft)), digits=0),
+#' replace=FALSE),]
+#' #plot(dat_sample$x, dat_sample$y) #preview
 #' stp_learner(dat_sample,
 #' start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
-#' crsys = SanF_CRS_string,  show.plot = FALSE)
+#' crsys = "EPSG:27700",  show.plot = FALSE)
 #' @details Returns an object of the class `real_spo`,
-#' detailing the spatiotemporal properties of a real
-#' sample dataset
-#' @references https://www.google.co.uk/
+#' storing details of the learnt spatiotemporal
+#' properties of the sample data.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
@@ -66,7 +63,7 @@
 #' @importFrom sparr OS
 #' @export
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
-                        n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE){
+                        n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE){
 
   prob <- NULL
 
@@ -394,15 +391,4 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     return(output)
 
 }
-  #
-  # date_checker(as.Date("2000-01-01"))
 
-  #..then(create square grid)
-  #learn spatial properties
-  #1.
-  #2. derive spatial origins
-  #impose square grids
-  #is boundary supplied yes
-  #if no create chull poly..
-
-#}
