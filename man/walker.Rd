@@ -5,7 +5,7 @@
 \title{A landscape walker}
 \usage{
 walker(n = 5, s_threshold = 250, step_length = 20,
-poly = NULL, resistance_feat=NULL, coords=c(0,0),
+poly = NULL, resistance_feat=NULL, field = NA, coords=c(0,0),
 pt_itx = TRUE, show.plot = FALSE)
 }
 \arguments{
@@ -28,6 +28,16 @@ event origins are to be generated.}
 shapefile representing spaces across landscape
 within which event
 origins are not allowed. Default: \code{NULL}.}
+
+\item{field}{A number in the range of \code{[0-1]}
+(i.e. resistance values) to
+assign to all features covered by \code{shp}; or
+the name of a numeric field to extract such
+resistance values for different feature classes.
+The resistance value \code{0} and \code{1} indicate the
+lowest and the highest restrictions, respectively,
+to an event occuring within the space occupied
+by a feature.}
 
 \item{coords}{a vector of the form c(x, y) giving the
 initial coordinates of a walker (i.e., coordinates
@@ -54,6 +64,18 @@ in line with an in-built transition matrix, and
 specified spatial and temporal properties. The transition
 matrix defines a two-state status, namely; the \code{exploration}
 and the \code{action} states. See vignette for details.
+}
+\details{
+Walks freely in all directions in accordance with a
+transition matrix, but avoids obstacles (i.e., the
+\code{resistance_feat}, if provided) along the way.
+}
+\examples{
+data(camden_boundary)
+path <- walker(n = 5, s_threshold = 250, step_length = 20,
+poly=camden_boundary, resistance_feat=NULL, field = NA,
+coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
+#plot(path)
 }
 \references{
 #https://google.co.uk

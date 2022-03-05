@@ -5,7 +5,7 @@
 \title{Artificial spatiotemporal point pattern}
 \usage{
 psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
-poly, n_origin, resistance_feat,
+poly, n_origin, resistance_feat, field,
 n_foci, foci_separation, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
@@ -33,7 +33,17 @@ influence on the computational time.}
 
 \item{resistance_feat}{(An S4 object) Optional
 shapefile representing spaces across landscape
-within which event
+within which event}
+
+\item{field}{A number in the range of \code{[0-1]}
+(i.e. resistance values) to
+assign to all features covered by \code{resistance_feat}; or
+the name of a numeric field to extract such
+resistance values for different feature classes.
+The resistance value \code{0} and \code{1} indicate the
+lowest and the highest restrictions, respectively,
+to an event occuring within the space occupied
+by a feature.
 origins are not allowed. Default: \code{NULL}.}
 
 \item{n_foci}{(an integer) Value indicating the number of
@@ -52,11 +62,9 @@ to their nearest focal origins. Value is either
 \code{"nucleated"} or \code{"dispersed"}.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of the Pareto ratio. For example, for a \code{20:80}
-ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{30}. Valid inputs are \code{10}, \code{20},
-\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-30\% dominant and 70\% non-dominant origins.}
+two terms of a Pareto ratio.
+For example, a value of \code{20}
+implies a \code{20:80} Pareto ratio.}
 
 \item{s_threshold}{(numeric) Spatial threshold
 value. This is the spatial range within which
@@ -113,9 +121,10 @@ domain within which walkers operate.
 \examples{
 \dontrun{
 data(camden_boundary)
-data(camden_landuse)
+data(landuse)
 artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-poly=camden_boundary, n_origin=50,, resistance_feat = camden_landuse,
+poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+field = "rValue1",
 n_foci=5, foci_separation = 10, conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,

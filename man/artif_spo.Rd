@@ -72,8 +72,8 @@ situated in the same locations occupied by the features.
 }
 \examples{
 data(camden_boundary)
-data(camden_landuse)
+data(landuse)
 spo <- artif_spo(poly = camden_boundary, n_origin = 50,
-resistance_feat = camden_landuse, n_foci=5,
+resistance_feat = landuse, n_foci=5,
 foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 }

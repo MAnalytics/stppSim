@@ -2,56 +2,54 @@
 % Please edit documentation in R/stp_learner.R
 \name{stp_learner}
 \alias{stp_learner}
-\title{Learning the spatiao-temporal properties of sample data}
+\title{Learning spatiotemporal properties}
 \usage{
 stp_learner(ppt, start_date = NULL, poly = NULL,
-n_origin=50, p_ratio, crsys = "CRS_string", show.plot = FALSE)
+n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
 }
 \arguments{
-\item{ppt}{(matrix) coordinates (and time) vectors of points.
-A 3-column matrix or list: \code{x} - eastings,
+\item{ppt}{xyt A 3-column matrix or list of
+\code{x} - eastings,
 \code{y} - northing, and \code{t} - time of occurrence
-(in the format: `yyyy-mm-dd'). The sample needs to
-cover the one year period being investigated.}
+(in the format: `yyyy-mm-dd'). Learns the
+spatiotemporal
+properties of first 1-year subset of the data.}
 
 \item{start_date}{(string) Specify the start date of
-the sample point supplied (i.e. \code{ppt}),
-in the format \code{yyyy-mm-dd}. If \code{NULL}, the earliest date
+the sample data provided (format: \code{yyyy-mm-dd}).
+If \code{NULL}, the earliest date
 from the \code{ppt} is utilized. The end date is the 365th day
 from the specified start date (by default).}
 
-\item{poly}{(as \code{spatialPolygons},
-\code{spatialPolygonDataFrames}, or
-\verb{simple features}). The boundary (spatial polygon) surrounding
-the sample points. The default is \code{NULL} - meaning that an
-arbitrary boundary is drawn to cover the spatial
-point distribution. The 'poly' object must have a projection
-system (crs) when not NULL.}
+\item{poly}{(An sf or S4 object)
+Spatial (administrative) boundary covering the area
+under study. The default is \code{NULL}, in which an
+arbitrary boundary is drawn based on the spatial extent
+of the data.}
 
-\item{n_origin}{(an integer) Number of origins to simulate.
-Default:\code{50}. This is the parameter that has the greatest
+\item{n_origin}{(an integer) Value specifying
+the number of event origins to synthetize.
+Default:\code{50}. Value specified here has the greatest
 influence on the computational time.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of the Pareto ratio. For example, for a \code{20:80}
-ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{30}. Valid inputs are \code{10}, \code{20},
-\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-30\% dominant and 70\% non-dominant origins.}
+two terms of a Pareto ratio.
+For example, a value of \code{20}
+implies a \code{20:80} Pareto ratio.}
 
-\item{crsys}{(string) The projection ('crs') system to utilize
-when 'poly' argument is not NULL. You can obtain CRS string
-from "http://spatialreference.org/". The \code{crs} can be set using
-\verb{proj4string(poly) <- "CRS string", where }CRS string\verb{defines the projection of}ppt\verb{. When both }poly\code{and}crsys`
-are not NULL, the function utilizes the crs of the former}
+\item{crsys}{(string) The crs projection to utilize
+when \code{poly} argument is \code{not} NULL.
+A user can obtain CRS strings for different world regions
+from "http://spatialreference.org/".
+When both \code{poly} and \code{crsys}
+are not NULL, the function utilizes the \code{crs} of the former}
 
 \item{show.plot}{(TRUE or FALSE) Whether to display
 the plots after execution.}
 }
 \description{
-Learns all the spatial and temporal
-properties (required to build events' population)
-from a sample points.
+Learns specific spatiotemporal
+properties of a sample dataset.
 }
 \details{
 Returns an object of the class \code{real_spo},

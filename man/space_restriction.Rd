@@ -5,7 +5,7 @@
 \title{Space restriction map (raster)}
 \usage{
 space_restriction(shp, baseMap, res, binary = is.na(field),
-field = NA, mapvalues = NA, background = 1)
+field = NA, background = 1)
 }
 \arguments{
 \item{shp}{polygon shapefile object.}
@@ -17,16 +17,18 @@ to stack the next rasterized shapefile.}
 raster to be created, when baseMap is not provided.}
 
 \item{binary}{if TRUE, the shapefile will be rasterized
-so that any feature is assigned a value of 0 (least resistance
-to event occurences),
-and the background 1 (most resistance to event occurences).}
+so that any feature is assigned a value of \code{0},
+and the background is assigned \code{1}.}
 
-\item{field}{(string) the name of the character
-field from which to extract the label of different
-feature classes.}
-
-\item{mapvalues}{a named vector specifying the resistance
-value mapping from the classes of field.}
+\item{field}{A number in the range of \code{[0-1]}
+(i.e. resistance values) to
+assign to all features covered by \code{shp}; or
+the name of a numeric field to extract such
+resistance values for different feature classes.
+The resistance value \code{0} and \code{1} indicate the
+lowest and the highest restrictions, respectively,
+to an event occuring within the space occupied
+by a feature.}
 
 \item{background}{the value in the range 0 and 1
 to assign to all pixels that are not covered
@@ -58,11 +60,10 @@ res = 20, binary = TRUE)
 #plot(restrct_space)
 #Setting 'restrct_space' raster as basemap, the landuse
 #map can now be stacked onto the basemap as follows:
-data(camden_landuse)
-restrct_Landuse <- space_restriction(shp = camden_landuse,
+data(cam_landuse)
+restrct_Landuse <- space_restriction(shp = landuse,
 baseMap = restrct_space,
-res = 20, field = "type", mapvalues = c("Green" = 0.8,
-"Leisure" = 1, "Sports" = 0.7), background = 1)
+res = 20, field = "rValues2", background = 1)
 #plot(restrct_Landuse)
 }
 \references{
