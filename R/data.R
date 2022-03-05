@@ -54,13 +54,3 @@
 #'     }
 "xyt_data"
 
-#' CRS string of San Francisco Area
-#' Source: http://spatialreference.org/
-#'
-#' @format A list containing projected CRS
-#' string for San Francisco area
-#' \itemize{
-#'   \item text: CRS string
-#'     }
-"SanF_CRS_string"
-
