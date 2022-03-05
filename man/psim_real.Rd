@@ -2,84 +2,88 @@
 % Please edit documentation in R/psim_real.R
 \name{psim_real}
 \alias{psim_real}
-\title{Point Pattern Simulation from real origins}
+\title{Stpp from real (sample) origins}
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-s_threshold = NULL, n_origin=50, p_ratio=20, crsys = "CRS_string")
+s_threshold = NULL, n_origin=50, resistance_feat, field=NA,
+p_ratio=20, crsys = "CRS_string")
 }
 \arguments{
-\item{n_events}{(integer) Value of the total
-number of points (events) to simulate. Default: \code{2000}.
-A vector of integer values can also be inputted, such as
-\code{c(a1, a2, ....)}, where a1, a2, ... represent different values.}
+\item{n_events}{(integer) Number of points
+(events) to simulate. Default: \code{1000}.
+A vector of integer values can be supplied, in the
+format \code{c(a1, a2, ....)}, where a1, a2, ...
+represent different values.}
 
-\item{ppt}{(matrix) coordinates (and time) vectors of points.
-A 3-column matrix or list: \code{x} - eastings,
-\code{y} - northing, and \code{t} - time of occurrence
-(in the format: `yyyy-mm-dd'). The sample needs to
-cover the one year period being investigated.}
+\item{ppt}{A 3-column matrix or list containing
+\code{x} - eastings, \code{y} - northing, and \code{t} - time of occurrence
+(in the format: `yyyy-mm-dd').}
 
-\item{start_date}{(string) Specify the start date of
-the sample point supplied (i.e. \code{ppt}),
-in the format \code{yyyy-mm-dd}. If \code{NULL}, the earliest date
-from the \code{ppt} is utilized. The end date is the 365th day
-from the specified start date (by default).}
+\item{start_date}{Specifies the start date of
+the sample data provided (format: \code{yyyy-mm-dd}).
+If \code{NULL}, the earliest date
+of the \code{t} field of \code{ppt} is utilized.
+The end date is automatically set as the 365th day
+from the start date.}
 
-\item{poly}{(as \code{spatialPolygons},
-\code{spatialPolygonDataFrames}, or
-\verb{simple features}). The boundary (spatial polygon) surrounding
-the sample points. The default is \code{NULL} - meaning that an
-arbitrary boundary is drawn to cover the spatial
-point distribution. The 'poly' object must have a projection
-system (crs) when not NULL.}
+\item{poly}{(An sf or S4 object)
+Spatial (administrative) boundary covering the area
+under study. The default is \code{NULL}, in which an
+arbitrary boundary is drawn to cover the spatial extent
+of the data. The projection system of \code{poly} is assume
+for \code{ppt}, therefore, a user needs to ensure that both
+\code{poly} and \code{ppt}(-xy cordinates) are in the same
+reference system for accurate result.}
 
-\item{s_threshold}{(numeric) Spatial threshold value. The
-(assumed) spatial range within which events are
-re-generated (or repeated) by or around the same origin.
-Default: \code{NULL}, in which the spatial bandwidth
-is estimated from \code{ppp}. If not \code{NULL}, a numerical value
-based on prior or expert knowledge is expected.}
+\item{s_threshold}{(numeric) Spatial range
+from the origin within
+which a walker re-generate events.
+Default: \code{NULL}, in which the value is
+automatically estimated from the sample data (i.e., \code{ppt}).}
 
-\item{n_origin}{(an integer) Number of origins to simulate.
-Default:\code{50}. This is the parameter that has the greatest
-influence on the computational time.}
+\item{n_origin}{(an integer) Number of
+locations to serve as origins for walkers. The value has
+largest impacts on the computational time.}
 
 \item{p_ratio}{(an integer) The smaller of the
-two terms of the Pareto ratio. For example, for a \code{20:80}
-ratio, \code{p_ratio} will be \code{20}. Default value is
-\code{30}. Valid inputs are \code{10}, \code{20},
-\code{30}, \code{40}, and \code{50}. A \code{30:70}, represents
-30\% dominant and 70\% non-dominant origins.}
+two terms of a Pareto ratio.
+For example, a value of \code{20}
+implies a \code{20:80} Pareto ratio.}
 
-\item{crsys}{(string) The projection ('crs') system to utilize
-when 'poly' argument is not NULL. You can obtain CRS string
-from "http://spatialreference.org/". The \code{crs} can be set using
-\verb{proj4string(poly) <- "CRS string", where }CRS string\verb{defines the projection of}ppt\verb{. When both }poly\code{and}crsys`
-are not NULL, the function utilizes the crs of the former}
+\item{crsys}{(string) The EPSG projection code that defines
+the xy coordinates (of \code{ppt}). This will be utilized
+if \code{poly} argument is \code{NULL}.
+See "http://spatialreference.org/" for the list of
+EPSG codes for different regions of the world.
+As an example, the EPSG code for the British National Grid
+projection system is: \code{"EPSG:27700"}.}
 }
 \description{
-Generate point pattern in space and time
-from real sample dataset, based on the
-temporal pattern and
-spatial properties learnt from the sample dataset.
+Generate spatiotemporal point pattern
+from origins sampled based on real dataset.
 }
 \details{
 Returns an object of the class \code{real_spo},
 detailing the spatiotemporal properties of a real
 sample dataset
+
+#' If not \code{NULL}, a numerical value
+based on prior or expert knowledge is expected.
 }
 \examples{
 \dontrun{
-data(SanF_fulldata)
-data(SanF_CRS_string)
-#get a sample data
+data(camden_theft)
+#specify the proportion of full data to use
+sample_size <- 0.2
 set.seed(1000)
-sample_size <- 1000
-dat_sample <- SanF_fulldata[sample(1:nrow(SanF_fulldata),
-sample_size, replace=FALSE),]
+dat_sample <- camden_theft[sample(1:nrow(camden_theft),
+round((sample_size * nrow(camden_theft)), digits=0),
+replace=FALSE),]
+#plot(dat_sample$x, dat_sample$y) #preview
 result <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
-n_origin=50, p_ratio=20,crsys = SanF_CRS_string)
+n_origin=50, resistance_feat, field=NA,
+p_ratio=20, crsys = "EPSG:27700")
 }
 }
 \references{

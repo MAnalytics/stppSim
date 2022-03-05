@@ -2,9 +2,9 @@
 % Please edit documentation in R/psim_artif.R
 \name{psim_artif}
 \alias{psim_artif}
-\title{Artificial spatiotemporal point pattern}
+\title{Stpp from synthetic origins}
 \usage{
-psim_artif(n_events=2000, start_date = "yyyy-mm-dd",
+psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 poly, n_origin, resistance_feat, field,
 n_foci, foci_separation, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
@@ -13,7 +13,7 @@ slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 }
 \arguments{
 \item{n_events}{(integer) Number of points
-(events) to simulate. Default: \code{2000}.
+(events) to simulate. Default: \code{1000}.
 A vector of integer values can be supplied, in the
 format \code{c(a1, a2, ....)}, where a1, a2, ...
 represent different values.}
@@ -106,7 +106,7 @@ Returns a list of artificial spatiotemporal
 point patterns.
 }
 \description{
-Generate artificial spatiotemporal
+Generate spatiotemporal
 point pattern from synthesized origins.
 }
 \details{

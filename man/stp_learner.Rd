@@ -8,28 +8,29 @@ stp_learner(ppt, start_date = NULL, poly = NULL,
 n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
 }
 \arguments{
-\item{ppt}{xyt A 3-column matrix or list of
-\code{x} - eastings,
-\code{y} - northing, and \code{t} - time of occurrence
-(in the format: `yyyy-mm-dd'). Learns the
-spatiotemporal
-properties of first 1-year subset of the data.}
+\item{ppt}{A 3-column matrix or list containing
+\code{x} - eastings, \code{y} - northing, and \code{t} - time of occurrence
+(in the format: `yyyy-mm-dd').}
 
-\item{start_date}{(string) Specify the start date of
+\item{start_date}{Specifies the start date of
 the sample data provided (format: \code{yyyy-mm-dd}).
 If \code{NULL}, the earliest date
-from the \code{ppt} is utilized. The end date is the 365th day
-from the specified start date (by default).}
+of the \code{t} field of \code{ppt} is utilized.
+The end date is automatically set as the 365th day
+from the start date.}
 
 \item{poly}{(An sf or S4 object)
 Spatial (administrative) boundary covering the area
 under study. The default is \code{NULL}, in which an
-arbitrary boundary is drawn based on the spatial extent
-of the data.}
+arbitrary boundary is drawn to cover the spatial extent
+of the data. The projection system of \code{poly} is assume
+for \code{ppt}, therefore, a user needs to ensure that both
+\code{poly} and \code{ppt}(-xy cordinates) are in the same
+reference system for accurate result.}
 
-\item{n_origin}{(an integer) Value specifying
-the number of event origins to synthetize.
-Default:\code{50}. Value specified here has the greatest
+\item{n_origin}{(an integer) Number of
+event origins to simulate/utilize.
+Default:\code{50}. This parameter has the greatest
 influence on the computational time.}
 
 \item{p_ratio}{(an integer) The smaller of the
@@ -37,37 +38,51 @@ two terms of a Pareto ratio.
 For example, a value of \code{20}
 implies a \code{20:80} Pareto ratio.}
 
-\item{crsys}{(string) The crs projection to utilize
-when \code{poly} argument is \code{not} NULL.
-A user can obtain CRS strings for different world regions
-from "http://spatialreference.org/".
-When both \code{poly} and \code{crsys}
-are not NULL, the function utilizes the \code{crs} of the former}
+\item{crsys}{(string) The EPSG projection code that defines
+the xy coordinates (of \code{ppt}). This will be utilized
+if \code{poly} argument is \code{NULL}.
+See "http://spatialreference.org/" for the list of
+EPSG codes for different regions of the world.
+As an example, the EPSG code for the British National Grid
+projection system is: \code{"EPSG:27700"}.}
 
-\item{show.plot}{(TRUE or FALSE) Whether to display
-the plots after execution.}
+\item{show.plot}{(TRUE or FALSE) Whether to show
+some displays.}
+
+\item{resistance_feat}{(An S4 object) Optional
+shapefile representing spaces across landscape
+within which event}
+
+\item{field}{A number in the range of \code{[0-1]}
+(i.e. resistance values) to
+assign to all features covered by \code{resistance_feat}; or
+the name of a numeric field to extract such
+resistance values for different feature classes.
+The resistance value \code{0} and \code{1} indicate the
+lowest and the highest restrictions, respectively,
+to an event occuring within the space occupied
+by a feature.
+origins are not allowed. Default: \code{NULL}.}
 }
 \description{
-Learns specific spatiotemporal
-properties of a sample dataset.
+Learns both spatial and temporal
+properties of a real sample dataset.
 }
 \details{
 Returns an object of the class \code{real_spo},
-detailing the spatiotemporal properties of a real
-sample dataset
+storing details of the learnt spatiotemporal
+properties of the sample data.
 }
 \examples{
-data(xyt_data)
-data(SanF_CRS_string)
-#get a sample data
+data(camden_theft)
+#specify the proportion of full data to use
+sample_size <- 0.2
 set.seed(1000)
-sample_size <- 500
-dat_sample <- xyt_data[sample(1:nrow(xyt_data),
-sample_size, replace=FALSE),]
+dat_sample <- camden_theft[sample(1:nrow(camden_theft),
+round((sample_size * nrow(camden_theft)), digits=0),
+replace=FALSE),]
+#plot(dat_sample$x, dat_sample$y) #preview
 stp_learner(dat_sample,
 start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
-crsys = SanF_CRS_string,  show.plot = FALSE)
-}
-\references{
-https://www.google.co.uk/
+crsys = "EPSG:27700",  show.plot = FALSE)
 }

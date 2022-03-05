@@ -19,13 +19,6 @@ for a 250 by 250 square grids is \code{250}.}
 
 \item{show_output}{(logical) Display the output.
 Default: \code{FALSE}}
-
-\item{dir}{(string) Specifies the directory to
-export the resuting output into.
-The default directory is \code{NULL} in which
-the output is exported into the working directory.
-A \code{dir} string should be in the format:
-"\verb{C:/.../folder}".}
 }
 \value{
 Returns a spatial square grid system
