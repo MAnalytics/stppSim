@@ -14,10 +14,8 @@
 #' @param poly (An sf or S4 object)
 #' A polygon shapefile within which
 #' event origins are to be situated.
-#' @param n_origin (an integer) Value specifying
-#' the number of event origins to synthetize.
-#' Default:\code{50}. Value specified here has the greatest
-#' influence on the computational time.
+#' @param n_origin (an integer) Number of locations from which
+#' the walkers originate. Default:\code{50}.
 #' @param resistance_feat (An S4 object) Optional
 #' shapefile representing spaces across landscape
 #' within which event
@@ -68,7 +66,7 @@
 #' instant. Default: \code{250} (in the same linear unit
 #' as the `poly` - polygon shapefile).
 #' @param step_length (numeric) A maximum step taken at a time
-#' by a walker from one state to the next.
+#' by a walker from one point to the next.
 #' @param show.data (TRUE or FALSE) To show the output
 #' data. Default is \code{FALSE}.
 #' @param ... additional arguments to pass from
@@ -93,13 +91,12 @@
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
 #' }
 #' @details
-#' Produces artificial spatiotemporal point
-#' patterns based on the behaviours of a set of
-#' `walkers` within a configured landscape. See the
-#' `walker` function on how to define the properties of
-#' a walker, and see `gtp` and `artif_spo`
-#' functions on how to configure the temporal and spatial
-#' domain within which walkers operate.
+#' Generate spatiotemporal point pattern
+#' based on the actions of specified 'walkers' moving
+#' across a landscape. Both the walkers and the
+#' landscape are configured arbitrarily (in accordance
+#' with the users (expert) knowledge of the domain
+#' in question.
 #' @return Returns a list of artificial spatiotemporal
 #' point patterns.
 #' @importFrom data.table rbindlist
