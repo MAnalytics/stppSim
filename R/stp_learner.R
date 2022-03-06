@@ -18,10 +18,10 @@
 #' for `ppt`, therefore, a user needs to ensure that both
 #' `poly` and `ppt`(-xy cordinates) are in the same
 #' reference system for accurate result.
-#' @param n_origin (an integer) Number of
-#' event origins to simulate/utilize.
-#' Default:\code{50}. This parameter has the greatest
-#' influence on the computational time.
+#' @param gridSize (an integer) The size of square grid
+#' for discretizing the entire space. Default is: \code{150}.
+#' @param n_origin (an integer) Number of locations from which
+#' the walkers originate. Default:\code{50}.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio.
 #' For example, a value of \code{20}
@@ -36,7 +36,8 @@
 #' @param show.plot (TRUE or FALSE) Whether to show
 #' some displays.
 #' @usage stp_learner(ppt, start_date = NULL, poly = NULL,
-#' n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
+#' n_origin=50, p_ratio, gridSize = 150,
+#' crsys = NULL, show.plot = FALSE)
 #' @examples
 #' data(camden_theft)
 #' #specify the proportion of full data to use
@@ -47,8 +48,9 @@
 #' replace=FALSE),]
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #' stp_learner(dat_sample,
-#' start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
-#' crsys = "EPSG:27700",  show.plot = FALSE)
+#' start_date = NULL, poly = NULL, n_origin=50,
+#' p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
+#' show.plot = FALSE)
 #' @details Returns an object of the class `real_spo`,
 #' storing details of the learnt spatiotemporal
 #' properties of the sample data.
@@ -67,7 +69,8 @@
 #' @export
 #'
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
-                        n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE){
+                        n_origin=50, p_ratio, gridSize = 150,
+                        crsys = NULL, show.plot = FALSE){
 
   prob <- NULL
 
@@ -254,19 +257,19 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     s4_proj <- proj4string(boundary_ppt)
     #warning
 
-    #determine grid size by dividing the area
-    #by n_origin #(work to do)
-    m_square <- as.numeric(st_area(st_as_sf(boundary_ppt))) / n_origin
-
-
-    if(grepl("+units=m", s4_proj, fixed = TRUE) == TRUE){
-      #grid_size <- 500
-      grid_size <- m_square^(1/2)
-    }
-    if(grepl("+units=us-ft", s4_proj, fixed = TRUE)==TRUE){
-      #grid_size <- 1700
-      grid_size <- m_square^(1/2)
-      }
+    # #determine grid size by dividing the area
+    # #by n_origin #(work to do)
+    # m_square <- as.numeric(st_area(st_as_sf(boundary_ppt))) / n_origin
+    #
+    #
+    # if(grepl("+units=m", s4_proj, fixed = TRUE) == TRUE){
+    #   #grid_size <- 500
+    #   grid_size <- m_square^(1/2)
+    # }
+    # if(grepl("+units=us-ft", s4_proj, fixed = TRUE)==TRUE){
+    #   #grid_size <- 1700
+    #   grid_size <- m_square^(1/2)
+    #   }
 
     #check the crs
     if((grepl("+units=m", s4_proj, fixed = TRUE) == FALSE)&
@@ -278,7 +281,8 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #create regular grids
     #default 250 square metres
     set.seed(1000)
-    grid_sys <- make_grids(poly=boundary_ppt, size = grid_size, show_output = FALSE)
+    grid_sys <- make_grids(poly=boundary_ppt,
+                           size = gridSize, show_output = FALSE)
     #warning msg
 
     #plot(grid_sys)
@@ -311,7 +315,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                               stc$grid_id))
     colnames(ptsxy) <- c("x","y","grid_id")
 
-
     #join
     #Assign the probability value to each grid
     #based on its historical events
@@ -323,37 +326,27 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       mutate(prob = round(count/sum(count),
                           digits=10)) %>%
       left_join(ptsxy) %>%
-      arrange(prob)#%>%
+      arrange(prob)%>%
+      filter(!is.na(grid_id))
 
-    #----------------------------------
-    #Append origin type
-    #----------------------------------
-    no_of_non_dom <- round(nrow(spo)*(100-p_ratio)/100, digits=0)
-    no_of_dom <- round(nrow(spo)*(p_ratio)/100, digits = 0)
+    #now randomly select 'n_origin'
+    #taking into account the 'resistance_feat'
 
-    # #create labels
-    # #check to ensure that the total adds up
-    # if((no_of_non_dom + no_of_dom) < nrow(spo)){
-    #   no_of_non_dom <- no_of_non_dom + 1
-    #   OriginType <- c(rep("Non-dominant", no_of_non_dom),
-    #                   rep("Dominant", no_of_dom))
-    # }
-    #
-    # if(((no_of_non_dom + no_of_dom) != nrow(spo))&((no_of_non_dom + no_of_dom) > nrow(spo))){
-    #   stop("Process terminated! Increase the value of 'n_origin'!")
-    # }
-    #
-    # if((no_of_non_dom + no_of_dom) == nrow(spo)){
-    #   OriginType <- c(rep("Non-dominant", no_of_non_dom),
-    #                   rep("Dominant", no_of_dom))
-    # }
-    #
-    # spo <- as.data.frame(cbind(spo, OriginType))
-      #randomly select...50..OriginType, plot the curve...elbow
+      if(length(spo$grid_id) > n_origin){
+      samp_idx <- as.numeric(sample(spo$grid_id, size = n_origin,
+                        replace = FALSE, prob = spo$prob)) #%>
+      spo <- spo %>%
+        filter(grid_id %in% samp_idx)
+      }
 
-    # spo_xy <- spo %>%
-    #   dplyr::select(x, y) %>%
-    #   as.matrix()
+      if(length(spo$grid_id) <= n_origin){
+        spo <- spo #do nothing
+      }
+
+    #Note: 'resistance_feat' has not use here
+    #but could be added (optionally) to the simulation function
+    #if a user deems fit.
+
 
     x <- as.numeric(spo$x)
     y <- as.numeric(spo$y)
