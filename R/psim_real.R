@@ -30,12 +30,14 @@
 #' which a walker re-generate events.
 #' Default: \code{NULL}, in which the value is
 #' automatically estimated from the sample data (i.e., `ppt`).
-#' @param n_origin (an integer) Number of
-#' locations to serve as origins for walkers. The value has
+#' @param step_length (numeric) A maximum step taken at a time
+#' by a walker from one point to the next.
+#' @param n_origin (an integer) Number of locations from which
+#' the walkers originate. Default:\code{50}.The value has
 #' largest impacts on the computational time.
 #' @param resistance_feat (An S4 object) Optional
 #' shapefile representing spaces across landscape
-#' within which event
+#' within which events are prohibited.
 #' @param field A number in the range of \code{[0-1]}
 #' (i.e. resistance values) to
 #' assign to all features covered by `resistance_feat`; or
@@ -58,7 +60,8 @@
 #' As an example, the EPSG code for the British National Grid
 #' projection system is: \code{"EPSG:27700"}.
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-#' s_threshold = NULL, n_origin=50, resistance_feat, field=NA,
+#' s_threshold = NULL, step_length = 20, n_origin=50,
+#' resistance_feat, field=NA,
 #' p_ratio=20, crsys = NULL)
 #' @examples
 #' \dontrun{
@@ -72,17 +75,15 @@
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #' result <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
-#' n_origin=50, resistance_feat, field=NA,
+#' step_length = 20, n_origin=50, resistance_feat, field=NA,
 #' p_ratio=20, crsys = "EPSG:27700")
 #' }
-#' @details Returns an object of the class `real_spo`,
-#' detailing the spatiotemporal properties of a real
-#' sample dataset
-#'
-#' #' If not `NULL`, a numerical value
-#' based on prior or expert knowledge is expected.
-#'
-#'
+#' @details
+#' Generate spatiotemporal point pattern
+#' based on the actions of specified 'walkers' moving
+#' across a landscape.The walkers and the landscape are
+#' configured based on spatiotemporal information
+#' learnt from real sample datasets.
 #' @references
 #' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
 #' kernel estimation of spatial relative risk,
@@ -99,8 +100,9 @@
 #' @export
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
-                      s_threshold = NULL,
-                      n_origin=50, p_ratio=20, crsys = NULL){
+                      s_threshold = NULL, step_length = 20,
+                      n_origin=50, resistance_feat,
+                      field = NA, p_ratio=20, crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
     axis <- . <- OriginType <- NULL
@@ -222,56 +224,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     output[h] <- list(stp_All_)
   }
 
-  #length(which(stp_All_$OriginType == "Dominant"))
-  #length(which(stp_All_$OriginType == "Non-dominant"))
-
-  #-------------------------------------------
-  #Temporal trend and patterns
-  #stp_All_ %>%
-
-  #create window to plot frou
-  #spatial patterns
-  # plot(stp_All_$x, stp_All_$y,
-  #      main = "Spatial point distribution",
-  #      xlab = "x",
-  #      ylab = "y")
-  #
-  # #add origins
-  # spo_forPlot <- st_properties$origins %>%
-  #   mutate(pch = as.numeric(if_else(OriginType == "Dominant",
-  #                  paste("20"), paste("1")))) #'20' is point type
-  #
-  # points(spo_forPlot$x, spo_forPlot$y,
-  #        add=TRUE, pch=spo_forPlot$pch, col="red",
-  #        cex=1.2)
-  #
-  # legend("bottomleft",
-  #        legend = c("Events", "Origin (D)", "Origin (N)"),
-  #             col = c("black","red","red"),
-  #             pch = c(1, 20, 1))
-
-  #temporal pattern
-  #get t holder
-  # all_t <- data.frame(tid=unique(stp_All$tid))
-  #
-  # temp_p <- stp_All_ %>%
-  #   group_by(tid) %>%
-  #   summarise(ct = n())
-  #
-  # temp_pattern <- all_t %>%
-  #   left_join(temp_p)%>%
-  #   replace(is.na(.), 0)
-  #
-  # plot(temp_pattern$tid, temp_pattern$ct, 'l', xaxt = "n")
-  #
-  # ticks <- seq(temp_pattern$tid[1],
-  #              temp_pattern$tid[length(temp_pattern$tid)])
-  # ix <- seq(temp_pattern$tid[1],
-  #           temp_pattern$tid[length(temp_pattern$tid)], by=30)#every 60 days
-  #
-  # dates_list <- t2[ix]
-  # ticks <- ticks[ix]
-  # axis(1, at = ticks, labels = dates_list, tcl = -0.2)
 
   #combine and add as details
   #-------------------------------------------
