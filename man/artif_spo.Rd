@@ -13,10 +13,8 @@ conc_type = "nucleated", p_ratio)
 A polygon shapefile within which
 event origins are to be situated.}
 
-\item{n_origin}{(an integer) Value specifying
-the number of event origins to synthetize.
-Default:\code{50}. Value specified here has the greatest
-influence on the computational time.}
+\item{n_origin}{(an integer) Number of locations from which
+the walkers originate. Default:\code{50}.}
 
 \item{resistance_feat}{(An S4 object) Optional
 shapefile representing spaces across landscape

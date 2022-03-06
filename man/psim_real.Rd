@@ -5,8 +5,9 @@
 \title{Stpp from real (sample) origins}
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-s_threshold = NULL, n_origin=50, resistance_feat, field=NA,
-p_ratio=20, crsys = "CRS_string")
+s_threshold = NULL, step_length = 20, n_origin=50,
+resistance_feat, field=NA,
+p_ratio=20, crsys = NULL)
 }
 \arguments{
 \item{n_events}{(integer) Number of points
@@ -41,9 +42,27 @@ which a walker re-generate events.
 Default: \code{NULL}, in which the value is
 automatically estimated from the sample data (i.e., \code{ppt}).}
 
-\item{n_origin}{(an integer) Number of
-locations to serve as origins for walkers. The value has
+\item{step_length}{(numeric) A maximum step taken at a time
+by a walker from one point to the next.}
+
+\item{n_origin}{(an integer) Number of locations from which
+the walkers originate. Default:\code{50}.The value has
 largest impacts on the computational time.}
+
+\item{resistance_feat}{(An S4 object) Optional
+shapefile representing spaces across landscape
+within which events are prohibited.}
+
+\item{field}{A number in the range of \code{[0-1]}
+(i.e. resistance values) to
+assign to all features covered by \code{resistance_feat}; or
+the name of a numeric field to extract such
+resistance values for different feature classes.
+The resistance value \code{0} and \code{1} indicate the
+lowest and the highest restrictions, respectively,
+to an event occuring within the space occupied
+by a feature.
+origins are not allowed. Default: \code{NULL}.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio.
@@ -63,12 +82,11 @@ Generate spatiotemporal point pattern
 from origins sampled based on real dataset.
 }
 \details{
-Returns an object of the class \code{real_spo},
-detailing the spatiotemporal properties of a real
-sample dataset
-
-#' If not \code{NULL}, a numerical value
-based on prior or expert knowledge is expected.
+Generate spatiotemporal point pattern
+based on the actions of specified 'walkers' moving
+across a landscape.The walkers and the landscape are
+configured based on spatiotemporal information
+learnt from real sample datasets.
 }
 \examples{
 \dontrun{
@@ -82,7 +100,7 @@ replace=FALSE),]
 #plot(dat_sample$x, dat_sample$y) #preview
 result <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
-n_origin=50, resistance_feat, field=NA,
+step_length = 20, n_origin=50, resistance_feat, field=NA,
 p_ratio=20, crsys = "EPSG:27700")
 }
 }

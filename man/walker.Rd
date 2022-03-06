@@ -18,7 +18,7 @@ re-generated (or repeated) by a walker.
 Default: \code{250} (in the unit as the polygon shapefile (below))}
 
 \item{step_length}{(numeric) A maximum step taken at a time
-by a walker from one state to the next.}
+by a walker from one point to the next.}
 
 \item{poly}{(An sf or S4 object)
 A polygon shapefile within which

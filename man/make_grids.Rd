@@ -5,7 +5,7 @@
 \title{Make square grids}
 \usage{
 make_grids(poly, size = 250,
-show_output = FALSE, dir=NULL)
+show_output = FALSE)
 }
 \arguments{
 \item{poly}{(as \code{spatialPolygons},
@@ -35,5 +35,5 @@ format (in the same crs as the input \code{poly})
 \examples{
 data(camden_boundary)
 make_grids(poly=camden_boundary, size = 250,
-show_output = FALSE, dir=NULL)
+show_output = FALSE)
 }

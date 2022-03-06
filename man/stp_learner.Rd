@@ -5,7 +5,8 @@
 \title{Learning spatiotemporal properties}
 \usage{
 stp_learner(ppt, start_date = NULL, poly = NULL,
-n_origin=50, p_ratio, crsys = NULL, show.plot = FALSE)
+n_origin=50, p_ratio, gridSize = 150,
+crsys = NULL, show.plot = FALSE)
 }
 \arguments{
 \item{ppt}{A 3-column matrix or list containing
@@ -28,15 +29,16 @@ for \code{ppt}, therefore, a user needs to ensure that both
 \code{poly} and \code{ppt}(-xy cordinates) are in the same
 reference system for accurate result.}
 
-\item{n_origin}{(an integer) Number of
-event origins to simulate/utilize.
-Default:\code{50}. This parameter has the greatest
-influence on the computational time.}
+\item{n_origin}{(an integer) Number of locations from which
+the walkers originate. Default:\code{50}.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio.
 For example, a value of \code{20}
 implies a \code{20:80} Pareto ratio.}
+
+\item{gridSize}{(an integer) The size of square grid
+for discretizing the entire space. Default is: \code{150}.}
 
 \item{crsys}{(string) The EPSG projection code that defines
 the xy coordinates (of \code{ppt}). This will be utilized
@@ -48,21 +50,6 @@ projection system is: \code{"EPSG:27700"}.}
 
 \item{show.plot}{(TRUE or FALSE) Whether to show
 some displays.}
-
-\item{resistance_feat}{(An S4 object) Optional
-shapefile representing spaces across landscape
-within which event}
-
-\item{field}{A number in the range of \code{[0-1]}
-(i.e. resistance values) to
-assign to all features covered by \code{resistance_feat}; or
-the name of a numeric field to extract such
-resistance values for different feature classes.
-The resistance value \code{0} and \code{1} indicate the
-lowest and the highest restrictions, respectively,
-to an event occuring within the space occupied
-by a feature.
-origins are not allowed. Default: \code{NULL}.}
 }
 \description{
 Learns both spatial and temporal
@@ -83,6 +70,7 @@ round((sample_size * nrow(camden_theft)), digits=0),
 replace=FALSE),]
 #plot(dat_sample$x, dat_sample$y) #preview
 stp_learner(dat_sample,
-start_date = NULL, poly = NULL, n_origin=50, p_ratio=20,
-crsys = "EPSG:27700",  show.plot = FALSE)
+start_date = NULL, poly = NULL, n_origin=50,
+p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
+show.plot = FALSE)
 }
