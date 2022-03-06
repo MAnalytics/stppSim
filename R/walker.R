@@ -12,7 +12,7 @@
 #' re-generated (or repeated) by a walker.
 #' Default: \code{250} (in the unit as the polygon shapefile (below))
 #' @param step_length (numeric) A maximum step taken at a time
-#' by a walker from one state to the next.
+#' by a walker from one point to the next.
 #' @param poly (An sf or S4 object)
 #' A polygon shapefile within which
 #' event origins are to be generated.
