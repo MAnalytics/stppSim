@@ -1,0 +1,62 @@
+---
+title: "An R package for synthesizing spatiotemporal point patterns for social science research - A user guide"
+
+author: |
+  | Monsuru Adepeju^[Big Data Centre, Manchester Metropolitan University, Manchester, M156BH, UK, m.adepeju@mmu.ac.uk]
+  | Meng Le Zhang^[Interdisciplinary Centre of Social Sciences, University of Sheffield, S14DP, UK, mengle.zhang@sheffield.ac.uk] 
+  
+date: |
+  | `Date:`
+  | ``r Sys.Date()``
+
+#output:
+  #pdf_vignette
+  
+output:
+  pdf_document
+  
+fontsize: 
+  15pt
+
+#dev: png
+#output:
+  #word_document: default
+  #always_allow_html: yes
+#  pdf_document: default
+always_allow_html: yes
+#fig_caption: yes
+bibliography: references.bib
+
+abstract: Generates artificial spatio-temporal point patterns (stpp) by integrating microsimulation and agent-based models. Allows a user to define the movement properties of a set of "walkers" (an agents) distributed across a spatially configured landscape. The interaction of the walkers (be it human offenders in a crime analysis, foraging animals in a Wildlife study, or carriers in disease transmission) with their environment results in advent of new events, whose spatiotemporal (ST) signatures are measurable at the global levels. These signatures can be used in ST model testing and evaluation across wide variety of fields in social and life sciences.
+
+vignette: >
+  %\VignetteIndexEntry{An Opinion Analytical Tool for Big Digital Text Document - A User Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r functions, include=FALSE}
+# A function for captioning and referencing images
+fig <- local({
+  i <- 0
+  ref <- list()
+  list(
+    cap=function(refName, text) {
+      i <<- i + 1
+      ref[[refName]] <<- i
+      paste("Figure ", i, ": ", text, sep="")
+    },
+    ref=function(refName) {
+      ref[[refName]]
+    })
+})
+```
+
+It is possible that I go in liek this

@@ -1,6 +1,6 @@
 Package: stppSim
 Type: Package
-Title: Spatial and Temporal Point Patterns Simulation for Social Science Research
+Title: Spatial and Temporal Point Patterns Simulation for Social and Life Science Research
 Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
   Meng Le Zhang [aut]
@@ -53,18 +53,4 @@ Suggests:
   graphics,
   grDevices,
   utils
-Collate: 
-    'artif_spo.R'
-    'chull_poly.R'
-    'data.R'
-    'date_checker.R'
-    'extract_coords.R'
-    'gtp.R'
-    'make_grids.R'
-    'p_prob.R'
-    'poly_tester.R'
-    'walker.R'
-    'psim_artif.R'
-    'psim_real.R'
-    'space_restriction.R'
-    'stp_learner.R'
+VignetteBuilder: knitr
