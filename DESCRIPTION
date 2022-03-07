@@ -5,13 +5,15 @@ Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
   Meng Le Zhang [aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
-Description: Generates artificial spatio-temporal point patterns (stpp) through the 
-  integration of microsimulation and agent-based models. Allows a user to 
-  define the behavioural properties of a "walker" (an agent) within a spatially configured 
-  environment. The interaction of a walker (such as, a human offender in a crime application, 
-  a foraging animal in a Wildlife study, or a carrier in an epidemiological study) with
-  it's environment results in new event cases, whose spatiotemporal (ST) signatures
-  are measurable at the global level for ST model testing and evaluation.
+Description: Generates artificial spatio-temporal point patterns (stpp) by integrating 
+  microsimulation and agent-based models. Allows a user to define the movement 
+  properties of a set of "walkers" (an agents) distributed across a spatially 
+  configured landscape. The interaction of the walkers (be it human offenders in a 
+  crime analysis, foraging animals in a Wildlife study, or carriers in disease 
+  transmission) with their environment results in the advent of new events, whose 
+  spatiotemporal (ST) signatures are measurable at the global levels. These 
+  signatures can be used in ST model testing and evaluation across wide variety of 
+  fields in social and life sciences.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
