@@ -7,7 +7,7 @@ Author: Monsuru Adepeju [cre, aut],
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatio-temporal point patterns (stpp) by integrating 
   microsimulation and agent-based models. Allows a user to define the movement 
-  properties of a set of "walkers" (an agents) distributed across a spatially 
+  properties of a set of `walkers` (an agents) distributed across a spatially 
   configured landscape. The interaction of the walkers (be it human offenders in a 
   crime analysis, foraging animals in a Wildlife study, or carriers in disease 
   transmission) with their environment results in the advent of new events, whose 
