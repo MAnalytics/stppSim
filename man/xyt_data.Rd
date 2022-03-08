@@ -3,9 +3,7 @@
 \docType{data}
 \name{xyt_data}
 \alias{xyt_data}
-\title{A spatiotemporal point data
-of a part of San Francisco City,
-California, US}
+\title{Spatiotemporal point data}
 \format{
 A matrix containing three variables
 \itemize{

@@ -15,6 +15,6 @@ A boundary file (ESRI format)
 camden_boundary
 }
 \description{
-A boundary shapefile
+A boundary shapefile of Camden Borough, London, UK
 }
 \keyword{datasets}

@@ -3,8 +3,7 @@
 \docType{data}
 \name{landuse}
 \alias{landuse}
-\title{A land use shapefile of Camden
-Borough of London, United Kingdom}
+\title{Landuse shapefile}
 \format{
 A boundary file (ESRI format)
 \itemize{

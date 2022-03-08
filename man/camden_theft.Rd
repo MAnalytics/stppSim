@@ -3,10 +3,7 @@
 \docType{data}
 \name{camden_theft}
 \alias{camden_theft}
-\title{A spatiotemporal point data
-('theft-from-person' crime)
-of Camden Borough of London, UK
-for the year 2021}
+\title{'theft-from-person' crime of Camden Borough, London, UK}
 \format{
 A matrix containing three variables
 \itemize{
@@ -20,8 +17,14 @@ camden_theft
 }
 \description{
 A spatiotemporal point data
-('theft-from-person' crime)
+('theft-from-person' crime: Source: \code{police.uk})
 of Camden Borough of London, UK
-for the year 2021
+of the year 2021.
+Note: Police.uk data is only accurate to monthly
+scale (\code{yyyy-mm}). However, the data here is
+provided at the daily scales
+by adding random \code{days} to produce the dates in
+the format \code{yyyy-mm-dd}. So, caution should be taken
+when interpreting the results from this datasets.
 }
 \keyword{datasets}

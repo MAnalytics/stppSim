@@ -3,7 +3,7 @@
 \docType{data}
 \name{poly}
 \alias{poly}
-\title{Boundary Coordinates of Camden Borough of London}
+\title{Boundary Coordinates}
 \format{
 A dataframe containing one variable:
 \itemize{
@@ -15,6 +15,7 @@ A dataframe containing one variable:
 poly
 }
 \description{
-Boundary Coordinates of Camden Borough of London
+Boundary coordinates of Camden
+Borough of London
 }
 \keyword{datasets}
