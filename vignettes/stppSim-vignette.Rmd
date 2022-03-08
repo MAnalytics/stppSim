@@ -24,8 +24,8 @@ number_sections:
 linestretch: 
   1.5
   
-#fontsize: 
-#  15pt
+fontsize: 
+  16pt
 
 #header-includes:
  # - \usepackage{leading}
