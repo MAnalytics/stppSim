@@ -127,7 +127,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
 
   #define global variables...
-  nrowh <- NULL
+  nrowh <- origins <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, resistance_feat = resistance_feat,
