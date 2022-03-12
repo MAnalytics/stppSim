@@ -1,7 +1,7 @@
 #' @title Date (Format) Checker
-#' @description Checks if date is in the correct
-#' format.
-#' @param x A vector of date values
+#' @description Checks if date is in a
+#' specified format (i.e. `'yyyy-mm-dd'`).
+#' @param x A date or a vector of date values
 #' @usage date_checker(x)
 #' @examples
 #' date_list_1 <- c("2021-09-12", "2016-xx-02",
@@ -13,10 +13,10 @@
 #' date_checker(date_list_2)
 #' #> TRUE
 #' @details Returns \code{"TRUE"} if all
-#' entries of a vector are date values and
-#' \code{FALSE} if any entries of a vector
-#' is not a date value. The date vector
-#' needs to be in the format: `"yyyy-mm-dd"`.
+#' date entries are in the specified format
+#' (`"yyyy-mm-dd`),
+#' and \code{FALSE} if at least one date is not
+#' in the format.
 #' @return Returns TRUE or FALSE
 #' @export
 #'
