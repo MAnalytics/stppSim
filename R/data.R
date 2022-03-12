@@ -9,25 +9,26 @@
 #'     }
 "poly"
 
-#' @title The 'theft-from-person' crime of Camden Borough, London,
+#' @title Records of crimes of Camden Borough of London,
 #' UK, 2021 (Source: https://data.police.uk/data/)
-#' @description A spatiotemporal point data
-#' ('theft-from-person' crime: Source: `police.uk`)
+#' @description 'Theft' and 'Criminal Damage' records
+#' (Source: `police.uk`)
 #' of Camden Borough of London, UK
-#' of the year 2021.
+#' for the year 2021.
 #' Note: Police.uk data is only accurate to monthly
-#' scale (`yyyy-mm`). However, the data here is
-#' provided at the daily scales
-#' by adding random `days` to produce the dates in
-#' the format `yyyy-mm-dd`. So, caution should be taken
-#' when interpreting the results from this datasets.
+#' scale (`yyyy-mm`). But, the data provided here has been
+#' manipulated to include fake 'days of occurrence'.
+#' So, caution should
+#' be taken when interpreting the results based on
+#' full date stamp (`yyyy-mm-dd`).
 #' @format A matrix containing three variables
 #' \itemize{
 #'   \item x: x coordinate
 #'   \item y: y coordinate
-#'   \item t: t time
+#'   \item date: date of occurence
+#'   \item type: type of crime
 #'     }
-"camden_theft"
+"camden_crimes"
 
 #' @title A boundary shapefile
 #' @description A boundary shapefile of Camden Borough, London, UK
