@@ -5,15 +5,14 @@ Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
   Meng Le Zhang [aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
-Description: Generates artificial spatio-temporal point patterns (stpp) by integrating 
-  microsimulation and agent-based models. Allows a user to define the movement 
-  properties of a set of `walkers` (an agents) distributed across a spatially 
-  configured landscape. The interaction of the walkers (be it human offenders in a 
-  crime analysis, foraging animals in a Wildlife study, or carriers in disease 
-  transmission) with their environment results in the advent of new events, whose 
-  spatiotemporal (ST) signatures are measurable at the global levels. These 
-  signatures can be used in ST model testing and evaluation across wide variety of 
-  fields in social and life sciences.
+Description: Generates artificial spatiotemporal point patterns (stpp) through
+  the integration of microsimulation and agent-based models. Allows a user 
+  to define the movement characteristics of a set of `walkers` (agents) 
+  across a specified landscape. The spatiotemporal (ST) point patterns result
+  from the interactions between the walkers and their environment, 
+  with the outcome ST signatures being measurable at the global levels. 
+  Application areas include social and life sciences for ST model 
+  testing and evaluation.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
@@ -54,3 +53,18 @@ Suggests:
   grDevices,
   utils
 VignetteBuilder: knitr
+Collate: 
+    'artif_spo.R'
+    'chull_poly.R'
+    'data.R'
+    'date_checker.R'
+    'extract_coords.R'
+    'gtp.R'
+    'make_grids.R'
+    'p_prob.R'
+    'poly_tester.R'
+    'walker.R'
+    'psim_artif.R'
+    'psim_real.R'
+    'space_restriction.R'
+    'stp_learner.R'
