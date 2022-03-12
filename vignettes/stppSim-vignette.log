@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  8 MAR 2022 09:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  11 MAR 2022 02:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/monsu/AppData/Local/Temp/RtmpABqamG/preview-6e42ae62e7e.dir/stppSim-
-vignette.tex
+**C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-490054a465e7.dir/stppSim
+-vignette.tex
 
-(C:/Users/monsu/AppData/Local/Temp/RtmpABqamG/preview-6e42ae62e7e.dir/stppSim-v
-ignette.tex
+(C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-490054a465e7.dir/stppSim-
+vignette.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (C:\Users\monsu\AppData\Local\Programs\MiKTeX
 \tex/latex/base\article.cls
@@ -207,7 +207,13 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1372.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1373.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1374.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1375.
-) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/xurl\xurl.sty
+(C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/graphics\dvipsnam.def
+File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\svgnam.def
+File: svgnam.def 2021/10/31 v2.13 Predefined colors according to SVG 1.1 (UK)
+) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\x11nam.def
+File: x11nam.def 2021/10/31 v2.13 Predefined colors according to Unix/X11 (UK)
+)) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/xurl\xurl.sty
 Package: xurl 2022/01/09 v 0.10 modify URL breaks
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip17
@@ -337,8 +343,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/bookmark\bkm-pdftex.def
 File: bkm-pdftex.def 2020-11-06 v1.29 bookmark driver for pdfTeX (HO)
 \BKM@id=\count282
-)) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.st
-y
+))
+Package hyperref Info: Option `colorlinks' set `true' on input line 48.
+(C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
@@ -400,36 +407,36 @@ LaTeX Warning: Unused global option(s):
 (stppSim-vignette.aux)
 \openout1 = `stppSim-vignette.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Info: Redefining \microtypecontext on input line 115.
-Package microtype Info: Applying patch `item' on input line 115.
-Package microtype Info: Applying patch `toc' on input line 115.
-Package microtype Info: Applying patch `eqnum' on input line 115.
-Package microtype Info: Applying patch `footnote' on input line 115.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 120.
+LaTeX Font Info:    ... okay on input line 120.
+LaTeX Info: Redefining \microtypecontext on input line 120.
+Package microtype Info: Applying patch `item' on input line 120.
+Package microtype Info: Applying patch `toc' on input line 120.
+Package microtype Info: Applying patch `eqnum' on input line 120.
+Package microtype Info: Applying patch `footnote' on input line 120.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 115.
+LaTeX Info: Redefining \showhyphens on input line 120.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -462,7 +469,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 115.
+Package hyperref Info: Link coloring ON on input line 120.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
@@ -474,9 +481,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count296
 )
-LaTeX Info: Redefining \ref on input line 115.
-LaTeX Info: Redefining \pageref on input line 115.
-LaTeX Info: Redefining \nameref on input line 115.
+LaTeX Info: Redefining \ref on input line 120.
+LaTeX Info: Redefining \pageref on input line 120.
+LaTeX Info: Redefining \nameref on input line 120.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -512,39 +519,39 @@ LaTeX Info: Redefining \nameref on input line 115.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-17.
+22.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-17.
+22.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-117.
+122.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-117.
+122.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 117.
+(Font)              <12> on input line 122.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 117.
+(Font)              <8> on input line 122.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 117.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 117
+(Font)              <6> on input line 122.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 122
 .
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 117
+LaTeX Font Info:    Trying to load font information for U+msb on input line 122
 .
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -552,17 +559,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-17.
+22.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-17.
+22.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 117.
+(Font)              <5> on input line 122.
 (stppSim-vignette.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 1.
@@ -576,21 +583,21 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 {C:/Users/monsu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 218.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 226.
 [2]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-269.
+277.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] (stppSim-vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 13961 strings out of 478659
- 224791 string characters out of 2845919
- 561261 words of memory out of 3000000
- 31689 multiletter control sequences out of 15000+600000
- 467501 words of font info for 129 fonts, out of 8000000 for 9000
+ 14052 strings out of 478659
+ 226490 string characters out of 2845919
+ 577648 words of memory out of 3000000
+ 31768 multiletter control sequences out of 15000+600000
+ 467909 words of font info for 131 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,11n,77p,1082b,432s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 74i,11n,77p,1083b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Users/monsu/AppData/Local/Programs/MiKTeX/fon
 ts/enc/dvips/lm/lm-ts1.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
 enc/dvips/lm/lm-ec.enc}<C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type
@@ -606,10 +613,11 @@ ic/lm/lmr8.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public
 m/lmtk10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
 m/lmtt10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
 m/lmtt12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmtti10.pfb>
-Output written on stppSim-vignette.pdf (3 pages, 352745 bytes).
+m/lmtt9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmtti10.pfb>
+Output written on stppSim-vignette.pdf (3 pages, 372790 bytes).
 PDF statistics:
- 149 PDF objects out of 1000 (max. 8388607)
+ 154 PDF objects out of 1000 (max. 8388607)
  25 named destinations out of 1000 (max. 500000)
  38969 words of extra memory for PDF output out of 42996 (max. 10000000)
 

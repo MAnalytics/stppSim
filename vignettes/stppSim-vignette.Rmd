@@ -15,6 +15,8 @@ date: |
 output:
   pdf_document
 
+urlcolor: blue
+
 toc:
   true
 
@@ -40,7 +42,7 @@ always_allow_html: yes
 #fig_caption: yes
 bibliography: references.bib
 
-abstract: Generates artificial spatio-temporal point patterns (stpp) by integrating microsimulation and agent-based models. Allows a user to define the movement properties of a set of "walkers" (an agents) distributed across a spatially configured landscape. The interaction of the walkers (be it human offenders in a crime analysis, foraging animals in a Wildlife study, or carriers in disease transmission) with their environment results in advent of new events, whose spatiotemporal (ST) signatures are measurable at the global levels. These signatures can be used in ST model testing and evaluation across wide variety of fields in social and life sciences.
+abstract: Generates artificial spatio-temporal point patterns (stpp) through the integration of microsimulation and agent-based models. Allows a user to define the movement properties of a set of "walkers" (agents) across a spatially configured landscape. The interaction between the walkers (be it human offenders in crime science, foraging animals in Wildlife studies, or disease carriers in epidemiology) and the environment results in the advent of new events, whose spatiotemporal (ST) signatures can be measured at the global levels. With increasingly limited availability of fine-grained spatially and temporally stamped point data, `stppSim` provides alternative source of datasets for ST model testing and evaluation across a wide variety of fields in social and life sciences.
 
 vignette: >
   %\VignetteIndexEntry{An R package for synthesizing spatiotemporal point patterns for social and life science research - A user guide}
@@ -74,25 +76,25 @@ fig <- local({
 
 ## Introduction
 
-In many research cases, access to fine-grained spatially and temporally stamped point data have been severely restricted due to privacy concerns. As an alternative, synthesized data which mimic the real-life point pattern have been utilized in a wide range of research context. The `R-stppSim` package is designed for synthesizing point patterns within a defined landscape. The package combining microsimulation and agent-based models, allowing a user to construct movement characteristics of `walkers` (i.e., agents) across landscape. As the `walkers` interact with their environment, new cases of events originate - the cumulative of which produces spatiotemporal signatures at the global levels. These signatures can be utilized for testing and evaluation of spatiotemporal models.
+In many context, access to fine-grained spatiotemporal (ST) point data have been severely restricted due to privacy concerns. As an alternative, synthesized data which mimic the real-life data have been utilized in a wide range of research contexts. The `R-stppSim` package is designed for synthesizing spatiotemporal point patterns within a defined landscape coverage. The package combines microsimulation and agent-based models, allowing a user to construct movement characteristics of `walkers` (i.e., agents) across the space. As the `walkers` interact with their environment,  new cases of events originate - the cumulative of which produces spatiotemporal signatures at the global levels. These signatures can be utilized for testing and evaluation of spatiotemporal models.
 
-The package contains two primary functions for synthesizing artificial `stpp` data. They are: `psim_artif` and `psim_real`. The `psim_artif` synthesize point pattern from scratch. In other words, given the landscape, the movement characteristics `walkers` are defined entirely by the user. On the other hand, `psim_real` synthesizes point pattern from a sample (sparse) real point data. The function learns certain properties of the sample data, and then configures the behaviours of the `walkers` as they move across the landscape. The potential application fields `stppSim` include criminology and epidemiology studies.
+The package contains two primary functions for synthesizing artificial `stpp` data: `psim_artif` and `psim_real`. The `psim_artif` synthesizes ST point pattern from scratch. That is, given a landscape configuration, the movement characteristics of `walkers` as well as the landscape features are defined by the user. On the other hand, `psim_real` synthesizes ST point pattern from a sample (or a sparse version) of a real data. The function learns (or extracts) certain characteristics of the sample data, and utilizes them to configures the behaviours of the `walkers` as they move across teh space. The potential application fields for `stppSim` include criminology, epidemiology, and wildlife science.
 
 
-### Properties of a walker.
+### Key properties of a walker.
 
-The following are the key properties (parameters) that control the behaviours of a walker:
+The following are the key properties controlling the movement behaviours of a walker:
 
-1. Origins (`coords`) - A set of xy coordinates serving as the initial location of the walkers. These are the origins, such as homes of human offenders.
-2. Movement (`transition matrix`) - An in-built stochastic property that controls the direction and the transition states of a walker. At any instant, a walker can assume one of the two state, namely; an exploratory and a performance state (See the manual for details).
-3. Spatial threshold (`s_threshold`) - This is the perception range of a walker at any point in time. The range is generally updated as a walker moves to a new location. The default value is 250m.
-4. Steps (`step_length`) - The maximum step taken by a walker at a time. Default value is 20m.
+* Origins (`coords`) - A set of xy coordinates representing the initial location of the walkers. A `origin` could be a home of a human offender (in Criminology).
+* Movement (`transition matrix`) - An in-built stochastic property that controls the `direction` and the `transition states` of a walker. At any instant, a walker can assume one of the two states, namely; an `exploratory` and a `performative` states (See the manual for details).
+* Spatial threshold (`s_threshold`) - The perception range of a walker at any point in time. The range is generally updated as a walker moves to a new location.
+* Steps (`step_length`) - The maximum step taken by a walker at a time.
 
 ### Landscape
 
 The boundary shapefile (`poly`) defines the extent of a landscape which can be of two types: 
 
-1. `Retricted` - Contains features that restrict the movement of walkers across the landscape. Different classes of feature can have varying resistance levels. For example, a gated property may be harder (high resistance) to burgle compared to an open one (low resistance).  
+1. `Retricted` - Contains environmental features that restrict the movement of walkers across the landscape. Examples of such features include route network and mountains. Different classes of feature can have varying restriction (resistance) levels. For example, a gated property may be harder (high resistance) to burgle compared to an open one (low resistance).  
 
 2. `Unrestricted` - Contains no features or all features has zero resistance level.
 
@@ -104,7 +106,7 @@ The following steps demonstrate how `stppSim` package can be used to simulate sp
 
 From an R console, type:
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+```{r eval=TRUE, message=FALSE, warning=FALSE}
 #install.packages("stppSim")
 library(stppSim)
 ```
@@ -120,26 +122,70 @@ library(stppSim)
 Note: `remotes` is an extra package that needed to be installed prior to the running of this code. 
 
 
-### STPP Simulation from Scratch
+### stpp simulation from scratch
 
-Run the following codes:
+To simulate `stpp`, key parameters include the `n_events` denoting the number of events to generate. It is however, advisable to supply a vector with different values
+
+#### On an unrestricted landscape
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-#xxx
-head(data)
+data(camden_boundary)
+data(landuse)
+artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+field = "rValue1",
+n_foci=5, foci_separation = 10, conc_type = "dispersed",
+p_ratio = 20, s_threshold = 50, step_length = 20,
+trend = "stable", first_pDate=NULL,
+slope = NULL,show.plot=FALSE, show.data=FALSE)
 ```
 
-### STPP Simulation from sample dataset
+The computational time:
+
+#### On a restricted landscape
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+data(camden_boundary)
+data(landuse)
+artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+field = "rValue1",
+n_foci=5, foci_separation = 10, conc_type = "dispersed",
+p_ratio = 20, s_threshold = 50, step_length = 20,
+trend = "stable", first_pDate=NULL,
+slope = NULL,show.plot=FALSE, show.data=FALSE)
+```
+
+Computational time
+
+#plotting the results
+
+
+### stpp simulation from a sample dataset
 
 Here, we are going to use a small sample of a data to simulate the full dataset. We will then compare the real full data with the simulated data.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-#load data
-data(camden_theft)
-
-#let's sample 20% of the data
-
-#
+data(camden_crimes)
+#subset 'theft' crime
+theft <- camden_crimes[which(camden_crimes$type ==
+"Theft"),]
+#specify the proportion of full data to use
+sample_size <- 0.2
+set.seed(1000)
+dat_sample <- theft[sample(1:nrow(theft),
+round((sample_size * nrow(theft)), digits=0),
+replace=FALSE),1:3]
+#plot(dat_sample$x, dat_sample$y) #preview
+result <- psim_real(n_events=2000, ppt=dat_sample,
+start_date = NULL, poly = NULL, s_threshold = NULL,
+step_length = 20, n_origin=50, resistance_feat, field=NA,
+p_ratio=20, crsys = "EPSG:27700")
 ```
 
+
+
 We are going to compare real (full) data and the simulated one in terms of their spatial and temporal characteristics. Recall that a user would have no idea of case count. So, the number to simulate is left to the discretion of the use. You can infer the potential size from any available data from previus years.
+
+
+Note:
+applications. Certain areas, only sparse data are availabe;... 
