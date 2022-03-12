@@ -1,22 +1,23 @@
 #' @title Global temporal pattern (GTP)
 #' @description Models the global temporal pattern,
-#' as combining long-term trend and seasonality.
-#' @param start_date The start date of temporal pattern.
+#' as combining the long-term trend and seasonality.
+#' @param start_date the start date of the temporal pattern.
 #' The date should be in the format `"yyyy-mm-dd"`.
-#' The GTP will usually covers a 1-year period.
-#' @param trend (string) Specify the trend direction of
-#' the GTP. Values are: `"decreasing"`, `"stable"`,
-#' and `"increasing"`. Default is: `"stable"`.
-#' @param slope (string) Slope GTP trend if
-#' "increasing" or "decreasing" trend is specified.
-#' Values: `"gentle"` or `"steep"`.
-#' Default value is \code{NULL} (i.e., for `stable` trend).
-#' @param first_pDate (in `"yyyy-mm-dd"` format).
-#' Date of the
-#' first seasonal peak of the time series.
-#' Default value is \code{NULL}, in which a
-#' seasonal cycle of 180 days is utilized. That is,
-#' a first seasonal peak of 90 days.
+#' The GTP will normally cover a 1-year period.
+#' @param trend specifies the direction of the
+#' long-term trend. Options are:
+#' `"decreasing"`, `"stable"`,
+#' and `"increasing"`. Default value is: `"stable"`.
+#' @param slope slope of the long-term trend when
+#' an `"increasing"` or `"decreasing"` trend is specified.
+#' Options: `"gentle"` or `"steep"`. The default value is
+#' set as \code{NULL} for the `stable` trend.
+#' @param first_pDate date of the first seasonal peak of
+#' the GTP (format: `"yyyy-mm-dd"`).
+#' Default value is \code{NULL}, in which first seasonal
+#' peak of 90 days is utilized.
+#' seasonal cycle of 180 days is utilized (that is,
+#' a seasonal cycle of 180 days).
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
@@ -24,10 +25,10 @@
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
 #' slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
-#' @details Models the GTP which could be utilize for simulating
-#' artifical point pattern across space.
+#' @details Models the GTP for anchoring the temporal
+#' trends and patterns of the point patterns to be simulated.
 #' @return Returns a vector of 365 data points representing
-#' the global temporal pattern
+#' 1-year global temporal pattern.
 #' @export
 #'
 
