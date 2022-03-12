@@ -40,10 +40,9 @@
 #' @format A boundary file (ESRI format)
 #' \itemize{
 #'   \item type: Landuse type
-#'   \item rValues1: Field specifying a uniform resistance
-#'   for all features (Value = 1)
-#'   for all features
-#'   \item rValues2: Field specifying varying resistance
+#'   \item rValues1: Numerical field setting a uniform
+#'   restriction value for each feature (Value `1` is set).
+#'   \item rValues2: Numerical field containing varying restriction
 #'   values for different feature classes.
 #'     }
 "landuse"
