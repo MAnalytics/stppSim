@@ -19,9 +19,9 @@
 #' #visualise result
 #' #plot(bry) #to plot
 #' #points(xy[,1], xy[,2], add=TRUE)
-#' @details Draw an arbitrary boundary around
-#' by joining the outer-most
-#' points amongst the spatial data points
+#' @details Draws an arbitrary boundary around
+#' spatial points by joining the outer-most
+#' points by lines.
 #' @references Eddy, W. F. (1977).
 #' A new convex hull algorithm for planar sets.
 #' ACM Transactions on Mathematical Software,
