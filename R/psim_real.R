@@ -65,13 +65,16 @@
 #' p_ratio=20, crsys = NULL)
 #' @examples
 #' \dontrun{
-#' data(camden_theft)
+#' data(camden_crimes)
+#' #subset 'theft' crime
+#' theft <- camden_crimes[which(camden_crimes$type ==
+#' "Theft"),]
 #' #specify the proportion of full data to use
 #' sample_size <- 0.2
 #' set.seed(1000)
-#' dat_sample <- camden_theft[sample(1:nrow(camden_theft),
-#' round((sample_size * nrow(camden_theft)), digits=0),
-#' replace=FALSE),]
+#' dat_sample <- theft[sample(1:nrow(theft),
+#' round((sample_size * nrow(theft)), digits=0),
+#' replace=FALSE),1:3]
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #' result <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
