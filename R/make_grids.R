@@ -1,10 +1,10 @@
 #' @title Make square grids
 #' @description Generates a system of square grids
-#' across a specified spatial polygon (boundary).
+#' over an area (boundary shapefile).
 #' @param poly (as `spatialPolygons`,
 #' `spatialPolygonDataFrames`, or
 #' `simple features`). A polygon object over
-#' which square grids are to be overlaid.
+#' which square grids are to be created.
 #' @param size Size of square grids to be
 #' created. For example, the input `size`
 #' for a 250 by 250 square grids is \code{250}.
@@ -16,8 +16,8 @@
 #' data(camden_boundary)
 #' make_grids(poly=camden_boundary, size = 250,
 #' show_output = FALSE)
-#' @details Exports a grid system in a shapefile
-#' format (in the same crs as the input `poly`)
+#' @details Generates a square grid system in a shapefile
+#' format (in the same `crs` as the input `poly`)
 #' @return Returns a spatial square grid system
 #' in a shapefile format
 #' @importFrom sp spTransform proj4string bbox
