@@ -8,9 +8,10 @@ Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatiotemporal point patterns (stpp) through
   the integration of microsimulation and agent-based models. Allows a user 
   to define the movement characteristics of a set of `walkers` (agents) 
-  across a specified landscape. The spatiotemporal (ST) point patterns result
+  across a specified landscape. The `stpp` result
   from the interactions between the walkers and their environment, 
-  with the outcome ST signatures being measurable at the global levels. 
+  with the outcome spatio-temporal (ST) signatures being 
+  measurable at the global levels. 
   Application areas include social and life sciences for ST model 
   testing and evaluation.
 Language: en-US
