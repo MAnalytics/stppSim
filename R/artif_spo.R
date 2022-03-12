@@ -1,34 +1,34 @@
 #' @title Artificial spatial origins
 #' @description Simulates spatial locations to serve
 #' as origins of walkers. If provided, spaces covered
-#' by resistance features avoided. Final
-#' origins are assigned a probability values
+#' by restriction features are avoided. Final
+#' origins are assigned probability values
 #' indicating the strengths of the origins.
 #' @param poly (An sf or S4 object)
-#' A polygon shapefile within which
-#' event origins are to be situated.
-#' @param n_origin (an integer) Number of locations from which
-#' the walkers originate. Default:\code{50}.
-#' @param resistance_feat (An S4 object) Optional
-#' shapefile representing spaces across landscape
-#' within which event
-#' origins are not allowed. Default: \code{NULL}.
-#' @param  n_foci (an integer) Value indicating the number of
-#' focal points amongst event origins. `n_foci` will usually be
-#' smaller than `n_origin`.
-#' @param foci_separation (an integer) A percentage value indicating
-#' indicating the nearness of focal points from one another. A `0`
-#' separation indicates that focal points are in close proximity
+#' a polygon shapefile defining the extent of the landscape
+#' @param n_origin number of locations to serve as
+#' origins for walkers. Default:\code{50}.
+#' @param resistance_feat (An S4 object) optional
+#' shapefile containing features
+#' in which walkers cannot walk through.
+#' Default: \code{NULL}.
+#' @param  n_foci number of focal points amongst the origin
+#' locations. The origins to serve as focal
+#' points are based on random selection. `n_foci` must be
+#' smaller than `n_origins`.
+#' @param foci_separation a value from `1` to `100`
+#' indicating the nearness of focal points to one another.
+#' A `0` separation indicates that focal points are in
+#' close proximity
 #' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
-#' @param conc_type (string) Specifies the spatial pattern
-#' of non-focal origin (strengths) in relation to
-#' to their nearest focal origins. Value is either
-#' \code{"nucleated"} or \code{"dispersed"}.
-#' @param p_ratio (an integer) The smaller of the
-#' two terms of a Pareto ratio.
+#' @param conc_type concentration of the rest of the
+#' origins (non-focal origins) around the focal ones. The options
+#' are `"nucleated"` and `"dispersed"`.
+#' @param p_ratio the smaller of the
+#' two terms of a proportional ratio.
 #' For example, a value of \code{20}
-#' implies a \code{20:80} Pareto ratio.
+#' implies a \code{20:80} proportional ratio.
 #' @usage artif_spo(poly, n_origin=50, resistance_feat = NULL,
 #' n_foci=5, foci_separation = 10,
 #' conc_type = "nucleated", p_ratio)
@@ -38,21 +38,17 @@
 #' spo <- artif_spo(poly = camden_boundary, n_origin = 50,
 #' resistance_feat = landuse, n_foci=5,
 #' foci_separation = 0, conc_type = "dispersed", p_ratio=20)
-#' @details Details of events origins:
-#' {x,y locations, categories (i.e. focal and non-focal (others)
-#' origins), and the probability values.
-#' and non-focal point}.
-#' The focal origins (`n_foci`) serve as the more dominant
-#' origins (e.g. city centres), while the non-focal origins
-#' (i.e. non-dominant) origin. The `foci_separation` indicates
-#' the nearness of dominant origins from one another.
+#' @details
+#' The focal origins (`n_foci`) serve as the central locations
+#' (such as, city centres). The `foci_separation` indicates
+#' the nearness of focal origins from one another.
 #' The `conc_type` argument allows a user to specify
-#' the type of spatial patterns exhibited by the non-focal
-#' points around the focal points (See vignette for details).
-#' If `resistance_feat` is provided, the features help
-#' to prevent event origins from being
-#' situated in the same locations occupied by the features.
-#' @return Returns event origins with their respective
+#' the type of spatial concentration exhibited by the non-focal
+#' origin around the focal ones.
+#' If `resistance_feat` is provided, its features help
+#' to prevent the occurrence of any events in the areas
+#' occupied by the features.
+#' @return Returns spatial origins with associated
 #' strength (probability) values.
 #' @importFrom dplyr if_else mutate filter
 #' row_number select bind_cols
