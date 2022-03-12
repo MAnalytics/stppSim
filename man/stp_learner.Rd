@@ -61,12 +61,18 @@ storing details of the learnt spatiotemporal
 properties of the sample data.
 }
 \examples{
-data(camden_theft)
+#Goal: To learn the ST properties
+#of a sample data, for the purpose of
+#simulating the full dataset (see `psim_real`).
+data(camden_crimes)
+#subset 'theft' crime
+theft <- camden_crimes[which(camden_crimes$type ==
+"Theft"),1:3]
 #specify the proportion of full data to use
 sample_size <- 0.2
 set.seed(1000)
-dat_sample <- camden_theft[sample(1:nrow(camden_theft),
-round((sample_size * nrow(camden_theft)), digits=0),
+dat_sample <- theft[sample(1:nrow(theft),
+round((sample_size * nrow(theft)), digits=0),
 replace=FALSE),]
 #plot(dat_sample$x, dat_sample$y) #preview
 stp_learner(dat_sample,
