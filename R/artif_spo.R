@@ -1,9 +1,9 @@
-#' @title Artificial spatial event origins
-#' @description Simulate spatial points to serve as event
-#' origins across the space. If provided, resistance features
-#' are to be avoided. Each final
-#' event origin point is assigned a probability value
-#' indicating the strength of the origin.
+#' @title Artificial spatial origins
+#' @description Simulates spatial locations to serve
+#' as origins of walkers. If provided, spaces covered
+#' by resistance features avoided. Final
+#' origins are assigned a probability values
+#' indicating the strengths of the origins.
 #' @param poly (An sf or S4 object)
 #' A polygon shapefile within which
 #' event origins are to be situated.
