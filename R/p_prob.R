@@ -1,24 +1,21 @@
-#' @title Pareto (probability) distribution
+#' @title Proportional (probability) distribution
 #' @description Generates an \code{n} probability
-#' values in accordance with a specified Pareto ratio.
-#' @param n (an integer) Number of data points.
-#' @param p_ratio (an integer) The smaller of the
-#' terms of a Pareto ratio. For instance, for a
-#' \code{20:80} ratio, `p_ratio` is \code{20}.
+#' values in accordance with a specified
+#' proportional ratios.
+#' @param n a number of data points.
+#' @param p_ratio the smaller of the
+#' terms of specified proportional ratios. For instance, for a
+#' \code{30:70} ratio, `p_ratio` is equal to \code{30}.
 #' Default value is set as
-#' \code{20}. Acceptable `p_ratio` values
+#' \code{20}. Valid `p_ratio` values
 #' are: (\code{5, 10, 20, 30, 40}).
 #' @usage p_prob(n,  p_ratio = 20)
 #' @examples
 #' p_prob(n = 15,  p_ratio = 20)
-#' @details Produces a list probability values
-#' based on the specified Pareto ratio. Each ratio
-#' term is assigned the proportion of area under
-#' an exponential curve that is equal to
-#' the value of the other ratio term. For example,
-#' for a \code{20:80} ratio, 20% of data points
-#' covers 80% of areas under the curve, and vice
-#' versa.
+#' @details Proportional ratios are used to divide the
+#' area under curve (auc) of an exponential function
+#' such that for any given percentage ratios `a:b`, the
+#' auc is divided into `b:a`.
 #' @return Returns a vector of probability values
 #' @importFrom magrittr %>%
 #' @export
