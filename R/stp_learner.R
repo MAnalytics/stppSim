@@ -14,10 +14,8 @@
 #' @param gridSize the size of square grid
 #' to use for discretizing the space.
 #' Default is: \code{150}.
-#' @param p_ratio the smaller of the
-#' two terms of proportional ratios.
-#' For example, a value of \code{20}
-#' implies \code{20:80} proportional ratios.
+#' @param n_origin number of locations to serve as
+#' origins for walkers. Default:\code{50}.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio.
 #' For example, a value of \code{20}
