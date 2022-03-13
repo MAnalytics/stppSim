@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  13 MAR 2022 06:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  13 MAR 2022 23:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-49006788112.dir/stppSim-
-vignette.tex
+**C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-490063426d75.dir/stppSim
+-vignette.tex
 
-(C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-49006788112.dir/stppSim-v
-ignette.tex
+(C:/Users/monsu/AppData/Local/Temp/Rtmpeebeo4/preview-490063426d75.dir/stppSim-
+vignette.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (C:\Users\monsu\AppData\Local\Programs\MiKTeX
 \tex/latex/base\article.cls
@@ -581,45 +581,48 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 [1
 
-{C:/Users/monsu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+{C:/Users/monsu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 229.
-[2] [3]
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 258.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 278.
+[3]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-314.
+339.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [4] (stppSim-vignette.aux) ) 
+) [4] [5] (stppSim-vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 14056 strings out of 478659
- 226657 string characters out of 2845919
- 578754 words of memory out of 3000000
- 31774 multiletter control sequences out of 15000+600000
- 468072 words of font info for 130 fonts, out of 8000000 for 9000
+ 14073 strings out of 478659
+ 226849 string characters out of 2845919
+ 578766 words of memory out of 3000000
+ 31781 multiletter control sequences out of 15000+600000
+ 473173 words of font info for 136 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,11n,77p,1082b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fon
-ts/enc/dvips/lm/lm-ts1.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
-enc/dvips/lm/lm-ec.enc}<C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmbx10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmbx12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmbx9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/lm/lmr10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmr12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/lm/lmr17.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/lm/lmr6.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/lm/lmr8.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmr9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmtk10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmtt10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmtt12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmtt9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmtti10.pfb>
-Output written on stppSim-vignette.pdf (4 pages, 383256 bytes).
+ 74i,11n,77p,1083b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/monsu/AppData/Local/Programs/MiKTeX
+/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fo
+nts/enc/dvips/lm/lm-ec.enc}<C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmbx10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmbx12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmbx9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/lm/lmbxi10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/lm/lmr10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/lm/lmr12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/lm/lmr17.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/lm/lmr6.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/lm/lmr8.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/lm/lmr9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/lm/lmtk10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/lm/lmtt10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/lm/lmtt12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/lm/lmtt9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/lm/lmtti10.pfb>
+Output written on stppSim-vignette.pdf (5 pages, 403160 bytes).
 PDF statistics:
- 161 PDF objects out of 1000 (max. 8388607)
- 26 named destinations out of 1000 (max. 500000)
- 41017 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 174 PDF objects out of 1000 (max. 8388607)
+ 27 named destinations out of 1000 (max. 500000)
+ 43073 words of extra memory for PDF output out of 51595 (max. 10000000)
 
 
 ! pdflatex: major issue: So far, you have not checked for MiKTeX updates.
