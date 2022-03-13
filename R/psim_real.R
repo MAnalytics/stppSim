@@ -1,60 +1,50 @@
 #' @include gtp.R
 #' @include walker.R
 #' @title Stpp from real (sample) origins
-#' @description Generate spatiotemporal point pattern
-#' from origins sampled based on real dataset.
-#' @param n_events (integer) Number of points
+#' @description Generates spatiotemporal point pattern
+#' from origins sampled based on real sample dataset.
+#' @param n_events number of points
 #' (events) to simulate. Default: \code{1000}.
-#' A vector of integer values can be supplied, in the
-#' format `c(a1, a2, ....)`, where a1, a2, ...
-#' represent different values.
+#' A vector of integer values can be supplied, such as,
+#' c(`a`1, `a`2, ....)`, where `a`1, `a`2, ...
+#' represent different integer values.
 #' @param ppt A 3-column matrix or list containing
 #' `x` - eastings, `y` - northing, and `t` - time of occurrence
 #' (in the format: `yyyy-mm-dd').
-#' @param start_date Specifies the start date of
-#' the sample data provided (format: `yyyy-mm-dd`).
-#' If `NULL`, the earliest date
-#' of the `t` field of `ppt` is utilized.
-#' The end date is automatically set as the 365th day
-#' from the start date.
+#' @param start_date the start date of the temporal pattern.
+#' The date should be in the format `"yyyy-mm-dd"`.
+#' The GTP will normally cover a 1-year period.
 #' @param poly (An sf or S4 object)
-#' Spatial (administrative) boundary covering the area
-#' under study. The default is `NULL`, in which an
-#' arbitrary boundary is drawn to cover the spatial extent
-#' of the data. The projection system of `poly` is assume
-#' for `ppt`, therefore, a user needs to ensure that both
-#' `poly` and `ppt`(-xy cordinates) are in the same
-#' reference system for accurate result.
-#' @param s_threshold (numeric) Spatial range
-#' from the origin within
-#' which a walker re-generate events.
-#' Default: \code{NULL}, in which the value is
-#' automatically estimated from the sample data (i.e., `ppt`).
-#' @param step_length (numeric) A maximum step taken at a time
+#' a polygon shapefile defining the extent of the landscape
+#' @param s_threshold defines the spatial
+#' perception range of a walker at a given
+#' location. Default: \code{250} (in the same
+#' linear unit
+#' as the `poly` - polygon shapefile).
+#' @param step_length the maximum step taken
 #' by a walker from one point to the next.
-#' @param n_origin (an integer) Number of locations from which
-#' the walkers originate. Default:\code{50}.The value has
-#' largest impacts on the computational time.
-#' @param resistance_feat (An S4 object) Optional
-#' shapefile representing spaces across landscape
-#' within which events are prohibited.
-#' @param field A number in the range of \code{[0-1]}
-#' (i.e. resistance values) to
-#' assign to all features covered by `resistance_feat`; or
+#' @param n_origin number of locations to serve as
+#' origins for walkers. Default:\code{50}.
+#' @param restriction_feat (An S4 object) optional
+#' shapefile containing features
+#' in which walkers cannot walk through.
+#' Default: \code{NULL}.
+#' @param field a number in the range of \code{[0-1]}
+#' (i.e. restriction values) assigned
+#' to all features; or
 #' the name of a numeric field to extract such
-#' resistance values for different feature classes.
-#' The resistance value `0` and `1` indicate the
-#' lowest and the highest restrictions, respectively,
-#' to an event occuring within the space occupied
-#' by a feature.
-#' origins are not allowed. Default: \code{NULL}.
-#' @param p_ratio (an integer) The smaller of the
-#' two terms of a Pareto ratio.
+#' restriction values for different classes of
+#' feature.
+#' Restriction value `0` and `1` indicate the
+#' lowest and the highest obstructions, respectively.
+#' Default: \code{NULL}.
+#' @param p_ratio the smaller of the
+#' two terms of proportional ratios.
 #' For example, a value of \code{20}
-#' implies a \code{20:80} Pareto ratio.
-#' @param crsys (string) The EPSG projection code that defines
-#' the xy coordinates (of `ppt`). This will be utilized
-#' if `poly` argument is \code{NULL}.
+#' implies \code{20:80} proportional ratios.
+#' @param crsys (string) the EPSG code of the projection
+#' system of the `ppt` coordinates. This only used if
+#' `poly` argument is \code{NULL}.
 #' See "http://spatialreference.org/" for the list of
 #' EPSG codes for different regions of the world.
 #' As an example, the EPSG code for the British National Grid
@@ -82,11 +72,12 @@
 #' p_ratio=20, crsys = "EPSG:27700")
 #' }
 #' @details
-#' Generate spatiotemporal point pattern
-#' based on the actions of specified 'walkers' moving
-#' across a landscape.The walkers and the landscape are
-#' configured based on spatiotemporal information
-#' learnt from real sample datasets.
+#' The movement characteristics of walkers as well
+#' as the configuration of the landscape are defined
+#' based on the properties learnt from the real sample
+#' data. The explanations under `psim_artif`
+#' function regarding the computation time
+#' apply.
 #' @references
 #' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
 #' kernel estimation of spatial relative risk,
