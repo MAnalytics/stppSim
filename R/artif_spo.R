@@ -8,7 +8,7 @@
 #' a polygon shapefile defining the extent of the landscape
 #' @param n_origin number of locations to serve as
 #' origins for walkers. Default:\code{50}.
-#' @param resistance_feat (An S4 object) optional
+#' @param restriction_feat (An S4 object) optional
 #' shapefile containing features
 #' in which walkers cannot walk through.
 #' Default: \code{NULL}.
@@ -26,17 +26,17 @@
 #' origins (non-focal origins) around the focal ones. The options
 #' are `"nucleated"` and `"dispersed"`.
 #' @param p_ratio the smaller of the
-#' two terms of a proportional ratio.
+#' two terms of proportional ratios.
 #' For example, a value of \code{20}
-#' implies a \code{20:80} proportional ratio.
-#' @usage artif_spo(poly, n_origin=50, resistance_feat = NULL,
+#' implies \code{20:80} proportional ratios.
+#' @usage artif_spo(poly, n_origin=50, restriction_feat = NULL,
 #' n_foci=5, foci_separation = 10,
 #' conc_type = "nucleated", p_ratio)
 #' @examples
 #' data(camden_boundary)
 #' data(landuse)
 #' spo <- artif_spo(poly = camden_boundary, n_origin = 50,
-#' resistance_feat = landuse, n_foci=5,
+#' restriction_feat = landuse, n_foci=5,
 #' foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 #' @details
 #' The focal origins (`n_foci`) serve as the central locations
@@ -45,7 +45,7 @@
 #' The `conc_type` argument allows a user to specify
 #' the type of spatial concentration exhibited by the non-focal
 #' origin around the focal ones.
-#' If `resistance_feat` is provided, its features help
+#' If `restriction_feat` is provided, its features help
 #' to prevent the occurrence of any events in the areas
 #' occupied by the features.
 #' @return Returns spatial origins with associated
@@ -60,7 +60,7 @@
 #' @importFrom stats dist kmeans
 #' @export
 
-artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
+artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
                       n_foci=5, foci_separation = 10,
                       conc_type = "nucleated", p_ratio = 20){
 
@@ -110,7 +110,7 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
 
 
 
-  if(is.null(resistance_feat)){
+  if(is.null(restriction_feat)){
 
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
                            proj4string = crs(backup_poly)))
@@ -118,19 +118,19 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
     final_ran_points_pt <- ran_points_pt
     }
 
-  if(!is.null(resistance_feat)){
+  if(!is.null(restriction_feat)){
 
     #loop through
-    resistance_feat <- st_as_sf(resistance_feat)
+    restriction_feat <- st_as_sf(restriction_feat)
     #convert xy to points
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                proj4string = crs(resistance_feat)))
+                                proj4string = crs(restriction_feat)))
     #check those intersecting land use
-    pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, resistance_feat))[,1])
+    pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
     new_ran_points_pt <- ran_points_pt[-pt_intersect,]
 
     #check if any of the point intersects
-    #resistance feature across the space.
+    #restriction feature across the space.
     final_ran_points_pt <- new_ran_points_pt
 
     #loop until there is exactly number
@@ -143,9 +143,9 @@ artif_spo <- function(poly, n_origin =  50, resistance_feat = NULL,
       colnames(ran_points) <- c("x", "y")
       #convert to points and check intersection
       ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                              proj4string = crs(resistance_feat)))
+                                              proj4string = crs(restriction_feat)))
       #check those not intersecting land use
-      pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, resistance_feat))[,1])
+      pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
       new_ran_points_pt <- ran_points_pt[-pt_intersect,]
 
       #add to existing list
