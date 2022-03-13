@@ -1,34 +1,30 @@
-#' @title Learning spatiotemporal properties
-#' @description Learns both spatial and temporal
+#' @title Learning the spatiotemporal properties of
+#' a sample data
+#' @description Learns both the spatial and the temporal
 #' properties of a real sample dataset.
 #' @param ppt A 3-column matrix or list containing
 #' `x` - eastings, `y` - northing, and `t` - time of occurrence
 #' (in the format: `yyyy-mm-dd').
-#' @param start_date Specifies the start date of
-#' the sample data provided (format: `yyyy-mm-dd`).
-#' If `NULL`, the earliest date
-#' of the `t` field of `ppt` is utilized.
-#' The end date is automatically set as the 365th day
-#' from the start date.
+#' @param start_date the start date of the temporal pattern.
+#' The date should be in the format `"yyyy-mm-dd"`.
+#' The temporal pattern will normally
+#' cover 1-year period.
 #' @param poly (An sf or S4 object)
-#' Spatial (administrative) boundary covering the area
-#' under study. The default is `NULL`, in which an
-#' arbitrary boundary is drawn to cover the spatial extent
-#' of the data. The projection system of `poly` is assume
-#' for `ppt`, therefore, a user needs to ensure that both
-#' `poly` and `ppt`(-xy cordinates) are in the same
-#' reference system for accurate result.
-#' @param gridSize (an integer) The size of square grid
-#' for discretizing the entire space. Default is: \code{150}.
-#' @param n_origin (an integer) Number of locations from which
-#' the walkers originate. Default:\code{50}.
+#' a polygon shapefile defining the extent of the landscape
+#' @param gridSize the size of square grid
+#' to use for discretizing the space.
+#' Default is: \code{150}.
+#' @param p_ratio the smaller of the
+#' two terms of proportional ratios.
+#' For example, a value of \code{20}
+#' implies \code{20:80} proportional ratios.
 #' @param p_ratio (an integer) The smaller of the
 #' two terms of a Pareto ratio.
 #' For example, a value of \code{20}
 #' implies a \code{20:80} Pareto ratio.
-#' @param crsys (string) The EPSG projection code that defines
-#' the xy coordinates (of `ppt`). This will be utilized
-#' if `poly` argument is \code{NULL}.
+#' @param crsys (string) the EPSG code of the projection
+#' system of the `ppt` coordinates. This only used if
+#' `poly` argument is \code{NULL}.
 #' See "http://spatialreference.org/" for the list of
 #' EPSG codes for different regions of the world.
 #' As an example, the EPSG code for the British National Grid
@@ -58,8 +54,8 @@
 #' p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
 #' show.plot = FALSE)
 #' @details Returns an object of the class `real_spo`,
-#' storing details of the learnt spatiotemporal
-#' properties of the sample data.
+#' storing details of the spatiotemporal
+#' properties of the sample data learnt.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
