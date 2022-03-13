@@ -1,4 +1,4 @@
-#' @title Boundary Coordinates
+#' @title Boundary coordinates
 #' @description Boundary coordinates of Camden
 #' Borough of London
 #'
