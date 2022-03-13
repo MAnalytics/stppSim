@@ -5,7 +5,8 @@
 #' origins are assigned probability values
 #' indicating the strengths of the origins.
 #' @param poly (An sf or S4 object)
-#' a polygon shapefile defining the extent of the landscape
+#' a polygon shapefile defining the extent
+#' of the landscape
 #' @param n_origin number of locations to serve as
 #' origins for walkers. Default:\code{50}.
 #' @param restriction_feat (An S4 object) optional
