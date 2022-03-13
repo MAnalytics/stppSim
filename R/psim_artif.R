@@ -1,79 +1,81 @@
 #' @include gtp.R
 #' @include walker.R
 #' @title Stpp from synthetic origins
-#' @description Generate spatiotemporal
-#' point pattern from synthesized origins.
-#' @param n_events (integer) Number of points
+#' @description Generates spatiotemporal
+#' point patterns based on a set of
+#' synthesized origins.
+#' @param n_events number of points
 #' (events) to simulate. Default: \code{1000}.
-#' A vector of integer values can be supplied, in the
-#' format `c(a1, a2, ....)`, where a1, a2, ...
-#' represent different values.
-#' @param start_date The start date of temporal pattern.
+#' A vector of integer values can be supplied, such as,
+#' c(`a`1, `a`2, ....)`, where `a`1, `a`2, ...
+#' represent different integer values.
+#' @param start_date the start date of the temporal pattern.
 #' The date should be in the format `"yyyy-mm-dd"`.
-#' The GTP will usually covers a 1-year period.
+#' The GTP will normally cover a 1-year period.
 #' @param poly (An sf or S4 object)
-#' A polygon shapefile within which
-#' event origins are to be situated.
-#' @param n_origin (an integer) Number of locations from which
-#' the walkers originate. Default:\code{50}.
-#' @param resistance_feat (An S4 object) Optional
-#' shapefile representing spaces across landscape
-#' within which event
-#' @param field A number in the range of \code{[0-1]}
-#' (i.e. resistance values) to
-#' assign to all features covered by `resistance_feat`; or
+#' a polygon shapefile defining the extent of the landscape
+#' @param n_origin number of locations to serve as
+#' origins for walkers. Default:\code{50}.
+#' @param restriction_feat (An S4 object) optional
+#' shapefile containing features
+#' in which walkers cannot walk through.
+#' Default: \code{NULL}.
+#' @param field a number in the range of \code{[0-1]}
+#' (i.e. restriction values) assigned
+#' to all features; or
 #' the name of a numeric field to extract such
-#' resistance values for different feature classes.
-#' The resistance value `0` and `1` indicate the
-#' lowest and the highest restrictions, respectively,
-#' to an event occuring within the space occupied
-#' by a feature.
-#' origins are not allowed. Default: \code{NULL}.
-#' @param  n_foci (an integer) Value indicating the number of
-#' focal points amongst event origins. `n_foci` will usually be
-#' smaller than `n_origin`.
-#' @param foci_separation (an integer) A percentage value indicating
-#' indicating the nearness of focal points from one another. A `0`
-#' separation indicates that focal points are in close proximity
+#' restriction values for different classes of
+#' feature.
+#' Restriction value `0` and `1` indicate the
+#' lowest and the highest obstructions, respectively.
+#' Default: \code{NULL}.
+#' @param  n_foci number of focal points amongst the origin
+#' locations. The origins to serve as focal
+#' points are based on random selection. `n_foci` must be
+#' smaller than `n_origins`.
+#' @param foci_separation a value from `1` to `100`
+#' indicating the nearness of focal points to one another.
+#' A `0` separation indicates that focal points are in
+#' close proximity
 #' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
-#' @param conc_type (string) Specifies the spatial pattern
-#' of non-focal origin (strengths) in relation to
-#' to their nearest focal origins. Value is either
-#' \code{"nucleated"} or \code{"dispersed"}.
-#' @param p_ratio (an integer) The smaller of the
-#' two terms of a Pareto ratio.
+#' @param conc_type concentration of the rest of the
+#' origins (non-focal origins) around the focal ones. The options
+#' are `"nucleated"` and `"dispersed"`.
+#' @param p_ratio the smaller of the
+#' two terms of proportional ratios.
 #' For example, a value of \code{20}
-#' implies a \code{20:80} Pareto ratio.
-#' @param trend (string) Specify the trend direction of
-#' the GTP. Values are: `"decreasing"`, `"stable"`,
-#' and `"increasing"`. Default is: `"stable"`.
-#' @param slope (string) Slope GTP trend if
-#' "increasing" or "decreasing" trend is specified.
-#' Values: `"gentle"` or `"steep"`.
-#' Default value is \code{NULL} (i.e., for `stable` trend).
-#' @param first_pDate (in `"yyyy-mm-dd"` format).
-#' Date of the
-#' first seasonal peak of the time series.
-#' Default value is \code{NULL}, in which a
-#' seasonal cycle of 180 days is utilized. That is,
-#' a first seasonal peak of 90 days.
+#' implies \code{20:80} proportional ratios.
+#' @param s_threshold defines the spatial
+#' perception range of a walker at a given
+#' location. Default: \code{250} (in the same
+#' linear unit
+#' as the `poly` - polygon shapefile).
+#' @param step_length the maximum step taken
+#' by a walker from one point to the next.
+#' @param trend specifies the direction of the
+#' long-term trend. Options are:
+#' `"decreasing"`, `"stable"`,
+#' and `"increasing"`. Default value is: `"stable"`.
+#' @param slope slope of the long-term trend when
+#' an `"increasing"` or `"decreasing"` trend is specified.
+#' Options: `"gentle"` or `"steep"`. The default value is
+#' set as \code{NULL} for the `stable` trend.
+#' @param first_pDate date of the first seasonal peak of
+#' the GTP (format: `"yyyy-mm-dd"`).
+#' Default value is \code{NULL}, in which first seasonal
+#' peak of 90 days is utilized.
+#' seasonal cycle of 180 days is utilized (that is,
+#' a seasonal cycle of 180 days).
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
-#' @param s_threshold (numeric) Spatial threshold
-#' value. This is the spatial range within which
-#' a walker perceives it's environment at any
-#' instant. Default: \code{250} (in the same linear unit
-#' as the `poly` - polygon shapefile).
-#' @param step_length (numeric) A maximum step taken at a time
-#' by a walker from one point to the next.
 #' @param show.data (TRUE or FALSE) To show the output
 #' data. Default is \code{FALSE}.
 #' @param ... additional arguments to pass from
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
 #' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
-#' poly, n_origin, resistance_feat, field,
+#' poly, n_origin, restriction_feat, field,
 #' n_foci, foci_separation, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
@@ -82,21 +84,35 @@
 #' \dontrun{
 #' data(camden_boundary)
 #' data(landuse)
-#' artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-#' poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+#' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+#' poly=camden_boundary, n_origin=50, restriction_feat = landuse,
 #' field = "rValue1",
 #' n_foci=5, foci_separation = 10, conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
+#' #If `n_events` is a vector, access the corresponding
+#' simulated data for each vector entry using
+#' `simulated_stpp[[vector-index]]`
 #' }
 #' @details
-#' Generate spatiotemporal point pattern
-#' based on the actions of specified 'walkers' moving
-#' across a landscape. Both the walkers and the
-#' landscape are configured arbitrarily (in accordance
-#' with the users (expert) knowledge of the domain
-#' in question.
+#' Generates spatiotemporal point pattern
+#' based on the interactions between the
+#' walkers (agents) and the landscape. Both the walkers
+#' and the landscape are configured arbitrarily (in accordance
+#' with the users knowledge of the domain under study.
+#' This function is computationally intensive, and so
+#' has been implemented to use parallel processing for
+#' faster results. An `n`-1 cores on a PC is utilized
+#' for the simulation. The argument `n_origin` has the
+#' largest impacts on the computation. The computational time
+#' is `15` minutes for the example above on a (4-1)
+#' core laptop (with parameters setting: `n_origin=50` and
+#' `restriction_feat = NULL`). The computational time
+#' increases to 2hours when
+#' `restriction_feat = landuse`). Note: the `n_events`
+#' argument has little of no impacts on the
+#' computational time.
 #' @return Returns a list of artificial spatiotemporal
 #' point patterns.
 #' @importFrom data.table rbindlist
@@ -117,7 +133,7 @@
 #'
 
 psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
-                       poly, n_origin, resistance_feat, field=NA,
+                       poly, n_origin, restriction_feat, field=NA,
                        n_foci,
                        foci_separation, conc_type = "dispersed",
                        p_ratio,
@@ -130,7 +146,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   nrowh <- origins <- NULL
 
   #first derive the spo object
-  spo <- artif_spo(poly, n_origin =  n_origin, resistance_feat = resistance_feat,
+  spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
                    n_foci=n_foci,
                    foci_separation = foci_separation,
                    conc_type = conc_type, p_ratio = p_ratio)
@@ -209,7 +225,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
     stppSim::walker(n, s_threshold = s_threshold,
-         poly=poly, resistance_feat = resistance_feat,
+         poly=poly, restriction_feat = restriction_feat,
          field = field,
          coords=as.numeric(as.vector(idx)),
                   step_length = step_length ,
@@ -264,7 +280,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #add the origins
   output$origins <- spo$origins
   output$poly <- spo$poly
-  output$resist <- resistance_feat
+  output$resist <- restriction_feat
 
   return(output)
 }
