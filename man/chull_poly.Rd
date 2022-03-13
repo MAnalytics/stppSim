@@ -23,9 +23,9 @@ a set of points, using Convex Hull technique
 (Eddy, W. F, 1977).
 }
 \details{
-Draw an arbitrary boundary around
-by joining the outer-most
-points amongst the spatial data points
+Draws an arbitrary boundary around
+spatial points by joining the outer-most
+points by lines.
 }
 \examples{
 data(xyt_data)

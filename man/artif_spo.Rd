@@ -2,76 +2,72 @@
 % Please edit documentation in R/artif_spo.R
 \name{artif_spo}
 \alias{artif_spo}
-\title{Artificial spatial event origins}
+\title{Artificial spatial origins}
 \usage{
-artif_spo(poly, n_origin=50, resistance_feat = NULL,
+artif_spo(poly, n_origin=50, restriction_feat = NULL,
 n_foci=5, foci_separation = 10,
 conc_type = "nucleated", p_ratio)
 }
 \arguments{
 \item{poly}{(An sf or S4 object)
-A polygon shapefile within which
-event origins are to be situated.}
+a polygon shapefile defining the extent
+of the landscape}
 
-\item{n_origin}{(an integer) Number of locations from which
-the walkers originate. Default:\code{50}.}
+\item{n_origin}{number of locations to serve as
+origins for walkers. Default:\code{50}.}
 
-\item{resistance_feat}{(An S4 object) Optional
-shapefile representing spaces across landscape
-within which event
-origins are not allowed. Default: \code{NULL}.}
+\item{restriction_feat}{(An S4 object) optional
+shapefile containing features
+in which walkers cannot walk through.
+Default: \code{NULL}.}
 
-\item{n_foci}{(an integer) Value indicating the number of
-focal points amongst event origins. \code{n_foci} will usually be
-smaller than \code{n_origin}.}
+\item{n_foci}{number of focal points amongst the origin
+locations. The origins to serve as focal
+points are based on random selection. \code{n_foci} must be
+smaller than \code{n_origins}.}
 
-\item{foci_separation}{(an integer) A percentage value indicating
-indicating the nearness of focal points from one another. A \code{0}
-separation indicates that focal points are in close proximity
+\item{foci_separation}{a value from \code{1} to \code{100}
+indicating the nearness of focal points to one another.
+A \code{0} separation indicates that focal points are in
+close proximity
 of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
 
-\item{conc_type}{(string) Specifies the spatial pattern
-of non-focal origin (strengths) in relation to
-to their nearest focal origins. Value is either
-\code{"nucleated"} or \code{"dispersed"}.}
+\item{conc_type}{concentration of the rest of the
+origins (non-focal origins) around the focal ones. The options
+are \code{"nucleated"} and \code{"dispersed"}.}
 
-\item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio.
+\item{p_ratio}{the smaller of the
+two terms of proportional ratios.
 For example, a value of \code{20}
-implies a \code{20:80} Pareto ratio.}
+implies \code{20:80} proportional ratios.}
 }
 \value{
-Returns event origins with their respective
+Returns spatial origins with associated
 strength (probability) values.
 }
 \description{
-Simulate spatial points to serve as event
-origins across the space. If provided, resistance features
-are to be avoided. Each final
-event origin point is assigned a probability value
-indicating the strength of the origin.
+Simulates spatial locations to serve
+as origins of walkers. If provided, spaces covered
+by restriction features are avoided. Final
+origins are assigned probability values
+indicating the strengths of the origins.
 }
 \details{
-Details of events origins:
-{x,y locations, categories (i.e. focal and non-focal (others)
-origins), and the probability values.
-and non-focal point}.
-The focal origins (\code{n_foci}) serve as the more dominant
-origins (e.g. city centres), while the non-focal origins
-(i.e. non-dominant) origin. The \code{foci_separation} indicates
-the nearness of dominant origins from one another.
+The focal origins (\code{n_foci}) serve as the central locations
+(such as, city centres). The \code{foci_separation} indicates
+the nearness of focal origins from one another.
 The \code{conc_type} argument allows a user to specify
-the type of spatial patterns exhibited by the non-focal
-points around the focal points (See vignette for details).
-If \code{resistance_feat} is provided, the features help
-to prevent event origins from being
-situated in the same locations occupied by the features.
+the type of spatial concentration exhibited by the non-focal
+origin around the focal ones.
+If \code{restriction_feat} is provided, its features help
+to prevent the occurrence of any events in the areas
+occupied by the features.
 }
 \examples{
 data(camden_boundary)
 data(landuse)
 spo <- artif_spo(poly = camden_boundary, n_origin = 50,
-resistance_feat = landuse, n_foci=5,
+restriction_feat = landuse, n_foci=5,
 foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 }

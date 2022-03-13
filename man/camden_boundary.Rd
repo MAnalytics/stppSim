@@ -6,10 +6,6 @@
 \title{A boundary shapefile}
 \format{
 A boundary file (ESRI format)
-\itemize{
-\item x: x coordinate
-\item y: y coordinate
-}
 }
 \usage{
 camden_boundary

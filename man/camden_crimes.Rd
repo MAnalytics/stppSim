@@ -6,27 +6,26 @@
 \title{Records of crimes of Camden Borough of London,
 UK, 2021 (Source: https://data.police.uk/data/)}
 \format{
-A matrix containing three variables
+A matrix containing four variables
 \itemize{
 \item x: x coordinate
 \item y: y coordinate
 \item date: date of occurence
-\item type: type of crime
+\item type: types of crime
 }
 }
 \usage{
 camden_crimes
 }
 \description{
-'Theft' and 'Criminal Damage' records
-(Source: \code{police.uk})
-of Camden Borough of London, UK
-for the year 2021.
-Note: Police.uk data is only accurate to monthly
+Data comprising 'Theft' and 'Criminal Damage'
+records of Camden Borough of London, UK
+for the year 2021 (Source: \verb{https://data.police.uk/}).
+Note: Police.uk data is aggregated at monthly
 scale (\code{yyyy-mm}). But, the data provided here has been
-manipulated to include fake 'days of occurrence'.
-So, caution should
+disaggregated to daily scale by adding fake
+'daily' stamps (to give \code{yyyy-mm-dd}). So, caution should
 be taken when interpreting the results based on
-full date stamp (\code{yyyy-mm-dd}).
+full date.
 }
 \keyword{datasets}
