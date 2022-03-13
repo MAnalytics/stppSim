@@ -13,7 +13,8 @@
 #' (in the format: `yyyy-mm-dd').
 #' @param start_date the start date of the temporal pattern.
 #' The date should be in the format `"yyyy-mm-dd"`.
-#' The GTP will normally cover a 1-year period.
+#' The temporal pattern will normally cover
+#' 1-year period.
 #' @param poly (An sf or S4 object)
 #' a polygon shapefile defining the extent of the landscape
 #' @param s_threshold defines the spatial
