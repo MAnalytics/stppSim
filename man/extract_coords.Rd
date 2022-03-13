@@ -19,8 +19,7 @@ of a polygon object.
 }
 \details{
 Given a spatial polygon object,
-the function extracts the bounding coordinates
-of the object.
+the function extracts its bounding coordinates.
 }
 \examples{
 data(camden_boundary)

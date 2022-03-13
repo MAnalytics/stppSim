@@ -5,89 +5,90 @@
 \title{Stpp from synthetic origins}
 \usage{
 psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
-poly, n_origin, resistance_feat, field,
+poly, n_origin, restriction_feat, field,
 n_foci, foci_separation, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 }
 \arguments{
-\item{n_events}{(integer) Number of points
+\item{n_events}{number of points
 (events) to simulate. Default: \code{1000}.
-A vector of integer values can be supplied, in the
-format \code{c(a1, a2, ....)}, where a1, a2, ...
-represent different values.}
+A vector of integer values can be supplied, such as,
+c(\code{a}1, \code{a}2, ....)\verb{, where }a\verb{1, }a`2, ...
+represent different integer values.}
 
-\item{start_date}{The start date of temporal pattern.
+\item{start_date}{the start date of the temporal pattern.
 The date should be in the format \code{"yyyy-mm-dd"}.
-The GTP will usually covers a 1-year period.}
+The GTP will normally cover a 1-year period.}
 
 \item{poly}{(An sf or S4 object)
-A polygon shapefile within which
-event origins are to be situated.}
+a polygon shapefile defining the extent of the landscape}
 
-\item{n_origin}{(an integer) Number of locations from which
-the walkers originate. Default:\code{50}.}
+\item{n_origin}{number of locations to serve as
+origins for walkers. Default:\code{50}.}
 
-\item{resistance_feat}{(An S4 object) Optional
-shapefile representing spaces across landscape
-within which event}
+\item{restriction_feat}{(An S4 object) optional
+shapefile containing features
+in which walkers cannot walk through.
+Default: \code{NULL}.}
 
-\item{field}{A number in the range of \code{[0-1]}
-(i.e. resistance values) to
-assign to all features covered by \code{resistance_feat}; or
+\item{field}{a number in the range of \code{[0-1]}
+(i.e. restriction values) assigned
+to all features; or
 the name of a numeric field to extract such
-resistance values for different feature classes.
-The resistance value \code{0} and \code{1} indicate the
-lowest and the highest restrictions, respectively,
-to an event occuring within the space occupied
-by a feature.
-origins are not allowed. Default: \code{NULL}.}
+restriction values for different classes of
+feature.
+Restriction value \code{0} and \code{1} indicate the
+lowest and the highest obstructions, respectively.
+Default: \code{NULL}.}
 
-\item{n_foci}{(an integer) Value indicating the number of
-focal points amongst event origins. \code{n_foci} will usually be
-smaller than \code{n_origin}.}
+\item{n_foci}{number of focal points amongst the origin
+locations. The origins to serve as focal
+points are based on random selection. \code{n_foci} must be
+smaller than \code{n_origins}.}
 
-\item{foci_separation}{(an integer) A percentage value indicating
-indicating the nearness of focal points from one another. A \code{0}
-separation indicates that focal points are in close proximity
+\item{foci_separation}{a value from \code{1} to \code{100}
+indicating the nearness of focal points to one another.
+A \code{0} separation indicates that focal points are in
+close proximity
 of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
 
-\item{conc_type}{(string) Specifies the spatial pattern
-of non-focal origin (strengths) in relation to
-to their nearest focal origins. Value is either
-\code{"nucleated"} or \code{"dispersed"}.}
+\item{conc_type}{concentration of the rest of the
+origins (non-focal origins) around the focal ones. The options
+are \code{"nucleated"} and \code{"dispersed"}.}
 
-\item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio.
+\item{p_ratio}{the smaller of the
+two terms of proportional ratios.
 For example, a value of \code{20}
-implies a \code{20:80} Pareto ratio.}
+implies \code{20:80} proportional ratios.}
 
-\item{s_threshold}{(numeric) Spatial threshold
-value. This is the spatial range within which
-a walker perceives it's environment at any
-instant. Default: \code{250} (in the same linear unit
+\item{s_threshold}{defines the spatial
+perception range of a walker at a given
+location. Default: \code{250} (in the same
+linear unit
 as the \code{poly} - polygon shapefile).}
 
-\item{step_length}{(numeric) A maximum step taken at a time
+\item{step_length}{the maximum step taken
 by a walker from one point to the next.}
 
-\item{trend}{(string) Specify the trend direction of
-the GTP. Values are: \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"}. Default is: \code{"stable"}.}
+\item{trend}{specifies the direction of the
+long-term trend. Options are:
+\code{"decreasing"}, \code{"stable"},
+and \code{"increasing"}. Default value is: \code{"stable"}.}
 
-\item{first_pDate}{(in \code{"yyyy-mm-dd"} format).
-Date of the
-first seasonal peak of the time series.
-Default value is \code{NULL}, in which a
-seasonal cycle of 180 days is utilized. That is,
-a first seasonal peak of 90 days.}
+\item{first_pDate}{date of the first seasonal peak of
+the GTP (format: \code{"yyyy-mm-dd"}).
+Default value is \code{NULL}, in which first seasonal
+peak of 90 days is utilized.
+seasonal cycle of 180 days is utilized (that is,
+a seasonal cycle of 180 days).}
 
-\item{slope}{(string) Slope GTP trend if
-"increasing" or "decreasing" trend is specified.
-Values: \code{"gentle"} or \code{"steep"}.
-Default value is \code{NULL} (i.e., for \code{stable} trend).}
+\item{slope}{slope of the long-term trend when
+an \code{"increasing"} or \code{"decreasing"} trend is specified.
+Options: \code{"gentle"} or \code{"steep"}. The default value is
+set as \code{NULL} for the \code{stable} trend.}
 
 \item{...}{additional arguments to pass from
 \code{gtp}, \code{walker} and \code{artif_spo}
@@ -104,27 +105,42 @@ Returns a list of artificial spatiotemporal
 point patterns.
 }
 \description{
-Generate spatiotemporal
-point pattern from synthesized origins.
+Generates spatiotemporal
+point patterns based on a set of
+synthesized origins.
 }
 \details{
-Generate spatiotemporal point pattern
-based on the actions of specified 'walkers' moving
-across a landscape. Both the walkers and the
-landscape are configured arbitrarily (in accordance
-with the users (expert) knowledge of the domain
-in question.
+Generates spatiotemporal point pattern
+based on the interactions between the
+walkers (agents) and the landscape. Both the walkers
+and the landscape are configured arbitrarily (in accordance
+with the users knowledge of the domain under study.
+This function is computationally intensive, and so
+has been implemented to use parallel processing for
+faster results. An \code{n}-1 cores on a PC is utilized
+for the simulation. The argument \code{n_origin} has the
+largest impacts on the computation. The computational time
+is \code{15} minutes for the example above on a (4-1)
+core laptop (with parameters setting: \code{n_origin=50} and
+\code{restriction_feat = NULL}). The computational time
+increases to 2hours when
+\code{restriction_feat = landuse}). Note: the \code{n_events}
+argument has little of no impacts on the
+computational time.
 }
 \examples{
 \dontrun{
 data(camden_boundary)
 data(landuse)
-artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+poly=camden_boundary, n_origin=50, restriction_feat = landuse,
 field = "rValue1",
 n_foci=5, foci_separation = 10, conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)
+#If `n_events` is a vector, access the corresponding
+simulated data for each vector entry using
+`simulated_stpp[[vector-index]]`
 }
 }

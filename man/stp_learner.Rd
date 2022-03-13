@@ -2,7 +2,8 @@
 % Please edit documentation in R/stp_learner.R
 \name{stp_learner}
 \alias{stp_learner}
-\title{Learning spatiotemporal properties}
+\title{Learning the spatiotemporal properties of
+a sample data}
 \usage{
 stp_learner(ppt, start_date = NULL, poly = NULL,
 n_origin=50, p_ratio, gridSize = 150,
@@ -13,36 +14,29 @@ crsys = NULL, show.plot = FALSE)
 \code{x} - eastings, \code{y} - northing, and \code{t} - time of occurrence
 (in the format: `yyyy-mm-dd').}
 
-\item{start_date}{Specifies the start date of
-the sample data provided (format: \code{yyyy-mm-dd}).
-If \code{NULL}, the earliest date
-of the \code{t} field of \code{ppt} is utilized.
-The end date is automatically set as the 365th day
-from the start date.}
+\item{start_date}{the start date of the temporal pattern.
+The date should be in the format \code{"yyyy-mm-dd"}.
+The temporal pattern will normally
+cover 1-year period.}
 
 \item{poly}{(An sf or S4 object)
-Spatial (administrative) boundary covering the area
-under study. The default is \code{NULL}, in which an
-arbitrary boundary is drawn to cover the spatial extent
-of the data. The projection system of \code{poly} is assume
-for \code{ppt}, therefore, a user needs to ensure that both
-\code{poly} and \code{ppt}(-xy cordinates) are in the same
-reference system for accurate result.}
+a polygon shapefile defining the extent of the landscape}
 
-\item{n_origin}{(an integer) Number of locations from which
-the walkers originate. Default:\code{50}.}
+\item{n_origin}{number of locations to serve as
+origins for walkers. Default:\code{50}.}
 
 \item{p_ratio}{(an integer) The smaller of the
 two terms of a Pareto ratio.
 For example, a value of \code{20}
 implies a \code{20:80} Pareto ratio.}
 
-\item{gridSize}{(an integer) The size of square grid
-for discretizing the entire space. Default is: \code{150}.}
+\item{gridSize}{the size of square grid
+to use for discretizing the space.
+Default is: \code{150}.}
 
-\item{crsys}{(string) The EPSG projection code that defines
-the xy coordinates (of \code{ppt}). This will be utilized
-if \code{poly} argument is \code{NULL}.
+\item{crsys}{(string) the EPSG code of the projection
+system of the \code{ppt} coordinates. This only used if
+\code{poly} argument is \code{NULL}.
 See "http://spatialreference.org/" for the list of
 EPSG codes for different regions of the world.
 As an example, the EPSG code for the British National Grid
@@ -52,13 +46,13 @@ projection system is: \code{"EPSG:27700"}.}
 some displays.}
 }
 \description{
-Learns both spatial and temporal
+Learns both the spatial and the temporal
 properties of a real sample dataset.
 }
 \details{
 Returns an object of the class \code{real_spo},
-storing details of the learnt spatiotemporal
-properties of the sample data.
+storing details of the spatiotemporal
+properties of the sample data learnt.
 }
 \examples{
 #Goal: To learn the ST properties

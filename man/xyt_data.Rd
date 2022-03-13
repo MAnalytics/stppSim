@@ -16,7 +16,7 @@ A matrix containing three variables
 xyt_data
 }
 \description{
-A spatiotemporal point data
+Example spatiotemporal point data
 of a part of San Francisco City,
 California, US
 }

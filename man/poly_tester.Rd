@@ -2,21 +2,22 @@
 % Please edit documentation in R/poly_tester.R
 \name{poly_tester}
 \alias{poly_tester}
-\title{Geometry and crs of a polygon}
+\title{Geometry and Coordinate
+Reference System test of a polygon}
 \usage{
 poly_tester(poly)
 }
 \arguments{
 \item{poly}{(as \code{spatialPolygons}, \code{spatialPolygonDataFrames}, or
-\verb{simple features}). A spatial polygon}
+\verb{simple features}). A spatial polygon object.}
 }
 \value{
 Returns error messages, or mute
 }
 \description{
-Test whether an input polygon
+Tests whether a polygon
 has the correct geometry,
-namely \code{S4} or \code{sf}. Further, to test
+namely; \code{S4} or \code{sf}. Also, tests
 that there is a valid projection attached to
 the polygon.
 }

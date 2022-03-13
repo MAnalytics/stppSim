@@ -8,40 +8,41 @@ gtp(start_date, trend = "stable",
 slope = NULL, first_pDate = NULL, show.plot =FALSE)
 }
 \arguments{
-\item{start_date}{The start date of temporal pattern.
+\item{start_date}{the start date of the temporal pattern.
 The date should be in the format \code{"yyyy-mm-dd"}.
-The GTP will usually covers a 1-year period.}
+The GTP will normally cover a 1-year period.}
 
-\item{trend}{(string) Specify the trend direction of
-the GTP. Values are: \code{"decreasing"}, \code{"stable"},
-and \code{"increasing"}. Default is: \code{"stable"}.}
+\item{trend}{specifies the direction of the
+long-term trend. Options are:
+\code{"decreasing"}, \code{"stable"},
+and \code{"increasing"}. Default value is: \code{"stable"}.}
 
-\item{slope}{(string) Slope GTP trend if
-"increasing" or "decreasing" trend is specified.
-Values: \code{"gentle"} or \code{"steep"}.
-Default value is \code{NULL} (i.e., for \code{stable} trend).}
+\item{slope}{slope of the long-term trend when
+an \code{"increasing"} or \code{"decreasing"} trend is specified.
+Options: \code{"gentle"} or \code{"steep"}. The default value is
+set as \code{NULL} for the \code{stable} trend.}
 
-\item{first_pDate}{(in \code{"yyyy-mm-dd"} format).
-Date of the
-first seasonal peak of the time series.
-Default value is \code{NULL}, in which a
-seasonal cycle of 180 days is utilized. That is,
-a first seasonal peak of 90 days.}
+\item{first_pDate}{date of the first seasonal peak of
+the GTP (format: \code{"yyyy-mm-dd"}).
+Default value is \code{NULL}, in which first seasonal
+peak of 90 days is utilized.
+seasonal cycle of 180 days is utilized (that is,
+a seasonal cycle of 180 days).}
 
 \item{show.plot}{(logical) Shows GTP.
 Default is \code{FALSE}.}
 }
 \value{
 Returns a vector of 365 data points representing
-the global temporal pattern
+1-year global temporal pattern.
 }
 \description{
 Models the global temporal pattern,
-as combining long-term trend and seasonality.
+as combining the long-term trend and seasonality.
 }
 \details{
-Models the GTP which could be utilize for simulating
-artifical point pattern across space.
+Models the GTP for anchoring the temporal
+trends and patterns of the point patterns to be simulated.
 }
 \examples{
 gtp(start_date = "2020-01-01", trend = "stable",

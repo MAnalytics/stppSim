@@ -7,21 +7,21 @@
 date_checker(x)
 }
 \arguments{
-\item{x}{A vector of date values}
+\item{x}{A date or a vector of date values}
 }
 \value{
 Returns TRUE or FALSE
 }
 \description{
-Checks if date is in the correct
-format.
+Checks if date is in a
+specified format (i.e. \code{'yyyy-mm-dd'}).
 }
 \details{
 Returns \code{"TRUE"} if all
-entries of a vector are date values and
-\code{FALSE} if any entries of a vector
-is not a date value. The date vector
-needs to be in the format: \code{"yyyy-mm-dd"}.
+date entries are in the specified format
+(\verb{"yyyy-mm-dd}),
+and \code{FALSE} if at least one date is not
+in the format.
 }
 \examples{
 date_list_1 <- c("2021-09-12", "2016-xx-02",

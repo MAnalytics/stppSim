@@ -11,7 +11,7 @@ show_output = FALSE)
 \item{poly}{(as \code{spatialPolygons},
 \code{spatialPolygonDataFrames}, or
 \verb{simple features}). A polygon object over
-which square grids are to be overlaid.}
+which square grids are to be created.}
 
 \item{size}{Size of square grids to be
 created. For example, the input \code{size}
@@ -26,11 +26,11 @@ in a shapefile format
 }
 \description{
 Generates a system of square grids
-across a specified spatial polygon (boundary).
+over an area (boundary shapefile).
 }
 \details{
-Exports a grid system in a shapefile
-format (in the same crs as the input \code{poly})
+Generates a square grid system in a shapefile
+format (in the same \code{crs} as the input \code{poly})
 }
 \examples{
 data(camden_boundary)

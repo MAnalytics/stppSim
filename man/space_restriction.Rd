@@ -2,52 +2,58 @@
 % Please edit documentation in R/space_restriction.R
 \name{space_restriction}
 \alias{space_restriction}
-\title{Space restriction map (raster)}
+\title{Space restriction raster map}
 \usage{
 space_restriction(shp, baseMap, res, binary = is.na(field),
 field = NA, background = 1)
 }
 \arguments{
-\item{shp}{polygon shapefile object.}
+\item{shp}{shapefile object containing
+features to serve as obstructions to the movement
+of walkers.}
 
 \item{baseMap}{if provided, a raster onto which
-to stack the next rasterized shapefile.}
+to stack the restriction features (\code{shp}).}
 
 \item{res}{the desired pixel resolution of the
 raster to be created, when baseMap is not provided.}
 
 \item{binary}{if TRUE, the shapefile will be rasterized
-so that any feature is assigned a value of \code{0},
-and the background is assigned \code{1}.}
+so that all features are assigned a value of \code{0} (minimum
+restriction level),
+and the background is assigned \code{1}
+(maximum restriction level).}
 
-\item{field}{A number in the range of \code{[0-1]}
-(i.e. resistance values) to
-assign to all features covered by \code{shp}; or
+\item{field}{a number in the range of \code{[0-1]}
+(i.e. restriction values) assigned
+to all features; or
 the name of a numeric field to extract such
-resistance values for different feature classes.
-The resistance value \code{0} and \code{1} indicate the
-lowest and the highest restrictions, respectively,
-to an event occuring within the space occupied
-by a feature.}
+restriction values for different classes of
+feature.
+Restriction value \code{0} and \code{1} indicate the
+lowest and the highest obstructions, respectively.
+Default: \code{NULL}.}
 
 \item{background}{the value in the range 0 and 1
 to assign to all pixels that are not covered
-by any shapefile feature.}
+by any shapefile object.}
 }
 \value{
 Returns a raster map
 }
 \description{
-Build a space restriction map
-from one or more shapefiles. A space restriction map
-(raster) shows the restrictions (to event occurences)
-across space. Function builds
+Builds a space restriction map
+from one or more shapefiles. A space restriction
+raster map showing the restriction levels
+of various features across the landscape.
+The function builds
 on raster- and SimRIv-packages.
 }
 \details{
-Help to create a complete space restriction map
-with cell values ranging from 0(lowest) and 1(highest). All
-other area not covered by any features is assigned the value
+Helps to create a complete space restriction map
+with cell values ranging from 0
+(\verb{minimum restriction level}) and 1(\verb{maximum restriction level}). All
+other areas not covered by any features are assigned the value
 of \code{background}. When stacking additional features to existing
 \code{baseMap}, only the areas covered by features are updated, while
 the remaining areas retain the original values of \code{baseMap}.

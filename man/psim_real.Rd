@@ -6,87 +6,79 @@
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 s_threshold = NULL, step_length = 20, n_origin=50,
-resistance_feat, field=NA,
+restriction_feat, field=NA,
 p_ratio=20, crsys = NULL)
 }
 \arguments{
-\item{n_events}{(integer) Number of points
+\item{n_events}{number of points
 (events) to simulate. Default: \code{1000}.
-A vector of integer values can be supplied, in the
-format \code{c(a1, a2, ....)}, where a1, a2, ...
-represent different values.}
+A vector of integer values can be supplied, such as,
+c(\code{a}1, \code{a}2, ....)\verb{, where }a\verb{1, }a`2, ...
+represent different integer values.}
 
 \item{ppt}{A 3-column matrix or list containing
 \code{x} - eastings, \code{y} - northing, and \code{t} - time of occurrence
 (in the format: `yyyy-mm-dd').}
 
-\item{start_date}{Specifies the start date of
-the sample data provided (format: \code{yyyy-mm-dd}).
-If \code{NULL}, the earliest date
-of the \code{t} field of \code{ppt} is utilized.
-The end date is automatically set as the 365th day
-from the start date.}
+\item{start_date}{the start date of the temporal pattern.
+The date should be in the format \code{"yyyy-mm-dd"}.
+The temporal pattern will normally cover
+1-year period.}
 
 \item{poly}{(An sf or S4 object)
-Spatial (administrative) boundary covering the area
-under study. The default is \code{NULL}, in which an
-arbitrary boundary is drawn to cover the spatial extent
-of the data. The projection system of \code{poly} is assume
-for \code{ppt}, therefore, a user needs to ensure that both
-\code{poly} and \code{ppt}(-xy cordinates) are in the same
-reference system for accurate result.}
+a polygon shapefile defining the extent of the landscape}
 
-\item{s_threshold}{(numeric) Spatial range
-from the origin within
-which a walker re-generate events.
-Default: \code{NULL}, in which the value is
-automatically estimated from the sample data (i.e., \code{ppt}).}
+\item{s_threshold}{defines the spatial
+perception range of a walker at a given
+location. Default: \code{250} (in the same
+linear unit
+as the \code{poly} - polygon shapefile).}
 
-\item{step_length}{(numeric) A maximum step taken at a time
+\item{step_length}{the maximum step taken
 by a walker from one point to the next.}
 
-\item{n_origin}{(an integer) Number of locations from which
-the walkers originate. Default:\code{50}.The value has
-largest impacts on the computational time.}
+\item{n_origin}{number of locations to serve as
+origins for walkers. Default:\code{50}.}
 
-\item{resistance_feat}{(An S4 object) Optional
-shapefile representing spaces across landscape
-within which events are prohibited.}
+\item{restriction_feat}{(An S4 object) optional
+shapefile containing features
+in which walkers cannot walk through.
+Default: \code{NULL}.}
 
-\item{field}{A number in the range of \code{[0-1]}
-(i.e. resistance values) to
-assign to all features covered by \code{resistance_feat}; or
+\item{field}{a number in the range of \code{[0-1]}
+(i.e. restriction values) assigned
+to all features; or
 the name of a numeric field to extract such
-resistance values for different feature classes.
-The resistance value \code{0} and \code{1} indicate the
-lowest and the highest restrictions, respectively,
-to an event occuring within the space occupied
-by a feature.
-origins are not allowed. Default: \code{NULL}.}
+restriction values for different classes of
+feature.
+Restriction value \code{0} and \code{1} indicate the
+lowest and the highest obstructions, respectively.
+Default: \code{NULL}.}
 
-\item{p_ratio}{(an integer) The smaller of the
-two terms of a Pareto ratio.
+\item{p_ratio}{the smaller of the
+two terms of proportional ratios.
 For example, a value of \code{20}
-implies a \code{20:80} Pareto ratio.}
+implies \code{20:80} proportional ratios.}
 
-\item{crsys}{(string) The EPSG projection code that defines
-the xy coordinates (of \code{ppt}). This will be utilized
-if \code{poly} argument is \code{NULL}.
+\item{crsys}{(string) the EPSG code of the projection
+system of the \code{ppt} coordinates. This only used if
+\code{poly} argument is \code{NULL}.
 See "http://spatialreference.org/" for the list of
 EPSG codes for different regions of the world.
 As an example, the EPSG code for the British National Grid
 projection system is: \code{"EPSG:27700"}.}
 }
 \description{
-Generate spatiotemporal point pattern
-from origins sampled based on real dataset.
+Generates spatiotemporal point pattern
+from origins sampled based on real sample dataset.
 }
 \details{
-Generate spatiotemporal point pattern
-based on the actions of specified 'walkers' moving
-across a landscape.The walkers and the landscape are
-configured based on spatiotemporal information
-learnt from real sample datasets.
+The movement characteristics of walkers as well
+as the configuration of the landscape are defined
+based on the properties learnt from the real sample
+data. The explanations under \code{psim_artif}
+function regarding the computation time
+apply.
 }
 \examples{
 \dontrun{
@@ -103,7 +95,7 @@ replace=FALSE),1:3]
 #plot(dat_sample$x, dat_sample$y) #preview
 result <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
-step_length = 20, n_origin=50, resistance_feat, field=NA,
+step_length = 20, n_origin=50, restriction_feat, field=NA,
 p_ratio=20, crsys = "EPSG:27700")
 }
 }

@@ -3,7 +3,7 @@
 \docType{data}
 \name{poly}
 \alias{poly}
-\title{Boundary Coordinates}
+\title{Boundary coordinates}
 \format{
 A dataframe containing one variable:
 \itemize{

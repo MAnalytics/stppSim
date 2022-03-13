@@ -2,18 +2,18 @@
 % Please edit documentation in R/p_prob.R
 \name{p_prob}
 \alias{p_prob}
-\title{Pareto (probability) distribution}
+\title{Proportional (probability) distribution}
 \usage{
 p_prob(n,  p_ratio = 20)
 }
 \arguments{
-\item{n}{(an integer) Number of data points.}
+\item{n}{a number of data points.}
 
-\item{p_ratio}{(an integer) The smaller of the
-terms of a Pareto ratio. For instance, for a
-\code{20:80} ratio, \code{p_ratio} is \code{20}.
+\item{p_ratio}{the smaller of the
+terms of specified proportional ratios. For instance, for a
+\code{30:70} ratio, \code{p_ratio} is equal to \code{30}.
 Default value is set as
-\code{20}. Acceptable \code{p_ratio} values
+\code{20}. Valid \code{p_ratio} values
 are: (\code{5, 10, 20, 30, 40}).}
 }
 \value{
@@ -21,17 +21,14 @@ Returns a vector of probability values
 }
 \description{
 Generates an \code{n} probability
-values in accordance with a specified Pareto ratio.
+values in accordance with a specified
+proportional ratios.
 }
 \details{
-Produces a list probability values
-based on the specified Pareto ratio. Each ratio
-term is assigned the proportion of area under
-an exponential curve that is equal to
-the value of the other ratio term. For example,
-for a \code{20:80} ratio, 20\% of data points
-covers 80\% of areas under the curve, and vice
-versa.
+Proportional ratios are used to divide the
+area under curve (auc) of an exponential function
+such that for any given percentage ratios \code{a:b}, the
+auc is divided into \code{b:a}.
 }
 \examples{
 p_prob(n = 15,  p_ratio = 20)
