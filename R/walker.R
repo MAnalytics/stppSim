@@ -39,12 +39,12 @@
 #' @param show.plot (TRUE or False) To show the time series
 #' plot. Default is \code{FALSE}.
 #' @usage walker(n = 5, s_threshold = 250, step_length = 20,
-#' poly = NULL, resistance_feat=NULL, field = NA, coords=c(0,0),
+#' poly = NULL, restriction_feat=NULL, field = NA, coords=c(0,0),
 #' pt_itx = TRUE, show.plot = FALSE)
 #' @examples
 #' data(camden_boundary)
 #' path <- walker(n = 5, s_threshold = 250, step_length = 20,
-#' poly=camden_boundary, resistance_feat=NULL, field = NA,
+#' poly=camden_boundary, restriction_feat=NULL, field = NA,
 #' coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
 #' #plot(path)
 #' @details
@@ -53,7 +53,7 @@
 #' and specified spatial and temporal parameters. The transition
 #' matrix defines two states, namely; the `exploratory`
 #' and a `performative` states. A walker is capable
-#' of avoiding obstructions (i.e., `resistance_feat`)
+#' of avoiding obstructions (i.e., `restriction_feat`)
 #' if included. The resulting number of events may be
 #' slightly different from the value `n` because of the
 #' stochastic process involved.
@@ -63,7 +63,7 @@
 #' #https://google.co.uk
 #' @importFrom dplyr select filter
 #' @importFrom SiMRiv species transitionMatrix
-#' state.CRW simulate resistanceFromShape
+#' state.CRW simulate
 #' @importFrom chron chron
 #' @importFrom stats time
 #' @importFrom sf st_intersects st_as_sf st_centroid
@@ -72,7 +72,7 @@
 #' @export
 
 walker <- function(n = 5, s_threshold = 250, step_length = 20,
-                   poly=NULL, resistance_feat=NULL,
+                   poly=NULL, restriction_feat=NULL,
                    field = NA,
                    coords = c(0,0), pt_itx = TRUE, show.plot = FALSE){
 
@@ -113,16 +113,16 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
   #-6.25679 + 1.26863*log(n) is the
   #power regression that relate x and y (see 'calibra..R')
 
-  #create the landscape resistance raster
+  #create the landscape restriction raster
   #create boundary
   #test polygon geometry
   if(!is.null(poly)){
     landscape <- space_restriction(shp = poly,
                                    res = 50, binary = TRUE)
 
-    #update the landscape resistance map
-    if(!is.null(resistance_feat)){
-      landscape <- space_restriction(shp = resistance_feat,
+    #update the landscape restriction map
+    if(!is.null(restriction_feat)){
+      landscape <- space_restriction(shp = restriction_feat,
                                      baseMap = landscape,
                                     res = 50, field = field)
     }
