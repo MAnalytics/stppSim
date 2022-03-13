@@ -42,7 +42,7 @@ always_allow_html: yes
 #fig_caption: yes
 bibliography: references.bib
 
-abstract: Generates artificial spatio-temporal point patterns (stpp) through the integration of microsimulation and agent-based models. Allows a user to define the movement characteristics of a set of "walkers" (agents) across a spatially configured landscape. The interaction between the walkers (be it human offenders in crime studies, foraging animals in Wildlife studies, or disease carriers in epidemiology) and the environment results in the advent of new events, whose spatiotemporal (ST) signatures can be measured at the global levels. With increasingly limited availability of fine-grained spatially and temporally stamped point data, `stppSim` provides alternative source of datasets for ST model testing and evaluation across a wide variety of fields in social and life sciences.
+abstract: Generates artificial spatio-temporal point patterns (stpp) through the integration of microsimulation and agent-based models. Allows a user to define the movement characteristics of a set of "walkers" (agents) whose interactions with the environment give rise to new events across the space. The ST patterns from the accumulation of events can be quantified for model testing and evaluation. With increasingly limited availability of fine-grained spatially and temporally stamped point data, `stppSim` provides an alternative source of datasets for wide range of fields in social and life sciences.
 
 vignette: >
   %\VignetteIndexEntry{An R package for synthesizing spatiotemporal point patterns for social and life science research - A user guide}
@@ -76,33 +76,43 @@ fig <- local({
 
 ## Introduction
 
-In many context, access to fine-grained spatiotemporal (ST) point data have been severely restricted due to privacy concerns. As an alternative, synthesized data which mimic the real-life data have been utilized in a wide range of research contexts. The `R-stppSim` package is designed for synthesizing spatiotemporal point patterns within a defined landscape coverage. The package combines microsimulation and agent-based models, allowing a user to construct movement characteristics of `walkers` (i.e., agents) across the space. As the `walkers` interact with their environment,  new cases of events originate - the cumulative of which produces spatiotemporal signatures at the global levels. These signatures can be utilized for testing and evaluation of spatiotemporal models.
+In many context, access to fine-grained spatiotemporal (ST) point data have been severely restricted due to privacy concerns. As an alternative, synthesized data which mimic the real-life data have been utilized. The `R-stppSim` package is designed for generating synthesized fine-grained ST point data within a defined landscape coverage. The package combines microsimulation and agent-based models, allowing a user to construct the movement characteristics of a set of `walkers` (i.e., agents) across the space. A walker can be interpreted in a wide variety of ways depending on the application field. For example, a walker could be a human offender (crime analysis), a foraging animal (Wildlife studies) or a carrier in epidemiological studies). The interaction between the walkers and the environment give rise to new events whose patterns are measurable at both the local and global level for model testing and evaluation.
 
-The package contains two primary functions for synthesizing artificial `stpp` data: `psim_artif` and `psim_real`. The `psim_artif` synthesizes ST point pattern from scratch. That is, given a landscape configuration, the movement characteristics of `walkers` as well as the landscape features are defined by the user. On the other hand, `psim_real` synthesizes ST point pattern from a sample (or a sparse version) of a real data. The function learns (or extracts) certain characteristics of the sample data, and utilizes them to configures the behaviours of the `walkers` as they move across teh space. The potential application fields for `stppSim` include criminology, epidemiology, and wildlife science.
+The `stpp` can be synthesized by using either of two functions: `psim_artif` and `psim_real`. The `psim_artif` synthesizes `stpp` from scratch. That is, given a landscape, the movement characteristics of the `walkers` as well as the properties of the landscape are defined by the user. On the other hand, `psim_real` synthesizes `stpp` from a sample (or a sparse version) of a real data. The function first learns (or extracts) the ST characteristics of the sample data, and utilizes these characteristics to calibrate the behaviours of the `walkers` and certain properties of the landscape. The potential application fields for `stppSim` include criminology, epidemiology, and wildlife science.
 
+## Simulation Parameters
 
-### Key properties of a walker.
+The simulation parameters are in relation to three items, namely; the '`walkers`', the `landscape` (spatial), and `long-term trend` (temporal). The interactions between these three result in the advent of new point events. The parameters are described as follow: 
 
-The following are the key properties controlling the movement behaviours of a walker:
+### Walkers.
 
-* Origins (`coords`) - A set of xy coordinates representing the initial location of the walkers. A `origin` could be a home of a human offender (in Criminology).
-* Movement (`transition matrix`) - An in-built stochastic property that controls the `direction` and the `transition states` of a walker. At any instant, a walker can assume one of the two states, namely; an `exploratory` and a `performative` states (See the manual for details).
-* Spatial threshold (`s_threshold`) - The perception range of a walker at any point in time. The range is generally updated as a walker moves to a new location.
-* Steps (`step_length`) - The maximum step taken by a walker at a time.
+The walkers are defined primarily by the following characteristics:
+
+* ***Origins*** - The walkers emanate from a set of origins distributed randomly across the landscape (for `psim_artif()`) or origins determined from a sample real point data. Origins are supplied as a set of `xy` coordinates (`coords`). In the analysis of human offenders, origins are synonymous to their residences. 
+* ***Movement*** - Walkers a capable of moving in any direction and also aware of restrictions around them. The movements are controlled primarily by an in-built (stochastic) transition matrix configured for two transitional states, namely; an `exploratory` state, in which a walker is merely exploring the environment and a `performative` state in which a walker is performing an action other than exploring.
+* ***Spatial range*** - A distance threshold that defines the perception range of a walker at any location. The perception range is generally updated as a walker moves to a new location.
+* ***Steps*** - The maximum step taken by a walkers as they move from location to another. This impacts the spread of the resulting point patterns across the space. The step should be carefully defined, especially, when the movement is restricted to narrow paths, such as route network as a restriction feature. 
 
 ### Landscape
 
-The boundary shapefile (`poly`) defines the extent of a landscape which can be of two types: 
+The landscape  are key properties of a landscape:
 
-1. `Retricted` - Contains environmental features that restrict the movement of walkers across the landscape. Examples of such features include route network and mountains. Different classes of feature can have varying restriction (resistance) levels. For example, a gated property may be harder (high resistance) to burgle compared to an open one (low resistance).  
+* ***BOundary*** - The landscape is bounded by the polygon shapefile (`poly`) provided or by an arbitrary polygon based on the extent .. derived from the sample dataset.
+* ***Type*** - There are two types of landscape, namely; (i) a `retricted` and `unrestricted` landscapes. A restricted landscape contains environmental features that restrict the movement of walkers across the landscape. Different classes of features can have varying restriction levels. For example, a gated property may be harder (high resistance) to burgle compared to an open one (low resistance). An unrestricted landscape contains no features or all features has zero resistance *level.
+* ***Focal points (origins)*** - Forms the central point around which other origins concentrate. For example, city/town centre(s) are example of focal points in urban studies.
+* ***Concentration*** - The concentration of origin across the landscape can be nucleated or dispersed
 
-2. `Unrestricted` - Contains no features or all features has zero resistance level.
+### interactions
 
-## Spatiotemporal point patterns
+* ***global temporal pattern*** - composed of long-term trend and seasonality.
 
-The following steps demonstrate how `stppSim` package can be used to simulate spatiotemporal point patterns:
+* first temporal peak.
 
-### Install the package from `CRAN`
+* ***Proportional ratios*** - This is the the
+* ***time bin*** - only daily time bin is implemented here.. ne time bin is implemented here
+
+
+## Installation of the package
 
 From an R console, type:
 
@@ -122,7 +132,9 @@ library(stppSim)
 Note: `remotes` is an extra package that needed to be installed prior to the running of this code. 
 
 
-### stpp simulation from scratch
+## Synthesizing `stpp` from scratch
+
+The following steps demonstrate how `stppSim` package can be used to simulate spatiotemporal point patterns:
 
 To simulate `stpp`, key parameters include the `n_events` denoting the number of events to generate. It is however, advisable to supply a vector with different values
 
