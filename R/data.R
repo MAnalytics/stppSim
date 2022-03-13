@@ -48,7 +48,7 @@
 "landuse"
 
 #' @title Spatiotemporal point data
-#' @description A spatiotemporal point data
+#' @description Example spatiotemporal point data
 #' of a part of San Francisco City,
 #' California, US
 #'
