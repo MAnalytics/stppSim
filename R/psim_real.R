@@ -52,7 +52,7 @@
 #' projection system is: \code{"EPSG:27700"}.
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' s_threshold = NULL, step_length = 20, n_origin=50,
-#' resistance_feat, field=NA,
+#' restriction_feat, field=NA,
 #' p_ratio=20, crsys = NULL)
 #' @examples
 #' \dontrun{
@@ -69,7 +69,7 @@
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #' result <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
-#' step_length = 20, n_origin=50, resistance_feat, field=NA,
+#' step_length = 20, n_origin=50, restriction_feat, field=NA,
 #' p_ratio=20, crsys = "EPSG:27700")
 #' }
 #' @details
@@ -96,7 +96,7 @@
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL, step_length = 20,
-                      n_origin=50, resistance_feat,
+                      n_origin=50, restriction_feat,
                       field = NA, p_ratio=20, crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
@@ -152,7 +152,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
       stppSim::walker(n, s_threshold = st_properties$s_threshold, #jsut example for now..
-                      poly=poly,resistance_feat = resistance_feat,
+                      poly=poly,restriction_feat = restriction_feat,
                       field = field,
                       coords=as.numeric(as.vector(idx)),
                       step_length = step_length,
@@ -163,7 +163,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
     lapply(n, function(n)
       stppSim::walker(n, s_threshold = s_threshold, #jsut example for now..
-                      poly=poly, resistance_feat = resistance_feat,
+                      poly=poly, restriction_feat = restriction_feat,
                       field = field,
                       coords=as.numeric(as.vector(idx)),
                       step_length = step_length,
@@ -225,7 +225,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #add the origins
   output$origins <- st_properties$origins
   output$poly <- st_properties$poly
-  output$resist <- resistance_feat
+  output$resist <- restriction_feat
   return(output)
 
 }
