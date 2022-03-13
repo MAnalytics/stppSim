@@ -42,7 +42,7 @@ always_allow_html: yes
 #fig_caption: yes
 bibliography: references.bib
 
-abstract: Generates artificial spatio-temporal point patterns (stpp) through the integration of microsimulation and agent-based models. Allows a user to define the movement properties of a set of "walkers" (agents) across a spatially configured landscape. The interaction between the walkers (be it human offenders in crime science, foraging animals in Wildlife studies, or disease carriers in epidemiology) and the environment results in the advent of new events, whose spatiotemporal (ST) signatures can be measured at the global levels. With increasingly limited availability of fine-grained spatially and temporally stamped point data, `stppSim` provides alternative source of datasets for ST model testing and evaluation across a wide variety of fields in social and life sciences.
+abstract: Generates artificial spatio-temporal point patterns (stpp) through the integration of microsimulation and agent-based models. Allows a user to define the movement characteristics of a set of "walkers" (agents) across a spatially configured landscape. The interaction between the walkers (be it human offenders in crime studies, foraging animals in Wildlife studies, or disease carriers in epidemiology) and the environment results in the advent of new events, whose spatiotemporal (ST) signatures can be measured at the global levels. With increasingly limited availability of fine-grained spatially and temporally stamped point data, `stppSim` provides alternative source of datasets for ST model testing and evaluation across a wide variety of fields in social and life sciences.
 
 vignette: >
   %\VignetteIndexEntry{An R package for synthesizing spatiotemporal point patterns for social and life science research - A user guide}
@@ -106,7 +106,7 @@ The following steps demonstrate how `stppSim` package can be used to simulate sp
 
 From an R console, type:
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE}
 #install.packages("stppSim")
 library(stppSim)
 ```
