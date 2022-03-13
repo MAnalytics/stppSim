@@ -1,11 +1,12 @@
-#' @title Geometry and crs of a polygon
-#' @description Test whether an input polygon
+#' @title Geometry and Coordinate
+#' Reference System test of a polygon
+#' @description Tests whether a polygon
 #' has the correct geometry,
-#' namely `S4` or `sf`. Further, to test
+#' namely; `S4` or `sf`. Also, tests
 #' that there is a valid projection attached to
 #' the polygon.
 #' @param poly (as `spatialPolygons`, `spatialPolygonDataFrames`, or
-#' `simple features`). A spatial polygon
+#' `simple features`). A spatial polygon object.
 #' @usage poly_tester(poly)
 #' @examples
 #' poly_tester(poly=camden_boundary)
