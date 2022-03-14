@@ -5,17 +5,17 @@ Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut], 
   Meng Le Zhang [aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
-Description: Generates artificial spatio-temporal point patterns (stpp) 
+Description: Generates artificial spatio-temporal (ST) point patterns 
   through the integration of microsimulation and agent-based models. 
   Allows a user to define the movement characteristics of a set of 
-  "walkers" (agents) whose interactions with the environment give 
-  rise to new events across the landscape. The ST patterns 
-  resulting from the accumulation of events can be quantified 
-  and utilized for model testing and evaluation purposes. With increasingly 
-  limited availability of fine-grained spatially and temporally 
-  stamped point data, the package provides an alternative source 
-  of data for a wide range of application domains, including 
-  social and life sciences. 
+  "walkers" (agents) whose behaviours within spatial and temporal 
+  domains give rise to new point events. The resulting ST patterns 
+  from the point cloud can be measured and utilized for spatial 
+  and/or temporal model testing and evaluations. 
+  Application: With increasingly limited availability of 
+  fine-grained spatially and temporally 
+  stamped point data, `stppSim` provides an alternative source of 
+  data for a wide range of fields in social and life sciences.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
