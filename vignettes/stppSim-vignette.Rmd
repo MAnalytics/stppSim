@@ -88,31 +88,29 @@ The simulation parameters are in relation to three items, namely; the '`walkers`
 
 The walkers are defined primarily by the following characteristics:
 
-* ***Origins*** - The walkers emanate from a set of origins distributed randomly across the landscape (for `psim_artif()`) or origins determined from a sample real point data. Origins are supplied as a set of `xy` coordinates (`coords`). In the analysis of human offenders, origins are synonymous to their residences. 
+* ***Origins*** - The walkers emanate from a set of origins distributed randomly across the landscape or origins determined from a sample real point data. Origins are supplied as a set of `xy` coordinates (`coords`). In the analysis of human offenders, origins are synonymous to their residences. The spatial pattern of `origins` can be either of two concentration type. First, is `nucleated` in which all origins concentrate around one single major focal point, and the second, `dispersed` in which there is no single focus.
+The concentration of origin across the landscape can be nucleated or dispersed
 * ***Movement*** - Walkers a capable of moving in any direction and also aware of restrictions around them. The movements are controlled primarily by an in-built (stochastic) transition matrix configured for two transitional states, namely; an `exploratory` state, in which a walker is merely exploring the environment and a `performative` state in which a walker is performing an action other than exploring.
 * ***Spatial range*** - A distance threshold that defines the perception range of a walker at any location. The perception range is generally updated as a walker moves to a new location.
 * ***Steps*** - The maximum step taken by a walkers as they move from location to another. This impacts the spread of the resulting point patterns across the space. The step should be carefully defined, especially, when the movement is restricted to narrow paths, such as route network as a restriction feature. 
+
 
 ### Landscape
 
 The landscape  are key properties of a landscape:
 
-* ***BOundary*** - The landscape is bounded by the polygon shapefile (`poly`) provided or by an arbitrary polygon based on the extent .. derived from the sample dataset.
-* ***Type*** - There are two types of landscape, namely; (i) a `retricted` and `unrestricted` landscapes. A restricted landscape contains environmental features that restrict the movement of walkers across the landscape. Different classes of features can have varying restriction levels. For example, a gated property may be harder (high resistance) to burgle compared to an open one (low resistance). An unrestricted landscape contains no features or all features has zero resistance *level.
-* ***Focal points (origins)*** - Forms the central point around which other origins concentrate. For example, city/town centre(s) are example of focal points in urban studies.
-* ***Concentration*** - The concentration of origin across the landscape can be nucleated or dispersed
+* ***Boundary*** - The extent of a landscape is defined by a polygon shapefile (`poly`) or by the land coverage of the sample point data.
+* ***Restrictions*** - These are supplied as a raster layer. A restriction map would normally show the boundary outside of which the restriction value is `1` representing the maximum restriction. In other words, events cannot occur outside the boundary. When additional features, such as urban structures or land use, are added, they may carry restriction values in the range of [0-1].
+* ***Focal points*** - These are synonymous to city/town centres (in urban studies) within/around which events are relatively higher in concentration compared to the rest of the city. The locations present more opportunities to event occurrences. 
 
-### interactions
 
-* ***global temporal pattern*** - composed of long-term trend and seasonality.
+### Long-term trend
 
-* first temporal peak.
-
-* ***Proportional ratios*** - This is the the
+* ***global pattern*** - this anchors the variability in the magnitude of events over time. Its composed of two components: `long-term trend` and `seasonality`. The long-term trend can be `stable`, `increasing` or `decreasing`. The `seasonality` is controlled by the parameter `first_pDate` indicating the first seasonal peak` of a time series. A `90` day first peak implies a seasonal cycle of 180 days.
 * ***time bin*** - only daily time bin is implemented here.. ne time bin is implemented here
+* ***Proportional ratios*** - This is the the
 
-
-## Installation of the package
+## Installation of `stppSim`
 
 From an R console, type:
 
