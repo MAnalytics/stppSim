@@ -7,15 +7,14 @@ Author: Monsuru Adepeju [cre, aut],
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatio-temporal (ST) point patterns 
   through the integration of microsimulation and agent-based models. 
-  Allows a user to define the movement characteristics of a set of 
-  "walkers" (agents) whose behaviours within spatial and temporal 
-  domains give rise to new point events. The resulting ST patterns 
-  from the point cloud can be measured and utilized for spatial 
-  and/or temporal model testing and evaluations. 
-  Application: With increasingly limited availability of 
-  fine-grained spatially and temporally 
-  stamped point data, `stppSim` provides an alternative source of 
-  data for a wide range of fields in social and life sciences.
+  Allows a user to define the behaviours of a set of 'walkers' (agents, 
+  objects, persons, etc,) whose interactions with the spatial (landscape) 
+  and the temporal domains produce new point events. The resulting ST 
+  patterns from the point cloud can be measured and utilized for spatial 
+  and/or temporal model testings and evaluations. Application: With 
+  increasingly limited availability of fine-grained spatially and 
+  temporally stamped point data, the package provides an alternative 
+  source of data for a wide range of fields in social and life sciences.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
@@ -56,18 +55,3 @@ Suggests:
   grDevices,
   utils
 VignetteBuilder: knitr
-Collate: 
-    'artif_spo.R'
-    'chull_poly.R'
-    'data.R'
-    'date_checker.R'
-    'extract_coords.R'
-    'gtp.R'
-    'make_grids.R'
-    'p_prob.R'
-    'poly_tester.R'
-    'walker.R'
-    'psim_artif.R'
-    'psim_real.R'
-    'space_restriction.R'
-    'stp_learner.R'
