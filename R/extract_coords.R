@@ -5,8 +5,11 @@
 #' A polygon shapefile.
 #' @usage extract_coords(poly)
 #' @examples
-#' data(camden_boundary)
-#' extract_coords(poly=camden_boundary)
+#' #load boundary of Camden
+#' load(file = system.file("extdata", "camden.rda",
+#' package="stppSim"))
+#' boundary = camden$boundary # get boundary
+#' extract_coords(poly=boundary)
 #' @details Given a spatial polygon object,
 #' the function extracts its bounding coordinates.
 #' @return Returns 2-column xy coordinates
@@ -19,11 +22,11 @@ extract_coords <- function(poly){
 
   X <- Y <- as <- asNULL <- NULL
 
-    #check the geometry of the input
-    if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                             "SpatialPolygons", "sf")){
-      stop(paste("Not the required object class!"))
-    }
+    # #check the geometry of the input
+    # if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
+    #                          "SpatialPolygons", "sf")){
+    #   stop(paste("Not the required object class!"))
+    # }
 
   #convert to as_spatial and retain the crs
   if(class(poly)[1] == "sf"){
