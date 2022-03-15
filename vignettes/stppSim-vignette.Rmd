@@ -3,7 +3,6 @@ title: "An R package for synthesizing spatiotemporal point patterns for social a
 
 author: |
   | Monsuru Adepeju^[Big Data Centre, Manchester Metropolitan University, Manchester, M156BH, UK, m.adepeju@mmu.ac.uk]
-  | Meng Le Zhang^[Interdisciplinary Centre of Social Sciences, University of Sheffield, S14DP, UK, mengle.zhang@sheffield.ac.uk] 
   
 date: |
   | `Date:`
@@ -42,18 +41,16 @@ always_allow_html: yes
 #fig_caption: yes
 bibliography: references.bib
 
-abstract: Generates artificial spatio-temporal (ST) point 
-  patterns through the integration of microsimulation and 
-  agent-based models. Allows a user to define the behaviours 
-  of a set of "walkers" (agents, objects, persons, etc,) whose
-  interactions with the spatial (landscape) and the temporal 
-  domains produce new point events. The resulting ST patterns
-  from the point cloud can be measured and utilized for spatial 
-  and/or temporal model testings and evaluations. 
-  With increasingly limited availability of fine-grained 
-  spatially and temporally stamped point data, the package 
-  provides an alternative source of data for a wide range of 
-  fields in social and life sciences.
+abstract: Generates artificial spatio-temporal (ST) point patterns 
+  through the integration of microsimulation and agent-based models. 
+  Allows a user to define the behaviours of a set of 'walkers' (agents, 
+  objects, persons, etc,) whose interactions with the spatial (landscape) 
+  and the temporal domains produce new point events. The resulting ST 
+  patterns from the point cloud can be measured and utilized for spatial 
+  and/or temporal model testings and evaluations. With 
+  increasingly limited availability of fine-grained spatially and 
+  temporally stamped point data, the package provides an alternative 
+  source of data for a wide range of fields in social and life sciences.
 
 vignette: >
   %\VignetteIndexEntry{An R package for synthesizing spatiotemporal point patterns for social and life science research - A user guide}
@@ -128,19 +125,17 @@ The followings define the temporal patterns:
 From an R console, type:
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-#install.packages("stppSim")
-library(stppSim)
-```
-
-To install the developmental version of the package, type:
-
-```{r eval=FALSE, message=FALSE, warning=FALSE}
-#install.packages("stppSim")
+install.packages("stppSim")
+#To install the developmental version of the package, type:
 remotes::install_github("MAnalytics/stppSim")
-library(stppSim)
 ```
 
 Note: `remotes` is an extra package that needed to be installed prior to the running of this code. 
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+#Now, load the package,
+library(stppSim)
+```
 
 
 ## Synthesizing `stpp` from scratch
@@ -155,10 +150,10 @@ impacts on the computational time (See the manual for further details on the com
 data(camden_boundary)
 data(landuse)
 #defining data sizes to simulate
-size = c(200, 500, 1000, 2000, 5000)
+size = c(200, 1000,  2000)
 
 artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-  poly=camden_boundary, n_origin=50, resistance_feat = landuse,
+  poly=camden_boundary, n_origin=50, resistance_feat = NULL,
   field = "rValue1",
   n_foci=5, foci_separation = 10, conc_type = "dispersed",
   p_ratio = 20, s_threshold = 50, step_length = 20,
@@ -166,7 +161,15 @@ artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
   slope = NULL,show.plot=FALSE, show.data=FALSE)
 ```
 
+Based on the setting above, the followings are the spatial and the corresponding temporal patterns generated. Users are advised to explore the effects of different argument options, such as `trend` {`stable`,`increasing` or `decreasing`},  `conc_type` {`nucleated` or `dispersed`}, as well as different values of `n_origin`, and so on.  
+
+#### Figure 1 - spatial pattern
+#### Figure 2 - temporal patterns
+
+
 #### On a restricted landscape
+
+Here, the `resistance_feat` is included.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 data(camden_boundary)
@@ -179,6 +182,11 @@ p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)
 ```
+
+#### Figure 1 - spatial pattern
+#### Figure 2 - temporal patterns
+
+
 
 Computational time
 
