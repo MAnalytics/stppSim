@@ -9,7 +9,11 @@
 #' `simple features`). A spatial polygon object.
 #' @usage poly_tester(poly)
 #' @examples
-#' poly_tester(poly=camden_boundary)
+#' #load boundary of Camden
+#' load(file = system.file("extdata", "camden.rda",
+#' package="stppSim"))
+#' boundary = camden$boundary # get boundary
+#' poly_tester(poly=boundary)
 #' @details
 #' Returns an error message if
 #' the polygon is not in correct geometry
@@ -25,13 +29,13 @@ poly_tester <- function(poly){
 
   as <- NULL
 
-  #check the polygon geometry
-    if(isS4(poly)){
-      #check the geometry of the input
-      if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
-                                "SpatialPolygons", "sf")){
-        stop(paste("Not the required object class!"))
-      }
+  # #check the polygon geometry
+     if(isS4(poly)){
+  #     #check the geometry of the input
+  #     if(!class(poly)[1] %in% c("SpatialPolygonsDataFrame",
+  #                               "SpatialPolygons", "sf")){
+  #       stop(paste("Not the required object class!"))
+  #     }
 
       #if simple feature is supplied
       #convert to as_spatial and retain the crs
