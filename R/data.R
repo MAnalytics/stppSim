@@ -41,4 +41,3 @@
 #'   \item t: t time
 #'     }
 "xyt_data"
-
