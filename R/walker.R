@@ -42,9 +42,12 @@
 #' poly = NULL, restriction_feat=NULL, field = NA, coords=c(0,0),
 #' pt_itx = TRUE, show.plot = FALSE)
 #' @examples
-#' data(camden_boundary)
-#' path <- walker(n = 5, s_threshold = 250, step_length = 20,
-#' poly=camden_boundary, restriction_feat=NULL, field = NA,
+#' #load boundary of Camden
+#' load(file = system.file("extdata", "camden.rda",
+#' package="stppSim"))
+#' boundary = camden$boundary # get boundary
+#' pathwalker <- walker(n = 5, s_threshold = 250, step_length = 20,
+#' poly = boundary, restriction_feat=NULL, field = NA,
 #' coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
 #' #plot(path)
 #' @details
