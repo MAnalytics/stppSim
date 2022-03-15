@@ -90,9 +90,9 @@ The package contains two main functions for synthesizing new datasets; (i) `psim
 
 ## Simulation Parameters
 
-The simulation parameters are in relation to three items, namely; the '`walkers`', the `landscape` (spatial), and the `temporal` components. The parameters are described as follow: 
+The simulation parameters are in relation to three elements, namely; the '`Walkers (agents)`', the `landscape` (spatial), and the `time dimension`. The parameters are described as follow: 
 
-### Walkers.
+### Walkers (agents).
 
 The walkers are defined primarily by the following characteristics:
 
@@ -111,10 +111,9 @@ The followings are key properties of the landscape:
 * ***Restrictions*** - Provided as a raster layer. A restriction map would normally show areas outside the boundary as having the maximum restriction value of `1` (that is, no movement is allowed). Furthermore, it would show features within the boundary, such as land use or urban structures, that serve as obstructions to movements. The values may range between 0 and 1.
 * ***Focal points*** - Synonymous to city/town centres (in urban studies) which usually contain relatively higher concentration of events. Areas around focal points present more opportunities to event occurrences. 
 
+### Time dimension
 
-### Temporal pattern
-
-The followings define the temporal patterns:
+The following parameters define the time dimension:
 
 * ***global pattern*** - Defines the temporal variation in events over time. Its composed of two aspects: `long-term trend` and `seasonality`. The long-term trend can be `stable`, `increasing` or `decreasing`. The `seasonality` is controlled by the parameter; `first_pDate`, indicating the date of the first seasonal peak of a time series. A `90` day first peak implies a seasonal cycle of `180` days.
 * ***time bin*** - Time range to reset all walkers.
@@ -140,20 +139,22 @@ library(stppSim)
 
 ## Synthesizing `stpp` from scratch
 
-To simulate point patterns from scratch, note the argument `n_events=` to specify number of point events to generate. It is recommended that a vector of values is provided, such as, `n_events = c(200, 500, 1000, 2000, ...)`. This gives a user the opportunity to explore different data sizes for their research. Note: the specification of `n_events` has little or no
-impacts on the computational time (See the manual for further details on the computational time). 
+To simulate point patterns from scratch, the argument `n_events` specifies the number of points to simulate. It is recommended to input a vector of values, instead of a single value. For example, `n_events = c(200, 500, 1000, 2000)`. This saves the user the time from having to synthesize new data. ***Note***: the specification of `n_events` input has little or no impacts on the computational time (See the manual for further details). 
 
-#### On an unrestricted landscape
+### Example using a restricted landscape
+
+Given a boundary shapefile {e.g., data(`camden_boundary`} and land use features with restriction values {e.g., data(`landuse`) - `Leisure` (0.5); `Sports` (0.7); and `Green` (0.9)}, the ST point pattern can be generated as follows: 
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 #Using datasets that come with the package;
 data(camden_boundary)
 data(landuse)
-#defining data sizes to simulate
-size = c(200, 1000,  2000)
 
-artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-  poly=camden_boundary, n_origin=50, resistance_feat = NULL,
+#specifyings say 3 data sizes
+pt_sizes = c(200, 1000, 2000)
+
+artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
+  poly=camden_boundary, n_origin=50, resistance_feat = landuse,
   field = "rValue1",
   n_foci=5, foci_separation = 10, conc_type = "dispersed",
   p_ratio = 20, s_threshold = 50, step_length = 20,
@@ -161,64 +162,88 @@ artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
   slope = NULL,show.plot=FALSE, show.data=FALSE)
 ```
 
-Based on the setting above, the followings are the spatial and the corresponding temporal patterns generated. Users are advised to explore the effects of different argument options, such as `trend` {`stable`,`increasing` or `decreasing`},  `conc_type` {`nucleated` or `dispersed`}, as well as different values of `n_origin`, and so on.  
+To preview the output:
 
-#### Figure 1 - spatial pattern
-#### Figure 2 - temporal patterns
-
-
-#### On a restricted landscape
-
-Here, the `resistance_feat` is included.
-
-```{r eval=FALSE, message=FALSE, warning=FALSE}
-data(camden_boundary)
-data(landuse)
-artif_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-poly=camden_boundary, n_origin=50, resistance_feat = landuse,
-field = "rValue1",
-n_foci=5, foci_separation = 10, conc_type = "dispersed",
-p_ratio = 20, s_threshold = 50, step_length = 20,
-trend = "stable", first_pDate=NULL,
-slope = NULL,show.plot=FALSE, show.data=FALSE)
+```{r eval=FALSE}
+head(artif_stpp)
 ```
 
-#### Figure 1 - spatial pattern
-#### Figure 2 - temporal patterns
+Users should explore the impacts of different arguments, including the `n_origin`, `foci_separation`, `trend` {`stable`,`increasing` or `decreasing`},  and `conc_type` {`nucleated` or `dispersed`}.  
+
+Exploring the results using visualization:
+
+* **Figure 1abc - spatial patterns of 200, 1000. 2000 data points**
+
+The corresponding temporal pattern of the data can be visualized as follows:
+
+* **Figure 2 - temporal patterns of 200, 1000. 2000 data points**
 
 
+## Synthesizing `stpp` from a sample real dataset
 
-Computational time
-
-#plotting the results
-
-
-### stpp simulation from a sample dataset
-
-Here, we are going to use a small sample of a data to simulate the full dataset. We will then compare the real full data with the simulated data.
+Here, we are going to extract 30% random sample the `Theft` crime of Camden, then utilize the sample to synthesize a `full` data size.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 data(camden_crimes)
-#subset 'theft' crime
-theft <- camden_crimes[which(camden_crimes$type ==
-"Theft"),]
-#specify the proportion of full data to use
-sample_size <- 0.2
+
+#get the 'theft' crime
+theft <- camden_crimes %>%
+  filter(type == "Theft")
+
+#specify the proportion to extract
+sample_size <- 0.3 #i.e. 30% of real data
+
 set.seed(1000)
 dat_sample <- theft[sample(1:nrow(theft),
-round((sample_size * nrow(theft)), digits=0),
-replace=FALSE),1:3]
+  round((sample_size * nrow(theft)), digits=0),
+  replace=FALSE),1:3]
+
+#As a user would not normally know the actual size of 
+#the real full data, therefore, we would assume `n_events`
+#to be `2000`. In practice, a user should infer 
+#the input size from any available (similar) data 
+#from the study area.
+
+#Now, simulate
+sim_fullData <- psim_real(n_events=2000, ppt=dat_sample,
+  start_date = NULL, poly = NULL, s_threshold = NULL,
+  step_length = 20, n_origin=50, resistance_feat, field=NA,
+  p_ratio=20, crsys = "EPSG:27700")
+
 #plot(dat_sample$x, dat_sample$y) #preview
-result <- psim_real(n_events=2000, ppt=dat_sample,
-start_date = NULL, poly = NULL, s_threshold = NULL,
-step_length = 20, n_origin=50, resistance_feat, field=NA,
-p_ratio=20, crsys = "EPSG:27700")
+
+```
+
+Preview the resulting data using visualization approach (above).
+
+### Comparing simulated data and full real data
+
+We will utilize a `visual approach` and a `statistical approach` to compare the spatial and temporal patterns of the simulated data and the `100%` real data size. The visual approach involves the comparison of `heat maps` derived from the aggregation of the datasets to a square grid system (250m x 250m). The statistical approach involves computing the `pearson coefficient` to compares the two datasets.
+
+* Visual approach
+
+** Spatial
+Figure 1a (heat map of simulated data) 
+Figure 1b (heat map of full real data)
+
+** Temporal
+Figure 2a (Time series plot of simulated data) 
+Figure 2b (Time series plot of full real data)
+
+* Statistical approach
+
+Flattening the 2D square grids (above) and then apply Pearson correlation:
+
+```{r eval=FALSE}
+#corr
+
+cor(sim, real)
+
 ```
 
 
+## Discussion
 
-We are going to compare real (full) data and the simulated one in terms of their spatial and temporal characteristics. Recall that a user would have no idea of case count. So, the number to simulate is left to the discretion of the use. You can infer the potential size from any available data from previus years.
+This vignette has demonstrated the basic utility of `stppSim` package for generating fine-grained spatiotemporal point patterns, (1) from scratch and (2) from a sample of real data sets. The parameters of the three simulation elements: the 'Walkers (agents)', the landscape (spatial), and the time dimension should be modified in accordance with the research questions at hand. The package has a wide potential areas of applications. Examples of objects with similar objectives as walkers (as defined in this package) include, human offenders, foraging animals and disease carriers, in victimization, Wildlife, and epidemiological studies, respectively. We will continue to update the package for wider application.   
 
-
-Note:
-applications. Certain areas, only sparse data are availabe;... 
+We encourage users to report any bugs encountered while using the package so that they can be fixed immediately. Welcome contributions to this package which will be acknowledged accordingly. 
