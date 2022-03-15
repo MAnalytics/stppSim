@@ -9,7 +9,6 @@ output: html_document
 Details:
 
 1. First submission
-2. Check on 
 
 Thanks,
 
