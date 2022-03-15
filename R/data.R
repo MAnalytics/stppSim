@@ -29,24 +29,6 @@
 #'     }
 "camden_crimes"
 
-#' @title A boundary shapefile
-#' @description A boundary shapefile of Camden Borough, London, UK
-#' @format A boundary file (ESRI format)
-"camden_boundary"
-
-#' @title Landuse shapefile
-#' @description A land use shapefile of Camden
-#' Borough of London, United Kingdom
-#' @format A boundary file (ESRI format)
-#' \itemize{
-#'   \item type: Landuse type
-#'   \item rValues1: Numerical field setting a uniform
-#'   restriction value for each feature (Value `1` is set).
-#'   \item rValues2: Numerical field containing varying restriction
-#'   values for different feature classes.
-#'     }
-"landuse"
-
 #' @title Spatiotemporal point data
 #' @description Example spatiotemporal point data
 #' of a part of San Francisco City,
