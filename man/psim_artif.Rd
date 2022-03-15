@@ -130,8 +130,11 @@ computational time.
 }
 \examples{
 \dontrun{
-data(camden_boundary)
-data(landuse)
+require(rgdal)
+path <- system.file("extdata", package="stppSim")
+camden_boundary <- readOGR(dsn=path, layer = "camden_boundary", verbose=FALSE)
+landuse <- system.file("extdata",
+"landuse.rda", package="stppSim")
 simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 poly=camden_boundary, n_origin=50, restriction_feat = landuse,
 field = "rValue1",

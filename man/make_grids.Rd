@@ -33,7 +33,10 @@ Generates a square grid system in a shapefile
 format (in the same \code{crs} as the input \code{poly})
 }
 \examples{
-data(camden_boundary)
-make_grids(poly=camden_boundary, size = 250,
+#load boundary of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+boundary = camden$boundary
+make_grids(poly=boundary, size = 250,
 show_output = FALSE)
 }

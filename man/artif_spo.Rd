@@ -65,9 +65,12 @@ to prevent the occurrence of any events in the areas
 occupied by the features.
 }
 \examples{
-data(camden_boundary)
-data(landuse)
-spo <- artif_spo(poly = camden_boundary, n_origin = 50,
+#load boundary of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+boundary = camden$boundary # get boundary
+landuse <- camden$landuse
+spo <- artif_spo(poly = boundary, n_origin = 50,
 restriction_feat = landuse, n_foci=5,
 foci_separation = 0, conc_type = "dispersed", p_ratio=20)
 }

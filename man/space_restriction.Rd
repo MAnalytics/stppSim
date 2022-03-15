@@ -59,14 +59,17 @@ of \code{background}. When stacking additional features to existing
 the remaining areas retain the original values of \code{baseMap}.
 }
 \examples{
-data(camden_boundary)
-restrct_space <- space_restriction(shp = camden_boundary,
+#load boundary of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+boundary = camden$boundary # get boundary
+restrct_space <- space_restriction(shp = boundary,
 res = 20, binary = TRUE)
 #plot the result
 #plot(restrct_space)
 #Setting 'restrct_space' raster as basemap, the landuse
 #map can now be stacked onto the basemap as follows:
-data(cam_landuse)
+landuse = camden$landuse # get landuse
 restrct_Landuse <- space_restriction(shp = landuse,
 baseMap = restrct_space,
 res = 20, field = "rValues2", background = 1)

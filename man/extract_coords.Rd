@@ -22,6 +22,9 @@ Given a spatial polygon object,
 the function extracts its bounding coordinates.
 }
 \examples{
-data(camden_boundary)
-extract_coords(poly=camden_boundary)
+#load boundary of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+boundary = camden$boundary # get boundary
+extract_coords(poly=boundary)
 }

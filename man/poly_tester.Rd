@@ -27,5 +27,9 @@ the polygon is not in correct geometry
 or CRS.
 }
 \examples{
-poly_tester(poly=camden_boundary)
+#load boundary of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+boundary = camden$boundary # get boundary
+poly_tester(poly=boundary)
 }
