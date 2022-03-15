@@ -54,3 +54,18 @@ Suggests:
   grDevices,
   utils
 VignetteBuilder: knitr
+Collate: 
+    'artif_spo.R'
+    'chull_poly.R'
+    'data.R'
+    'date_checker.R'
+    'extract_coords.R'
+    'gtp.R'
+    'make_grids.R'
+    'p_prob.R'
+    'poly_tester.R'
+    'walker.R'
+    'psim_artif.R'
+    'psim_real.R'
+    'space_restriction.R'
+    'stp_learner.R'
