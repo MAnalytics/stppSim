@@ -7,7 +7,7 @@ Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatio-temporal (ST) point patterns 
   through the integration of microsimulation and agent-based models. 
   Allows a user to define the behaviours of a set of 'walkers' (agents, 
-  objects, persons, etc,) whose interactions with the spatial (landscape) 
+  objects, persons, etc.) whose interactions with the spatial (landscape) 
   and the temporal domains produce new point events. The resulting ST 
   patterns from the point cloud can be measured and utilized for spatial 
   and/or temporal model testings and evaluations. Application: With 
