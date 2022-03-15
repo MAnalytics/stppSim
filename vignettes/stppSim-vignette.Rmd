@@ -98,18 +98,18 @@ The walkers are defined primarily by the following characteristics:
 
 * ***Origins*** - The walkers emanate from a set of origins distributed randomly across the landscape or origins determined from a sample of real point data. Origins are provided as a set of `xy` coordinates (`coords`). In the analysis of human offenders, as an example, origins are synonymous to offender residences. The spatial pattern of `origins` can be either of two concentration types. First, is the `nucleated` in which all origins concentrate around one focal point, and the second, the `dispersed` in which there is no focal point.
 * ***Movement*** - Walkers are configured to move in any direction and also be aware of restrictions on their path. The movements are controlled primarily by an in-built transition matrix (TM) comprising two transitional states, namely; an `exploratory` state (in which a walker is merely exploring the environment) and a `performative` state (in which a walker is performing an action). The stochastic properties of the TM ensure variations in the behavioural patterns amongst the walkers.
-* ***Spatial threshold*** - A distance that defines the perception range of a walker at any location. The perception range is generally updated as a walker moves to a new location.
+* ***Spatial threshold*** - Distance that defines the perception range of a walker at any location. The perception range is generally updated as a walker moves to a new location. Specified when data is simulated from scratch or learnt when data is simulated from a sample real data.
 * ***Steps*** - The maximum step taken by a walkers as they move from one location to another. This impacts the spread of point patterns across the space. The `steps` should be carefully defined, especially, when movements of walkers are restricted to narrow paths, such as route network, in which case the `steps` should be smaller than the path widths. 
 * ***Proportional ratios*** - Controls the percentage of total events emanating from a small number of origins (i.e., most active origins). 
 
 
 ### Landscape
 
-The followings are key properties of a landscape:
+The followings are key properties of the landscape:
 
 * ***Boundary*** - Defined by a polygon shapefile (`poly`) or by the spatial extent of a sample point data.
-* ***Restrictions*** - Provided as a raster layer. A restriction map shows the boundary outside of which the restriction value is usually `1`, representing the maximum restriction. That is, events are not allowed to occur outside the boundary. When a restriction map contains additional features, such as land use or urban structures, the restriction values may vary from one feature type to another in the range of [0-1].
-* ***Focal points*** - Synonymous to city/town centres (in urban studies) which usually contain relatively higher concentration of events. Focal points present more opportunities to event occurrences. 
+* ***Restrictions*** - Provided as a raster layer. A restriction map would normally show areas outside the boundary as having the maximum restriction value of `1` (that is, no movement is allowed). Furthermore, it would show features within the boundary, such as land use or urban structures, that serve as obstructions to movements. The values may range between 0 and 1.
+* ***Focal points*** - Synonymous to city/town centres (in urban studies) which usually contain relatively higher concentration of events. Areas around focal points present more opportunities to event occurrences. 
 
 
 ### Temporal pattern
