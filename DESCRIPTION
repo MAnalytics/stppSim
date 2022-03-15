@@ -2,8 +2,7 @@ Package: stppSim
 Type: Package
 Title: Spatial and Temporal Point Patterns Simulation for Social and Life Science Research
 Version: 1.0.0
-Author: Monsuru Adepeju [cre, aut], 
-  Meng Le Zhang [aut]
+Author: Monsuru Adepeju [cre, aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatio-temporal (ST) point patterns 
   through the integration of microsimulation and agent-based models. 
