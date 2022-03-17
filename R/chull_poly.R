@@ -22,6 +22,9 @@
 #' @details Draws an arbitrary boundary around
 #' spatial points by joining the outer-most
 #' points by lines.
+#' @return Returns a "SpatialPolygonsDataFrame"
+#' object representing the boundary
+#' surround the spatial points
 #' @references Eddy, W. F. (1977).
 #' A new convex hull algorithm for planar sets.
 #' ACM Transactions on Mathematical Software,
