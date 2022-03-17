@@ -52,7 +52,9 @@
 #' If `restriction_feat` is provided, its features help
 #' to prevent the occurrence of any events in the areas
 #' occupied by the features.
-#' @return Returns spatial origins with associated
+#' @return Returns a list detailing the
+#' properties of the generated spatial origins
+#' with associated
 #' strength (probability) values.
 #' @importFrom dplyr if_else mutate filter
 #' row_number select bind_cols
