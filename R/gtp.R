@@ -27,7 +27,8 @@
 #' slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
-#' @return Returns a vector of 365 data points representing
+#' @return Returns a time series (list) of 365
+#' data points representing
 #' 1-year global temporal pattern.
 #' @export
 #'
