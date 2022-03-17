@@ -143,7 +143,7 @@ p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)
 #If `n_events` is a vector, access the corresponding
-simulated data for each vector entry using
-`simulated_stpp[[vector-index]]`
+#simulated data for each vector entry using
+#`simulated_stpp[[vector-index]]`
 }
 }
