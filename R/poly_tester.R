@@ -16,8 +16,8 @@
 #' poly_tester(poly=boundary)
 #' @details
 #' Returns an error message if
-#' the polygon is not in correct geometry
-#' or CRS.
+#' the polygon is not in the
+#' correct geometry or CRS.
 #' @return Returns error messages, or mute
 #' @importFrom raster raster extent
 #' @importFrom sp proj4string
