@@ -115,7 +115,6 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     #plot(ran_points$x,ran_points$y)
 
 
-
   if(is.null(restriction_feat)){
 
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
@@ -199,10 +198,11 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
 
   #set as kmean centroids
   #group with 1 iteration
+  suppressWarnings(
   groups <- kmeans(final_ran_points_pt,
                    final_ran_points_pt[as.numeric(n_foci_centre),],
                    iter.max = 1, nstart = 1,
-         algorithm = "Lloyd", trace=FALSE)
+         algorithm = "Lloyd", trace=FALSE))
 
   #now collate members of each group
   #assign probablity value
