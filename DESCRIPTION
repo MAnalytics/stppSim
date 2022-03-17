@@ -1,13 +1,17 @@
 Package: stppSim
 Type: Package
-Title: Spatial and Temporal Point Patterns Simulation for Social and Life Science Research
+Title: Spatiotemporal Point Patterns Simulation.
 Version: 1.0.0
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatiotemporal (ST) point patterns 
-  through the integration of microsimulation and agent-based models. 
+  through the integration of microsimulation 
+  (Holm, E., (2017)<doi:10.1002/9781118786352.wbieg0320>) 
+  and agent-based models 
+  (Bonabeau, E., (2002)<doi:10.1073/pnas.082080899>). 
   Allows a user to define the behaviours of a set of 'walkers' (agents, 
   objects, persons, etc.) whose interactions with the spatial (landscape) 
+  (Quaglietta, L. and Porto, M., (2019)<doi:10.1186/s40462-019-0154-8>)
   and the temporal domains produce new point events. The resulting ST 
   patterns from the point cloud can be measured and utilized for spatial 
   and/or temporal model testings and evaluations. Application: With 
