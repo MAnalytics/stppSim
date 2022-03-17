@@ -21,8 +21,9 @@
 #' show_output = FALSE)
 #' @details Generates a square grid system in a shapefile
 #' format (in the same `crs` as the input `poly`)
-#' @return Returns a spatial square grid system
-#' in a shapefile format
+#' @return Returns a "SpatialPolygonsDataFrames" object
+#' representing a system of square grids covering
+#' the polygon area.
 #' @importFrom sp spTransform proj4string bbox
 #' SpatialPolygons SpatialPolygonsDataFrame CRS
 #' Polygon Polygons
@@ -46,7 +47,7 @@ make_grids <- function(poly, size = 250, show_output = FALSE){
   #-----
 
   #get coordinates
-  proj_Coods <- proj4string(area_B)
+  proj_Coods <- suppressWarnings(proj4string(area_B))
 
   #3.Size of grid unit to create (in metres)
   #e.g. 50m, 100m, 150m, and so on.
@@ -127,23 +128,6 @@ make_grids <- function(poly, size = 250, show_output = FALSE){
  #convert back to polygon dataframe
  #to export
  intersect_grids <- as_Spatial(intersect_grids)
-
- # #get output directory
- # if(is.null(dir)){
- #   dr <- getwd()
- #   writeOGR(intersect_grids, dr, 'spatial_grid_system',
- #            'ESRI Shapefile', overwrite_layer=T)
- #   flush.console()
- #   print("Output generated!")
- # }
-
- # if(!is.null(dir)){
- #   dr <- dir
- #   writeOGR(intersect_grids, dr, 'spatial_grid_system',
- #            'ESRI Shapefile', overwrite_layer=T)
- #   flush.console()
- #   print("Output generated!")
- # }
 
  return(intersect_grids)
 
