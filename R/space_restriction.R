@@ -36,7 +36,7 @@
 #' load(file = system.file("extdata", "camden.rda",
 #' package="stppSim"))
 #' boundary = camden$boundary # get boundary
-#' restrct_space <- space_restriction(shp = boundary,
+#' restrct_map <- space_restriction(shp = boundary,
 #' res = 20, binary = TRUE)
 #' #plot the result
 #' #plot(restrct_space)
@@ -44,7 +44,7 @@
 #' #map can now be stacked onto the basemap as follows:
 #' landuse = camden$landuse # get landuse
 #' restrct_Landuse <- space_restriction(shp = landuse,
-#' baseMap = restrct_space,
+#' baseMap = restrct_map,
 #' res = 20, field = "rValues2", background = 1)
 #' #plot(restrct_Landuse)
 #' @details Helps to create a complete space restriction map
@@ -55,7 +55,8 @@
 #' of `background`. When stacking additional features to existing
 #' `baseMap`, only the areas covered by features are updated, while
 #' the remaining areas retain the original values of `baseMap`.
-#' @return Returns a raster map
+#' @return Returns a raster map showing the restriction
+#' levels (values [0-1]) across the landscape.
 #' @references
 #' 1. Paul Murrell (2019). rasterize: Rasterize Graphical
 #' Output. R package version 0.1.
@@ -71,11 +72,11 @@
 space_restriction <- function(shp, baseMap, res=20, binary = is.na(field),
                              field = NA, background = 1){
 
-
+  suppressWarnings(
   space_res <- resistanceFromShape(shp = shp, baseRaster = baseMap, res = res,
                                    binary = binary, field = field,
                                    background = background, buffer = NA,
-                                   margin = 0,extend = FALSE)
+                                   margin = 0,extend = FALSE))
 
   return(space_res)
 
