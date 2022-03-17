@@ -51,7 +51,7 @@ poly_tester <- function(poly){
       #Use extent (from raster package) to read
       #bounds of vector and assign to the raster:
       extent(area_B.raster) <- extent(area_B)
-      crs(area_B.raster) <- proj4string(area_B)
+      crs(area_B.raster) <- suppressWarnings(proj4string(area_B))
       res(area_B.raster) <- 50 #assumed
       #now rasterize
       area_B.raster.r <- rast(area_B.raster)
