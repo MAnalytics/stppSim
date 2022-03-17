@@ -13,6 +13,8 @@
 #' @details Given a spatial polygon object,
 #' the function extracts its bounding coordinates.
 #' @return Returns 2-column xy coordinates
+#' representing points of directional
+#' change along the boundary.
 #' @importFrom magrittr %>%
 #' @importFrom sf st_as_sf st_coordinates
 #' @importFrom dplyr select
