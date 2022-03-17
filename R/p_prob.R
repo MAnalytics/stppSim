@@ -16,7 +16,8 @@
 #' area under curve (auc) of an exponential function
 #' such that for any given percentage ratios `a:b`, the
 #' auc is divided into `b:a`.
-#' @return Returns a vector of probability values
+#' @return Returns a dataframe with
+#' a probability field.
 #' @importFrom magrittr %>%
 #' @export
 
