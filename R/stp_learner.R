@@ -41,7 +41,7 @@
 #' theft <- camden_crimes[which(camden_crimes$type ==
 #' "Theft"),1:3]
 #' #specify the proportion of full data to use
-#' sample_size <- 0.2
+#' sample_size <- 0.3
 #' set.seed(1000)
 #' dat_sample <- theft[sample(1:nrow(theft),
 #' round((sample_size * nrow(theft)), digits=0),
@@ -54,6 +54,8 @@
 #' @details Returns an object of the class `real_spo`,
 #' storing details of the spatiotemporal
 #' properties of the sample data learnt.
+#' @return an object (list) containing specific spatial
+#' and temporal properties of a sample dataset.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
@@ -166,9 +168,10 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     time <- data.frame(time=1:365)
     t <- as.vector(unlist(time))
 
+    suppressMessages(
     dat_sample_p <- time %>%
       left_join(dat_sample_p) %>%
-      dplyr::mutate(n = replace_na(n, 0))
+      dplyr::mutate(n = replace_na(n, 0)))
 
 
     #unique(dat_sample_p$time)
@@ -178,6 +181,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     #--------------------------------
     #smoothen and plot
+
     loessData <- data.frame(
       x = 1:nrow(dat_sample_p),
       y = predict(loess(n~time, dat_sample_p, span = 0.3)),
@@ -213,7 +217,8 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
              "when 'poly' argument is NULL!!",
              "Needs to define the 'crsys' argument", sep=" "))
       } else {
-        proj4string(boundary_ppt) <- CRS(crsys)
+        suppressWarnings(
+        proj4string(boundary_ppt) <- CRS(crsys))
         #warning msg
       }
 
@@ -244,17 +249,19 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     y_min <- min(extract_coords(boundary_ppt)$Y)
     y_max <- max(extract_coords(boundary_ppt)$Y)
 
+    suppressWarnings(
     ppt_df_ppp <- ppp(x=as.numeric(ppt_df$x),
         y=as.numeric(ppt_df$y),
         window = owin(c(x_min, x_max),
-                      c(y_min, y_max)))
+                      c(y_min, y_max))))
 
     sbw <- OS(ppt_df_ppp)/4
 
     #determine if projection is in metres or feet
     #if metres, use 500m2
     #if feet, 5000ft2
-    s4_proj <- proj4string(boundary_ppt)
+    suppressWarnings(
+    s4_proj <- proj4string(boundary_ppt))
     #warning
 
     # #determine grid size by dividing the area
@@ -309,7 +316,8 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     colnames(pnt_grid_intsct) <- c("id", "grid_id")
     pnt_grid_intsct$id <- as.character(pnt_grid_intsct$id)
 
-    stc <- st_centroid(grid_sys)
+    suppressWarnings(
+    stc <- st_centroid(grid_sys))
     #warning msg
     ptsxy <- data.frame(cbind(do.call(rbind, st_geometry(stc)),
                               stc$grid_id))
@@ -318,6 +326,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #join
     #Assign the probability value to each grid
     #based on its historical events
+    suppressMessages(
     spo <- ppt_df %>%
       left_join(pnt_grid_intsct)%>%
       group_by(grid_id) %>%
@@ -327,7 +336,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                           digits=10)) %>%
       left_join(ptsxy) %>%
       arrange(prob)%>%
-      filter(!is.na(grid_id))
+      filter(!is.na(grid_id)))
 
     #now randomly select 'n_origin'
     #taking into account the 'resistance_feat'
@@ -353,34 +362,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     spo_xy <- data.frame(cbind(x,y))
     colnames(spo_xy) <- c("x","y")
-
-    #spo_xy_point <- SpatialPoints(spo_xy)
-
-    # spo_xy_point <- st_as_sf(spo,
-    #                          coords = c("x", "y"),
-    #                          crs = crs(boundary_ppt))
-    # spo_xy_point <- spo_xy
-    # #spo_xy_point$OriginType <- spo$OriginType
-    # #proj4string(spo_xy_point) <- crs(boundary_ppt)
-    # #spo_xy_point <- st_as_sf(spo_xy_point)
-    # spo_xy_point$x <- st_coordinates(spo_xy_point)[,1]
-    # spo_xy_point$y <- st_coordinates(spo_xy_point)[,2]
-    #
-    #  p <- NULL
-    #
-    #  if(show.plot==TRUE){
-    #    p <- st_as_sf(boundary_ppt) %>%
-    #      ggplot() + geom_sf(aes(), fill="NA") +
-    #      geom_point(st_as_sf(spo_xy_point),
-    #                 mapping = aes(x = x, y = y, colour = OriginType)) +
-    #      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-    #      theme_light()
-    #    flush.console()
-    #    p
-    #
-    # }
-
-    #}
 
     output$origins <- spo
     output$gtp <- gtp
