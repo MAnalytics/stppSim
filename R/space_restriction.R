@@ -61,9 +61,9 @@
 #' 1. Paul Murrell (2019). rasterize: Rasterize Graphical
 #' Output. R package version 0.1.
 #' https://CRAN.R-project.org/package=rasterize
-#' 2. Quaglietta L, Porto M (2019). _SiMRiv: Individual-Based,
+#' 2. Quaglietta L, Porto M (2019). SiMRiv: Individual-Based,
 #' Spatially-Explicit Simulation and Analysis of Multi-State
-#' Movements in River Networks and Heterogeneous Landscapes_.
+#' Movements in River Networks and Heterogeneous Landscapes.
 #' R package version 1.0.4, <URL:
 #' https://CRAN.R-project.org/package=SiMRiv>.
 #' @importFrom SiMRiv resistanceFromShape
