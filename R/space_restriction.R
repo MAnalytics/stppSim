@@ -21,8 +21,8 @@
 #' (i.e. restriction values) assigned
 #' to all features; or
 #' the name of a numeric field to extract such
-#' restriction values for different classes of
-#' feature.
+#' restriction values (\code{[0 <= value < 1]}
+#' for different classes of feature.
 #' Restriction value `0` and `1` indicate the
 #' lowest and the highest obstructions, respectively.
 #' Default: \code{NULL}.
@@ -45,7 +45,7 @@
 #' landuse = camden$landuse # get landuse
 #' restrct_Landuse <- space_restriction(shp = landuse,
 #' baseMap = restrct_map,
-#' res = 20, field = "rValues2", background = 1)
+#' res = 20, field = "restrVal", background = 1)
 #' #plot(restrct_Landuse)
 #' @details Helps to create a complete space restriction map
 #' with cell values ranging from 0
