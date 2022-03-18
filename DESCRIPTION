@@ -44,15 +44,11 @@ Imports:
   spatstat.geom,
   sparr,
   chron,
-  doParallel,
-  foreach,
-  iterators,
   ggplot2
 RoxygenNote: 7.1.1
 Suggests:
   knitr,
   rmarkdown,
-  parallel,
   graphics,
   grDevices,
   utils
