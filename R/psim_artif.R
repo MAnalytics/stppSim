@@ -82,47 +82,57 @@
 #' slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 #' @examples
 #' \dontrun{
+#'
 #' #load boundary and land use of Camden
 #' load(file = system.file("extdata", "camden.rda",
 #' package="stppSim"))
 #' boundary = camden$boundary # get boundary
 #' landuse = camden$landuse # get landuse
-#' #in this example, we will use a minimal number of
-#' #'n_origin' (i.e. `20`) for faster computation
+#'
+#' #In this example, we will use a minimal number of
+#' #'n_origin' (i.e. `20`) for faster computation:
+#'
 #' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-#' poly=boundary, n_origin=20, restriction_feat = landuse,
-#' field = "rValues1",
+#' poly=boundary, n_origin=20, restriction_feat = NULL,
+#' field = NULL,
 #' n_foci=1, foci_separation = 10, conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
-#' #If `n_events` is a vector, access the corresponding
-#' #simulated data for each vector entry using
-#' #`simulated_stpp[[enter-list-index-here]]`#e.g.
-#' #simulated_stpp[[1]], which is to retrieve the
-#' #first data list.
+#'
+#' #If `n_events` is a vector of values,
+#' #retrieve the simulated data for the
+#' #corresponding vector element by using
+#' #`simulated_stpp[[enter-element-index-here]]`, e.g.,
+#' #to retrieve the first dataframe, use
+#' #simulated_stpp[[1]].
+#'
+#' #The above example simulates point patterns on
+#' #an unrestricted landscape. If set ,
+#' #`restriction_feat = landuse` and
+#' #`field = "rValues2"`, then the simulation
+#' #is performed on a restricted landscape.
 #' }
+#'
 #' @details
-#' Generates spatiotemporal point pattern
-#' based on the interactions between the
-#' walkers (agents) and the landscape. Both the walkers
+#' Both the walkers
 #' and the landscape are configured arbitrarily (in accordance
-#' with the users knowledge of the domain under study.
-#' This function is computationally intensive, and so
-#' has been implemented to use parallel processing for
-#' faster results. An `n`-1 cores on a PC is utilized
-#' for the simulation. The argument `n_origin` has the
-#' largest impacts on the computation. The computational time
-#' is `15` minutes for the example above on a (4-1)
-#' core laptop (with parameters setting: `n_origin=50` and
-#' `restriction_feat = NULL`). The computational time
-#' increases to 2hours when
-#' `restriction_feat = landuse`). Note: the `n_events`
+#' with the users knowledge of the domain.
+#' This function is computationally intensive. When run,
+#' an estimate of the expected computational time
+#' is first printed in the console for the user.
+#' Argument with the largest impacts on the computational
+#' time include `n_origin=50`, and `restriction_feat` when
+#' not \code(NULL). Note: the `n_events`
 #' argument has little of no impacts on the
-#' computational time.
-#' In addition to exporting the simulated `stpp`, the
-#' function also export the simulated origins, returns
-#' the boundary and restriction objects.
+#' computational time, and so it is recommended that
+#' that a user inputs a vector of several values
+#' to simulate.
+#' Lastly, in addition to exporting the simulated
+#' point patterns, the
+#' function also returns the simulated origins,
+#' the boundary and the restriction features
+#' (if supplied).
 #' @return Returns a list of artificial spatiotemporal
 #' point patterns generated from scratch.
 #' @importFrom data.table rbindlist
@@ -131,12 +141,8 @@
 #' @importFrom sp proj4string
 #' @importFrom terra crs res linearUnits
 #' @importFrom dplyr mutate bind_rows select
-#' summarise left_join rename
+#' summarise left_join rename arrange
 #' @importFrom tibble rownames_to_column as_tibble
-#' @importFrom doParallel registerDoParallel
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar%
-#' @importFrom iterators iter
 #' @importFrom graphics points legend
 #' @importFrom lubridate hms
 #' @export
@@ -235,11 +241,11 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   tme2 <- Sys.time()
   #time_elapse <- tme2 - tme1
   time_elapse <- difftime(tme2,tme1,units = "secs")
-  time_elapse <- round((time_elapse * n_origin)/60, digits=0)
+  time_elapse <- round((time_elapse * n_origin)/60, digits=2)
   flush.console()
-  cat("--------------------------------------------------------")
-  cat("The estimated computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
-  cat("--------------------------------------------------------")
+  cat("#=====")
+  cat("The expected computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("=====#")
 
   #the actual process
   stp_All <- NULL
@@ -279,6 +285,10 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                                 replace = FALSE, prob = stp_All_$prob)) #%>
 
     stp_All_ <- stp_All_[samp_idx, ]
+
+    #sort
+    stp_All_ <- stp_All_ %>%
+      arrange(locid, tid, sn)
 
     output[h] <- list(stp_All_)
   }
