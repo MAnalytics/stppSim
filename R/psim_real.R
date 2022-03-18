@@ -128,7 +128,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       field = NA, p_ratio=20, crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
-    axis <- . <- OriginType <- NULL
+    axis <- . <- locid <- sn <- OriginType <- NULL
 
   output <- list()
 
