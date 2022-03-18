@@ -110,7 +110,7 @@
 #' #The above example simulates point patterns on
 #' #an unrestricted landscape. If set ,
 #' #`restriction_feat = landuse` and
-#' #`field = "rValues2"`, then the simulation
+#' #`field = "restrVal"`, then the simulation
 #' #is performed on a restricted landscape.
 #' }
 #'
@@ -243,6 +243,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   time_elapse <- difftime(tme2,tme1,units = "secs")
   time_elapse <- round((time_elapse * n_origin)/60, digits=2)
   flush.console()
+  time_elapse <- time_elapse + (time_elapse * 0.1)#add 10%
   cat("#=====")
   cat("The expected computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
   cat("=====#")
