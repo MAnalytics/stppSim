@@ -52,7 +52,7 @@
 #' projection system is: \code{"EPSG:27700"}.
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' s_threshold = NULL, step_length = 20, n_origin=50,
-#' restriction_feat, field=NA,
+#' restriction_feat=NULL, field=NA,
 #' p_ratio=20, crsys = NULL)
 #' @examples
 #' \dontrun{
@@ -67,11 +67,21 @@
 #' round((sample_size * nrow(theft)), digits=0),
 #' replace=FALSE),1:3]
 #' #plot(dat_sample$x, dat_sample$y) #preview
-#' result <- psim_real(n_events=2000, ppt=dat_sample,
+#' #load boundary and land use of Camden
+#' load(file = system.file("extdata", "camden.rda",
+#' package="stppSim"))
+#' landuse = camden$landuse # get landuse
+#' simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
-#' step_length = 20, n_origin=50, restriction_feat, field=NA,
+#' step_length = 20, n_origin=50,
+#' restriction_feat = NULL, field=NULL,
 #' p_ratio=20, crsys = "EPSG:27700")
 #' }
+#' #If `n_events` is a vector, access the corresponding
+#' #simulated data for each vector entry using
+#' #`simulated_stpp[[enter-list-index-here]]`#e.g.
+#' #simulated_stpp[[1]], which is to retrieve the
+#' #first data list.
 #' @details
 #' The movement characteristics of walkers as well
 #' as the configuration of the landscape are defined
@@ -79,6 +89,12 @@
 #' data. The explanations under `psim_artif`
 #' function regarding the computation time
 #' apply.
+#' In addition to exporting the simulated `stpp`, the
+#' function also export the simulated origins, returns
+#' the boundary and restriction objects.
+#' @return Returns a list of artificial spatiotemporal
+#' point patterns generated based on a sample
+#' real data.
 #' @references
 #' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
 #' kernel estimation of spatial relative risk,
@@ -89,14 +105,22 @@
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
+#' @importFrom data.table rbindlist
+#' @importFrom SiMRiv resistanceFromShape
 #' @importFrom tidyr replace_na
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
+#' @importFrom lubridate hms
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
+#' @importFrom iterators iter
+#' @importFrom tibble rownames_to_column
 #' @export
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL, step_length = 20,
-                      n_origin=50, restriction_feat,
+                      n_origin=50, restriction_feat=NULL,
                       field = NA, p_ratio=20, crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
@@ -144,7 +168,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #subset xy columns
   spo_xy <- st_properties$origins %>%
-    select(x, y)
+    select(x, y)#%>%
+    #top_n(3)
 
   #t1 <- Sys.time()
 
@@ -194,7 +219,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
              #OriginType = st_properties$origins$OriginType[loc]) %>%
       #mutate(time=(tid-1) + as.Date(start_date))
 
-      mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
+      mutate(time=format(((tid-1) +
+                            as.Date(st_properties$start_date) +
+                            hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
       rename(datetime=time)
     stp_All <- stp_All %>%
