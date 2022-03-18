@@ -73,7 +73,7 @@
 #' landuse = camden$landuse # get landuse
 #' simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
-#' step_length = 20, n_origin=50,
+#' step_length = 20, n_origin=20,
 #' restriction_feat = NULL, field=NULL,
 #' p_ratio=20, crsys = "EPSG:27700")
 #' }
@@ -154,80 +154,86 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #get the global temporal pattern
   n = st_properties$gtp#[1:4]
   #
-  #to implement parallelizing later
-  no_of_clusters <- detectCores()
-
-  #create clusters (use n-1 cores)
-  myCluster <- makeCluster((no_of_clusters-1), # number of cores to use
-                           type = "PSOCK") # type of cluster
-
-  #register cluster with foreach
-  registerDoParallel(myCluster)
-
-  ##result <- foreach(x = c(4,9,16)) %dopar% sqrt(x)
-
   #subset xy columns
   spo_xy <- st_properties$origins %>%
-    select(x, y)#%>%
+    dplyr::select(x, y)#%>%
     #top_n(3)
 
   #t1 <- Sys.time()
 
-  if(is.null(s_threshold)){
-  pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
-    lapply(n, function(n)
-      stppSim::walker(n, s_threshold = st_properties$s_threshold, #jsut example for now..
-                      poly=poly,restriction_feat = restriction_feat,
-                      field = field,
-                      coords=as.numeric(as.vector(idx)),
-                      step_length = step_length,
-                      show.plot = FALSE)
-    )}
+  #estimating computational time
+  options(digits.secs = 5)
+  tme1 <- Sys.time()
+  event_loc_N <- lapply(n, function(n)
+    stppSim::walker(n, s_threshold = 100,
+                    poly=poly, restriction_feat = restriction_feat,
+                    field = field,
+                    coords=as.vector(unlist(spo_xy[1,],)),
+                    step_length = step_length ,
+                    show.plot = FALSE)
+  )
+  tme2 <- Sys.time()
+  #time_elapse <- tme2 - tme1
+  time_elapse <- difftime(tme2,tme1,units = "secs")
+  time_elapse <- round((time_elapse * n_origin)/60, digits=0)
+  flush.console()
+  cat("--------------------------------------------------------")
+  cat("The estimated computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("--------------------------------------------------------")
 
-  if(!is.null(s_threshold)){
-  pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
-    lapply(n, function(n)
-      stppSim::walker(n, s_threshold = s_threshold, #jsut example for now..
-                      poly=poly, restriction_feat = restriction_feat,
-                      field = field,
-                      coords=as.numeric(as.vector(idx)),
-                      step_length = step_length,
-                      show.plot = FALSE)
-    )}
-  #)
-  #t2 <- Sys.time()
-  #tme <- t2 - t1
-  #print(tme)
-
-  #stop the cluster
-  stopCluster(myCluster)
-
-  #
-  length(pp_allTime)
-  #unlist the result..
-
+  #the actual process
   stp_All <- NULL
 
-  #combine all results by
-  for(loc in 1:nrow(st_properties$origins)){ #loc<-1
-    #extract slot 'intersection'
-    p_events <- rbindlist(pp_allTime[[loc]],
-                          use.names=TRUE, fill=TRUE, idcol="tid")
+  if(is.null(s_threshold)){
+  for(b in seq_len(nrow(spo_xy))){ #b<-1
+    event_loc_N <- lapply(n, function(n)
+      stppSim::walker(n, s_threshold = st_properties$s_threshold,
+                      poly=poly, restriction_feat = restriction_feat,
+                      field = field,
+                      coords=as.vector(unlist(spo_xy[b,],)),
+                      step_length = step_length ,
+                      show.plot = FALSE)
+    )
 
-    p_events <- p_events %>%
-      mutate(locid=loc, prob=st_properties$origins$prob[loc])%>%#,
-             #OriginType = st_properties$origins$OriginType[loc]) %>%
-      #mutate(time=(tid-1) + as.Date(start_date))
+    loc_N <- rbindlist(event_loc_N,
+                       use.names=TRUE, fill=TRUE, idcol="tid")
 
-      mutate(time=format(((tid-1) +
-                            as.Date(st_properties$start_date) +
-                            hms(time)),
+    loc_N <- loc_N %>%
+      mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
+      mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
       rename(datetime=time)
-    stp_All <- stp_All %>%
-      bind_rows(p_events)
 
+    stp_All <- stp_All %>%
+      bind_rows(loc_N)
   }
+  }
+
+  if(!is.null(s_threshold)){
+  for(b in seq_len(nrow(spo_xy))){ #b<-1
+    event_loc_N <- lapply(n, function(n)
+      stppSim::walker(n, s_threshold = s_threshold,
+                      poly=poly, restriction_feat = restriction_feat,
+                      field = field,
+                      coords=as.vector(unlist(spo_xy[b,],)),
+                      step_length = step_length ,
+                      show.plot = FALSE)
+    )
+
+    loc_N <- rbindlist(event_loc_N,
+                       use.names=TRUE, fill=TRUE, idcol="tid")
+
+    loc_N <- loc_N %>%
+      mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
+      mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
+                         "%Y-%m-%d %H:%M:%S"))%>%
+      rename(datetime=time)
+
+    stp_All <- stp_All %>%
+      bind_rows(loc_N)
+  }
+  }
+
 
   #n_events <- c(2000, 3000)
   #generate all the results
