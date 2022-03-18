@@ -91,8 +91,8 @@
 #' #'n_origin' (i.e. `20`) for faster computation
 #' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 #' poly=boundary, n_origin=20, restriction_feat = landuse,
-#' field = "rValue1",
-#' n_foci=5, foci_separation = 10, conc_type = "dispersed",
+#' field = "rValues1",
+#' n_foci=1, foci_separation = 10, conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
@@ -132,7 +132,7 @@
 #' @importFrom terra crs res linearUnits
 #' @importFrom dplyr mutate bind_rows select
 #' summarise left_join rename
-#' @importFrom tibble rownames_to_column
+#' @importFrom tibble rownames_to_column as_tibble
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom foreach foreach %dopar%
@@ -160,6 +160,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                    n_foci=n_foci,
                    foci_separation = foci_separation,
                    conc_type = conc_type, p_ratio = p_ratio)
+
+  #start_date <- as.Date(start_date)
 
   #check that start_date has value
   if(start_date == "yyyy-mm-dd"){
@@ -215,61 +217,55 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   n = gtp$data#[1:4]
 
-  #to implement parallelizing later
-  no_of_clusters <- detectCores()
-
-  #create clusters (use n-1 cores)
-  myCluster <- makeCluster((no_of_clusters-1), # number of cores to use
-                           type = "PSOCK") # type of cluster
-
-  #register cluster with foreach
-  registerDoParallel(myCluster)
-
   #subset xy columns
-  spo_xy <- spo$origins %>%
-    select(x, y)
+  spo_xy <- as_tibble(spo$origins) %>%
+    dplyr::select(x, y)
 
-  #tme1 <- Sys.time()
-
-  #simulate walkers
-  pp_allTime <- foreach(idx = iter(spo_xy, by='row')) %dopar%
-    lapply(n, function(n)
+  #estimating computational time
+  options(digits.secs = 5)
+  tme1 <- Sys.time()
+  event_loc_N <- lapply(n, function(n)
     stppSim::walker(n, s_threshold = s_threshold,
-         poly=poly, restriction_feat = restriction_feat,
-         field = field,
-         coords=as.numeric(as.vector(idx)),
-                  step_length = step_length ,
-                  show.plot = FALSE)
-    )
+                    poly=poly, restriction_feat = restriction_feat,
+                    field = field,
+                    coords=as.vector(unlist(spo_xy[1,],)),
+                    step_length = step_length ,
+                    show.plot = FALSE)
+  )
+  tme2 <- Sys.time()
+  #time_elapse <- tme2 - tme1
+  time_elapse <- difftime(tme2,tme1,units = "secs")
+  time_elapse <- round((time_elapse * n_origin)/60, digits=0)
+  flush.console()
+  cat("--------------------------------------------------------")
+  cat("The estimated computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("--------------------------------------------------------")
 
-  # tme2 <- Sys.time()
-  # tme <- tme2 - tme1
-  # print(tme)
-  #stop the cluster
-  stopCluster(myCluster)
-
-  length(pp_allTime)
-  #unlist the result..
-
+  #the actual process
   stp_All <- NULL
 
-  #combine all results by
-  for(loc in 1:nrow(spo$origins)){ #loc<-1
-    #extract slot 'intersection'
-    p_events <- rbindlist(pp_allTime[[loc]],
-                            use.names=TRUE, fill=TRUE, idcol="tid")
+  for(b in seq_len(nrow(spo_xy))){ #b<-1
+    event_loc_N <- lapply(n, function(n)
+      stppSim::walker(n, s_threshold = s_threshold,
+                      poly=poly, restriction_feat = restriction_feat,
+                      field = field,
+                      coords=as.vector(unlist(spo_xy[b,],)),
+                      step_length = step_length ,
+                      show.plot = FALSE)
+    )
 
-    p_events <- p_events %>%
-      mutate(locid=loc, prob=spo$origins$prob[loc],
-           OriginType = spo$origins$OriginType[loc]) %>%
-      #mutate(time=(tid-1) + as.Date(start_date))
+    loc_N <- rbindlist(event_loc_N,
+                          use.names=TRUE, fill=TRUE, idcol="tid")
 
+    loc_N <- loc_N %>%
+      mutate(locid=b, prob=spo$origins$prob[b]) %>%
       mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
       rename(datetime=time)
-  stp_All <- stp_All %>%
-    bind_rows(p_events)
-  }
+
+    stp_All <- stp_All %>%
+      bind_rows(loc_N)
+    }
 
   #generate all the results
   for(h in seq_len(length(n_events))){
