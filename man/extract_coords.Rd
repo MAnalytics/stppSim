@@ -12,6 +12,8 @@ A polygon shapefile.}
 }
 \value{
 Returns 2-column xy coordinates
+representing points of directional
+change along the boundary.
 }
 \description{
 Extracts the bounding (edges) coordinates

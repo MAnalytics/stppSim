@@ -21,8 +21,9 @@ for a 250 by 250 square grids is \code{250}.}
 Default: \code{FALSE}}
 }
 \value{
-Returns a spatial square grid system
-in a shapefile format
+Returns a "SpatialPolygonsDataFrames" object
+representing a system of square grids covering
+the polygon area.
 }
 \description{
 Generates a system of square grids

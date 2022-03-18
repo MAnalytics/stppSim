@@ -66,7 +66,8 @@ and avoiding obstacles on a landscape.
 \details{
 A walker is propelled by an in-built stochastic
 transition matrix
-and specified spatial and temporal parameters. The transition
+and a specified set of spatial and temporal
+parameters. The transition
 matrix defines two states, namely; the \code{exploratory}
 and a \code{performative} states. A walker is capable
 of avoiding obstructions (i.e., \code{restriction_feat})
@@ -79,10 +80,10 @@ stochastic process involved.
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary # get boundary
-pathwalker <- walker(n = 5, s_threshold = 250, step_length = 20,
+walkerpath <- walker(n = 5, s_threshold = 250, step_length = 20,
 poly = boundary, restriction_feat=NULL, field = NA,
 coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
-#plot(path)
+#plot(walkerpath)
 }
 \references{
 #https://google.co.uk

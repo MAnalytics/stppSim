@@ -17,7 +17,8 @@ Default value is set as
 are: (\code{5, 10, 20, 30, 40}).}
 }
 \value{
-Returns a vector of probability values
+Returns a dataframe with
+a probability field.
 }
 \description{
 Generates an \code{n} probability

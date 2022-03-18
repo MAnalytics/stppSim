@@ -45,6 +45,10 @@ projection system is: \code{"EPSG:27700"}.}
 \item{show.plot}{(TRUE or FALSE) Whether to show
 some displays.}
 }
+\value{
+an object (list) containing specific spatial
+and temporal properties of a sample dataset.
+}
 \description{
 Learns both the spatial and the temporal
 properties of a real sample dataset.
@@ -63,7 +67,7 @@ data(camden_crimes)
 theft <- camden_crimes[which(camden_crimes$type ==
 "Theft"),1:3]
 #specify the proportion of full data to use
-sample_size <- 0.2
+sample_size <- 0.3
 set.seed(1000)
 dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),

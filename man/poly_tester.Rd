@@ -23,8 +23,8 @@ the polygon.
 }
 \details{
 Returns an error message if
-the polygon is not in correct geometry
-or CRS.
+the polygon is not in the
+correct geometry or CRS.
 }
 \examples{
 #load boundary of Camden

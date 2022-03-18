@@ -17,6 +17,11 @@ reference system (crs) of the resulting boundary, e.g.,
 the crs string "+proj=longlat +datum=WGS84" transform
 the resulting boundary to wgs84 system.}
 }
+\value{
+Returns a "SpatialPolygonsDataFrame"
+object representing the boundary
+surround the spatial points
+}
 \description{
 Generates a boundary (polygon) around
 a set of points, using Convex Hull technique

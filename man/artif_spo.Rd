@@ -43,7 +43,9 @@ For example, a value of \code{20}
 implies \code{20:80} proportional ratios.}
 }
 \value{
-Returns spatial origins with associated
+Returns a list detailing the
+properties of the generated spatial origins
+with associated
 strength (probability) values.
 }
 \description{

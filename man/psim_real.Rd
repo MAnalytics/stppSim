@@ -6,7 +6,7 @@
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 s_threshold = NULL, step_length = 20, n_origin=50,
-restriction_feat, field=NA,
+restriction_feat=NULL, field=NA,
 p_ratio=20, crsys = NULL)
 }
 \arguments{
@@ -68,6 +68,11 @@ EPSG codes for different regions of the world.
 As an example, the EPSG code for the British National Grid
 projection system is: \code{"EPSG:27700"}.}
 }
+\value{
+Returns a list of artificial spatiotemporal
+point patterns generated based on a sample
+real data.
+}
 \description{
 Generates spatiotemporal point pattern
 from origins sampled based on real sample dataset.
@@ -79,6 +84,9 @@ based on the properties learnt from the real sample
 data. The explanations under \code{psim_artif}
 function regarding the computation time
 apply.
+In addition to exporting the simulated \code{stpp}, the
+function also export the simulated origins, returns
+the boundary and restriction objects.
 }
 \examples{
 \dontrun{
@@ -93,11 +101,21 @@ dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),
 replace=FALSE),1:3]
 #plot(dat_sample$x, dat_sample$y) #preview
-result <- psim_real(n_events=2000, ppt=dat_sample,
+#load boundary and land use of Camden
+load(file = system.file("extdata", "camden.rda",
+package="stppSim"))
+landuse = camden$landuse # get landuse
+simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
-step_length = 20, n_origin=50, restriction_feat, field=NA,
+step_length = 20, n_origin=50,
+restriction_feat = landuse, field=NA,
 p_ratio=20, crsys = "EPSG:27700")
 }
+#If `n_events` is a vector, access the corresponding
+#simulated data for each vector entry using
+#`simulated_stpp[[enter-list-index-here]]`#e.g.
+#simulated_stpp[[1]], which is to retrieve the
+#first data list.
 }
 \references{
 Davies, T.M. and Hazelton, M.L. (2010), Adaptive

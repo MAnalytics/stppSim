@@ -33,7 +33,8 @@ a seasonal cycle of 180 days).}
 Default is \code{FALSE}.}
 }
 \value{
-Returns a vector of 365 data points representing
+Returns a time series (list) of 365
+data points representing
 1-year global temporal pattern.
 }
 \description{

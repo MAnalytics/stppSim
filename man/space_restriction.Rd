@@ -39,7 +39,8 @@ to assign to all pixels that are not covered
 by any shapefile object.}
 }
 \value{
-Returns a raster map
+Returns a raster map showing the restriction
+levels across the landscape.
 }
 \description{
 Builds a space restriction map
@@ -59,11 +60,11 @@ of \code{background}. When stacking additional features to existing
 the remaining areas retain the original values of \code{baseMap}.
 }
 \examples{
-#load boundary of Camden
+#load boundary of Camden and land use data
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary # get boundary
-restrct_space <- space_restriction(shp = boundary,
+restrct_map <- space_restriction(shp = boundary,
 res = 20, binary = TRUE)
 #plot the result
 #plot(restrct_space)
@@ -71,7 +72,7 @@ res = 20, binary = TRUE)
 #map can now be stacked onto the basemap as follows:
 landuse = camden$landuse # get landuse
 restrct_Landuse <- space_restriction(shp = landuse,
-baseMap = restrct_space,
+baseMap = restrct_map,
 res = 20, field = "rValues2", background = 1)
 #plot(restrct_Landuse)
 }
