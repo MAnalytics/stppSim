@@ -64,7 +64,11 @@
 #' @return Returns a trace of walker's path, and the
 #' resulting events.
 #' @references
-#' #https://google.co.uk
+#' Quaglietta L, Porto M (2019). SiMRiv: Individual-Based,
+#' Spatially-Explicit Simulation and Analysis of Multi-State
+#' Movements in River Networks and Heterogeneous Landscapes_.
+#' R package version 1.0.4, <URL:
+#' https://CRAN.R-project.org/package=SiMRiv>.
 #' @importFrom dplyr select filter
 #' @importFrom SiMRiv species transitionMatrix
 #' state.CRW simulate
