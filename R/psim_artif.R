@@ -75,20 +75,22 @@
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
 #' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
-#' poly, n_origin, restriction_feat, field,
+#' poly, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
 #' @examples
 #' \dontrun{
-#' require(rgdal)
-#' path <- system.file("extdata", package="stppSim")
-#' camden_boundary <- readOGR(dsn=path, layer = "camden_boundary", verbose=FALSE)
-#' landuse <- system.file("extdata",
-#' "landuse.rda", package="stppSim")
+#' #load boundary and land use of Camden
+#' load(file = system.file("extdata", "camden.rda",
+#' package="stppSim"))
+#' boundary = camden$boundary # get boundary
+#' landuse = camden$landuse # get landuse
+#' #in this example, we will use a minimal number of
+#' #'n_origin' (i.e. `20`) for faster computation
 #' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-#' poly=camden_boundary, n_origin=50, restriction_feat = landuse,
+#' poly=boundary, n_origin=20, restriction_feat = landuse,
 #' field = "rValue1",
 #' n_foci=5, foci_separation = 10, conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
@@ -96,7 +98,9 @@
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
 #' #If `n_events` is a vector, access the corresponding
 #' #simulated data for each vector entry using
-#' #`simulated_stpp[[vector-index]]`
+#' #`simulated_stpp[[enter-list-index-here]]`#e.g.
+#' #simulated_stpp[[1]], which is to retrieve the
+#' #first data list.
 #' }
 #' @details
 #' Generates spatiotemporal point pattern
@@ -116,8 +120,11 @@
 #' `restriction_feat = landuse`). Note: the `n_events`
 #' argument has little of no impacts on the
 #' computational time.
+#' In addition to exporting the simulated `stpp`, the
+#' function also export the simulated origins, returns
+#' the boundary and restriction objects.
 #' @return Returns a list of artificial spatiotemporal
-#' point patterns.
+#' point patterns generated from scratch.
 #' @importFrom data.table rbindlist
 #' @importFrom SiMRiv resistanceFromShape
 #' @importFrom raster raster extent
@@ -136,7 +143,7 @@
 #'
 
 psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
-                       poly, n_origin, restriction_feat, field=NA,
+                       poly, n_origin, restriction_feat=NULL, field=NA,
                        n_foci,
                        foci_separation, conc_type = "dispersed",
                        p_ratio,
