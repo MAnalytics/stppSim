@@ -60,12 +60,14 @@
 #' #subset 'theft' crime
 #' theft <- camden_crimes[which(camden_crimes$type ==
 #' "Theft"),]
+#'
 #' #specify the proportion of full data to use
 #' sample_size <- 0.2
 #' set.seed(1000)
 #' dat_sample <- theft[sample(1:nrow(theft),
 #' round((sample_size * nrow(theft)), digits=0),
 #' replace=FALSE),1:3]
+#'
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #' #load boundary and land use of Camden
 #' load(file = system.file("extdata", "camden.rda",
@@ -76,22 +78,28 @@
 #' step_length = 20, n_origin=20,
 #' restriction_feat = NULL, field=NULL,
 #' p_ratio=20, crsys = "EPSG:27700")
+#'
+#' #If `n_events` is a vector of values,
+#' #retrieve the simulated data for the
+#' #corresponding vector element by using
+#' #`simulated_stpp[[enter-element-index-here]]`, e.g.,
+#' #to retrieve the first dataframe, use
+#' #simulated_stpp[[1]].
+#'
+#' #The above example simulates point patterns on
+#' #an unrestricted landscape. If set ,
+#' #`restriction_feat = landuse` and
+#' #`field = "rValues2"`, then the simulation
+#' #is performed on a restricted landscape.
 #' }
-#' #If `n_events` is a vector, access the corresponding
-#' #simulated data for each vector entry using
-#' #`simulated_stpp[[enter-list-index-here]]`#e.g.
-#' #simulated_stpp[[1]], which is to retrieve the
-#' #first data list.
+#'
 #' @details
 #' The movement characteristics of walkers as well
 #' as the configuration of the landscape are defined
 #' based on the properties learnt from the real sample
-#' data. The explanations under `psim_artif`
-#' function regarding the computation time
-#' apply.
-#' In addition to exporting the simulated `stpp`, the
-#' function also export the simulated origins, returns
-#' the boundary and restriction objects.
+#' data. See under `psim_artif`
+#' function for details on the computation time and
+#' the exported objects.
 #' @return Returns a list of artificial spatiotemporal
 #' point patterns generated based on a sample
 #' real data.
@@ -111,10 +119,6 @@
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
 #' @importFrom lubridate hms
-#' @importFrom doParallel registerDoParallel
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar%
-#' @importFrom iterators iter
 #' @importFrom tibble rownames_to_column
 #' @export
 
@@ -175,11 +179,11 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   tme2 <- Sys.time()
   #time_elapse <- tme2 - tme1
   time_elapse <- difftime(tme2,tme1,units = "secs")
-  time_elapse <- round((time_elapse * n_origin)/60, digits=0)
+  time_elapse <- round((time_elapse * n_origin)/60, digits=2)
   flush.console()
-  cat("--------------------------------------------------------")
-  cat("The estimated computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
-  cat("--------------------------------------------------------")
+  cat("#=====")
+  cat("The expected computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("=====#")
 
   #the actual process
   stp_All <- NULL
@@ -248,6 +252,10 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                                   replace = FALSE, prob = stp_All_$prob)) #%>
 
     stp_All_ <- stp_All_[samp_idx, ]
+
+    #sort
+    stp_All_ <- stp_All_ %>%
+      arrange(locid, tid, sn)
 
     output[h] <- list(stp_All_)
   }
