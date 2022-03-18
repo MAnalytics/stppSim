@@ -142,8 +142,8 @@ landuse = camden$landuse # get landuse
 #'n_origin' (i.e. `20`) for faster computation
 simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 poly=boundary, n_origin=20, restriction_feat = landuse,
-field = "rValue1",
-n_foci=5, foci_separation = 10, conc_type = "dispersed",
+field = "rValues1",
+n_foci=1, foci_separation = 10, conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)

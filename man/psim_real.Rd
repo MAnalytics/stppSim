@@ -107,8 +107,8 @@ package="stppSim"))
 landuse = camden$landuse # get landuse
 simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
-step_length = 20, n_origin=50,
-restriction_feat = landuse, field=NA,
+step_length = 20, n_origin=20,
+restriction_feat = NULL, field=NULL,
 p_ratio=20, crsys = "EPSG:27700")
 }
 #If `n_events` is a vector, access the corresponding

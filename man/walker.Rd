@@ -81,7 +81,7 @@ load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary # get boundary
 walkerpath <- walker(n = 5, s_threshold = 250, step_length = 20,
-poly = boundary, restriction_feat=NULL, field = NA,
+poly = boundary, restriction_feat=NULL, field = NULL,
 coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
 #plot(walkerpath)
 }
