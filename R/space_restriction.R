@@ -32,7 +32,7 @@
 #' @usage space_restriction(shp, baseMap, res, binary = is.na(field),
 #' field = NA, background = 1)
 #' @examples
-#' #load boundary of Camden
+#' #load boundary of Camden and land use data
 #' load(file = system.file("extdata", "camden.rda",
 #' package="stppSim"))
 #' boundary = camden$boundary # get boundary
@@ -56,7 +56,7 @@
 #' `baseMap`, only the areas covered by features are updated, while
 #' the remaining areas retain the original values of `baseMap`.
 #' @return Returns a raster map showing the restriction
-#' levels (values [0-1]) across the landscape.
+#' levels across the landscape.
 #' @references
 #' 1. Paul Murrell (2019). rasterize: Rasterize Graphical
 #' Output. R package version 0.1.
