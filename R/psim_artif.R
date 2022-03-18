@@ -123,7 +123,7 @@
 #' is first printed in the console for the user.
 #' Argument with the largest impacts on the computational
 #' time include `n_origin=50`, and `restriction_feat` when
-#' not \code(NULL). Note: the `n_events`
+#' not \code{NULL}. Note: the `n_events`
 #' argument has little of no impacts on the
 #' computational time, and so it is recommended that
 #' that a user inputs a vector of several values
@@ -159,7 +159,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
 
   #define global variables...
-  nrowh <- origins <- NULL
+  nrowh <- origins <- locid <- sn <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
