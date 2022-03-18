@@ -287,7 +287,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     #create regular grids
     #default 250 square metres
-    set.seed(1000)
     grid_sys <- make_grids(poly=boundary_ppt,
                            size = gridSize, show_output = FALSE)
     #warning msg
@@ -365,7 +364,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     output$origins <- spo
     output$gtp <- gtp
-    output$start_date <- start_date
+    output$start_date <- final_start_date
     output$s_threshold <- sbw
     #output$plot <- p
     output$poly <- boundary_ppt
