@@ -28,8 +28,8 @@ and the background is assigned \code{1}
 (i.e. restriction values) assigned
 to all features; or
 the name of a numeric field to extract such
-restriction values for different classes of
-feature.
+restriction values (\code{[0 <= value < 1]}
+for different classes of feature.
 Restriction value \code{0} and \code{1} indicate the
 lowest and the highest obstructions, respectively.
 Default: \code{NULL}.}
@@ -73,7 +73,7 @@ res = 20, binary = TRUE)
 landuse = camden$landuse # get landuse
 restrct_Landuse <- space_restriction(shp = landuse,
 baseMap = restrct_map,
-res = 20, field = "rValues2", background = 1)
+res = 20, field = "restrVal", background = 1)
 #plot(restrct_Landuse)
 }
 \references{
@@ -81,9 +81,9 @@ res = 20, field = "rValues2", background = 1)
 \item Paul Murrell (2019). rasterize: Rasterize Graphical
 Output. R package version 0.1.
 https://CRAN.R-project.org/package=rasterize
-\item Quaglietta L, Porto M (2019). \emph{SiMRiv: Individual-Based,
+\item Quaglietta L, Porto M (2019). SiMRiv: Individual-Based,
 Spatially-Explicit Simulation and Analysis of Multi-State
-Movements in River Networks and Heterogeneous Landscapes}.
+Movements in River Networks and Heterogeneous Landscapes.
 R package version 1.0.4, <URL:
 https://CRAN.R-project.org/package=SiMRiv>.
 }

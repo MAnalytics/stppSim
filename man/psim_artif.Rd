@@ -110,47 +110,57 @@ point patterns based on a set of
 synthesized origins.
 }
 \details{
-Generates spatiotemporal point pattern
-based on the interactions between the
-walkers (agents) and the landscape. Both the walkers
+Both the walkers
 and the landscape are configured arbitrarily (in accordance
-with the users knowledge of the domain under study.
-This function is computationally intensive, and so
-has been implemented to use parallel processing for
-faster results. An \code{n}-1 cores on a PC is utilized
-for the simulation. The argument \code{n_origin} has the
-largest impacts on the computation. The computational time
-is \code{15} minutes for the example above on a (4-1)
-core laptop (with parameters setting: \code{n_origin=50} and
-\code{restriction_feat = NULL}). The computational time
-increases to 2hours when
-\code{restriction_feat = landuse}). Note: the \code{n_events}
+with the users knowledge of the domain.
+This function is computationally intensive. When run,
+an estimate of the expected computational time
+is first printed in the console for the user.
+Argument with the largest impacts on the computational
+time include \code{n_origin=50}, and \code{restriction_feat} when
+not \code{NULL}. Note: the \code{n_events}
 argument has little of no impacts on the
-computational time.
-In addition to exporting the simulated \code{stpp}, the
-function also export the simulated origins, returns
-the boundary and restriction objects.
+computational time, and so it is recommended that
+that a user inputs a vector of several values
+to simulate.
+Lastly, in addition to exporting the simulated
+point patterns, the
+function also returns the simulated origins,
+the boundary and the restriction features
+(if supplied).
 }
 \examples{
 \dontrun{
+
 #load boundary and land use of Camden
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary # get boundary
 landuse = camden$landuse # get landuse
-#in this example, we will use a minimal number of
-#'n_origin' (i.e. `20`) for faster computation
+
+#In this example, we will use a minimal number of
+#'n_origin' (i.e. `20`) for faster computation:
+
 simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-poly=boundary, n_origin=20, restriction_feat = landuse,
-field = "rValues1",
+poly=boundary, n_origin=20, restriction_feat = NULL,
+field = NULL,
 n_foci=1, foci_separation = 10, conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)
-#If `n_events` is a vector, access the corresponding
-#simulated data for each vector entry using
-#`simulated_stpp[[enter-list-index-here]]`#e.g.
-#simulated_stpp[[1]], which is to retrieve the
-#first data list.
+
+#If `n_events` is a vector of values,
+#retrieve the simulated data for the
+#corresponding vector element by using
+#`simulated_stpp[[enter-element-index-here]]`, e.g.,
+#to retrieve the first dataframe, use
+#simulated_stpp[[1]].
+
+#The above example simulates point patterns on
+#an unrestricted landscape. If set ,
+#`restriction_feat = landuse` and
+#`field = "restrVal"`, then the simulation
+#is performed on a restricted landscape.
 }
+
 }

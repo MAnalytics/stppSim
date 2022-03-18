@@ -86,5 +86,9 @@ coords = c(0,0), pt_itx = TRUE, show.plot = FALSE)
 #plot(walkerpath)
 }
 \references{
-#https://google.co.uk
+Quaglietta L, Porto M (2019). SiMRiv: Individual-Based,
+Spatially-Explicit Simulation and Analysis of Multi-State
+Movements in River Networks and Heterogeneous Landscapes_.
+R package version 1.0.4, <URL:
+https://CRAN.R-project.org/package=SiMRiv>.
 }

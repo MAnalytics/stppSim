@@ -81,12 +81,9 @@ from origins sampled based on real sample dataset.
 The movement characteristics of walkers as well
 as the configuration of the landscape are defined
 based on the properties learnt from the real sample
-data. The explanations under \code{psim_artif}
-function regarding the computation time
-apply.
-In addition to exporting the simulated \code{stpp}, the
-function also export the simulated origins, returns
-the boundary and restriction objects.
+data. See under \code{psim_artif}
+function for details on the computation time and
+the exported objects.
 }
 \examples{
 \dontrun{
@@ -94,12 +91,14 @@ data(camden_crimes)
 #subset 'theft' crime
 theft <- camden_crimes[which(camden_crimes$type ==
 "Theft"),]
+
 #specify the proportion of full data to use
 sample_size <- 0.2
 set.seed(1000)
 dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),
 replace=FALSE),1:3]
+
 #plot(dat_sample$x, dat_sample$y) #preview
 #load boundary and land use of Camden
 load(file = system.file("extdata", "camden.rda",
@@ -110,12 +109,21 @@ start_date = NULL, poly = NULL, s_threshold = NULL,
 step_length = 20, n_origin=20,
 restriction_feat = NULL, field=NULL,
 p_ratio=20, crsys = "EPSG:27700")
+
+#If `n_events` is a vector of values,
+#retrieve the simulated data for the
+#corresponding vector element by using
+#`simulated_stpp[[enter-element-index-here]]`, e.g.,
+#to retrieve the first dataframe, use
+#simulated_stpp[[1]].
+
+#The above example simulates point patterns on
+#an unrestricted landscape. If set ,
+#`restriction_feat = landuse` and
+#`field = "restrVal"`, then the simulation
+#is performed on a restricted landscape.
 }
-#If `n_events` is a vector, access the corresponding
-#simulated data for each vector entry using
-#`simulated_stpp[[enter-list-index-here]]`#e.g.
-#simulated_stpp[[1]], which is to retrieve the
-#first data list.
+
 }
 \references{
 Davies, T.M. and Hazelton, M.L. (2010), Adaptive
