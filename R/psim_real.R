@@ -89,7 +89,7 @@
 #' #The above example simulates point patterns on
 #' #an unrestricted landscape. If set ,
 #' #`restriction_feat = landuse` and
-#' #`field = "rValues2"`, then the simulation
+#' #`field = "restrVal"`, then the simulation
 #' #is performed on a restricted landscape.
 #' }
 #'
@@ -179,6 +179,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   tme2 <- Sys.time()
   #time_elapse <- tme2 - tme1
   time_elapse <- difftime(tme2,tme1,units = "secs")
+  time_elapse <- time_elapse + (time_elapse * 0.1)#add 10%
   time_elapse <- round((time_elapse * n_origin)/60, digits=2)
   flush.console()
   cat("#=====")
