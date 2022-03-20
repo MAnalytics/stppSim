@@ -34,6 +34,7 @@ Imports:
   sf,
   rgdal,
   sp,
+  ks,
   terra,
   raster,
   SiMRiv,
@@ -43,7 +44,8 @@ Imports:
   lubridate,
   spatstat.geom,
   sparr,
-  chron,  ggplot2
+  chron,  
+  ggplot2
 RoxygenNote: 7.1.1
 Suggests:
   knitr,
