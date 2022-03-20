@@ -47,6 +47,7 @@
 #' round((sample_size * nrow(theft)), digits=0),
 #' replace=FALSE),]
 #' #plot(dat_sample$x, dat_sample$y) #preview
+#'
 #' stp_learner(dat_sample,
 #' start_date = NULL, poly = NULL, n_origin=50,
 #' p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
@@ -68,6 +69,7 @@
 #' @importFrom spatstat.geom ppp owin
 #' @importFrom sparr OS
 #' @importFrom tibble rownames_to_column
+#' @importFrom ks hpi
 #' @export
 #'
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
@@ -249,13 +251,26 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     y_min <- min(extract_coords(boundary_ppt)$Y)
     y_max <- max(extract_coords(boundary_ppt)$Y)
 
-    suppressWarnings(
-    ppt_df_ppp <- ppp(x=as.numeric(ppt_df$x),
-        y=as.numeric(ppt_df$y),
-        window = owin(c(x_min, x_max),
-                      c(y_min, y_max))))
+    #compute the univariate spatial bandwidth
+    #of x and y, and find average.
+    #bi-variate tends to over-smooth
+    #due to natural overlaps between
+    #events of multiple sources
 
-    sbw <- OS(ppt_df_ppp)/4
+    #suppressWarnings(
+
+    b1 <- hpi(x=ppt_df[,1])
+    b2 <- hpi(x=ppt_df[,2])
+
+    sbw <- (b1 + b2) / 2
+    #)
+
+    # ppt_df_ppp <- ppp(x=as.numeric(ppt_df$x),
+    #     y=as.numeric(ppt_df$y),
+    #     window = owin(c(x_min, x_max),
+    #                   c(y_min, y_max))))
+    #
+    # sbw <- OS(ppt_df_ppp)/4
 
     #determine if projection is in metres or feet
     #if metres, use 500m2
