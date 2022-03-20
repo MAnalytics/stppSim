@@ -92,6 +92,7 @@
 #' #In this example, we will use a minimal number of
 #' #'n_origin' (i.e. `20`) for faster computation:
 #'
+#' #simulate data
 #' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 #' poly=boundary, n_origin=20, restriction_feat = NULL,
 #' field = NULL,
