@@ -6,7 +6,7 @@ author: |
   
 date: |
   | `Date:`
-  | ``r Sys.Date()``
+  | `2022-03-20`
 
 #output:
   #pdf_vignette
@@ -58,29 +58,9 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
 
-```{r functions, include=FALSE}
-# A function for captioning and referencing images
-fig <- local({
-  i <- 0
-  ref <- list()
-  list(
-    cap=function(refName, text) {
-      i <<- i + 1
-      ref[[refName]] <<- i
-      paste("Figure ", i, ": ", text, sep="")
-    },
-    ref=function(refName) {
-      ref[[refName]]
-    })
-})
-```
+
+
 
 ## Introduction
 
@@ -98,9 +78,12 @@ The walkers are defined primarily by the following characteristics:
 
 * ***Origins*** - The walkers emanate from a set of origins that are distributed randomly across the landscape or origins defined from a sample of real point data. Origins are defined in terms of `xy` coordinates. In criminological application, a human offender can be modelled as a walker originating from his residence (origin). The `origins` of walkers typically exhibit two types of concentration: `nucleated` and `dispersed` (`ref`). A `nucleated` concentration is the one in which all origins concentrate around one focal point, while a `dispersed` concentration has no one particular focus, but could have multiple mini focal points (see fig. 1). 
 
-```{r fig1, echo=FALSE, out.width="90%", out.height="100%", fig.align = "right", fig.cap="Interactive predictive hotspot map"}
-knitr::include_graphics("C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins.png")
-```
+\begin{figure}
+
+\hfill{}\includegraphics[width=0.9\linewidth,height=1\textheight]{C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins} 
+
+\caption{Interactive predictive hotspot map}\label{fig:fig1}
+\end{figure}
 
 * ***Movement*** - Walkers are configured to move in any direction and to be aware of obstacles (restrictions) on their path. The movements are controlled primarily by an in-built transition matrix (TM) definig two transitional states, namely; an `exploratory` state (in which a walker is merely exploring the environment) and a `performative` state (in which a walker is performing an action). The stochastic properties of the TM ensure variations in the behavioral patterns amongst the walkers.
 In order to switch from one state to the next, a categorical distribution is assigned to the latent state variable $z_{it}$. So, every time step may be assigned to a movement behaviour state, independent of the previous state: $$z_t \sim Categorical(\Psi{_{1t}}, \Psi{_{2t}})$$ Such that $\Psi{_{i}}$ = Pr$(z_t = i)$, where $\Psi{_{i}}$ is the fixed probability of being in state $i$ at time $t$, and $\sum_{i=1}^{z}\Psi{_{i}}=1$
@@ -131,7 +114,8 @@ The following parameters define the temporal dimension:
 
 From an R console, type:
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+```r
 install.packages("stppSim")
 #To install the developmental version of the package, type:
 remotes::install_github("MAnalytics/stppSim")
@@ -139,7 +123,8 @@ remotes::install_github("MAnalytics/stppSim")
 
 Note: `remotes` is an extra package that needed to be installed prior to the running of this code. 
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+```r
 #Now, load the package,
 library(stppSim)
 ```
@@ -153,7 +138,8 @@ To simulate point patterns from scratch, the argument `n_events` specifies the n
 
 Given a boundary shapefile {e.g., data(`camden_boundary`} and land use features with restriction values {e.g., data(`landuse`) - `Leisure` (0.5); `Sports` (0.7); and `Green` (0.9)}, the ST point pattern can be generated as follows: 
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+```r
 #Using datasets that come with the package;
 data(camden_boundary)
 data(landuse)
@@ -172,7 +158,8 @@ artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
 
 To preview the output:
 
-```{r eval=FALSE}
+
+```r
 head(artif_stpp)
 ```
 
@@ -191,7 +178,8 @@ The corresponding temporal pattern of the data can be visualized as follows:
 
 Here, we are going to extract 30% random sample the `Theft` crime of Camden, then utilize the sample to synthesize a `full` data size.
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+```r
 data(camden_crimes)
 
 #get the 'theft' crime
@@ -242,7 +230,8 @@ Figure 2b (Time series plot of full real data)
 
 Flattening the 2D square grids (above) and then apply Pearson correlation:
 
-```{r eval=FALSE}
+
+```r
 #corr
 
 cor(sim, real)
