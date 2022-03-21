@@ -23,6 +23,9 @@
 #' close proximity
 #' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
+#' @param mfocal the c(x, y) coordinates of a single point,
+#' representing a pre-defined `main` focal point (origin)
+#' in the area.
 #' @param conc_type concentration of the rest of the
 #' origins (non-focal origins) around the focal ones. The options
 #' are `"nucleated"` and `"dispersed"`.
@@ -31,7 +34,7 @@
 #' For example, a value of \code{20}
 #' implies \code{20:80} proportional ratios.
 #' @usage artif_spo(poly, n_origin=50, restriction_feat = NULL,
-#' n_foci=5, foci_separation = 10,
+#' n_foci=5, foci_separation = 10, mfocal = NULL,
 #' conc_type = "nucleated", p_ratio)
 #' @examples
 #' #load boundary of Camden
@@ -40,8 +43,8 @@
 #' boundary = camden$boundary # get boundary
 #' landuse <- camden$landuse
 #' spo <- artif_spo(poly = boundary, n_origin = 50,
-#' restriction_feat = landuse, n_foci=5,
-#' foci_separation = 0, conc_type = "dispersed", p_ratio=20)
+#' restriction_feat = landuse, n_foci=5, foci_separation = 0,
+#' mfocal = NULL, conc_type = "dispersed", p_ratio=20)
 #' @details
 #' The focal origins (`n_foci`) serve as the central locations
 #' (such as, city centres). The `foci_separation` indicates
@@ -59,15 +62,17 @@
 #' @importFrom dplyr if_else mutate filter
 #' row_number select bind_cols
 #' @importFrom splancs csr
+#' @importFrom sp CRS
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
 #' @importFrom ggplot2 ggplot geom_point
 #' geom_polygon theme_bw
 #' @importFrom stats dist kmeans
+#' @importFrom raster crs
 #' @export
 
 artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
-                      n_foci=5, foci_separation = 10,
+                      n_foci=5, foci_separation = 10, mfocal = NULL,
                       conc_type = "nucleated", p_ratio = 20){
 
   origins <- list()
@@ -81,6 +86,19 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     slice <- chull <- x <- y <- ggplot <- geom_point <-
     aes <- geom_polygon <- NULL
 
+  #check that the main focal point
+  #falls within the boundary.
+  if(!is.null(mfocal)){
+     #mfocal <- c(526108, 185899)
+     #mfocal <- c(5261080, 1858990)
+     mfocal_pt <- st_as_sf(SpatialPoints(cbind(mfocal[1], mfocal[2]),
+                              proj4string = raster::crs(poly)))
+    #do they intersect?
+    itx <-  data.frame(st_intersects(mfocal_pt, st_as_sf(poly)))[,2]
+    if(length(itx) != 1){
+      stop("Terminated! 'mfocal' provided does not fall inside the 'polygon' area!!")
+    }
+  }
 
   #check the inputs
   if(n_origin <= 0){
@@ -118,7 +136,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
   if(is.null(restriction_feat)){
 
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                           proj4string = crs(backup_poly)))
+                           proj4string = raster::crs(backup_poly)))
 
     final_ran_points_pt <- ran_points_pt
     }
@@ -129,7 +147,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     restriction_feat <- st_as_sf(restriction_feat)
     #convert xy to points
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                proj4string = crs(restriction_feat)))
+                                proj4string = raster::crs(restriction_feat)))
     #check those intersecting land use
     pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
     new_ran_points_pt <- ran_points_pt[-pt_intersect,]
@@ -148,7 +166,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
       colnames(ran_points) <- c("x", "y")
       #convert to points and check intersection
       ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                              proj4string = crs(restriction_feat)))
+                                              proj4string = raster::crs(restriction_feat)))
       #check those not intersecting land use
       pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
       new_ran_points_pt <- ran_points_pt[-pt_intersect,]
@@ -162,25 +180,37 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     if(nrow(final_ran_points_pt) > n_origin){
       final_ran_points_pt <- final_ran_points_pt[1:(nrow(final_ran_points_pt) -
                                           ((nrow(final_ran_points_pt) - n_origin))),]
-    }
-
+      }
   }
 
-
+  #add xy coordinates
   final_ran_points_pt$x <- st_coordinates(final_ran_points_pt)[,1]
   final_ran_points_pt$y <- st_coordinates(final_ran_points_pt)[,2]
 
+  #collate cood only
   final_ran_points_pt <- final_ran_points_pt %>%
     as.data.frame() %>%
     dplyr::select(c(x, y))
 
+  if(!is.null(mfocal)){
+    #append the mfocal
+    final_ran_points_pt[nrow(final_ran_points_pt),1] <- mfocal[1]
+    final_ran_points_pt[nrow(final_ran_points_pt),2] <- mfocal[2]
+    #set the last record as the main
+    #main focal point
+    idx <- nrow(final_ran_points_pt)
+  }
+
+  if(is.null(mfocal)){
+    #randomly pick one point as the
+    #main focal point
+    idx <- sample(1:nrow(final_ran_points_pt), 1, replace=FALSE)
+  }
+
   #calculate distances between points
   o_dist <- dist(final_ran_points_pt, method = "euclidean", upper=TRUE, diag = TRUE)
 
-  #randomly pick one point as the
-  #main focal point
-  ##set.seed(1000)
-  idx <- sample(1:nrow(final_ran_points_pt), 1, replace=FALSE)
+
   #now sort the dist matrix from selected points
   dist_to_main_focus <- as.matrix(o_dist)[,idx]
   #order of proximity
