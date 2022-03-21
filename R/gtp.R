@@ -6,10 +6,10 @@
 #' The GTP will normally cover a 1-year period.
 #' @param trend specifies the direction of the
 #' long-term trend. Options are:
-#' `"decreasing"`, `"stable"`,
-#' and `"increasing"`. Default value is: `"stable"`.
+#' `"falling"`, `"stable"`,
+#' and `"rising"`. Default value is: `"stable"`.
 #' @param slope slope of the long-term trend when
-#' an `"increasing"` or `"decreasing"` trend is specified.
+#' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
 #' @param first_pDate date of the first seasonal peak of
@@ -90,9 +90,9 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   gentle <- ((max(y)/2) - min(y))/(365-0) #slope
   steep <-  ((max(y)) - min(y))/(365-0) #slope
 
-  if(trend == "decreasing"){
+  if(trend == "falling"){
     if(is.null(slope)){
-      stop("Slope cannot be NULL for a decreasing trend!")
+      stop("Slope cannot be NULL for a falling trend!")
     }
     #check slope
     if(slope == "gentle"){
@@ -108,10 +108,10 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
 
   }
 
-  if(trend == "increasing"){
+  if(trend == "rising"){
 
     if(is.null(slope)){
-      stop("Slope cannot be NULL for an increasing trend!")
+      stop("Slope cannot be NULL for an rising trend!")
     }
 
     if(slope == "gentle"){
