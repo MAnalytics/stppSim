@@ -57,7 +57,8 @@ evenly distributed across space.}
 
 \item{mfocal}{the c(x, y) coordinates of a single point,
 representing a pre-defined \code{main} focal point (origin)
-in the area.}
+in the area. The default is \code{NULL} in which a random
+coordinate is chosen within the \code{polygon} area.}
 
 \item{conc_type}{concentration of the rest of the
 origins (non-focal origins) around the focal ones. The options
