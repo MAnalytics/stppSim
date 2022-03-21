@@ -57,6 +57,8 @@
 #' properties of the sample data learnt.
 #' @return an object (list) containing specific spatial
 #' and temporal properties of a sample dataset.
+#' @references Silverman, B.W., 2018. Density estimation
+#' for statistics and data analysis. Routledge.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
 #' desc
