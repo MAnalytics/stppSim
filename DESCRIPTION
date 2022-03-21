@@ -1,7 +1,7 @@
 Package: stppSim
 Type: Package
 Title: Spatiotemporal Point Patterns Simulation
-Version: 1.1.0
+Version: 1.2.0
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial spatiotemporal (ST) point patterns 
