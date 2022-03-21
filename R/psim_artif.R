@@ -41,7 +41,8 @@
 #' evenly distributed across space.
 #' @param mfocal the c(x, y) coordinates of a single point,
 #' representing a pre-defined `main` focal point (origin)
-#' in the area.
+#' in the area. The default is `NULL` in which a random
+#' coordinate is chosen within the `polygon` area.
 #' @param conc_type concentration of the rest of the
 #' origins (non-focal origins) around the focal ones. The options
 #' are `"nucleated"` and `"dispersed"`.
