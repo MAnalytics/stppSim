@@ -39,6 +39,9 @@
 #' close proximity
 #' of one another, while a `100` indicates focal points being
 #' evenly distributed across space.
+#' @param mfocal the c(x, y) coordinates of a single point,
+#' representing a pre-defined `main` focal point (origin)
+#' in the area.
 #' @param conc_type concentration of the rest of the
 #' origins (non-focal origins) around the focal ones. The options
 #' are `"nucleated"` and `"dispersed"`.
@@ -55,10 +58,10 @@
 #' by a walker from one point to the next.
 #' @param trend specifies the direction of the
 #' long-term trend. Options are:
-#' `"decreasing"`, `"stable"`,
-#' and `"increasing"`. Default value is: `"stable"`.
+#' `"falling"`, `"stable"`,
+#' and `"rising"`. Default value is: `"stable"`.
 #' @param slope slope of the long-term trend when
-#' an `"increasing"` or `"decreasing"` trend is specified.
+#' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
 #' @param first_pDate date of the first seasonal peak of
@@ -76,7 +79,7 @@
 #' functions.
 #' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 #' poly, n_origin, restriction_feat=NULL, field,
-#' n_foci, foci_separation, conc_type = "dispersed",
+#' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
@@ -96,7 +99,8 @@
 #' simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 #' poly=boundary, n_origin=20, restriction_feat = NULL,
 #' field = NULL,
-#' n_foci=1, foci_separation = 10, conc_type = "dispersed",
+#' n_foci=1, foci_separation = 10, mfocal = NULL,
+#' conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
 #' slope = NULL,show.plot=FALSE, show.data=FALSE)
@@ -151,9 +155,8 @@
 
 psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        poly, n_origin, restriction_feat=NULL, field=NA,
-                       n_foci,
-                       foci_separation, conc_type = "dispersed",
-                       p_ratio,
+                       n_foci, foci_separation, mfocal = NULL,
+                       conc_type = "dispersed", p_ratio,
                        s_threshold = 50, step_length = 20,
                        trend = "stable",
                        first_pDate=NULL,
@@ -164,9 +167,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
-                   n_foci=n_foci,
-                   foci_separation = foci_separation,
-                   conc_type = conc_type, p_ratio = p_ratio)
+                   n_foci=n_foci, foci_separation = foci_separation,
+                   mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
 
   #start_date <- as.Date(start_date)
 
