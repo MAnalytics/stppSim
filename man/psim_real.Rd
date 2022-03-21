@@ -98,12 +98,14 @@ set.seed(1000)
 dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),
 replace=FALSE),1:3]
-
 #plot(dat_sample$x, dat_sample$y) #preview
+
 #load boundary and land use of Camden
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 landuse = camden$landuse # get landuse
+
+#simulate data
 simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
 step_length = 20, n_origin=20,

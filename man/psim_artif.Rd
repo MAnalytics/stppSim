@@ -6,7 +6,7 @@
 \usage{
 psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 poly, n_origin, restriction_feat=NULL, field,
-n_foci, foci_separation, conc_type = "dispersed",
+n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
@@ -55,6 +55,10 @@ close proximity
 of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
 
+\item{mfocal}{the c(x, y) coordinates of a single point,
+representing a pre-defined \code{main} focal point (origin)
+in the area.}
+
 \item{conc_type}{concentration of the rest of the
 origins (non-focal origins) around the focal ones. The options
 are \code{"nucleated"} and \code{"dispersed"}.}
@@ -75,8 +79,8 @@ by a walker from one point to the next.}
 
 \item{trend}{specifies the direction of the
 long-term trend. Options are:
-\code{"decreasing"}, \code{"stable"},
-and \code{"increasing"}. Default value is: \code{"stable"}.}
+\code{"falling"}, \code{"stable"},
+and \code{"rising"}. Default value is: \code{"stable"}.}
 
 \item{first_pDate}{date of the first seasonal peak of
 the GTP (format: \code{"yyyy-mm-dd"}).
@@ -86,7 +90,7 @@ seasonal cycle of 180 days is utilized (that is,
 a seasonal cycle of 180 days).}
 
 \item{slope}{slope of the long-term trend when
-an \code{"increasing"} or \code{"decreasing"} trend is specified.
+an \code{"rising"} or \code{"falling"} trend is specified.
 Options: \code{"gentle"} or \code{"steep"}. The default value is
 set as \code{NULL} for the \code{stable} trend.}
 
@@ -141,10 +145,12 @@ landuse = camden$landuse # get landuse
 #In this example, we will use a minimal number of
 #'n_origin' (i.e. `20`) for faster computation:
 
+#simulate data
 simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 poly=boundary, n_origin=20, restriction_feat = NULL,
 field = NULL,
-n_foci=1, foci_separation = 10, conc_type = "dispersed",
+n_foci=1, foci_separation = 10, mfocal = NULL,
+conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
 slope = NULL,show.plot=FALSE, show.data=FALSE)

@@ -73,8 +73,13 @@ dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),
 replace=FALSE),]
 #plot(dat_sample$x, dat_sample$y) #preview
+
 stp_learner(dat_sample,
 start_date = NULL, poly = NULL, n_origin=50,
 p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
 show.plot = FALSE)
+}
+\references{
+Silverman, B.W., 2018. Density estimation
+for statistics and data analysis. Routledge.
 }

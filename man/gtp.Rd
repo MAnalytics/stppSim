@@ -14,11 +14,11 @@ The GTP will normally cover a 1-year period.}
 
 \item{trend}{specifies the direction of the
 long-term trend. Options are:
-\code{"decreasing"}, \code{"stable"},
-and \code{"increasing"}. Default value is: \code{"stable"}.}
+\code{"falling"}, \code{"stable"},
+and \code{"rising"}. Default value is: \code{"stable"}.}
 
 \item{slope}{slope of the long-term trend when
-an \code{"increasing"} or \code{"decreasing"} trend is specified.
+an \code{"rising"} or \code{"falling"} trend is specified.
 Options: \code{"gentle"} or \code{"steep"}. The default value is
 set as \code{NULL} for the \code{stable} trend.}
 

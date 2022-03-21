@@ -5,7 +5,7 @@
 \title{Artificial spatial origins}
 \usage{
 artif_spo(poly, n_origin=50, restriction_feat = NULL,
-n_foci=5, foci_separation = 10,
+n_foci=5, foci_separation = 10, mfocal = NULL,
 conc_type = "nucleated", p_ratio)
 }
 \arguments{
@@ -32,6 +32,10 @@ A \code{0} separation indicates that focal points are in
 close proximity
 of one another, while a \code{100} indicates focal points being
 evenly distributed across space.}
+
+\item{mfocal}{the c(x, y) coordinates of a single point,
+representing a pre-defined \code{main} focal point (origin)
+in the area.}
 
 \item{conc_type}{concentration of the rest of the
 origins (non-focal origins) around the focal ones. The options
@@ -73,6 +77,6 @@ package="stppSim"))
 boundary = camden$boundary # get boundary
 landuse <- camden$landuse
 spo <- artif_spo(poly = boundary, n_origin = 50,
-restriction_feat = landuse, n_foci=5,
-foci_separation = 0, conc_type = "dispersed", p_ratio=20)
+restriction_feat = landuse, n_foci=5, foci_separation = 0,
+mfocal = NULL, conc_type = "dispersed", p_ratio=20)
 }
