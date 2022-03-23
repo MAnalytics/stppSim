@@ -236,7 +236,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       #a projection
       if(!is.null(crsys)){
         flush.console()
-        print(paste("Warning: The projection system (crs) of 'poly'",
+        print(paste("Note: The projection system (crs) of 'poly'",
               "object is utilized!!", sep=" "))
       }
       if(is.na(crs(poly))){
