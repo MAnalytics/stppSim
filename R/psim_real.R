@@ -232,7 +232,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     loc_N <- loc_N %>%
       mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
-      mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
+      mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
       rename(datetime=time)
 
