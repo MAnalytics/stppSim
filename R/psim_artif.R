@@ -300,6 +300,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   #add the origins
   output$origins <- spo$origins
+  output$mfocal <- spo$mfocal
   output$poly <- spo$poly
   output$resist <- restriction_feat
 
