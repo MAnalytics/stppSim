@@ -322,6 +322,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     geom_point(mapping = aes(x = x, y = y, color = category))#+
 
   origins$origins <- final_ran_points_pt_prob
+  origins$mfocal <- mfocal
   origins$plot <- p
   origins$poly <- backup_poly
   origins$Class <- "artif_spo"
