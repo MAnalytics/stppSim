@@ -17,12 +17,12 @@ Description: Generates artificial spatiotemporal (ST) point patterns
   and/or temporal model testings and evaluations. Application: With 
   increasingly limited availability of fine-grained spatially and 
   temporally stamped point data, the package provides an alternative 
-  source of data for a wide range of fields in social and life sciences.
+  source of data for a wide range of research in social and life sciences.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
 BugReports: https://github.com/Manalytics/stppSim/issues/new/choose
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -45,7 +45,11 @@ Imports:
   spatstat.geom,
   sparr,
   chron,  
-  ggplot2
+  ggplot2,
+  geosphere,
+  purrr,
+  ggsn,
+  cowplot
 RoxygenNote: 7.1.1
 Suggests:
   knitr,
