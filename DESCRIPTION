@@ -49,8 +49,9 @@ Imports:
   geosphere,
   purrr,
   ggsn,
-  cowplot
-RoxygenNote: 7.1.1
+  cowplot,
+  leaflet
+RoxygenNote: 7.1.2
 Suggests:
   knitr,
   rmarkdown,
@@ -60,6 +61,7 @@ Suggests:
 Collate: 
     'artif_spo.R'
     'chull_poly.R'
+    'compare_areas.R'
     'data.R'
     'date_checker.R'
     'extract_coords.R'
