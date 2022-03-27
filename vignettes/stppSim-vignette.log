@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  27 MAR 2022 05:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  27 MAR 2022 07:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-73882f174262.dir/stppSim
+**C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-7388214e1b26.dir/stppSim
 -vignette.tex
 
-(C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-73882f174262.dir/stppSim-
+(C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-7388214e1b26.dir/stppSim-
 vignette.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (C:\Users\monsu\AppData\Local\Programs\MiKTeX
@@ -617,164 +617,130 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [1
 
 {C:/Users/monsu/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins.png, id=24, 476.37
-975pt x 183.68625pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins.png Graphic f
-ile (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/or
-igins.png  used on input line 205.
+
+LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <10> not available
+(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 186.
+
+<fig/origins.png, id=25, 476.37975pt x 183.68625pt>
+File: fig/origins.png Graphic file (type png)
+<use fig/origins.png>
+Package pdftex.def Info: fig/origins.png  used on input line 202.
 (pdftex.def)             Requested size: 422.77725pt x 163.01776pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 221.
+(Font)              <10> on input line 218.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 221.
-[2 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/origins.png>]
+(Font)              <7> on input line 218.
+[2 <./fig/origins.png>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 276.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 280.
 [3]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/restrictionMap.png, id=51,
- 414.95026pt x 228.855pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/restrictionMap.png Gr
-aphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/restrictionMap.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/re
-strictionMap.png  used on input line 312.
+<fig/restrictionMap.png, id=55, 414.95026pt x 228.855pt>
+File: fig/restrictionMap.png Graphic file (type png)
+<use fig/restrictionMap.png>
+Package pdftex.def Info: fig/restrictionMap.png  used on input line 310.
 (pdftex.def)             Requested size: 469.76208pt x 259.08502pt.
-[4 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/restrictionMap.png>]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/trend.png, id=57, 393.2692
-6pt x 473.97075pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/trend.png Graphic fil
-e (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/trend.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/tr
-end.png  used on input line 365.
+[4 <./fig/restrictionMap.png>]
+<fig/trend.png, id=61, 393.26926pt x 473.97075pt>
+File: fig/trend.png Graphic file (type png)
+<use fig/trend.png>
+Package pdftex.def Info: fig/trend.png  used on input line 361.
 (pdftex.def)             Requested size: 269.83788pt x 325.21042pt.
+[5 <./fig/trend.png>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 386.
-[5] [6 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/trend.png>] [7]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/fromscratch.png, id=80, 65
-2.839pt x 477.58424pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/fromscratch.png Graph
-ic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/fromscratch.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/fr
-omscratch.png  used on input line 489.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 383.
+[6]
+<fig/fromscratch.png, id=79, 652.839pt x 477.58424pt>
+File: fig/fromscratch.png Graphic file (type png)
+<use fig/fromscratch.png>
+Package pdftex.def Info: fig/fromscratch.png  used on input line 480.
 (pdftex.def)             Requested size: 469.7648pt x 343.65634pt.
-[8 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/fromscratch.png>]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/temporalscratch.png, id=86
-, 348.1005pt x 264.38776pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/temporalscratch.png G
-raphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/temporalscratch.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/te
-mporalscratch.png  used on input line 512.
+<fig/temporalscratch.png, id=80, 348.1005pt x 264.38776pt>
+File: fig/temporalscratch.png Graphic file (type png)
+<use fig/temporalscratch.png>
+Package pdftex.def Info: fig/temporalscratch.png  used on input line 496.
 (pdftex.def)             Requested size: 187.8971pt x 142.71077pt.
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/onemonth.png, id=87, 262.5
-81pt x 208.3785pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/onemonth.png Graphic 
-file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/onemonth.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/on
-emonth.png  used on input line 532.
+<fig/onemonth.png, id=81, 262.581pt x 208.3785pt>
+File: fig/onemonth.png Graphic file (type png)
+<use fig/onemonth.png>
+Package pdftex.def Info: fig/onemonth.png  used on input line 510.
 (pdftex.def)             Requested size: 187.90024pt x 149.11348pt.
-[9 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/temporalscratch.png> <C
-:/Users/monsu/Documents/GitHub/stppSim backup/figs/onemonth.png>]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-551.
+529.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [10]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/samplerealvssampleaggregat
-ed.png, id=101, 654.0435pt x 238.491pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/samplerealvssampleagg
-regated.png Graphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/samplerealvssampleaggr
-egated.png>
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/sa
-mplerealvssampleaggregated.png  used on input line 633.
+) [7] [8 <./fig/fromscratch.png> <./fig/temporalscratch.png>] [9 <./fig/onemont
+h.png>]
+<fig/samplerealvssampleaggregated.png, id=101, 654.0435pt x 238.491pt>
+File: fig/samplerealvssampleaggregated.png Graphic file (type png)
+<use fig/samplerealvssampleaggregated.png>
+Package pdftex.def Info: fig/samplerealvssampleaggregated.png  used on input li
+ne 604.
 (pdftex.def)             Requested size: 469.7533pt x 171.29124pt.
-[11]
-Underfull \hbox (badness 1412) in paragraph at lines 688--697
+[10 <./fig/samplerealvssampleaggregated.png>]
+Underfull \hbox (badness 1412) in paragraph at lines 659--668
 \T1/lmtt/m/n/10 sim_fullData[[1]]\T1/lmr/m/n/10 (+20) . In the case of a vec-to
 r ar-gu-ment for \T1/lmtt/m/n/10 n_events\T1/lmr/m/n/10 (+20) , use \T1/lmtt/m/
 n/10 sim_fullData[[1]]\T1/lmr/m/n/10 (+20) ,
  []
 
-[12 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/samplerealvssampleaggr
-egated.png>]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_spatial.png, id=
-111, 662.475pt x 233.673pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_spatial.png
- Graphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_spatial.png>
-
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/si
-mvsreal_spatial.png  used on input line 728.
+[11]
+<fig/simvsreal_spatial.png, id=112, 662.475pt x 233.673pt>
+File: fig/simvsreal_spatial.png Graphic file (type png)
+<use fig/simvsreal_spatial.png>
+Package pdftex.def Info: fig/simvsreal_spatial.png  used on input line 693.
 (pdftex.def)             Requested size: 469.75403pt x 165.69505pt.
-[13 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_spatial.png>
-]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_temporal.png, id
-=120, 665.48625pt x 231.264pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_temporal.pn
-g Graphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_temporal.png
->
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/si
-mvsreal_temporal.png  used on input line 754.
+<fig/simvsreal_temporal.png, id=113, 665.48625pt x 231.264pt>
+File: fig/simvsreal_temporal.png Graphic file (type png)
+<use fig/simvsreal_temporal.png>
+Package pdftex.def Info: fig/simvsreal_temporal.png  used on input line 713.
 (pdftex.def)             Requested size: 469.75682pt x 163.2458pt.
-[14 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/simvsreal_temporal.png
->] [15]
-<C:/Users/monsu/Documents/GitHub/stppSim backup/figs/camdenvsbirmingham.png, id
-=134, 740.16525pt x 386.04225pt>
-File: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/camdenvsbirmingham.pn
-g Graphic file (type png)
-<use C:/Users/monsu/Documents/GitHub/stppSim backup/figs/camdenvsbirmingham.png
->
-Package pdftex.def Info: C:/Users/monsu/Documents/GitHub/stppSim backup/figs/ca
-mdenvsbirmingham.png  used on input line 893.
+[12 <./fig/simvsreal_spatial.png>] [13 <./fig/simvsreal_temporal.png>]
+<fig/camdenvsbirmingham.png, id=130, 740.16525pt x 386.04225pt>
+File: fig/camdenvsbirmingham.png Graphic file (type png)
+<use fig/camdenvsbirmingham.png>
+Package pdftex.def Info: fig/camdenvsbirmingham.png  used on input line 845.
 (pdftex.def)             Requested size: 469.75124pt x 245.00452pt.
-[16 <C:/Users/monsu/Documents/GitHub/stppSim backup/figs/camdenvsbirmingham.png
->] [17] (stppSim-vignette.aux) ) 
+[14] [15 <./fig/camdenvsbirmingham.png>] (stppSim-vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 14537 strings out of 478659
- 240528 string characters out of 2845919
- 578019 words of memory out of 3000000
- 32162 multiletter control sequences out of 15000+600000
- 468918 words of font info for 152 fonts, out of 8000000 for 9000
+ 14548 strings out of 478659
+ 235831 string characters out of 2845919
+ 578018 words of memory out of 3000000
+ 32167 multiletter control sequences out of 15000+600000
+ 469686 words of font info for 157 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,11n,77p,1083b,481s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/monsu/AppData/Local/Programs/MiKTeX/f
-onts/enc/dvips/lm/lm-ts1.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/font
-s/enc/dvips/lm/lm-ec.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/en
-c/dvips/lm/lm-mathex.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/en
-c/dvips/lm/lm-rm.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/enc/dv
-ips/lm/lm-mathit.enc}<C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmbx10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmbx12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmbx9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/lm/lmbxi10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmex10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmmi10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmmi7.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/lm/lmr10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/lm/lmr12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/lm/lmr17.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/lm/lmr6.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmr7.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmr8.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
-lmr9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-sy10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-tk10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-tt10.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-tt12.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
-tt9.pfb><C:/Users/monsu/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmt
-ti10.pfb>
-Output written on stppSim-vignette.pdf (17 pages, 1232509 bytes).
+ 74i,11n,77p,1083b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/mons
+u/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/monsu/A
+ppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/monsu/AppDa
+ta/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Users/monsu/AppDa
+ta/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}<C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmbx9.pfb><C:/Users/monsu/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.pfb><C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmex10.pfb><C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Users/monsu/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/lm/lmmi7.pfb><C:/Users/monsu/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/monsu/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/monsu/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Users/monsu/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/monsu/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/monsu/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/monsu/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Users/monsu/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/monsu/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/monsu/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmtko10.pfb><C:/Users/monsu/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/monsu/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/monsu/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/lm/lmtt9.pfb><C:/Users/monsu/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
+Output written on stppSim-vignette.pdf (15 pages, 1264006 bytes).
 PDF statistics:
- 292 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 500000)
+ 295 PDF objects out of 1000 (max. 8388607)
+ 51 named destinations out of 1000 (max. 500000)
  39059 words of extra memory for PDF output out of 42996 (max. 10000000)
 
 
