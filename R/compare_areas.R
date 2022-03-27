@@ -9,9 +9,8 @@
 #' `spatialPolygonDataFrames`, or
 #' `simple features`). the polygon object of the
 #' second area.
-#' @param display_output (logical) Whether to show output - a plot
-#' comparing the two areas (plotted at the same scale), and a
-#' statement stating the comparison.
+#' @param display_output (logical) Whether to print output
+#' in the console.
 #' Default: \code{FALSE}
 #' @usage compare_areas(area1, area2,
 #' display_output = FALSE)
@@ -30,24 +29,16 @@
 #' area2 = birmingham_boundary, display_output = FALSE)
 #' @details Compares the sizes of two areas (polygon shapefiles).
 #' The two shapefiles can be in any `crs`,
-#' and any spatial object formats. If enabled, the output
-#' is shown comprising a plot and a string quoting the
-#' factor by which
-#' one area is larger than the other. This factor can
-#' be used to scale specific spatial parameters, such as
-#' `n_orign`, `s_threshold`, and `step_length`, during simulation
-#' for a new study area.
+#' and any spatial object formats. If enabled, the output (a value)
+#' comparing the area of the two polygons is printed. This value can
+#' be used to scale some specific spatial parameters, including
+#' `n_origin`, `s_threshold`, and `step_length`.
 #' @return Returns a plot and a text (string) comparing
 #' the sizes of two areas.
 #' @importFrom sf st_as_sf st_transform st_bbox
 #' as_Spatial
 #' @importFrom dplyr mutate select
 #' @importFrom geosphere distHaversine areaPolygon
-#' @importFrom purrr map
-#' @importFrom cowplot plot_grid
-#' @importFrom ggsn scalebar
-#' @importFrom ggplot2 ggplot ggtitle
-#' geom_sf
 #' @export
 
 
@@ -103,28 +94,28 @@ compare_areas <- function(area1, area2, display_output = FALSE){
     val <- round(area2_area/area1_area, digits = 1)
     }
 
-  g1 <- purrr::map(unique(combine_map$area),
-            function(x) {
-              # subset data
-              temp_sf <- subset(combine_map, area == x)
-              ggplot() +
-                geom_sf(data = temp_sf, fill='white') +
-                #guides(fill = "none") +
-                ggtitle(x) +
-                ggsn::scalebar(temp_sf, dist = val, st.size=2,
-                         height=0.01, model = 'WGS84',
-                         transform = T, dist_unit='km')
-              })
-
-  g1 <- cowplot::plot_grid(plotlist = g1)
+  # g1 <- purrr::map(unique(combine_map$area),
+  #           function(x) {
+  #             # subset data
+  #             temp_sf <- subset(combine_map, area == x)
+  #             ggplot() +
+  #               geom_sf(data = temp_sf, fill='white') +
+  #               #guides(fill = "none") +
+  #               ggtitle(x) +
+  #               ggsn::scalebar(temp_sf, dist = val, st.size=2,
+  #                        height=0.01, model = 'WGS84',
+  #                        transform = T, dist_unit='km')
+  #             })
+  #
+  # g1 <- cowplot::plot_grid(plotlist = g1)
 
   if(display_output == TRUE){
-    print(g1)
+    ##print(g1)
     print(out)
   }
 
   output$comparison <- out
-  output$plot <- g1
+  ##output$plot <- g1
 
   return(output)
 
