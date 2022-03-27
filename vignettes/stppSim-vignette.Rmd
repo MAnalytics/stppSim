@@ -139,7 +139,7 @@ The walkers are defined primarily by the following characteristics:
 * ***Origins [`coords`]*** - Walkers emanate from origins. Origins may be distributed randomly across the landscape or exhibit specific spatial concentration. Origins are defined in terms of `xy` coordinates. In criminological application, a human offender can be modelled as a walker emanating from his residence (origin). `Origins` can exhibit two types of concentration: `nucleated` and `dispersed` ([Hornby and Jones, 1991](https://www.google.co.uk/books/edition/An_Introduction_to_Settlement_Geography/DLpzQgAACAAJ?hl=en)). A `nucleated` concentration is one in which all origins concentrate around one focal location, while a `dispersed` concentration has multiple focal locations and the origins can be completely random across the space (see fig. 1). 
 
 ```{r figs1, warnings=FALSE, echo=FALSE, out.width="90%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs1","Type of origin concentration")}
-knitr::include_graphics(paste("fig/","origins.png",sep=""))
+knitr::include_graphics("origins.png")
 ```
 
 * ***Movement*** - Walkers can move in any direction and have the ability to detect obstructions (restrictions) on their path. The movements are controlled primarily by an in-built `transition matrix` (TM) which defines two operational states, namely; an `exploratory` state (in which a walker is merely exploring the environment) and a `performative` state (in which a walker is doing an action). The stochastic properties of the `TM` ensure variations in the behavioral patterns amongst walkers.
@@ -187,7 +187,7 @@ plot(full_restrct_map)
 ```
 
 ```{r figs2, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs2","Restriction map")}
-knitr::include_graphics(paste("fig/", "restrictionMap.png", sep=""))
+knitr::include_graphics("restrictionMap.png")
 ```
 
 From figure 2, the land use feature has three classes, with each class having it's own restriction value {e.g., `Leisure` (0.5); `Sports` (0.7); and `Green` (0.9)}, 
@@ -204,7 +204,7 @@ The following parameters define the temporal dimension:
 * ***Seasonal patterns [`first_pDate`]*** - Defines the medium-term fluctuations of the total events over time. This is controlled by specifying the first seasonal peak point of the time series. A  `90` day first peak implies a seasonal cycle of `180` days.
 
 ```{r figs3, echo=FALSE, out.width="70%", out.height="50%", fig.align = "center", fig.cap=fig$cap("figs3", "Global trends and patterns")}
-knitr::include_graphics(paste("fig/", "trend.png", sep=""))
+knitr::include_graphics("trend.png")
 ```
 
 Figure 3 shows expected seasonal patterns based on different values of `first_pDate`, starting with 90 days, and then increasing the value successively by one month. The number of seasonal cycles decreases with later `first_pDate` values. Both the long-term trend and the seasonal patterns are learned when simulating using `psim_real`.
@@ -278,7 +278,7 @@ The spatial patterns and clustering of events can be controlled by manipulating 
 
 
 ```{r figs4, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs4", "Simulated spatial point patterns of Camden")}
-knitr::include_graphics(paste("fig/", "fromscratch.png", sep=""))
+knitr::include_graphics("fromscratch.png")
 ```
 In the above figures, notice that points that fall on exactly the same unique location are aggregated and symbolize to reflect the count. 
 
@@ -287,13 +287,13 @@ In the above figures, notice that points that fall on exactly the same unique lo
 Since the arguments that control the global temporal patterns (i.e. `trend`, `first_pDate`, and `slope`) in each of the simulation above are constant, then we expect the temporal patterns to be very similar. ***Figure 5a-d*** are the global temporal patterns of ***Figure 4a***, ***4b***, ***4c***, and ***4d***, respectively.
 
 ```{r figs5, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs5","Simulated global trends and patterns (gtp)")}
-knitr::include_graphics(paste("fig/", "temporalscratch.png", sep=""))
+knitr::include_graphics("temporalscratch.png")
 ```
 
 If, for example, we set `first_pDate = "2021-02-01"` (i.e., one month after the start date of the series) and re-run the simulation, assuming we use default parameters, then the resulting global temporal patterns is shown in ***Figure 6***. 
 
 ```{r figs6, echo=FALSE, out.width="50%", out.height="50%", fig.align = "center", fig.cap=fig$cap("figs6", "Gtp with an earlier first seasonal peak")}
-knitr::include_graphics(paste("fig/", "onemonth.png", sep=""))
+knitr::include_graphics("onemonth.png")
 ```
 
 
@@ -372,7 +372,7 @@ legend("topright", legend=c("1-2","3-5", ">5"), pt.cex=itvl, pch=16)
 
 
 ```{r figs7, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs7", "Sample real data (a) unaggregated and (b) aggregated by locations")}
-knitr::include_graphics(paste("fig/", "samplerealvssampleaggregated.png", sep=""))
+knitr::include_graphics("samplerealvssampleaggregated.png")
 ```
 
 From ***Figure 7b***, it can be seen that the southern part of Camden has the highest concentration of theft crimes. The spatial distribution of sample data points can guide a user in selecting the most appropriate spatial parameters. For example, to ensure a narrower spread of the points, a user can either set `n_origin` or {`s_threshold` and `step_length`} as small values. 
@@ -423,13 +423,13 @@ We will employ both `visual` and `statistical` approaches to compare the spatial
 The `visual` approach involves plotting the spatial distribution of points across the space for spatial comparison, and plotting the time series of the data for temporal comparison. ***Figure 8a*** and ***8b*** are the point distribution of the simulated data and the full real data set, respectively, while Figure 9a and 9b are their respective time series plot.
 
 ```{r figs8, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs8", "Setting an earlier first seasonal peak")}
-knitr::include_graphics(paste("fig/", "simvsreal_spatial.png", sep=""))
+knitr::include_graphics("simvsreal_spatial.png")
 ```
 
 Two things are important to note in ***Figure 8***, namely; the `total number of points` and the `clustering of points`. First, we intentionally set `n_events = 2000`, in order to mimicking a real life scenario, where we do not know the actual value. Second, the real data (***Figure 8b***) shows much higher clustering of points at unique locations; this reflects the crime recording practice in which points are snapped to reference locations nearest to incidents. However, our simulation (***Figure 8a***) does not attempts to aggregate points to any reference locations.
 
 ```{r figs9, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs9", "Global temporal pattern of (a) simulated and (b) full real data set ")}
-knitr::include_graphics(paste("fig/", "simvsreal_temporal.png", sep=""))
+knitr::include_graphics("simvsreal_temporal.png")
 ```
 
 It can be seen from ***Figure 9*** that the temporal patterns of both the simulated and the real data appear very similar. They both have similar seasonal patterns (red lines), with the trend rising steadily over time.
@@ -494,7 +494,7 @@ output$plot
 ```
 
 ```{r figs10, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs10", "Comparing Camden and Birmingham")}
-knitr::include_graphics(paste("fig/", "camdenvsbirmingham.png", sep=""))
+knitr::include_graphics("camdenvsbirmingham.png")
 ```
 
 
