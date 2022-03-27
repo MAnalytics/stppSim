@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  27 MAR 2022 07:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2021.12.30)  27 MAR 2022 15:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-7388214e1b26.dir/stppSim
+**C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-738847ed57b4.dir/stppSim
 -vignette.tex
 
-(C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-7388214e1b26.dir/stppSim-
+(C:/Users/monsu/AppData/Local/Temp/Rtmp6BZ16Y/preview-738847ed57b4.dir/stppSim-
 vignette.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (C:\Users\monsu\AppData\Local\Programs\MiKTeX
@@ -648,65 +648,58 @@ Package pdftex.def Info: fig/trend.png  used on input line 361.
 [5 <./fig/trend.png>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 383.
-[6]
-<fig/fromscratch.png, id=79, 652.839pt x 477.58424pt>
-File: fig/fromscratch.png Graphic file (type png)
-<use fig/fromscratch.png>
-Package pdftex.def Info: fig/fromscratch.png  used on input line 480.
-(pdftex.def)             Requested size: 469.7648pt x 343.65634pt.
-<fig/temporalscratch.png, id=80, 348.1005pt x 264.38776pt>
-File: fig/temporalscratch.png Graphic file (type png)
-<use fig/temporalscratch.png>
-Package pdftex.def Info: fig/temporalscratch.png  used on input line 496.
-(pdftex.def)             Requested size: 187.8971pt x 142.71077pt.
-<fig/onemonth.png, id=81, 262.581pt x 208.3785pt>
-File: fig/onemonth.png Graphic file (type png)
-<use fig/onemonth.png>
-Package pdftex.def Info: fig/onemonth.png  used on input line 510.
-(pdftex.def)             Requested size: 187.90024pt x 149.11348pt.
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-529.
+389.
 (C:\Users\monsu\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [7] [8 <./fig/fromscratch.png> <./fig/temporalscratch.png>] [9 <./fig/onemont
-h.png>]
-<fig/samplerealvssampleaggregated.png, id=101, 654.0435pt x 238.491pt>
+) [6]
+<fig/fromscratch.png, id=80, 647.41875pt x 467.346pt>
+File: fig/fromscratch.png Graphic file (type png)
+<use fig/fromscratch.png>
+Package pdftex.def Info: fig/fromscratch.png  used on input line 510.
+(pdftex.def)             Requested size: 469.75677pt x 339.09885pt.
+[7] [8 <./fig/fromscratch.png>]
+<fig/temporalscratch.png, id=91, 681.14474pt x 433.62pt>
+File: fig/temporalscratch.png Graphic file (type png)
+<use fig/temporalscratch.png>
+Package pdftex.def Info: fig/temporalscratch.png  used on input line 535.
+(pdftex.def)             Requested size: 469.76173pt x 299.05255pt.
+<fig/onemonth.png, id=92, 348.70274pt x 244.5135pt>
+File: fig/onemonth.png Graphic file (type png)
+<use fig/onemonth.png>
+Package pdftex.def Info: fig/onemonth.png  used on input line 549.
+(pdftex.def)             Requested size: 234.88531pt x 164.70369pt.
+[9 <./fig/temporalscratch.png>] [10 <./fig/onemonth.png>]
+<fig/samplerealvssampleaggregated.png, id=107, 654.0435pt x 238.491pt>
 File: fig/samplerealvssampleaggregated.png Graphic file (type png)
 <use fig/samplerealvssampleaggregated.png>
 Package pdftex.def Info: fig/samplerealvssampleaggregated.png  used on input li
-ne 604.
+ne 657.
 (pdftex.def)             Requested size: 469.7533pt x 171.29124pt.
-[10 <./fig/samplerealvssampleaggregated.png>]
-Underfull \hbox (badness 1412) in paragraph at lines 659--668
-\T1/lmtt/m/n/10 sim_fullData[[1]]\T1/lmr/m/n/10 (+20) . In the case of a vec-to
-r ar-gu-ment for \T1/lmtt/m/n/10 n_events\T1/lmr/m/n/10 (+20) , use \T1/lmtt/m/
-n/10 sim_fullData[[1]]\T1/lmr/m/n/10 (+20) ,
- []
-
-[11]
-<fig/simvsreal_spatial.png, id=112, 662.475pt x 233.673pt>
+[11] [12 <./fig/samplerealvssampleaggregated.png>]
+<fig/simvsreal_spatial.png, id=117, 662.475pt x 233.673pt>
 File: fig/simvsreal_spatial.png Graphic file (type png)
 <use fig/simvsreal_spatial.png>
-Package pdftex.def Info: fig/simvsreal_spatial.png  used on input line 693.
+Package pdftex.def Info: fig/simvsreal_spatial.png  used on input line 743.
 (pdftex.def)             Requested size: 469.75403pt x 165.69505pt.
-<fig/simvsreal_temporal.png, id=113, 665.48625pt x 231.264pt>
+<fig/simvsreal_temporal.png, id=118, 665.48625pt x 231.264pt>
 File: fig/simvsreal_temporal.png Graphic file (type png)
 <use fig/simvsreal_temporal.png>
-Package pdftex.def Info: fig/simvsreal_temporal.png  used on input line 713.
+Package pdftex.def Info: fig/simvsreal_temporal.png  used on input line 763.
 (pdftex.def)             Requested size: 469.75682pt x 163.2458pt.
-[12 <./fig/simvsreal_spatial.png>] [13 <./fig/simvsreal_temporal.png>]
-<fig/camdenvsbirmingham.png, id=130, 740.16525pt x 386.04225pt>
+[13] [14 <./fig/simvsreal_spatial.png> <./fig/simvsreal_temporal.png>] [15]
+<fig/camdenvsbirmingham.png, id=140, 740.16525pt x 386.04225pt>
 File: fig/camdenvsbirmingham.png Graphic file (type png)
 <use fig/camdenvsbirmingham.png>
-Package pdftex.def Info: fig/camdenvsbirmingham.png  used on input line 845.
+Package pdftex.def Info: fig/camdenvsbirmingham.png  used on input line 901.
 (pdftex.def)             Requested size: 469.75124pt x 245.00452pt.
-[14] [15 <./fig/camdenvsbirmingham.png>] (stppSim-vignette.aux) ) 
+[16] [17 <./fig/camdenvsbirmingham.png>] (stppSim-vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 14548 strings out of 478659
- 235831 string characters out of 2845919
- 578018 words of memory out of 3000000
- 32167 multiletter control sequences out of 15000+600000
- 469686 words of font info for 157 fonts, out of 8000000 for 9000
+ 14562 strings out of 478659
+ 235964 string characters out of 2845919
+ 579067 words of memory out of 3000000
+ 32169 multiletter control sequences out of 15000+600000
+ 470153 words of font info for 161 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  74i,11n,77p,1083b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Users/mons
@@ -737,11 +730,11 @@ ms/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/monsu/AppData/Local/Progra
 ms/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/monsu/AppData/Local/Progra
 ms/MiKTeX/fonts/type1/public/lm/lmtt9.pfb><C:/Users/monsu/AppData/Local/Program
 s/MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
-Output written on stppSim-vignette.pdf (15 pages, 1264006 bytes).
+Output written on stppSim-vignette.pdf (17 pages, 1369133 bytes).
 PDF statistics:
- 295 PDF objects out of 1000 (max. 8388607)
- 51 named destinations out of 1000 (max. 500000)
- 39059 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 309 PDF objects out of 1000 (max. 8388607)
+ 55 named destinations out of 1000 (max. 500000)
+ 39067 words of extra memory for PDF output out of 42996 (max. 10000000)
 
 
 ! pdflatex: major issue: So far, you have not checked for MiKTeX updates.

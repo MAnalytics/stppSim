@@ -2,12 +2,13 @@
 title: 'stppSim: An R package for synthesizing spatiotemporal point patterns - A user
   guide'
 author: |
-  | Monsuru Adepeju^[Big Data Centre, Manchester Metropolitan University, Manchester, M156BH, UK, m.adepeju@mmu.ac.uk]
+  | `Adepeju, M.`
+  | `Big Data Centre, Manchester Metropolitan University, Manchester, M15 6BH, UK`
+  | `Author:`
 date: |
   | ``r Sys.Date()``
   | `Date:`
 output:
-  pdf_document: default
   html_document:
     df_print: paged
 urlcolor: blue
@@ -19,12 +20,80 @@ abstract: With increasingly limited availability of fine-grained spatially and t
   range of research in social and life sciences. It generates artificial spatio-temporal
   (ST) point patterns through the integration of microsimulation and agent-based models.
   Allows a user to define the behaviours of a set of 'walkers' (agents, objects, persons,
-  etc.,) whose interactions with the spatial (landscape) and the temporal configurations produce
-  new point events. The resulting point cloud and patterns can be measured, analyzed, and      
-  processed for spatial and/or temporal model testings and evaluations.
+  etc.,) whose interactions with the spatial (landscape) and the temporal configurations
+  produce new point events. The resulting point cloud and patterns can be measured,
+  analyzed, and processed for spatial and/or temporal model testings and evaluations.
 vignette: |
   %\VignetteIndexEntry{stppSim: An R package for synthesizing spatiotemporal point patterns - A user guide} %\VignetteEngine{knitr::rmarkdown} \usepackage[utf8]{inputenc}
 ---
+
+
+<style type="text/css">
+
+h1.title {
+  font-size: 26px;
+  line-height: 130%;
+  color: Black;
+  text-align: center;
+}
+
+h2.subtitle {
+  font-size: 13px;
+  line-height: 120%;
+  color: Black;
+  text-align: center;
+}
+
+h4.author { /* Header 4 - and the author and data headers use this too  */
+  font-size: 17px;
+  font-family: "Arial";
+  color: Black;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 17px;
+  font-family: "Arial", Times, serif;
+  color: Black;
+  text-align: center;
+}
+
+h4.abstract { /* Header 4 - and the author and data headers use this too  */
+  font-size: 10px;
+  font-family: "Arial", Times, serif;
+  color: black;
+  text-align: center;
+}
+
+h4.institute{ /* Header 4 - and the author and data headers use this too  */
+  font-size: 10px;
+  font-family: "Arial", Times, serif;
+  color: black;
+  text-align: center;
+}
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 13px;
+}
+pre {
+  font-size: 13px
+}
+h1 { /* Header 1 */
+  font-size: 16px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 16px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 15px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+
+</style>
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -36,38 +105,40 @@ knitr::opts_chunk$set(
 ```{r functions, include=FALSE}
 # A function for captioning and referencing images
 fig <- local({
-  i <- 0
-  ref <- list()
-  list(
-    cap=function(refName, text) {
-      i <<- i + 1
-      ref[[refName]] <<- i
-      paste("Figure ", i, ": ", text, sep="")
-    },
-    ref=function(refName) {
-      ref[[refName]]
-    })
+    i <- 0
+    ref <- list()
+    list(
+        cap=function(refName, text) {
+            i <<- i + 1
+            ref[[refName]] <<- i
+            paste("Figure ", i, ": ", text, sep="")
+        },
+        ref=function(refName) {
+            ref[[refName]]
+        })
 })
 ```
 
 
-## Introduction
+
+
+## ***Introduction***
 
 In many research contexts, access to fine-grained spatiotemporal (ST) point data have been severely restricted due to privacy concerns. The `R-stppSim` package has been designed to address this challenge by presenting a framework that is capable of mimicking a real-life data, through the integration of microsimulation and agent-based techniques, in order to generate new point events in space and time. The framework comprises a set of 'walkers' (agents, objects, persons, etc.) with modifiable movement characteristics, the landscape (spatial components), and the temporal configurations. It is The interaction between these three elements that give rise to new point events, which can be processed, measured, and manipulated for further applications.
 
 The package contains two key functions for synthesizing new datasets; (i) `psim_artif` and (ii) `psim_real`. The `psim_artif` synthesizes point patterns purely from users specifications (`simulation from scratch`). This implies that the simulation does not depend on any existing point data. On the other hand, `psim_real` synthesizes point patterns based on a sample real data set. The latter is particularly applicable to situations where only sparse version of a data set is available for an area. The function learns (or extracts) certain spatial and temporal characteristics of the sample data, and then extrapolates to generate full data set. The potential applications of `stppSim` include generation of offending data sets (crime), disease infection data sets, and foraging point patterns of wild animals. 
 
-## Simulation Parameters
+## ***Simulation Parameters***
 
 The simulation parameters are in relation to three elements, namely; the '`walkers (agents)`', the `landscape` (spatial), and the `temporal dimension`. The parameters are described as follow: 
 
-### Walkers (agents).
+### ***Walkers (agents)***
 
 The walkers are defined primarily by the following characteristics:
 
 * ***Origins [`coords`]*** - Walkers emanate from origins. Origins may be distributed randomly across the landscape or exhibit specific spatial concentration. Origins are defined in terms of `xy` coordinates. In criminological application, a human offender can be modelled as a walker emanating from his residence (origin). `Origins` can exhibit two types of concentration: `nucleated` and `dispersed` ([Hornby and Jones, 1991](https://www.google.co.uk/books/edition/An_Introduction_to_Settlement_Geography/DLpzQgAACAAJ?hl=en)). A `nucleated` concentration is one in which all origins concentrate around one focal location, while a `dispersed` concentration has multiple focal locations and the origins can be completely random across the space (see fig. 1). 
 
-```{r fig1, warnings=FALSE, echo=FALSE, out.width="90%", out.height="100%", fig.align = "right", fig.cap="Type of origin concentration"}
+```{r figs1, warnings=FALSE, echo=FALSE, out.width="90%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs1","Type of origin concentration")}
 knitr::include_graphics(paste("fig/","origins.png",sep=""))
 ```
 
@@ -80,7 +151,7 @@ In order to switch from one state to another, a categorical distribution is assi
 
 * ***Proportional ratios [`p_ratio`]*** - Defines the spatial concentration of events being generated by the walkers. Defined as the percentage of total events emanating from a small number of the most active origins. For example, a `20:80` proportional ratios implies that 20% of origins (walkers) would generate 80% of the total point events.
 
-### Landscape (spatial)
+### ***Landscape (spatial)***
 
 The followings are the key properties of a landscape:
 
@@ -115,7 +186,7 @@ full_restrct_map <- space_restriction(shp = landuse,
 plot(full_restrct_map)
 ```
 
-```{r fig2, echo=FALSE, out.width="100%", out.height="100%", fig.align = "right", fig.cap="Restriction map"}
+```{r figs2, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs2","Restriction map")}
 knitr::include_graphics(paste("fig/", "restrictionMap.png", sep=""))
 ```
 
@@ -124,7 +195,7 @@ From figure 2, the land use feature has three classes, with each class having it
 
 * ***Focal points [`n_foci`]*** - Locations (origins) of relatively higher importance. Usually present more opportunities (to event occurrences). This is only specified when using `psim_artif`. A user will typically specify the number of focal points to simulate. In the context of urban landscape configuration, a focal point is synonymous to a `city/town centre`. The major focal point (location) within a city (if exist) can also be specified, using an additional parameter `mfocal`.  The default value of `mfocal` is `NULL`. Also, a parameter `foci separation` allows a user to specify the proximity of the focal points to one another (values range from 1 to 100), with `1` and `100` being `highest` and `lowest` proximities, respectively. 
 
-### Temporal dimension
+### ***Temporal dimension***
 
 The following parameters define the temporal dimension:
 
@@ -132,7 +203,7 @@ The following parameters define the temporal dimension:
 
 * ***Seasonal patterns [`first_pDate`]*** - Defines the medium-term fluctuations of the total events over time. This is controlled by specifying the first seasonal peak point of the time series. A  `90` day first peak implies a seasonal cycle of `180` days.
 
-```{r fig3, echo=FALSE, out.width="70%", out.height="50%", fig.align = "center", fig.cap="Global trends and patterns"}
+```{r figs3, echo=FALSE, out.width="70%", out.height="50%", fig.align = "center", fig.cap=fig$cap("figs3", "Global trends and patterns")}
 knitr::include_graphics(paste("fig/", "trend.png", sep=""))
 ```
 
@@ -140,7 +211,7 @@ Figure 3 shows expected seasonal patterns based on different values of `first_pD
 
 * ***time bin*** - Time to reset all walkers. Typically 1 day. 
 
-## Installation of `stppSim`
+## ***Installation of `stppSim`***
 
 From `R` console, type:
 
@@ -160,7 +231,7 @@ library(stppSim)
 ```
 
 
-## Simulating `stpp` from scratch
+## ***Simulating `stpp` from scratch***
 
 Three key arguments required are: `n_events` - **the number of points to simulate**, `start_date` - the start date of the time series, and `poly` - **the polygon shapefile representing the boundary of the study area** within which point patterns are to be simulated. For the former, it is recommended that a vector of values is provided, rather than a single value. For example, `n_events = c(200, 500, 1000, 2000)`. The output is generated as a list comprising the separate data frame for each value. Besides, the length of `n_events` has little of no effects on the processing time.   
 
@@ -206,7 +277,7 @@ The spatial patterns and clustering of events can be controlled by manipulating 
 ***Figure 4*** is the spatial point patterns (`spp`) of `n_events = 1000` at varying parameter settings. ***Note:*** the spatial pattern is likely to change each time the code is re-run, owing to the random elements in the function. ***Figure 4a*** is the result when all default arguments are used (as in the code above). ***Figure 4b*** is the result when the following extra arguments are applied, namely; `resistance_feat = camden$landuse` and `mfocal = c(530000, 182250)` - the first argument limits the amount of events simulated within the land use (restriction) features, and the second argument ensures that the spatial concentration of origins are around a focal point (point indicated as red dot on the map). ***Figure 4c*** is the result when, in addition to applying the `resistance_feat` and `mfocal` (as above), the `foci_separation = 50` - this additional argument ensures that the origins are moderately far from each another. Lastly, ***Figure 4d*** is the result when, in addition to setting the `mfocal` (as above), the `s_threshold` and `step_length` are set as equal to `250` and `50`, respectively - these additional settings is to ensure that points are well-spread out from their respective  origins. 
 
 
-```{r fig4, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap="Simulated spatial point patterns of Camden"}
+```{r figs4, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs4", "Simulated spatial point patterns of Camden")}
 knitr::include_graphics(paste("fig/", "fromscratch.png", sep=""))
 ```
 In the above figures, notice that points that fall on exactly the same unique location are aggregated and symbolize to reflect the count. 
@@ -215,18 +286,18 @@ In the above figures, notice that points that fall on exactly the same unique lo
 
 Since the arguments that control the global temporal patterns (i.e. `trend`, `first_pDate`, and `slope`) in each of the simulation above are constant, then we expect the temporal patterns to be very similar. ***Figure 5a-d*** are the global temporal patterns of ***Figure 4a***, ***4b***, ***4c***, and ***4d***, respectively.
 
-```{r fig5, echo=FALSE, out.width="40%", out.height="40%", fig.align = "center", fig.cap="Simulated global trends and patterns (gtp)"}
+```{r figs5, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs5","Simulated global trends and patterns (gtp)")}
 knitr::include_graphics(paste("fig/", "temporalscratch.png", sep=""))
 ```
 
 If, for example, we set `first_pDate = "2021-02-01"` (i.e., one month after the start date of the series) and re-run the simulation, assuming we use default parameters, then the resulting global temporal patterns is shown in ***Figure 6***. 
 
-```{r fig6, echo=FALSE, out.width="40%", out.height="40%", fig.align = "center", fig.cap="Gtp with an earlier first seasonal peak"}
+```{r figs6, echo=FALSE, out.width="50%", out.height="50%", fig.align = "center", fig.cap=fig$cap("figs6", "Gtp with an earlier first seasonal peak")}
 knitr::include_graphics(paste("fig/", "onemonth.png", sep=""))
 ```
 
 
-## Simulating `stpp` from sample real dataset
+## ***Simulating `stpp` from sample real dataset***
 
 The two key parameters here include, `n_events` - **the number of points to simulate**, and `ppt` - the **sample real data**. As stated above, it is recommended to set a vector of values as equal to `n_events`. The sample data set should have clear `x`, `y` and `t` fields (see details in the package`manual`). 
 
@@ -300,7 +371,7 @@ legend("topright", legend=c("1-2","3-5", ">5"), pt.cex=itvl, pch=16)
 ```
 
 
-```{r fig7, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap="Sample real data (a) unaggregated and (b) aggregated by locations"}
+```{r figs7, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs7", "Sample real data (a) unaggregated and (b) aggregated by locations")}
 knitr::include_graphics(paste("fig/", "samplerealvssampleaggregated.png", sep=""))
 ```
 
@@ -338,12 +409,12 @@ sim_d <- sim_fullData[[1]]
 
 Summarising the results:
 
-```{r eval=TRUE, echo=TRUE, warning=FALSE}
+```{r eval=FALSE, echo=TRUE, warning=FALSE}
 summary(sim_fullData[[1]])
 ```
 
 
-### Comparing simulated data and full real data
+### ***Comparing simulated data and full real data***
 
 We will employ both `visual` and `statistical` approaches to compare the spatial and temporal patterns of the simulated data and the full real data (i.e., 100% data size). 
 
@@ -351,13 +422,13 @@ We will employ both `visual` and `statistical` approaches to compare the spatial
 
 The `visual` approach involves plotting the spatial distribution of points across the space for spatial comparison, and plotting the time series of the data for temporal comparison. ***Figure 8a*** and ***8b*** are the point distribution of the simulated data and the full real data set, respectively, while Figure 9a and 9b are their respective time series plot.
 
-```{r fig8, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap="Setting an earlier first seasonal peak"}
+```{r figs8, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs8", "Setting an earlier first seasonal peak")}
 knitr::include_graphics(paste("fig/", "simvsreal_spatial.png", sep=""))
 ```
 
 Two things are important to note in ***Figure 8***, namely; the `total number of points` and the `clustering of points`. First, we intentionally set `n_events = 2000`, in order to mimicking a real life scenario, where we do not know the actual value. Second, the real data (***Figure 8b***) shows much higher clustering of points at unique locations; this reflects the crime recording practice in which points are snapped to reference locations nearest to incidents. However, our simulation (***Figure 8a***) does not attempts to aggregate points to any reference locations.
 
-```{r fig9, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap="Global temporal pattern of (a) simulated and (b) full real data set "}
+```{r figs9, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs9", "Global temporal pattern of (a) simulated and (b) full real data set ")}
 knitr::include_graphics(paste("fig/", "simvsreal_temporal.png", sep=""))
 ```
 
@@ -380,7 +451,7 @@ knitr::kable(table, caption = "Table 1. `Correlation between simulated and real 
 There are strong similarities between the simulated and the real data sets, in both spatial and temporal dimensions, except at the `daily` temporal scale in which the similarity is weak. This is however expected given the level of randomness at such a finer scale, coupled with the fact that the daily stamp of the 
 real data set was randomly generated (see the manual on the details of the `police.uk` data set). As the aggregation increases, either in the spatial or temporal dimension, the data tends to be more similar, with correlation coefficients of `.78` and `.93`, at the highest spatial and temporal scales, respectively. 
 
-## Setting simulation parameters for different study areas
+## ***Setting simulation parameters for different study areas***
 
 All the parameters (arguments) as used in this vignette are expected to produce similar effects for any study area, except for three of the parameters that control the spatial distributions of the simulated points. These include `n_origin`, `s_threshold` and `step_length`. A user will need to set the appropriate values for these parameters in order to produce a reasonably distributed point patterns across the space. As the size of the study area increases or decreases, we expect these three arguments to "proportionally" scale up or scale down, respectively. ***Note***: We recommend that a user only scale either {`n_origin`} or {`s_threshold` and `step_length`} to control the spatial dimension. 
 
@@ -422,13 +493,13 @@ To retrieve the plot showing the relative sizes of the two areas:
 output$plot
 ```
 
-```{r fig10, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap="Comparing Camden and Birmingham"}
+```{r figs10, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs10", "Comparing Camden and Birmingham")}
 knitr::include_graphics(paste("fig/", "camdenvsbirmingham.png", sep=""))
 ```
 
 
-## Discussion
+## ***Discussion***
 
-This vignette has demonstrated the utility of the two main functions of the `stppSim` package for generating fine-grained spatiotemporal point patterns; (1) `psim_artif` - for generating data from scratch and (2) `psim_real` for generating data from a sample real data set. The vignette discusses the parameters that control the three main simulation elements, namely; 'Walkers (agents)', the `landscape` (spatial), and the `temporal` dimension. These parameters should be modified in accordance with the subject under study. The package has a wide potential areas of applications, including the study of human offending behaviours and crime, the study of foraging animals and their scores, and the study of disease carriers and infections. We will continue to update the package for wider application.   
+This vignette has demonstrated the utility of the two key simulation functions of the `stppSim` package: (i) the `psim_artif` - for generating `stpp` from scratch and (ii) `psim_real` - for generating `stpp` from a sample real data set. The vignette demonstrated how to modify the parameters in order to control the resulting spatial and dimension characteristics of the data. However, these parameters should be modified in accordance with the subject under study. The package has a wide potential areas of applications, including the study of human offending behaviours and crime, the foraging characteristics of wild animals and their scores, and thirdly, the study of disease carriers and infections. We will continue to update the package for wider application.   
 
 We encourage users to report any bugs encountered while using the package so that they can be fixed immediately. Welcome contributions to this package which will be acknowledged accordingly. 
