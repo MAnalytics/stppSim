@@ -18,9 +18,8 @@ first area.}
 \verb{simple features}). the polygon object of the
 second area.}
 
-\item{display_output}{(logical) Whether to show output - a plot
-comparing the two areas (plotted at the same scale), and a
-statement stating the comparison.
+\item{display_output}{(logical) Whether to print output
+in the console.
 Default: \code{FALSE}}
 }
 \value{
@@ -34,13 +33,10 @@ areas (boundary shapefiles).
 \details{
 Compares the sizes of two areas (polygon shapefiles).
 The two shapefiles can be in any \code{crs},
-and any spatial object formats. If enabled, the output
-is shown comprising a plot and a string quoting the
-factor by which
-one area is larger than the other. This factor can
-be used to scale specific spatial parameters, such as
-\code{n_orign}, \code{s_threshold}, and \code{step_length}, during simulation
-for a new study area.
+and any spatial object formats. If enabled, the output (a value)
+comparing the area of the two polygons is printed. This value can
+be used to scale some specific spatial parameters, including
+\code{n_origin}, \code{s_threshold}, and \code{step_length}.
 }
 \examples{
 #load 'area1' object - boundary of Camden, UK
