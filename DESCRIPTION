@@ -58,6 +58,7 @@ Suggests:
   graphics,
   grDevices,
   utils
+VignetteBuilder: knitr
 Collate: 
     'artif_spo.R'
     'chull_poly.R'
