@@ -23,8 +23,10 @@ abstract: With increasingly limited availability of fine-grained spatially and t
   etc.,) whose interactions with the spatial (landscape) and the temporal configurations
   produce new point events. The resulting point cloud and patterns can be measured,
   analyzed, and processed for spatial and/or temporal model testings and evaluations.
-vignette: |
-  %\VignetteIndexEntry{stppSim: An R package for synthesizing spatiotemporal point patterns - A user guide} %\VignetteEngine{knitr::rmarkdown} \usepackage[utf8]{inputenc}
+vignette: >
+  %\VignetteIndexEntry{stppSim: An R package for synthesizing spatiotemporal point patterns - A user guide}
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
 ---
 
 
@@ -455,7 +457,7 @@ real data set was randomly generated (see the manual on the details of the `poli
 
 All the parameters (arguments) as used in this vignette are expected to produce similar effects for any study area, except for three of the parameters that control the spatial distributions of the simulated points. These include `n_origin`, `s_threshold` and `step_length`. A user will need to set the appropriate values for these parameters in order to produce a reasonably distributed point patterns across the space. As the size of the study area increases or decreases, we expect these three arguments to "proportionally" scale up or scale down, respectively. ***Note***: We recommend that a user only scale either {`n_origin`} or {`s_threshold` and `step_length`} to control the spatial dimension. 
 
-As a result of the above challenge, we provide the function `compare_areas()` to allow a user to compare the relative size of any twp areas. Typically, one of the area would be one in which the simulation parameters are already established, such as `Camden` (in this vignette). By inputing a second polygon shapefile in the function, a factor or value is generated, which indicates the relative sizes of the two areas. This factor can then be used to multiple the aforementioned parameters. For example, if `Camden` is `3 times` smaller than the new area, then we multiply either {`n_origin`} or {`s_threshold` and `step_length`} by `3` for the simulation. You use divide if `Camden` is bigger. Computationally, using {`s_threshold` and `step_length`} is a better option.
+As a result of the above challenge, we provide the function `compare_areas()` to allow a user to compare the relative size of any two areas. Typically, one of the areas would be one in which the appropriate simulation parameters are already established, such as `Camden` (in this vignette). By inputing a second polygon shapefile in the function, a factor or value is generated, which compares the sizes of the two areas. This factor should be used to multiple the above stated parameters for the new area. For example, if `Camden` is `3 times` smaller than the new area, then we multiply either {`n_origin`} or {`s_threshold` and `step_length`} by `3` for the simulation. You use divide if `Camden` is bigger. Computationally, using {`s_threshold` and `step_length`} is a better option.
 
 We can demonstrate the utility of `compare_areas()` function by comparing `Birmingham` area of UK with `Camden` area, as follows:
 
@@ -486,17 +488,6 @@ output$comparison
 The above code returns the string `#-----'area2' is 12.3 times bigger than 'area1'-----#`. 
 
 Based on the above, then multiply {`n_origin`} used for Camden simulation by `12.3` or each of {`s_threshold` and `step_length`} used for Camden simulation by `12.3`. Then, set the new values in the simulation function and run. 
-
-To retrieve the plot showing the relative sizes of the two areas: 
-
-```{r eval=FALSE, echo=TRUE, warning=FALSE}
-output$plot
-```
-
-```{r figs10, echo=FALSE, out.width="100%", out.height="100%", fig.align = "center", fig.cap=fig$cap("figs10", "Comparing Camden and Birmingham")}
-knitr::include_graphics("camdenvsbirmingham.png")
-```
-
 
 ## ***Discussion***
 
