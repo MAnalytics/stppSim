@@ -47,9 +47,6 @@ Imports:
   chron,  
   ggplot2,
   geosphere,
-  purrr,
-  ggsn,
-  cowplot,
   leaflet
 RoxygenNote: 7.1.2
 Suggests:
