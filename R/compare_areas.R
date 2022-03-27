@@ -93,13 +93,13 @@ compare_areas <- function(area1, area2, display_output = FALSE){
 
   if(area1_area > area2_area) {
     out <- paste("#-----'area1' is", round(area1_area/area2_area, digits = 1),
-               "times larger than 'area2'-----#", sep=" ")
+               "times bigger than 'area2'-----#", sep=" ")
     val <- round(area1_area/area2_area, digits = 1)
     }
 
   if(area2_area > area1_area) {
     out <- paste("#-----'area2' is", round(area2_area/area1_area, digits = 1),
-               "times larger than 'area1'-----#", sep=" ")
+               "times bigger than 'area1'-----#", sep=" ")
     val <- round(area2_area/area1_area, digits = 1)
     }
 
@@ -111,7 +111,7 @@ compare_areas <- function(area1, area2, display_output = FALSE){
                 geom_sf(data = temp_sf, fill='white') +
                 #guides(fill = "none") +
                 ggtitle(x) +
-                scalebar(temp_sf, dist = val, st.size=2,
+                ggsn::scalebar(temp_sf, dist = val, st.size=2,
                          height=0.01, model = 'WGS84',
                          transform = T, dist_unit='km')
               })
@@ -119,9 +119,7 @@ compare_areas <- function(area1, area2, display_output = FALSE){
   g1 <- cowplot::plot_grid(plotlist = g1)
 
   if(display_output == TRUE){
-    flush.console()
     print(g1)
-    flush.console()
     print(out)
   }
 
