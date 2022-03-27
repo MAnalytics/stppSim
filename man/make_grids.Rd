@@ -5,7 +5,7 @@
 \title{Make square grids}
 \usage{
 make_grids(poly, size = 250,
-show_output = FALSE)
+show_output = FALSE, interactive = FALSE)
 }
 \arguments{
 \item{poly}{(as \code{spatialPolygons},
@@ -19,6 +19,10 @@ for a 250 by 250 square grids is \code{250}.}
 
 \item{show_output}{(logical) Display the output.
 Default: \code{FALSE}}
+
+\item{interactive}{(logical) to show
+interactive map of the grids generated.
+Default: \code{FALSE}.}
 }
 \value{
 Returns a "SpatialPolygonsDataFrames" object
@@ -31,7 +35,13 @@ over an area (boundary shapefile).
 }
 \details{
 Generates a square grid system in a shapefile
-format (in the same \code{crs} as the input \code{poly})
+format (in the same \code{crs} as the input \code{poly}).
+If \code{interactive} argument is \code{TRUE}, an interactive
+map is shown from which the centroid coordinates
+of any grid can be displayed by hovering the mouse
+over the grid. If internet connection is
+available on the PC, a basemap (OpenStreetmap) is
+added to help identify places.
 }
 \examples{
 #load boundary of Camden
@@ -39,5 +49,5 @@ load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary
 make_grids(poly=boundary, size = 250,
-show_output = FALSE)
+show_output = FALSE, interactive = FALSE)
 }
