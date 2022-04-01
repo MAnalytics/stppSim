@@ -151,6 +151,7 @@
 #' @importFrom tibble rownames_to_column as_tibble
 #' @importFrom graphics points legend
 #' @importFrom lubridate hms
+#' @importFrom ggplot2 ggplot
 #' @export
 #'
 
@@ -231,7 +232,24 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   spo_xy <- as_tibble(spo$origins) %>%
     dplyr::select(x, y)
 
-  #Show models before proceeding.
+  #Create spatial and temporal models
+
+  #Temporal models
+  temporal_data <- data.frame(gtp) %>%
+    dplyr::mutate(t_step = 1:length(gtp$data))%>%
+    dplyr::mutate(firstPeak = first_pDate)%>%
+    mutate(first_peak = "twodash")
+
+  temporal_model <- ggplot(data=(temporal_data %>%
+                            mutate(peak = factor(firstPeak,
+                            levels = c(first_pDate)))),
+                    aes(x=t_step, y=data)) +
+    geom_line(aes(linetype="dash"), size=1, lty=2) +
+    labs(y= "Event count", x = "time step") +
+    theme_bw()
+
+  #spatial models
+  spo$origins
 
 
   #estimating computational time
