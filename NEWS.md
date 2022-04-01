@@ -16,11 +16,19 @@ Details of changes made (27/03/2022):
 Note: Package checked on multiple platforms, and passed! 
 ## Test environments
 * local OS Windows, R 3.5.3
-* Debian Linux (R-devel), R 3.5.3
+* Fedora Linux (R-devel), R 3.5.3
 * win-builder (devel and release), R 3.5.3 
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs. 
+There were no ERRORs, WARNINGs or 2 NOTEs. 
+
+**NOTEs 1**: The note pertains to using a lot of non-default packages. 
+***Author's comment***: This will be addressed in 
+the future.
+
+**NOTEs2**: Found the (possibly) invalid DOIs.
+***Author's comment***: All DOI's are correct!
+
 
 Thanks,
 
