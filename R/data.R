@@ -41,3 +41,14 @@
 #'   \item t: t time
 #'     }
 "xyt_data"
+
+#' @title xyz data
+#' @description Example data with 'x', 'y',
+#' and a 'z' information
+#' @format A matrix containing three variables
+#' \itemize{
+#'   \item x: x coordinate
+#'   \item y: y coordinate
+#'   \item z: z height/probability/etc
+#'     }
+"xyz"

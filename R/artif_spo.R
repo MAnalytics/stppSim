@@ -318,6 +318,9 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
       cbind(groups_clusters, prob=rev(grp_p$prob))
   }
 
+  final_ran_points_pt_prob <- final_ran_points_pt_prob %>%
+    select(x, y, prob, group, category)
+
   p <- ggplot(data = final_ran_points_pt_prob) +
     geom_point(mapping = aes(x = x, y = y, color = category))#+
 
