@@ -5,30 +5,14 @@ date: "27 March 2022"
 output: html_document
 ---
 
-Details of changes made (27/03/2022):
+Details of changes made (**/**/2022):
 
-1. Added a `vignette` to guide the use of the package
-2. Added a new function, i.e. `compare_boundary.R`
-3. Added a parameter `interactive` to `make_grids.R` function. 
-4. Added new data set,  `birmingham_boundary.rda` inside `inst/extdata`
-5. Modified the `DESCRIPTION` file: R (>= 4.0.0) to R (>= 4.1.0) 
+1. Added msg "Preview the final spatial and temporal model?"? Yes or No "Continue?" `vignette` to guide the use of the package
+Vignette modified accordingly. interpolation..
+2. Implement network space (for the 'planar' and 'network'.... 'real' point snapped to nearest segment)
+3. Address the computational time for the 'psim_real'
 
-Note: Package checked on multiple platforms, and passed! 
-## Test environments
-* local OS Windows, R 3.5.3
-* Fedora Linux (R-devel), R 3.5.3
-* win-builder (devel and release), R 3.5.3 
-
-## R CMD check results
-There were no ERRORs, WARNINGs or 2 NOTEs. 
-
-**NOTEs 1**: The note pertains to using a lot of non-default packages. 
-***Author's comment***: This will be addressed in 
-the future.
-
-**NOTEs2**: Found the (possibly) invalid DOIs.
-***Author's comment***: All DOI's are correct!
-
+Other information to be included
 
 Thanks,
 

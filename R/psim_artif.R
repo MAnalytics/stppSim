@@ -231,6 +231,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   spo_xy <- as_tibble(spo$origins) %>%
     dplyr::select(x, y)
 
+  #Show models before proceeding.
+
+
   #estimating computational time
   options(digits.secs = 5)
   tme1 <- Sys.time()
