@@ -7,7 +7,7 @@
 #' a polygon shapefile defining the extent of a landscape.
 #' Default: \code{NULL}, in which the spatial extent
 #' of `pt` is utilized.
-#' @param df 1-column data frame containing
+#' @param df a vector or 1-column data frame containing
 #' values for the time series.
 #' @param crsys (string) the EPSG code of the projection
 #' system of the `ppt` coordinates. This only used if
@@ -31,14 +31,11 @@
 #' t <- seq(0,100,1)
 #' df <- data.frame(data = abs(min(sin(t))) + sin(t))
 #' #run function
-#' stm(pt = xyz, poly=camden_boundary, df,
+#' stm(pt = xyz, poly=camden_boundary, df=df,
 #' crsys = NULL, display_output = FALSE)
 #' @details
 #' @return
-#' @importFrom sf st_as_sf st_transform st_bbox
-#' as_Spatial
 #' @importFrom dplyr mutate select
-#' @importFrom geosphere distHaversine areaPolygon
 #' @export
 
 
@@ -115,7 +112,7 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   org_pt$x <- st_coordinates(org_pt)[,1]
   org_pt$y <- st_coordinates(org_pt)[,2]
   org_pt <- org_pt %>%
-    select(x, y, prob)
+    select(x, y, z)
 
   #collate the extent of polygon
   coordP <- extent(P)
@@ -142,12 +139,12 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
 
   #grd_template <- org_pt
 
-  grid_plot <- ggplot() +
-    geom_point(data = grd_template, aes(x = x, y = y), size = 0.01) +
-    geom_point(data = org_pt,
-             mapping = aes(x = x, y = y, color = (prob)), size = 3) +
-   scale_color_gradientn(colors = c("blue", "yellow", "red"))+
-    theme_bw()
+  # grid_plot <- ggplot() +
+  #   geom_point(data = grd_template, aes(x = x, y = y), size = 0.01) +
+  #   geom_point(data = org_pt,
+  #            mapping = aes(x = x, y = y, color = (prob)), size = 3) +
+  #  scale_color_gradientn(colors = c("blue", "yellow", "red"))+
+  #   theme_bw()
 
   sf_org_pt <- st_as_sf(org_pt, coords = c("x", "y"))
 
@@ -187,7 +184,6 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   #plot(r3)
   #plot(P, add=TRUE, lwd=1)
 
-
   r_points = rasterToPoints(r3)
   r_df = data.frame(r_points)
   #head(r_df) #breaks will be set to column "layer"
@@ -203,27 +199,30 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
     ggtitle("Spatial model")
 
 
-#Temporal models
-  temporal_data <- data.frame(gtp) %>%
-    dplyr::mutate(t_step = 1:length(gtp$data))%>%
-    dplyr::mutate(firstPeak = first_pDate)%>%
+  #Temporal models
+  colnames(df) <- "data"
+  temporal_data <- data.frame(df) %>%
+    dplyr::mutate(t_step = 1:length(df[,1]))%>%
+    #dplyr::mutate(firstPeak = first_pDate)%>%
     mutate(first_peak = "twodash")
 
-  temporal_model <- ggplot(data=(temporal_data %>%
-                                 mutate(peak = factor(firstPeak,
-                                                      levels = c(first_pDate)))),
+  temporal_model <- ggplot(data=temporal_data, #%>%
+                                 # mutate(peak = factor(firstPeak,
+                                 #                      levels = c(first_pDate)))),
                          aes(x=t_step, y=data)) +
     geom_line(aes(linetype="dash"), size=1, lty=2) +
     labs(y= "Event count", x = "time step") +
     ggtitle("Temporal_model")+
     theme_bw()
 
-  plot_grid(spatial_model,
-          temporal_model,
-          ncol=1,
-          rel_heights = c(3, 1),
-          rel_widths = c(2,1),
-          labels = c('A', 'B'),
-          label_size = 12)
+  fn_plot <- plot_grid(spatial_model,
+     temporal_model,
+     ncol=1,
+     rel_heights = c(3, 1),
+     rel_widths = c(2,1),
+     labels = c('A', 'B'),
+     label_size = 12)
+
+  return(fn_plot)
 
 }
