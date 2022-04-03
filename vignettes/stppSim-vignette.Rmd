@@ -264,7 +264,7 @@ pt_sizes = c(200, 1000, 2000)
 #simulate data
 artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
   poly=boundary, n_origin=50, resistance_feat = NULL,
-  field = "restrVal",
+  field = NA,
   n_foci=5, foci_separation = 10, mfocal = NULL,
   conc_type = "dispersed",
   p_ratio = 20, s_threshold = 50, step_length = 20,
@@ -273,7 +273,7 @@ artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
 
 ```
 
-The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `3.5 minutes`. The processing time is increased to `30.2` minutes, if the argument `resistance_feat = camden$landuse`. 
+The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `3.5 minutes`. The processing time is increases to `30.2` minutes, if the argument `resistance_feat = camden$landuse` (with `field = "restrVal"`). 
 
 To retrieve the result of any `n_events`, simply type the object name with the value index. For example to retrieve the result based on `n_events = 1000`, type: 
 
@@ -388,7 +388,7 @@ knitr::include_graphics("samplerealvssampleaggregated.png")
 
 From ***Figure 7b***, it can be seen that the southern part of Camden has the highest concentration of theft crimes. The spatial distribution of sample data points can guide a user in selecting the most appropriate spatial parameters. For example, to ensure a narrower spread of the points, a user can either set `n_origin` or {`s_threshold` and `step_length`} as small values. 
 
-In general, to guide the selection of appropriate spatial parameters for any new study area, a user might needs to understand the relative size of the new study area compared to Camden (This is discussed in details below).  
+In general, to guide the selection of appropriate spatial parameters for any new study area, a user would need to understand the relative size of the new study area compared to Camden (This is discussed in details below).  
 
 Now, simulating the point data:
 
@@ -405,7 +405,7 @@ Now, simulating the point data:
 sim_fullData <- psim_real(n_events=2000, ppt=dat_sample,
   start_date = NULL, poly = NULL, s_threshold = NULL,
   step_length = 20, n_origin=50, restriction_feat=landuse, 
-  field=NA, p_ratio=20, crsys = "EPSG:27700")
+  field="restrVal", p_ratio=20, crsys = "EPSG:27700")
 
 ```
 
