@@ -28,19 +28,34 @@
 #' #read xyz data
 #' data(xyz)
 #' #create a time series
-#' t <- seq(0,100,1)
+#' t <- seq(0,5,0.5)
 #' df <- data.frame(data = abs(min(sin(t))) + sin(t))
 #' #run function
 #' stm(pt = xyz, poly=camden_boundary, df=df,
 #' crsys = NULL, display_output = FALSE)
 #' @details
-#' @return
+#' @return Too...
 #' @importFrom dplyr mutate select
+#' @importFrom raster projection crop mask
+#' rasterToPoints
+#' @importFrom ggplot2 ggplot geom_line labs
+#' geom_tile scale_fill_brewer coord_equal
+#' element_blank xlab ylab ggtitle geom_sf
+#' guides guide_legend
+#' @importFrom sf st_crs st_as_sfc st_make_grid
+#' st_drop_geometry st_centroid
+#' @importFrom methods as
+#' @importFrom terra interpolate
+#' @importFrom cowplot plot_grid
+#' @importFrom gstat gstat
 #' @export
 
 
-stm <- function(pt = xyz, poly = NULL, df = NULL,
+stm <- function(pt = NULL, poly = NULL, df = NULL,
                 crsys = NULL, display_output = FALSE){
+
+  x <- y <- z <- . <- cuts <-
+  t_step <- data <- NULL
 
   if(is.null(poly)){
     stop("'poly' can not be NULL!")
@@ -53,7 +68,9 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   #test polygon
   poly_tester(poly)
 
-
+  pt <- data.frame(pt)
+  pt <- pt[,1:3]
+  colnames(pt) <- c("x", "y", "z")
   #----------------------------------
   #check if boundary is supplied,
   #if null, create an arbitrary boundary
@@ -94,8 +111,9 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   #spatial and temporal model
   P <- boundary_ppt
   ext_crs <- projection(P)
-  grd <- make_grids(P, 250)
-  grd <- st_centroid(st_as_sf(grd))
+  grd <- make_grids(P, 150)
+  suppressWarnings(
+  grd <- st_centroid(st_as_sf(grd)))
   grd$x <- st_coordinates(grd)[,1]
   grd$y <- st_coordinates(grd)[,2]
   #coordinates(grd) <- c("X", "Y")
@@ -122,7 +140,7 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   ne <- cbind(coordP@xmax, coordP@ymax, 0)
 
   xtr_pt <- data.frame(rbind(sw, se, nw, ne))
-  colnames(xtr_pt) <- c("x","y","prob")
+  colnames(xtr_pt) <- c("x","y","z")
 
   xtr_pt <- st_as_sf(xtr_pt, coords = c("x", "y"),
                    crs=st_crs(grd_template))
@@ -131,7 +149,7 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   xtr_pt$y <- st_coordinates(xtr_pt)[,2]
 
   xtr_pt <- xtr_pt %>%
-    select(x, y, prob)
+    select(x, y, z)
 
   #combine
   org_pt <- org_pt %>%
@@ -165,14 +183,15 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
       crs = ext_crs
     )
 
-  fit_NN <- gstat::gstat( # using package {gstat}
-    formula = prob ~ 1,    # The column `NH4` is what we are interested in
-    data = as(sf_NH4, "Spatial"), # using {sf} and converting to {sp}, which is expected
+  fit_NN <- gstat( # using package {gstat}
+    formula = z ~ 1,    # The column `NH4` is what we are interested in
+    data = as(sf_org_pt, "Spatial"), # using {sf} and converting to {sp}, which is expected
     nmax = 10, nmin = 3 # Number of neighboring observations used for the fit
   )
 
   # Nearest Neighbor
-  interp_NN <- interpolate(grd_template_raster, fit_NN)
+  suppressMessages(
+  interp_NN <- interpolate(grd_template_raster, fit_NN))
   #plot(interp_NN)
 
   ## crop and mask
@@ -189,17 +208,33 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
   #head(r_df) #breaks will be set to column "layer"
   r_df$cuts=cut(r_df$var1.pred,breaks=7) #set breaks
 
+  #res$stocktype = factor(res$stocktype, levels = c("cont", "bare") )
+
+  suppressWarnings(
   spatial_model <- ggplot(data=r_df) +
     geom_tile(aes(x=x,y=y,fill=cuts)) +
-    scale_fill_brewer("Legend",type = "seq", palette = "Greys") +
-    coord_equal() +
+    geom_sf(data = st_as_sf(P), fill = NA) +
+    # coord_sf(xlim = c(coordP@xmin, coordP@xmax),
+    #          ylim = c(coordP@ymin,coordP@ymax), expand = FALSE)+
+    scale_fill_brewer("Origin strength \ndistribution",type = "seq", palette = "Greys") +
+    geom_point(data = org_pt %>%filter(z != 0),
+               mapping = aes(x = x, y = y), shape=19, size = 2) +
+    #scale_color_manual(values = c("black") ) +
+    guides(color = guide_legend( override.aes = list(size = c(1.5))))+
+    #coord_equal() +
     theme_bw() +
     theme(panel.grid.major = element_blank()) +
     xlab("x") + ylab("y") +
-    ggtitle("Spatial model")
+    ggtitle("Spatial model"))
 
+  suppressWarnings(
+  spatial_model  <-  spatial_model +
+    geom_point(data = org_pt[1,],
+               aes(x = x, y = y, size="Event \norigins", shape = NA),
+               colour = "black"))
 
   #Temporal models
+  df <- data.frame(df)
   colnames(df) <- "data"
   temporal_data <- data.frame(df) %>%
     dplyr::mutate(t_step = 1:length(df[,1]))%>%
@@ -212,16 +247,23 @@ stm <- function(pt = xyz, poly = NULL, df = NULL,
                          aes(x=t_step, y=data)) +
     geom_line(aes(linetype="dash"), size=1, lty=2) +
     labs(y= "Event count", x = "time step") +
-    ggtitle("Temporal_model")+
+    ggtitle("Temporal model")+
     theme_bw()
 
+  suppressWarnings(
   fn_plot <- plot_grid(spatial_model,
      temporal_model,
      ncol=1,
      rel_heights = c(3, 1),
      rel_widths = c(2,1),
      labels = c('A', 'B'),
-     label_size = 12)
+     label_size = 12))
+
+  #to show plot
+  if(display_output == TRUE){
+    flush.console()
+    print(fn_plot)
+  }
 
   return(fn_plot)
 

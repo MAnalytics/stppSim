@@ -47,7 +47,10 @@ Imports:
   chron,  
   ggplot2,
   geosphere,
-  leaflet
+  leaflet,
+  methods,
+  cowplot,
+  gstat
 RoxygenNote: 7.1.2
 Suggests:
   knitr,
@@ -71,4 +74,5 @@ Collate:
     'psim_artif.R'
     'psim_real.R'
     'space_restriction.R'
+    'stm.R'
     'stp_learner.R'

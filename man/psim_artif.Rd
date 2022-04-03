@@ -9,7 +9,7 @@ poly, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
-slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
+slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
 \item{n_events}{number of points
@@ -95,15 +95,21 @@ an \code{"rising"} or \code{"falling"} trend is specified.
 Options: \code{"gentle"} or \code{"steep"}. The default value is
 set as \code{NULL} for the \code{stable} trend.}
 
-\item{...}{additional arguments to pass from
-\code{gtp}, \code{walker} and \code{artif_spo}
-functions.}
+\item{interactive}{Whether to run the process in
+interactive mode. Default is \code{FALSE}. If \code{TRUE},
+a user is able to preview the spatial and temporal models
+of the expected distribution of the final simulated
+events (points).}
 
 \item{show.plot}{(logical) Shows GTP.
 Default is \code{FALSE}.}
 
 \item{show.data}{(TRUE or FALSE) To show the output
 data. Default is \code{FALSE}.}
+
+\item{...}{additional arguments to pass from
+\code{gtp}, \code{walker} and \code{artif_spo}
+functions.}
 }
 \value{
 Returns a list of artificial spatiotemporal
@@ -154,7 +160,7 @@ n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
 trend = "stable", first_pDate=NULL,
-slope = NULL,show.plot=FALSE, show.data=FALSE)
+slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
 #retrieve the simulated data for the

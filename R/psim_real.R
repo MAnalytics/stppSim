@@ -43,6 +43,11 @@
 #' two terms of proportional ratios.
 #' For example, a value of \code{20}
 #' implies \code{20:80} proportional ratios.
+#' @param interactive Whether to run the process in
+#' interactive mode. Default is \code{FALSE}. If \code{TRUE},
+#' a user is able to preview the spatial and temporal models
+#' of the expected distribution of the final simulated
+#' events (points).
 #' @param crsys (string) the EPSG code of the projection
 #' system of the `ppt` coordinates. This only used if
 #' `poly` argument is \code{NULL}.
@@ -53,7 +58,7 @@
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' s_threshold = NULL, step_length = 20, n_origin=50,
 #' restriction_feat=NULL, field=NA,
-#' p_ratio=20, crsys = NULL)
+#' p_ratio=20, interactive = FALSE, crsys = NULL)
 #' @examples
 #' \dontrun{
 #' data(camden_crimes)
@@ -79,7 +84,7 @@
 #' start_date = NULL, poly = NULL, s_threshold = NULL,
 #' step_length = 20, n_origin=20,
 #' restriction_feat = NULL, field=NULL,
-#' p_ratio=20, crsys = "EPSG:27700")
+#' p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
 #'
 #' #If `n_events` is a vector of values,
 #' #retrieve the simulated data for the
@@ -127,10 +132,12 @@
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       s_threshold = NULL, step_length = 20,
                       n_origin=50, restriction_feat=NULL,
-                      field = NA, p_ratio=20, crsys = NULL){
+                      field = NA, p_ratio=20, interactive = FALSE,
+                      crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
-    axis <- . <- locid <- sn <- OriginType <- NULL
+    axis <- . <- locid <- sn <- OriginType <-
+    prob <- NULL
 
   output <- list()
 
@@ -166,6 +173,53 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     #top_n(3)
 
   #t1 <- Sys.time()
+  if(interactive == TRUE){
+    #Create spatial and temporal models
+    #-----
+
+    cat(paste("#-------------------------------------------#",
+              "#-------------------------------------------#",
+              "#-------------------------------------------#",sep="\n"))
+    cat("                                             ")
+
+    query1 <- readline(prompt = "Preview Spatial and Temporal model? (Y / N):")
+
+    if(query1 %in% c("Y", "y")){
+
+      stm(pt = st_properties$origins %>%
+            select(x, y, prob), poly=st_properties$poly, df=st_properties$gtp,
+          crsys = projection(st_properties$poly), display_output = TRUE)
+      #flush.console()
+      cat(paste("#-----------------#",
+                "#-----------------#",
+                "#-----------------#",sep="\n"))
+      cat("                   ")
+      query2 <- readline(prompt = "Continue? (Y / N):")
+
+      if(!query2 %in% c("N", "n", "Y", "y")){
+        stop("Invalid input! 'Y' or 'N', expected! Process terminated!")
+      }
+
+      if(query2 %in% c("N", "n")){
+        stop("Process terminated!")
+      }
+
+      if(query2 %in% c("Y", "y")){
+        #continue processing
+      }
+    }
+
+    # if(!query1 %in% c("N","n")){
+    #   stop("Invalid input! 'N' or 'n' expected! Process terminated!")
+    # }
+    #
+    # if(query1 %in% c("N","n")){
+    #   #do nothing
+    # }
+
+  }
+
+
 
   #estimating computational time
   options(digits.secs = 5)

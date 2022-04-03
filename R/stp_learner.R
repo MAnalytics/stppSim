@@ -372,12 +372,14 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #but could be added (optionally) to the simulation function
     #if a user deems fit.
 
+    spo <- spo %>%
+      select(x, y, prob, count, grid_id)
 
-    x <- as.numeric(spo$x)
-    y <- as.numeric(spo$y)
+    #x <- as.numeric(spo$x)
+    #y <- as.numeric(spo$y)
 
-    spo_xy <- data.frame(cbind(x,y))
-    colnames(spo_xy) <- c("x","y")
+    #spo_xy <- data.frame(cbind(x,y))
+    #colnames(spo_xy) <- c("x","y")
 
     output$origins <- spo
     output$gtp <- gtp

@@ -7,7 +7,7 @@
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 s_threshold = NULL, step_length = 20, n_origin=50,
 restriction_feat=NULL, field=NA,
-p_ratio=20, crsys = NULL)
+p_ratio=20, interactive = FALSE, crsys = NULL)
 }
 \arguments{
 \item{n_events}{number of points
@@ -60,6 +60,12 @@ two terms of proportional ratios.
 For example, a value of \code{20}
 implies \code{20:80} proportional ratios.}
 
+\item{interactive}{Whether to run the process in
+interactive mode. Default is \code{FALSE}. If \code{TRUE},
+a user is able to preview the spatial and temporal models
+of the expected distribution of the final simulated
+events (points).}
+
 \item{crsys}{(string) the EPSG code of the projection
 system of the \code{ppt} coordinates. This only used if
 \code{poly} argument is \code{NULL}.
@@ -110,7 +116,7 @@ simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 start_date = NULL, poly = NULL, s_threshold = NULL,
 step_length = 20, n_origin=20,
 restriction_feat = NULL, field=NULL,
-p_ratio=20, crsys = "EPSG:27700")
+p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
 
 #If `n_events` is a vector of values,
 #retrieve the simulated data for the

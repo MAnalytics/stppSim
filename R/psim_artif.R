@@ -75,6 +75,11 @@
 #' Default is \code{FALSE}.
 #' @param show.data (TRUE or FALSE) To show the output
 #' data. Default is \code{FALSE}.
+#' @param interactive Whether to run the process in
+#' interactive mode. Default is \code{FALSE}. If \code{TRUE},
+#' a user is able to preview the spatial and temporal models
+#' of the expected distribution of the final simulated
+#' events (points).
 #' @param ... additional arguments to pass from
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
@@ -83,7 +88,7 @@
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
-#' slope = NULL, ..., show.plot=FALSE, show.data=FALSE)
+#' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
 #'
@@ -104,7 +109,7 @@
 #' conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
 #' trend = "stable", first_pDate=NULL,
-#' slope = NULL,show.plot=FALSE, show.data=FALSE)
+#' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
 #' #retrieve the simulated data for the
@@ -162,10 +167,10 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        s_threshold = 50, step_length = 20,
                        trend = "stable",
                        first_pDate=NULL,
-                       slope = NULL, ..., show.plot=FALSE, show.data=FALSE){
+                       slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
   #define global variables...
-  nrowh <- origins <- locid <- sn <- NULL
+  nrowh <- origins <- locid <- sn <- prob <- z <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
@@ -232,26 +237,55 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   spo_xy <- as_tibble(spo$origins) %>%
     dplyr::select(x, y)
 
+
+  if(interactive == TRUE){
   #Create spatial and temporal models
+  #-----
 
-  #Temporal models
-  temporal_data <- data.frame(gtp) %>%
-    dplyr::mutate(t_step = 1:length(gtp$data))%>%
-    dplyr::mutate(firstPeak = first_pDate)%>%
-    mutate(first_peak = "twodash")
+  cat(paste("#-------------------------------------------#",
+              "#-------------------------------------------#",
+              "#-------------------------------------------#",sep="\n"))
+  cat("                                             ")
 
-  temporal_model <- ggplot(data=(temporal_data %>%
-                            mutate(peak = factor(firstPeak,
-                            levels = c(first_pDate)))),
-                    aes(x=t_step, y=data)) +
-    geom_line(aes(linetype="dash"), size=1, lty=2) +
-    labs(y= "Event count", x = "time step") +
-    theme_bw()
+  query1 <- readline(prompt = "Preview Spatial and Temporal model? (Y / N):")
 
-  #spatial models
-  spo$origins
+  if(query1 %in% c("Y", "y")){
 
+    stm(pt = spo$origins %>%
+                    select(x, y, prob), poly=spo$poly, df=gtp$data,
+                    crsys = projection(spo$poly), display_output = TRUE)
+    #flush.console()
+    cat(paste("#-----------------#",
+              "#-----------------#",
+              "#-----------------#",sep="\n"))
+    cat("                   ")
 
+    query2 <- readline(prompt = "Continue? (Y / N):")
+
+    if(!query2 %in% c("N", "n", "Y", "y")){
+      stop("Invalid input! 'Y' or 'N', expected! Process terminated!")
+    }
+
+    if(query2 %in% c("N", "n")){
+      stop("Process terminated!")
+    }
+
+    if(query2 %in% c("Y", "y")){
+      #continue processing
+    }
+  }
+
+  # if(!query1 %in% c("N","n")){
+  #     stop("Invalid input! 'N' or 'n' expected! Process terminated!")
+  #   }
+  #
+  # if(query1 %in% c("N","n")){
+  #   #do nothing
+  # }
+
+  }
+
+  #-----
   #estimating computational time
   options(digits.secs = 5)
   tme1 <- Sys.time()
