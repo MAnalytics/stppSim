@@ -273,7 +273,7 @@ artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
 
 ```
 
-The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `3.5 minutes`. The processing time is increases to `30.2` minutes, if the argument `resistance_feat = camden$landuse` (with `field = "restrVal"`). 
+The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `3.5 minutes`. The processing time is increases to `30.2` minutes if landscape restriction is added. That is, if the argument `resistance_feat = camden$landuse` (with `field = "restrVal"`). 
 
 To retrieve the result of any `n_events`, simply type the object name with the value index. For example to retrieve the result based on `n_events = 1000`, type: 
 

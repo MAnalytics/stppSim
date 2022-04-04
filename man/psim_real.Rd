@@ -126,10 +126,11 @@ p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
 #simulated_stpp[[1]].
 
 #The above example simulates point patterns on
-#an unrestricted landscape. If set ,
+#an unrestricted landscape. If
 #`restriction_feat = landuse` and
 #`field = "restrVal"`, then the simulation
-#is performed on a restricted landscape.
+#is run with the landuse features as restrictions
+#on the landscape.
 }
 
 }
