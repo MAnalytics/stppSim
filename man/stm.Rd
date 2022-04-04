@@ -31,11 +31,22 @@ projection system is: \code{"EPSG:27700"}.}
 Default: \code{FALSE}}
 }
 \value{
-Too...
+A graphics showing the spatial and
+temporal model of the simulation.
 }
 \description{
 To generate graphics depicting the spatial
 and temporal models of the final simulation
+}
+\details{
+Incorporated into \code{psim_artif} and
+\code{psim_real} functions to allow the preview of
+the spatial and the temporal model of the simulation.
+The spatial model is the strength distribution of
+origin which is the likeness of the spatial patterns
+to be simulated. The temporal model is the preview
+of the trend and seasonal patterns to be expected
+from the simulation.
 }
 \examples{
 #load polygon shapefile

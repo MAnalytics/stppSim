@@ -33,8 +33,16 @@
 #' #run function
 #' stm(pt = xyz, poly=camden_boundary, df=df,
 #' crsys = NULL, display_output = FALSE)
-#' @details
-#' @return Too...
+#' @details Incorporated into `psim_artif` and
+#' `psim_real` functions to allow the preview of
+#' the spatial and the temporal model of the simulation.
+#' The spatial model is the strength distribution of
+#' origin which is the likeness of the spatial patterns
+#' to be simulated. The temporal model is the preview
+#' of the trend and seasonal patterns to be expected
+#' from the simulation.
+#' @return A graphics showing the spatial and
+#' temporal model of the simulation.
 #' @importFrom dplyr mutate select
 #' @importFrom raster projection crop mask
 #' rasterToPoints

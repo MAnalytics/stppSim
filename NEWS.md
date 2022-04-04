@@ -1,20 +1,29 @@
 ---
 title: "NEWS.md"
 authors: "Monsuru Adepeju"
-date: "27 March 2022"
+date: "4th April 2022"
 output: html_document
 ---
 
-Details of changes made (**/**/2022):
+Details of changes made (04/04/2022):
 
-1. add 'stm' function
-2. Modify 'psim_artif' & 'psim_real' to allow preview of expected spatial and temporal model?"? 
-to guide the use of the package
-3. Editted the vignette accordingly. interpolation..
-2. Implement network space (for the 'planar' and 'network'.... 'real' point snapped to nearest segment)
-3. Address the computational time for the 'psim_real'
+1. added a new function, 'stm.R'
+2. Modified 'psim_artif' & 'psim_real' to make use of 'stm.R' 
+3. Editted the vignette accordingly. 
 
-Other information to be included
+## Note: Package checked on multiple platforms, and passed! 
+
+### Test environments
+* local OS Windows, R 4.1.0
+* Fedora Linux (R-devel), R 4.1.0
+* win-builder (devel and release), R 4.1.0
+
+### R CMD check results
+There were no ERRORs, WARNINGs or 1 NOTEs. 
+
+**NOTEs 1**: The note pertains to using a lot of non-default packages. 
+***Author's comment***: This will be addressed in 
+the future.
 
 Thanks,
 
