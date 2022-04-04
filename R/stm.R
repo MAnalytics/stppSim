@@ -21,6 +21,7 @@
 #' @usage stm(pt, poly, df, crsys = NULL,
 #' display_output = FALSE)
 #' @examples
+#' \dontrun{
 #' #load polygon shapefile
 #' load(file = system.file("extdata", "camden.rda",
 #' package="stppSim"))
@@ -33,6 +34,7 @@
 #' #run function
 #' stm(pt = xyz, poly=camden_boundary, df=df,
 #' crsys = NULL, display_output = FALSE)
+#' }
 #' @details Incorporated into `psim_artif` and
 #' `psim_real` functions to allow the preview of
 #' the spatial and the temporal model of the simulation.

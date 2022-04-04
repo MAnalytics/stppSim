@@ -49,6 +49,7 @@ of the trend and seasonal patterns to be expected
 from the simulation.
 }
 \examples{
+\dontrun{
 #load polygon shapefile
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
@@ -61,4 +62,5 @@ df <- data.frame(data = abs(min(sin(t))) + sin(t))
 #run function
 stm(pt = xyz, poly=camden_boundary, df=df,
 crsys = NULL, display_output = FALSE)
+}
 }
