@@ -1,15 +1,15 @@
 ---
 title: "NEWS.md"
 authors: "Monsuru Adepeju"
-date: "4th April 2022"
+date: "8th August 2022"
 output: html_document
 ---
 
-Details of changes made (04/04/2022):
+Details of changes made (08/08/2022):
 
-1. added a new function, 'stm.R'
-2. Modified 'psim_artif' & 'psim_real' to make use of 'stm.R' 
-3. Editted the vignette accordingly. 
+1. In "artif_spo.R": 
+Changed the function "crs()" to "projection()" as 
+per the updated version of dependency package 'raster' 
 
 ## Note: Package checked on multiple platforms, and passed! 
 
