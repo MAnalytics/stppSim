@@ -63,13 +63,13 @@
 #' @importFrom dplyr if_else mutate filter
 #' row_number select bind_cols
 #' @importFrom splancs csr
-#' @importFrom sp CRS
+#' @importFrom sp CRS SpatialPoints
 #' @importFrom utils flush.console
 #' @importFrom grDevices chull
 #' @importFrom ggplot2 ggplot geom_point
 #' geom_polygon theme_bw
 #' @importFrom stats dist kmeans
-#' @importFrom raster crs
+#' @importFrom raster projection
 #' @export
 
 artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
@@ -93,7 +93,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
      #mfocal <- c(526108, 185899)
      #mfocal <- c(5261080, 1858990)
      mfocal_pt <- st_as_sf(SpatialPoints(cbind(mfocal[1], mfocal[2]),
-                              proj4string = raster::crs(poly)))
+                              proj4string = raster::projection(poly, FALSE)))
     #do they intersect?
     itx <-  data.frame(st_intersects(mfocal_pt, st_as_sf(poly)))[,2]
     if(length(itx) != 1){
@@ -137,7 +137,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
   if(is.null(restriction_feat)){
 
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                           proj4string = raster::crs(backup_poly)))
+                           proj4string = raster::projection(backup_poly, FALSE)))
 
     final_ran_points_pt <- ran_points_pt
     }
@@ -148,7 +148,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
     restriction_feat <- st_as_sf(restriction_feat)
     #convert xy to points
     ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                proj4string = raster::crs(restriction_feat)))
+                                proj4string = raster::projection(restriction_feat, FALSE)))
     #check those intersecting land use
     pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
     new_ran_points_pt <- ran_points_pt[-pt_intersect,]
@@ -167,7 +167,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
       colnames(ran_points) <- c("x", "y")
       #convert to points and check intersection
       ran_points_pt <- st_as_sf(SpatialPoints(cbind(ran_points$x, ran_points$y),
-                                              proj4string = raster::crs(restriction_feat)))
+                                              proj4string = raster::projection(restriction_feat, FALSE)))
       #check those not intersecting land use
       pt_intersect <- unique(data.frame(st_intersects(ran_points_pt, restriction_feat))[,1])
       new_ran_points_pt <- ran_points_pt[-pt_intersect,]
