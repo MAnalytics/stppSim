@@ -1,9 +1,4 @@
----
-title: "NEWS.md"
-authors: "Monsuru Adepeju"
-date: "8th August 2022"
-output: html_document
----
+
  
 Details of changes made at the 8th August 2022:
 
