@@ -1,10 +1,9 @@
 # stppSim 1.2.7
 
-## Bug Fixes
+## Bug Fixing
 
 - `artif_spo()` now utilizes `raster::projection()` instead of `raster::crs()` assign a coordinate system to a simple point feature.
 projection(): 
-
 
 # stppSim 1.2.1
 
@@ -16,3 +15,16 @@ projection():
 - New dataset `birmingham_boundary.rda` included in `inst/extdata`
 - `DESCRIPTION` modified (R (>= 4.0.0) to R (>= 4.1.0))
 
+# stppSim 1.1.0
+
+## Changes
+- The length of the title reduced to less than 65 characters.
+- Added references to the `DESCRIPTION` file
+- Added `\value` field to `.Rd` files regarding exported methods. Also, included explanations of the function results. 
+- Suppressed unnecessary messages to the console.
+- Removed parallel processing functions altogether
+- Removed seed set within functions
+
+# stppSim 1.0.0
+
+- First CRAN submission
