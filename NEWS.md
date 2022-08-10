@@ -8,11 +8,11 @@ projection():
 
 # stppSim 1.2.1
 
-Details of changes made (27/03/2022):
+## Changes
 
-1. Added a `vignette` to guide the use of the package
-2. Added a new function, i.e. `compare_boundary.R`
-3. Added a parameter `interactive` to `make_grids.R` function. 
-4. Added new data set,  `birmingham_boundary.rda` inside `inst/extdata`
-5. Modified the `DESCRIPTION` file: R (>= 4.0.0) to R (>= 4.1.0) 
+- Included a `vignette` to guide the use of the package
+- `compare_boundary()` added to compare areas of two boundaries
+- `make_grids()` function now include `interactive` argument the control plotting  
+- New dataset `birmingham_boundary.rda` included in `inst/extdata`
+- `DESCRIPTION` modified (R (>= 4.0.0) to R (>= 4.1.0))
 
