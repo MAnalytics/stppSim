@@ -35,7 +35,7 @@ Imports:
   rgdal,
   sp,
   ks,
-  terra,
+  terra, 
   raster,
   SiMRiv,
   data.table,
@@ -50,7 +50,8 @@ Imports:
   leaflet,
   methods,
   cowplot,
-  gstat
+  gstat,
+  Rcpp
 RoxygenNote: 7.1.2
 Suggests:
   knitr,
