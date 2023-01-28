@@ -12,6 +12,10 @@
 #' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
+#' @param repeatType type of short- to medium-term
+#' fluctuations (patterns) associated with the
+#' trend line. Options are: \code{`"cyclic"` and `"single"`}.
+#' Default is: \code{`"cyclic"`}.
 #' @param first_pDate date of the first seasonal peak of
 #' the GTP (format: `"yyyy-mm-dd"`).
 #' Default value is \code{NULL}, in which first seasonal
@@ -21,10 +25,12 @@
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
-#' slope = NULL, first_pDate = NULL, show.plot =FALSE)
+#' slope = NULL, repeatType = "cyclic",
+#' first_pDate = NULL, show.plot =FALSE)
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
-#' slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
+#' slope = NULL, repeatType = "cyclic",
+#' first_pDate = "2020-02-28", show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
 #' @return Returns a time series (list) of 365
@@ -34,7 +40,8 @@
 #'
 
 gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
-                slope = NULL, first_pDate=NULL,
+                slope = NULL, repeatType = "cyclic",
+                first_pDate=NULL,
                 show.plot = FALSE){
 
   #function to check if start_date & first_pDate are
@@ -71,14 +78,24 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   t <- seq(0, 365, by = 1)
   t2 <- t1 + t
 
-  #n-th day of peak since start_date
-  nth_day <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
 
-  y <- 20 * cos(3 + 2 * pi * t/(2 * nth_day)) + 0.2 * sin(-1 * pi * t/15)
+  if(repeatType == "cyclic"){
 
-  y <- y #* scale
+    #n-th day of peak since start_date
+    nth_day <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
 
-  y <- (y + (-1 * min(y)))  #to remove negatives values and scale
+    y <- 20 * cos(3 + 2 * pi * t/(2 * nth_day)) + 0.2 * sin(-1 * pi * t/15)
+
+    y <- y #* scale
+
+    y <- (y + (-1 * min(y)))  #to remove negatives values and scale
+  }
+
+
+  if(repeatType == "single"){
+    y <- rep(60, length(t))
+  }
+
 
   #if trend is 'stable', slope has to be 'NULL'
   if(trend == "stable"){
@@ -87,8 +104,16 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     }
   }
 
-  gentle <- ((max(y)/2) - min(y))/(365-0) #slope
-  steep <-  ((max(y)) - min(y))/(365-0) #slope
+  if(repeatType == "cyclic"){
+    gentle <- ((max(y)/2) - min(y))/(365-0) #slope
+    steep <-  ((max(y)) - min(y))/(365-0) #slope
+  }
+
+  if(repeatType == "single"){
+    gentle <- 0.05#slope
+    steep <-  0.1 #slope
+  }
+
 
   if(trend == "falling"){
     if(is.null(slope)){
@@ -105,7 +130,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     }
 
     y <- y + trendline
-
+    #plot(y)
   }
 
   if(trend == "rising"){
@@ -121,16 +146,24 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
       trendline <- 0 + steep * t
     }
 
+    if(repeatType == "single"){
+      y <- y - 30
+    }
     y <- y + trendline
+    #plot(y)
   }
 
+  if(repeatType == "cyclic"){
+    #remove negative values
+    y <- round(y + (-1 * min(y)), digits = 0) #to remove negatives values
+    baseline_occur <- 0.25 * (max(y)/2)
+    y <- round(y + baseline_occur, digits = 0) #add baseline
+    y_ <- data.frame(Date = t2, y)
+  }
 
-  #remove negative values
-  y <- round(y + (-1 * min(y)), digits = 0) #to remove negatives values
-  baseline_occur <- 0.25 * (max(y)/2)
-  y <- round(y + baseline_occur, digits = 0) #add baseline
-  y_ <- data.frame(Date = t2, y)
-
+  # if(repeatType == "single"){
+  #
+  # }
 
   output$data <- y
 
