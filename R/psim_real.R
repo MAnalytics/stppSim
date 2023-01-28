@@ -120,7 +120,7 @@
 #' American Statistical Association, 85, 470-477.
 #' @importFrom dplyr select group_by
 #' mutate summarise left_join n arrange
-#' desc
+#' desc filter count pull
 #' @importFrom data.table rbindlist
 #' @importFrom SiMRiv resistanceFromShape
 #' @importFrom tidyr replace_na
@@ -128,6 +128,8 @@
 #' @importFrom stats predict loess
 #' @importFrom lubridate hms
 #' @importFrom tibble rownames_to_column
+#' @importFrom Rcpp cppFunction
+#' @importFrom graphics hist
 #' @export
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
@@ -163,7 +165,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #get coordinates
   coords <- st_properties$origins %>%
-    select(x, y)
+    dplyr::select(x, y)
 
   #get the global temporal pattern
   n = st_properties$gtp#[1:4]
@@ -264,7 +266,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
       mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
-      rename(datetime=time)
+      dplyr::rename(datetime=time)
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
@@ -289,33 +291,144 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
       mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
-      rename(datetime=time)
+      dplyr::rename(datetime=time)
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
   }
   }
 
+  #-------------------------
+  #C++ function to do sampling based on probability field
+  cppFunction('IntegerVector rcpp_sample_prob(const IntegerVector& ind_sample, int N, int n) {
+
+  LogicalVector is_chosen(N);
+  IntegerVector ind_chosen(n);
+
+  int i, k, ind;
+
+  for (k = 0, i = 0; i < n; i++) {
+    do {
+      ind = ind_sample[k++];
+    } while (is_chosen[ind-1]);
+    is_chosen[ind-1] = true;
+    ind_chosen[i] = ind;
+  }
+
+  return ind_chosen;
+}')
+
+  sample_fast <- function(n, prb) {
+    N <- length(prb)
+    sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
+    rcpp_sample_prob(sample_more, N, n)
+  }
+  #-------------------------
+
+  #-----------------------------------------------
+  #get repeat pattern in real (across the whole area)
+  #-----------------------------------------------
+  #n <- 365 #daily temporal resolution (accuracy)
+
+  ppt_diff <- ppt %>%
+    dplyr::select(date) %>%
+    dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
+    dplyr::mutate(tmeDiff = tme - min(tme)) #from origin
+#head(ppt_diff)
+  # tme <-as.numeric(as.Date(ppt$date))#[1:10] #check patterns first
+  # t_origin <- min(tme)
+  # dt_origin = tme - t_origin
+  #hist(dt_origin, n)
+
+  probList <- hist(ppt_diff %>% dplyr::pull(tmeDiff), 365)
+  probList <- c(0, probList$density)
+  probList <- data.frame(date = seq.Date(from = min(as.Date(ppt$date)), to = min(as.Date(ppt$date))+364, by = 'days'),
+                         probVal = probList/sum(probList))
+
+  fnDateList <- probList %>%
+    dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
+    dplyr::mutate(tme=paste0("D",as.character(tme)))#%>%
+
+  #head(probList)
+  #join the dataList
+  # fnDateList <- ppt_diff %>%
+  #   dplyr::left_join(probList) %>%
+  #   #dplyr::select(tmeDiff, probVal)%>%
+  #   #dplyr::select(-c(date, tmeDiff))%>%
+  #   dplyr::mutate(tme=paste0("D",as.character(tme)))%>%
+  #   dplyr::arrange(tme)
+
+  #get the proportions
+  # head(stp_All)
+  # stp_All %>%
+  #   dplyr::group_by(locid) %>%
+  #   count()
+
+  #plot(probList$valDist,probList$probVal, type="l")
+  #probList
 
   #n_events <- c(2000, 3000)
-  #generate all the results
+  #reformat/generate all the results
   for(h in seq_len(length(n_events))){
 
     #add idx
     stp_All_ <- stp_All %>%
       rownames_to_column('ID') #%>% #add row as column
 
-    #sample to derive required number
-    samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events[h],
-                                  replace = FALSE, prob = stp_All_$prob)) #%>
+    #head(stp_All_)
+    nrow(stp_All_)
+    #----------------------------
+    #apply repeat filtering
+    # tme <-as.numeric(as.Date(stp_All_subset$datetime))#[1:10] #check patterns first
+    # dt = dist(tme)
+    # dt_vector <- as.vector(dt)
+    # hist(dt_vector, 365)
 
-    stp_All_ <- stp_All_[samp_idx, ]
+    ##orList <- unique(stp_All_$locid)
+
+    ##for(or in seq_len(length(orList))){ #or<-1
+
+      stp_All_subset <- stp_All_ %>%
+        ##dplyr::filter(locid == orList[or]) %>%
+        data.frame() %>%
+        #dplyr::select(datetime)%>%
+        dplyr::mutate(tme= paste0("D", as.character(as.numeric(as.Date(datetime))))) %>%
+        dplyr::left_join(fnDateList)
+
+        #for sampling, define probability val and n
+        prb <- stp_All_subset$probVal
+        n <- round(nrow(stp_All_subset)/2, digits = 0) #select half of the data
+
+        #to call sampling function c++
+        sample_fast <- function(n, prb) {
+          N <- length(prb)
+          sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
+          rcpp_sample_prob(sample_more, N, n)
+        }
+
+        system.time(ind <- sample_fast(n, prb))
+
+        subsetFn <- stp_All_[ind, ]
+
+        #nrow(subsetFn)
+        # tme <-as.numeric(as.Date(subsetFn$datetime))#[1:10] #check patterns first
+        # dt <- dist(tme)
+        #hist(dt, 365)
+    #}
+
+
+    #----------------------------
+    #sample to derive required number
+    samp_idx <- as.numeric(sample(subsetFn$ID, size = n_events[h],
+                                  replace = FALSE, prob = subsetFn$prob)) #%>
+
+    subsetFn <- subsetFn[which(subsetFn$ID %in% samp_idx), ]
 
     #sort
-    stp_All_ <- stp_All_ %>%
+    subsetFn <- subsetFn %>%
       arrange(locid, tid, sn)
 
-    output[h] <- list(stp_All_)
+    output[h] <- list(subsetFn)
   }
 
 
@@ -325,6 +438,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   output$origins <- st_properties$origins
   output$poly <- st_properties$poly
   output$resist <- restriction_feat
+
   return(output)
 
 }
