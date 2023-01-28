@@ -65,6 +65,10 @@
 #' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
+#' @param repeatType type of short- to medium-term
+#' fluctuations (patterns) associated with the
+#' trend line. Options are: \code{`"cyclic"` and `"single"`}.
+#' Default is: \code{`"cyclic"`}.
 #' @param first_pDate date of the first seasonal peak of
 #' the GTP (format: `"yyyy-mm-dd"`).
 #' Default value is \code{NULL}, in which first seasonal
@@ -87,7 +91,7 @@
 #' poly, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
-#' trend = "stable", first_pDate=NULL,
+#' trend = "stable", repeatType = "cyclic", first_pDate=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
@@ -108,7 +112,7 @@
 #' n_foci=1, foci_separation = 10, mfocal = NULL,
 #' conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
-#' trend = "stable", first_pDate=NULL,
+#' trend = "stable", repeatType = "cyclic", first_pDate=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
@@ -165,7 +169,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        n_foci, foci_separation, mfocal = NULL,
                        conc_type = "dispersed", p_ratio,
                        s_threshold = 50, step_length = 20,
-                       trend = "stable",
+                       trend = "stable", repeatType = "cyclic",
                        first_pDate=NULL,
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
