@@ -5,7 +5,8 @@
 \title{Global temporal pattern (GTP)}
 \usage{
 gtp(start_date, trend = "stable",
-slope = NULL, first_pDate = NULL, show.plot =FALSE)
+slope = NULL, repeatType = "cyclic",
+first_pDate = NULL, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{the start date of the temporal pattern.
@@ -21,6 +22,11 @@ and \code{"rising"}. Default value is: \code{"stable"}.}
 an \code{"rising"} or \code{"falling"} trend is specified.
 Options: \code{"gentle"} or \code{"steep"}. The default value is
 set as \code{NULL} for the \code{stable} trend.}
+
+\item{repeatType}{type of short- to medium-term
+fluctuations (patterns) associated with the
+trend line. Options are: \code{`"cyclic"` and `"single"`}.
+Default is: \code{`"cyclic"`}.}
 
 \item{first_pDate}{date of the first seasonal peak of
 the GTP (format: \code{"yyyy-mm-dd"}).
@@ -47,5 +53,6 @@ trends and patterns of the point patterns to be simulated.
 }
 \examples{
 gtp(start_date = "2020-01-01", trend = "stable",
-slope = NULL, first_pDate = "2020-02-28", show.plot = FALSE)
+slope = NULL, repeatType = "cyclic",
+first_pDate = "2020-02-28", show.plot = FALSE)
 }
