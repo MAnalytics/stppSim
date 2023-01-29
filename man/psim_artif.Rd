@@ -8,7 +8,7 @@ psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 poly, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
-trend = "stable", first_pDate=NULL,
+trend = "stable", repeatType = "cyclic", first_pDate=NULL,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
@@ -83,6 +83,11 @@ long-term trend. Options are:
 \code{"falling"}, \code{"stable"},
 and \code{"rising"}. Default value is: \code{"stable"}.}
 
+\item{repeatType}{type of short- to medium-term
+fluctuations (patterns) associated with the
+trend line. Options are: \code{`"cyclic"` and `"single"`}.
+Default is: \code{`"cyclic"`}.}
+
 \item{first_pDate}{date of the first seasonal peak of
 the GTP (format: \code{"yyyy-mm-dd"}).
 Default value is \code{NULL}, in which first seasonal
@@ -153,13 +158,13 @@ landuse = camden$landuse # get landuse
 #'n_origin' (i.e. `20`) for faster computation:
 
 #simulate data
-simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
+simulated_stpp <- psim_artif(n_events=1000, start_date = "2021-01-01",
 poly=boundary, n_origin=20, restriction_feat = NULL,
 field = NULL,
 n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
-trend = "stable", first_pDate=NULL,
+trend = "stable", repeatType = "cyclic", first_pDate=NULL,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
