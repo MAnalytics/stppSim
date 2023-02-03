@@ -6,7 +6,7 @@
 \usage{
 gtp(start_date, trend = "stable",
 slope = NULL, repeatType = "cyclic",
-first_pDate = NULL, show.plot =FALSE)
+Tperiod = NULL, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{the start date of the temporal pattern.
@@ -28,12 +28,12 @@ fluctuations (patterns) associated with the
 trend line. Options are: \code{`"cyclic"` and `"single"`}.
 Default is: \code{`"cyclic"`}.}
 
-\item{first_pDate}{date of the first seasonal peak of
-the GTP (format: \code{"yyyy-mm-dd"}).
-Default value is \code{NULL}, in which first seasonal
-peak of 90 days is utilized.
-seasonal cycle of 180 days is utilized (that is,
-a seasonal cycle of 180 days).}
+\item{Tperiod}{time interval (in days) of repeat patterns
+in the event occurrences. Default value is \code{90}
+indicating the first seasonal
+peak of cyclic repeat type. For \code{"single"} repeat type,
+a single value, e.g. 90, or a sequence of values,
+e.g. c(80:95), can be supplied.}
 
 \item{show.plot}{(logical) Shows GTP.
 Default is \code{FALSE}.}
@@ -54,5 +54,5 @@ trends and patterns of the point patterns to be simulated.
 \examples{
 gtp(start_date = "2020-01-01", trend = "stable",
 slope = NULL, repeatType = "cyclic",
-first_pDate = "2020-02-28", show.plot = FALSE)
+Tperiod = 60, show.plot = FALSE)
 }
