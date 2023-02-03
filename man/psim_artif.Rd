@@ -8,7 +8,7 @@ psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 poly, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio, s_threshold = 50, step_length = 20,
-trend = "stable", repeatType = "cyclic", first_pDate=NULL,
+trend = "stable", repeatType = "cyclic", Tperiod=90,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
@@ -88,12 +88,12 @@ fluctuations (patterns) associated with the
 trend line. Options are: \code{`"cyclic"` and `"single"`}.
 Default is: \code{`"cyclic"`}.}
 
-\item{first_pDate}{date of the first seasonal peak of
-the GTP (format: \code{"yyyy-mm-dd"}).
-Default value is \code{NULL}, in which first seasonal
-peak of 90 days is utilized.
-seasonal cycle of 180 days is utilized (that is,
-a seasonal cycle of 180 days).}
+\item{Tperiod}{time interval (in days) of repeat patterns
+in the event occurrences. Default value is \code{90}
+indicating the first seasonal
+peak of cyclic repeat type. For \code{"single"} repeat type,
+a single value, e.g. 90, or a sequence of values,
+e.g. c(80:95), can be supplied.}
 
 \item{slope}{slope of the long-term trend when
 an \code{"rising"} or \code{"falling"} trend is specified.
@@ -164,7 +164,7 @@ field = NULL,
 n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50, step_length = 20,
-trend = "stable", repeatType = "cyclic", first_pDate=NULL,
+trend = "stable", repeatType = "cyclic", Tperiod=90,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
