@@ -425,18 +425,97 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
-  for(or in seq_len(length(ori_sn))){ #or=2
+  for(or in seq_len(length(ori_sn))){ #or=1
 
     sub_Dat <- filtered_stp_All %>%
       dplyr::filter(locid == ori_sn[or])
 
-    tme <-as.numeric(as.Date(sub_Dat$datetime))[1:10]
-    xy <- data.frame(x=sub_Dat$x, y=sub_Dat$y)[1:10,]
+    sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat), 10000, replace = FALSE),]
 
+    # somesample <- sample_sub_Dat[sample(1:nrow(sample_sub_Dat), 1052, replace = FALSE),]
+    # tme <-as.numeric(as.Date(somesample$datetime))#[1:10]
+    # ##xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
+    # dt = dist(tme)
+    # dim(dt)
+    # hist(dt, 365)
+
+    tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
     dt = dist(tme)
+
+    #for a specified time threshold
+    dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
+    head(dt_convert)
+
+    #given theshold
+    t_threshold <- c(3)
+    #t_threshold <- c(0:365)
+
+    #maximize the occurence of this threshold
+    dt_conver_Wthres <- dt_convert %>%
+      dplyr::filter(distVal %in% t_threshold)
+
+    dt_conver_Wthres_Comb <- data.frame(ids = c(dt_conver_Wthres$cname,  dt_conver_Wthres$rname),
+                                        distVal=rep(dt_conver_Wthres$distVal, 2))
+
+    dt_conver_Wthres_Comb_ <- dt_conver_Wthres_Comb %>%
+      dplyr::group_by(ids) %>%
+      dplyr::summarise(n=n())%>%
+      dplyr::arrange(desc(n))%>%
+      dplyr::top_frac(0.1) #top 10
+
+    final_dt_convert <- sample_sub_Dat[dt_conver_Wthres_Comb_$ids,]
+    nrow(final_dt_convert)
+    tme <-as.numeric(as.Date(final_dt_convert$datetime))#[1:10]
+    dt = dist(tme)
+    dim(dt)
+    hist(dt, 365)
+
+
+    #
+    mydata <- final_dt_convert %>%
+      dplyr::mutate(date = as.Date(datetime))
+    nrow(mydata)
+    #
+    # #library(NearRepeat)
+    #
+    #
+    # # set.seed(10)
+    # # mydata <- data.frame(x = sample(x = 20, size = 20, replace = TRUE) * 5,
+    # #                      y = sample(x = 20, size = 20, replace = TRUE) * 5,
+    # #                      time = sort(sample(20, size = 20, replace = TRUE)))
+    # # mydata$date = as.Date(mydata$time, origin = "2018-01-01")
+
+#
+#     set.seed(123)
+#     myoutput <- NearRepeat(x = mydata$x, y = mydata$y,time = mydata$date,
+#                            sds = c(0,50,100, 150, 200), tds = 0:15)
+#
+#     dev.new()
+#     myoutput
+#     plot(mydata$x, mydata$y)
+#     plot(myoutput, text = "observed")
+
+
+
+
+    rep(c(1:3), 2)
+    Wthres <- unique(c(dt_conver_Wthres$cname, dt_conver_Wthres$rname))
+
+    dt_conver_WOthres <- dt_convert %>%
+      dplyr::filter(!distVal %in% t_threshold)
+
+    #pick half of the rest
+    sample(1:nrow(dt_conver_WOthres))
+
+
+
+
+    hist(dt_conver_Wthres$distVal)
+
+
     #dt[1:20, ]
     ds = dist(xy)
-    hist(dt)
+
     hist(ds)
 
   }
