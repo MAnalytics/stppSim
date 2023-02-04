@@ -425,10 +425,19 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
-  for(or in seq_len(length(ori_sn))){ #or=1
+  for(or in seq_len(length(ori_sn))){ #or=2
 
+    sub_Dat <- filtered_stp_All %>%
+      dplyr::filter(locid == ori_sn[or])
 
+    tme <-as.numeric(as.Date(sub_Dat$datetime))[1:10]
+    xy <- data.frame(x=sub_Dat$x, y=sub_Dat$y)[1:10,]
 
+    dt = dist(tme)
+    #dt[1:20, ]
+    ds = dist(xy)
+    hist(dt)
+    hist(ds)
 
   }
 
