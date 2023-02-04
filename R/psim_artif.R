@@ -447,7 +447,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     head(dt_convert)
 
     #given theshold
-    t_threshold <- c(3)
+    t_threshold <- c(7)
     #t_threshold <- c(0:365)
 
     #maximize the occurence of this threshold
