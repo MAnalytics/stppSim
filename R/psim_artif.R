@@ -416,13 +416,22 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
     }
 
-
     filtered_stp_All
+
 
   }
 
-
   #repeat filter for spatial and temporal thresholds
+
+  ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+
+  for(or in seq_len(length(ori_sn))){ #or=1
+
+
+
+
+  }
+
 #--------------------------------------
 
 
