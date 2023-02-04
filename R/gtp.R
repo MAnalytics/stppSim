@@ -14,23 +14,23 @@
 #' set as \code{NULL} for the `stable` trend.
 #' @param repeatType type of short- to medium-term
 #' fluctuations (patterns) associated with the
-#' trend line. Options are: \code{`"cyclic"` and `"single"`}.
+#' trend line. Options are: \code{`"cyclic"` and `"noncyclic"`}.
 #' Default is: \code{`"cyclic"`}.
-#' @param first_pDate date of the first seasonal peak of
-#' the GTP (format: `"yyyy-mm-dd"`).
-#' Default value is \code{NULL}, in which first seasonal
-#' peak of 90 days is utilized.
-#' seasonal cycle of 180 days is utilized (that is,
-#' a seasonal cycle of 180 days).
+#' @param Tperiod time interval (in days) of repeat patterns
+#' in the event occurrences. Default value is \code{90}
+#' indicating the first seasonal
+#' peak of cyclic repeat type. For `"noncyclic"` repeat type,
+#' a single value, e.g. 90, or a sequence of values,
+#' e.g. c(80:95), can be supplied.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
 #' slope = NULL, repeatType = "cyclic",
-#' first_pDate = NULL, show.plot =FALSE)
+#' Tperiod = NULL, show.plot =FALSE)
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
 #' slope = NULL, repeatType = "cyclic",
-#' first_pDate = "2020-02-28", show.plot = FALSE)
+#' Tperiod = 60, show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
 #' @return Returns a time series (list) of 365
@@ -41,10 +41,10 @@
 
 gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
                 slope = NULL, repeatType = "cyclic",
-                first_pDate=NULL,
+                Tperiod=NULL,
                 show.plot = FALSE){
 
-  #function to check if start_date & first_pDate are
+  #function to check if start_date & Tperiod are
   #in correct format
 
   #check that start_date has value
@@ -53,17 +53,22 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   }
 
   #check first peak value
-  if(is.null(first_pDate)){
+  if(is.null(Tperiod)){
     first_pDate <- as.Date(start_date) + 90
+    Tperiod <- 90
+  }
+
+  if(!is.null(Tperiod)){
+    first_pDate <- as.Date(start_date) + Tperiod
   }
 
   if(date_checker(c(start_date)) == FALSE){
     stop("The 'start_date' specified is not in the correct format!")
   }
 
-  if(date_checker(c(first_pDate)) == FALSE){
-    stop("The 'first_pDate' specified is not in the correct format!")
-  }
+  # if(date_checker(c(first_pDate)) == FALSE){
+  #   stop("The 'first_pDate' specified is not in the correct format!")
+  # }
 
   #check if first_pDate is greater than start date
   if(as.numeric(as.Date(first_pDate) - as.Date(start_date)) <= 0){
@@ -92,7 +97,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   }
 
 
-  if(repeatType == "single"){
+  if(repeatType == "noncyclic"){
     y <- rep(60, length(t))
   }
 
@@ -109,7 +114,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     steep <-  ((max(y)) - min(y))/(365-0) #slope
   }
 
-  if(repeatType == "single"){
+  if(repeatType == "noncyclic"){
     gentle <- 0.05#slope
     steep <-  0.1 #slope
   }
@@ -146,7 +151,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
       trendline <- 0 + steep * t
     }
 
-    if(repeatType == "single"){
+    if(repeatType == "noncyclic"){
       y <- y - 30
     }
     y <- y + trendline
@@ -161,12 +166,9 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     y_ <- data.frame(Date = t2, y)
   }
 
-  # if(repeatType == "single"){
-  #
-  # }
 
   output$data <- y
-
+  output$Tperiod <- Tperiod
   #output$plot <- plot(t, y, 'l')
 
   if(show.plot == TRUE){
