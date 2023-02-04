@@ -295,6 +295,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
+    #saveRDS(stp_All,
+    #file="C:/Users/monsu/Documents/GitHub/stppSim backup/backup 27012023/stppSimbackupReal.rds")
   }
   }
 
@@ -334,6 +336,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     dplyr::select(date) %>%
     dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
     dplyr::mutate(tmeDiff = tme - min(tme)) #from origin
+
 #head(ppt_diff)
   # tme <-as.numeric(as.Date(ppt$date))#[1:10] #check patterns first
   # t_origin <- min(tme)
@@ -342,12 +345,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   probList <- hist(ppt_diff %>% dplyr::pull(tmeDiff), 365)
   probList <- c(0, probList$density)
-  probList <- data.frame(date = seq.Date(from = min(as.Date(ppt$date)), to = min(as.Date(ppt$date))+364, by = 'days'),
+  probList <- data.frame(date = seq.Date(from = min(as.Date(st_properties$start_date)),
+                                         to = min(as.Date(st_properties$start_date))+364, by = 'days'),
                          probVal = probList/sum(probList))
 
   fnDateList <- probList %>%
     dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
-    dplyr::mutate(tme=paste0("D",as.character(tme)))#%>%
+    dplyr::mutate(tme=paste0("D",as.character(tme))) ##%>%
+    # dplyr::mutate(probVal = as.numeric(if_else(tme %in% paste0("D", 18717:18740),
+    #                                            paste("0.5"), paste(probVal))))
 
   #head(probList)
   #join the dataList
@@ -369,7 +375,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #n_events <- c(2000, 3000)
   #reformat/generate all the results
-  for(h in seq_len(length(n_events))){
+  for(h in seq_len(length(n_events))){ #h<-1
 
     #add idx
     stp_All_ <- stp_All %>%
@@ -379,15 +385,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     nrow(stp_All_)
     #----------------------------
     #apply repeat filtering
-    # tme <-as.numeric(as.Date(stp_All_subset$datetime))#[1:10] #check patterns first
-    # dt = dist(tme)
-    # dt_vector <- as.vector(dt)
-    # hist(dt_vector, 365)
-
-    ##orList <- unique(stp_All_$locid)
-
-    ##for(or in seq_len(length(orList))){ #or<-1
-
       stp_All_subset <- stp_All_ %>%
         ##dplyr::filter(locid == orList[or]) %>%
         data.frame() %>%
@@ -410,19 +407,32 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
         subsetFn <- stp_All_[ind, ]
 
-        #nrow(subsetFn)
-        # tme <-as.numeric(as.Date(subsetFn$datetime))#[1:10] #check patterns first
-        # dt <- dist(tme)
-        #hist(dt, 365)
+        # #uncomment=========
+        # system.time(samp_idx <- as.numeric(sample(stp_All_subset$ID, size = round(nrow(stp_All_subset)/2, digits = 0),
+        #                               replace = FALSE, prob = stp_All_subset$probVal))) #%>
+        # stp_All_subset <- stp_All_subset[which(stp_All_subset$ID %in% samp_idx), ]
+        # subsetFn <- stp_All_subset
+        # #nrow(subsetFn)
+        # tme <-as.numeric(as.Date(stp_All_subset$datetime))#[1:10] #check patterns first
+        # dt <- tme - min(tme)
+        # #dev
+        # hist(dt, 365)
+        #==================
     #}
 
 
     #----------------------------
     #sample to derive required number
-    samp_idx <- as.numeric(sample(subsetFn$ID, size = n_events[h],
+    samp_idx <- as.numeric(sample(subsetFn$ID, size = n_events[h],  #n_events[h]
                                   replace = FALSE, prob = subsetFn$prob)) #%>
 
     subsetFn <- subsetFn[which(subsetFn$ID %in% samp_idx), ]
+    #uncomment
+    # tme <-as.numeric(as.Date(subsetFn$datetime))#[1:10] #check patterns first
+    # ##dt <- tme - min(tme)
+    # dt <- dist(tme) #dim(dt)
+    # dev
+    # hist(dt, 365)
 
     #sort
     subsetFn <- subsetFn %>%
