@@ -335,7 +335,97 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
+
+
+    ##saveRDS(stp_All,
+            ##file="C:/Users/monsu/Documents/GitHub/sppSim backup/backup 27012023/stppSimbackupArtif_noncyclic_60.rds")
+
     }
+
+
+#-------------------------------------
+
+  #to smooth the short and medium pattern
+  #when noncyclic
+
+    if(repeatType == "noncyclic"){
+
+    #divide the data and keep backup
+    s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
+    div_75 <- datxy[s_id, ]
+
+    div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
+
+    datxy_plot <- div_75 %>%
+      #datxy_plot <- stp_All_sub %>%
+      dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
+      group_by(t) %>%
+      summarise(n = n()) %>%
+      mutate(time = as.numeric(difftime(t, as.Date("2020-12-31"), units="days")))%>%
+      as.data.frame()
+
+    time <- data.frame(time=1:365)
+
+    datxy_plot <- time %>%
+      left_join(datxy_plot) %>%
+      dplyr::mutate(n = replace_na(n, 0))
+
+    #unique(dat_sample_p$time)
+
+    plot(datxy_plot$time, datxy_plot$n, 'l')
+    head(datxy)
+
+    #fit and plot
+    loessData1 <- data.frame(
+      x = 1:nrow(datxy_plot),
+      y = predict(lm(n~time, datxy_plot)),
+      method = "loess()"
+    )
+    #library(ggplot2)
+
+    # ggplot(loessData1, aes(x, y)) +
+    #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
+    #   geom_line(col = "blue") +
+    #   facet_wrap(~method) +
+    #   ggtitle("Interpolation and smoothing functions in R") +
+    #   theme_bw(16)
+
+    loessData1 <- round(loessData1$y, digits = 0)
+
+    #randomly remove point for each day data
+    filtered_stp_All <- NULL
+
+    for(rmv in seq_len(length(loessData1))){ #rmv = 1
+
+      #data to either reduce or increase
+      stp_All_on_day <- div_75 %>%
+        dplyr::filter(tid == rmv)
+
+      if(datxy_plot$n[rmv] >= loessData1[rmv]){
+        orig_pt <- sample(1:datxy_plot$n[rmv], loessData1[rmv], replace = FALSE)
+        todaysData <- stp_All_on_day[orig_pt, ]
+      }
+
+      if(datxy_plot$n[rmv] < loessData1[rmv]){
+        #first borrow the remainder
+        rem_D <- div_25[sample(1:nrow(div_25), (loessData1[rmv] - datxy_plot$n[rmv]), replace = F),]
+        todaysData <- rbind(stp_All_on_day, rem_D)
+      }
+
+      filtered_stp_All <- rbind(filtered_stp_All, todaysData)
+
+    }
+
+
+    filtered_stp_All
+
+  }
+
+
+  #repeat filter for spatial and temporal thresholds
+#--------------------------------------
+
+
 
   #generate all the results
   for(h in seq_len(length(n_events))){
