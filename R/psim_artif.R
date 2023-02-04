@@ -67,14 +67,14 @@
 #' set as \code{NULL} for the `stable` trend.
 #' @param repeatType type of short- to medium-term
 #' fluctuations (patterns) associated with the
-#' trend line. Options are: \code{`"cyclic"` and `"single"`}.
-#' Default is: \code{`"cyclic"`}.
-#' @param first_pDate date of the first seasonal peak of
-#' the GTP (format: `"yyyy-mm-dd"`).
-#' Default value is \code{NULL}, in which first seasonal
-#' peak of 90 days is utilized.
-#' seasonal cycle of 180 days is utilized (that is,
-#' a seasonal cycle of 180 days).
+#' trend line. Options are: \code{`"cyclical"` and `"acyclical"`}.
+#' Default is: \code{`"cyclical"`}.
+#' @param Tperiod time interval (in days) of repeat patterns
+#' in the event occurrences. Default value is \code{90}
+#' indicating the first seasonal
+#' peak of cyclical repeat type. For `"acyclical"` repeat type,
+#' a single value, e.g. 14, or a list of values,
+#' e.g. c(7, 14, 30), can be supplied.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @param show.data (TRUE or FALSE) To show the output
@@ -91,7 +91,7 @@
 #' poly, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
-#' trend = "stable", repeatType = "cyclic", first_pDate=NULL,
+#' trend = "stable", repeatType = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
@@ -112,7 +112,7 @@
 #' n_foci=1, foci_separation = 10, mfocal = NULL,
 #' conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
-#' trend = "stable", repeatType = "cyclic", first_pDate=NULL,
+#' trend = "stable", repeatType = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
@@ -169,8 +169,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        n_foci, foci_separation, mfocal = NULL,
                        conc_type = "dispersed", p_ratio,
                        s_threshold = 50, step_length = 20,
-                       trend = "stable", repeatType = "cyclic",
-                       first_pDate=NULL,
+                       trend = "stable", repeatType = "cyclical",
+                       Tperiod=NULL,
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
   #define global variables...
@@ -189,8 +189,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   }
 
   #check first peak value
-  if(is.null(first_pDate)){
-    first_pDate <- as.Date(start_date) + 90
+  if(is.null(Tperiod)){
+    Tperiod <- as.Date(start_date) + 90
   }
 
   output <- list()
@@ -219,7 +219,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date = start_date, trend, slope=slope, first_pDate=first_pDate,
+  gtp <- gtp(start_date = start_date, trend, slope=slope, Tperiod=Tperiod,
              show.plot=show.plot) #"01-01"
 
 
@@ -348,7 +348,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #to smooth the short and medium pattern
   #when noncyclic
 
-    if(repeatType == "noncyclic"){
+    if(repeatType == "acyclical"){
 
     #divide the data and keep backup
     s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
@@ -447,7 +447,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     head(dt_convert)
 
     #given theshold
-    t_threshold <- c(7)
+    t_threshold <- c(10)
     #t_threshold <- c(0:365)
 
     #maximize the occurence of this threshold
@@ -470,7 +470,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     dim(dt)
     hist(dt, 365)
 
-
+    plot(sub_Dat$x, sub_Dat$y)
     #
     mydata <- final_dt_convert %>%
       dplyr::mutate(date = as.Date(datetime))
