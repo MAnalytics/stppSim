@@ -55,6 +55,8 @@
 #' location. Default: \code{250} (in the same
 #' linear unit
 #' as the `poly` - polygon shapefile).
+#' @param s_band distance bandwidth that maximizes space and time
+#' interaction. It is a vector of two distance values. Default: NULL.
 #' @param step_length the maximum step taken
 #' by a walker from one point to the next.
 #' @param trend specifies the direction of the
