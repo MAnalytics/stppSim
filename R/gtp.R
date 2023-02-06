@@ -14,12 +14,12 @@
 #' set as \code{NULL} for the `stable` trend.
 #' @param shortTerm type of short- to medium-term
 #' fluctuations (patterns) of the time series.
-#' Options are: \code{`"cyclical"` and `"repeat"`}.
+#' Options are: \code{`"cyclical"` and `"acyclical"`}.
 #' Default is: \code{`"cyclical"`}.
 #' @param Tperiod time interval (in days) associated with
 #' the short term pattern. Default value is \code{90}
 #' indicating the first seasonal
-#' peak of cyclical short term. For `"repeat"` short term pattern
+#' peak of cyclical short term. For `"acyclical"` short term pattern
 #' a single value, e.g. 14, or a list of values,
 #' e.g. c(7, 14, 21), can be supplied.
 #' @param show.plot (logical) Shows GTP.
@@ -97,7 +97,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   }
 
 
-  if(shortTerm == "repeat"){
+  if(shortTerm == "acyclical"){
     y <- rep(60, length(t))
   }
 
@@ -114,7 +114,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     steep <-  ((max(y)) - min(y))/(365-0) #slope
   }
 
-  if(shortTerm == "repeat"){
+  if(shortTerm == "acyclical"){
     gentle <- 0.05#slope
     steep <-  0.1 #slope
   }
@@ -151,7 +151,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
       trendline <- 0 + steep * t
     }
 
-    if(shortTerm == "repeat"){
+    if(shortTerm == "acyclical"){
       y <- y - 30
     }
     y <- y + trendline
