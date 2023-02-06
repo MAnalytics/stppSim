@@ -69,12 +69,12 @@
 #' set as \code{NULL} for the `stable` trend.
 #' @param shortTerm type of short- to medium-term
 #' fluctuations (patterns) of the time series.
-#' Options are: \code{`"cyclical"` and `"repeat"`}.
+#' Options are: \code{`"cyclical"` and `"acyclical"`}.
 #' Default is: \code{`"cyclical"`}.
 #' @param Tperiod time interval (in days) associated with
 #' the short term pattern. Default value is \code{90}
 #' indicating the first seasonal
-#' peak of cyclical short term. For `"repeat"` short term pattern
+#' peak of cyclical short term. For `"acyclical"` short term pattern
 #' a single value, e.g. 14, or a list of values,
 #' e.g. c(7, 14, 21), can be supplied.
 #' @param show.plot (logical) Shows GTP.
@@ -92,7 +92,7 @@
 #' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 #' poly, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
-#' p_ratio, s_threshold = 50, step_length = 20,
+#' p_ratio, s_threshold = 50, s_band = NULL, step_length = 20,
 #' trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
@@ -113,7 +113,7 @@
 #' field = NULL,
 #' n_foci=1, foci_separation = 10, mfocal = NULL,
 #' conc_type = "dispersed",
-#' p_ratio = 20, s_threshold = 50, step_length = 20,
+#' p_ratio = 20, s_threshold = 50, s_band = NULL, step_length = 20,
 #' trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
@@ -170,7 +170,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        poly, n_origin, restriction_feat=NULL, field=NA,
                        n_foci, foci_separation, mfocal = NULL,
                        conc_type = "dispersed", p_ratio,
-                       s_threshold = 50, step_length = 20,
+                       s_threshold = 50, s_band = NULL, step_length = 20,
                        trend = "stable", shortTerm = "cyclical",
                        Tperiod=NULL,
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
@@ -182,6 +182,22 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
                    n_foci=n_foci, foci_separation = foci_separation,
                    mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
+
+  #
+  if(shortTerm == "acyclical" & s_band = NULL) {
+    stop(" 's_band' argument cannot be NULL for 'acyclical' short term pattern!")
+  }
+
+  #if one value is inputted
+  if(length(s_band) != 2){
+    stop(" 's_band' needs to be vector of two values!")
+  }
+
+  #if one value is inputted
+  if(s_band[1] >= s_band[2]){
+    stop(" 's_band' value 2 cannot be greater than value 1!")
+  }
+
 
   #start_date <- as.Date(start_date)
 
@@ -248,9 +264,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   #check the length and
   #and the possible outputs
-  if(length(n_events) > 1 & shortTerm == "repeat"){
+  if(length(n_events) > 1 & shortTerm == "acyclical"){
     cat(paste0("Note: One event set (i.e. n_events=", n_events[1], ")",
-               " will be generated for repeat short term pattern!!"))
+               " will be generated for acyclical short term pattern!!"))
   }
 
 
@@ -358,7 +374,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #to smooth the short and medium pattern
   #when noncyclic
 
-    if(shortTerm == "repeat"){
+    if(shortTerm == "acyclical"){
 
       datxy <- stp_All
 
@@ -462,12 +478,12 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     head(dt_convert)
 
     #given theshold
-    t_threshold <- c(7,  14)
+    #t_threshold <- c(7,  14)
     #t_threshold <- c(0:365)
 
     #maximize the occurence of this threshold
     dt_conver_Wthres <- dt_convert %>%
-      dplyr::filter(distVal %in% t_threshold)
+      dplyr::filter(distVal %in% Tperiod)
 
     dt_conver_Wthres_Comb <- data.frame(ids = c(dt_conver_Wthres$cname,  dt_conver_Wthres$rname),
                                         distVal=rep(dt_conver_Wthres$distVal, 2))
@@ -491,12 +507,12 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
     head(ds_convert)
 
-    s_threshold <- c(100,200)
+    #s_threshold <- c(100,200)
 
     #maximize the occurence of this threshold
     ds_conver_Wthres <- data.frame(ds_convert) %>%
-      dplyr::mutate(filterField1 = if_else(distVal >= min(s_threshold), paste("yes"), paste("no"))) %>%
-      dplyr::mutate(filterField2 = if_else(distVal <= max(s_threshold), paste("yes"), paste("no"))) %>%
+      dplyr::mutate(filterField1 = if_else(distVal >= min(s_band), paste("yes"), paste("no"))) %>%
+      dplyr::mutate(filterField2 = if_else(distVal <= max(s_band), paste("yes"), paste("no"))) %>%
       dplyr::filter(filterField1 == "yes" & filterField2 == "yes")
 
     ds_conver_Wthres_Comb <- data.frame(ids = c(ds_conver_Wthres$cname,  ds_conver_Wthres$rname),
@@ -524,7 +540,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
 #--------------------------------------
 
-  if(length(n_events) > 1 & shortTerm == "repeat"){
+  if(length(n_events) > 1 & shortTerm == "acyclical"){
     n_events <- n_events[1]
   }
 
