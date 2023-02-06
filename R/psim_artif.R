@@ -65,16 +65,16 @@
 #' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
-#' @param repeatType type of short- to medium-term
-#' fluctuations (patterns) associated with the
-#' trend line. Options are: \code{`"cyclical"` and `"acyclical"`}.
+#' @param shortTerm type of short- to medium-term
+#' fluctuations (patterns) of the time series.
+#' Options are: \code{`"cyclical"` and `"repeat"`}.
 #' Default is: \code{`"cyclical"`}.
-#' @param Tperiod time interval (in days) of repeat patterns
-#' in the event occurrences. Default value is \code{90}
+#' @param Tperiod time interval (in days) associated with
+#' the short term pattern. Default value is \code{90}
 #' indicating the first seasonal
-#' peak of cyclical repeat type. For `"acyclical"` repeat type,
+#' peak of cyclical short term. For `"repeat"` short term pattern
 #' a single value, e.g. 14, or a list of values,
-#' e.g. c(7, 14, 30), can be supplied.
+#' e.g. c(7, 14, 21), can be supplied.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @param show.data (TRUE or FALSE) To show the output
@@ -91,7 +91,7 @@
 #' poly, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 #' p_ratio, s_threshold = 50, step_length = 20,
-#' trend = "stable", repeatType = "cyclical", Tperiod=NULL,
+#' trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
@@ -112,7 +112,7 @@
 #' n_foci=1, foci_separation = 10, mfocal = NULL,
 #' conc_type = "dispersed",
 #' p_ratio = 20, s_threshold = 50, step_length = 20,
-#' trend = "stable", repeatType = "cyclical", Tperiod=NULL,
+#' trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
@@ -169,7 +169,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        n_foci, foci_separation, mfocal = NULL,
                        conc_type = "dispersed", p_ratio,
                        s_threshold = 50, step_length = 20,
-                       trend = "stable", repeatType = "cyclical",
+                       trend = "stable", shortTerm = "cyclical",
                        Tperiod=NULL,
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
@@ -190,7 +190,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   #check first peak value
   if(is.null(Tperiod)){
-    Tperiod <- as.Date(start_date) + 90
+    #Tperiod <- as.Date(start_date) + 90
+    Tperiod <- 90
   }
 
   output <- list()
@@ -219,7 +220,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     select(x, y)
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date = start_date, trend, slope=slope, Tperiod=Tperiod,
+  gtp <- gtp(start_date = start_date, trend, slope=slope,
+             shortTerm = shortTerm,
+             Tperiod=Tperiod,
              show.plot=show.plot) #"01-01"
 
 
@@ -240,6 +243,13 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #subset xy columns
   spo_xy <- as_tibble(spo$origins) %>%
     dplyr::select(x, y)
+
+  #check the length and
+  #and the possible outputs
+  if(length(n_events) > 1 & shortTerm == "repeat"){
+    cat(paste0("Note: One event set (i.e. n_events=", n_events[1], ")",
+               " will be generated for repeat short term pattern!!"))
+  }
 
 
   if(interactive == TRUE){
@@ -336,101 +346,104 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     stp_All <- stp_All %>%
       bind_rows(loc_N)
 
-
-    ##saveRDS(stp_All,
-            ##file="C:/Users/monsu/Documents/GitHub/sppSim backup/backup 27012023/stppSimbackupArtif_noncyclic_60.rds")
-
     }
 
+
+  #saveRDS(stp_All, file="C:/Users/monsu/Documents/GitHub/sppSim backup/backup 27012023/stppSimbackupArtif_acyclical_60.rds")
 
 #-------------------------------------
 
   #to smooth the short and medium pattern
   #when noncyclic
 
-    if(repeatType == "acyclical"){
+    if(shortTerm == "repeat"){
 
-    #divide the data and keep backup
-    s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
-    div_75 <- datxy[s_id, ]
+      datxy <- stp_All
 
-    div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
+      #divide the data and keep backup
+      s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
+      div_75 <- datxy[s_id, ]
 
-    datxy_plot <- div_75 %>%
-      #datxy_plot <- stp_All_sub %>%
-      dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
-      group_by(t) %>%
-      summarise(n = n()) %>%
-      mutate(time = as.numeric(difftime(t, as.Date("2020-12-31"), units="days")))%>%
-      as.data.frame()
+      div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
 
-    time <- data.frame(time=1:365)
+      datxy_plot <- div_75 %>%
+        #datxy_plot <- stp_All_sub %>%
+        dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
+        group_by(t) %>%
+        summarise(n = n()) %>%
+        mutate(time = as.numeric(difftime(t, as.Date("2020-12-31"), units="days")))%>%
+        as.data.frame()
 
-    datxy_plot <- time %>%
-      left_join(datxy_plot) %>%
-      dplyr::mutate(n = replace_na(n, 0))
+      time <- data.frame(time=1:365)
 
-    #unique(dat_sample_p$time)
+      datxy_plot <- time %>%
+        left_join(datxy_plot) %>%
+        dplyr::mutate(n = replace_na(n, 0))
 
-    plot(datxy_plot$time, datxy_plot$n, 'l')
-    head(datxy)
+      #unique(dat_sample_p$time)
 
-    #fit and plot
-    loessData1 <- data.frame(
-      x = 1:nrow(datxy_plot),
-      y = predict(lm(n~time, datxy_plot)),
-      method = "loess()"
-    )
-    #library(ggplot2)
+      plot(datxy_plot$time, datxy_plot$n, 'l')
+      head(datxy)
 
-    # ggplot(loessData1, aes(x, y)) +
-    #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
-    #   geom_line(col = "blue") +
-    #   facet_wrap(~method) +
-    #   ggtitle("Interpolation and smoothing functions in R") +
-    #   theme_bw(16)
+      #fit and plot
+      loessData1 <- data.frame(
+        x = 1:nrow(datxy_plot),
+        y = predict(lm(n~time, datxy_plot)),
+        method = "loess()"
+      )
+      #library(ggplot2)
 
-    loessData1 <- round(loessData1$y, digits = 0)
+      # ggplot(loessData1, aes(x, y)) +
+      #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
+      #   geom_line(col = "blue") +
+      #   facet_wrap(~method) +
+      #   ggtitle("Interpolation and smoothing functions in R") +
+      #   theme_bw(16)
 
-    #randomly remove point for each day data
-    filtered_stp_All <- NULL
+      loessData1 <- round(loessData1$y, digits = 0)
 
-    for(rmv in seq_len(length(loessData1))){ #rmv = 1
+      #randomly remove point for each day data
+      filtered_stp_All <- NULL
 
-      #data to either reduce or increase
-      stp_All_on_day <- div_75 %>%
-        dplyr::filter(tid == rmv)
+      for(rmv in seq_len(length(loessData1))){ #rmv = 1
 
-      if(datxy_plot$n[rmv] >= loessData1[rmv]){
-        orig_pt <- sample(1:datxy_plot$n[rmv], loessData1[rmv], replace = FALSE)
-        todaysData <- stp_All_on_day[orig_pt, ]
+        #data to either reduce or increase
+        stp_All_on_day <- div_75 %>%
+          dplyr::filter(tid == rmv)
+
+        if(datxy_plot$n[rmv] >= loessData1[rmv]){
+          orig_pt <- sample(1:datxy_plot$n[rmv], loessData1[rmv], replace = FALSE)
+          todaysData <- stp_All_on_day[orig_pt, ]
+        }
+
+        if(datxy_plot$n[rmv] < loessData1[rmv]){
+          #first borrow the remainder
+          rem_D <- div_25[sample(1:nrow(div_25), (loessData1[rmv] - datxy_plot$n[rmv]), replace = F),]
+          todaysData <- rbind(stp_All_on_day, rem_D)
+        }
+
+        filtered_stp_All <- rbind(filtered_stp_All, todaysData)
+
       }
 
-      if(datxy_plot$n[rmv] < loessData1[rmv]){
-        #first borrow the remainder
-        rem_D <- div_25[sample(1:nrow(div_25), (loessData1[rmv] - datxy_plot$n[rmv]), replace = F),]
-        todaysData <- rbind(stp_All_on_day, rem_D)
-      }
-
-      filtered_stp_All <- rbind(filtered_stp_All, todaysData)
-
-    }
-
-    filtered_stp_All
-
-
+      filtered_stp_All
   }
 
   #repeat filter for spatial and temporal thresholds
+
+  fN_final_dt_convert <- NULL
 
   ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
   for(or in seq_len(length(ori_sn))){ #or=1
 
+    ##plot(filtered_stp_All$x, filtered_stp_All$y)
+    ##plot(sub_Dat$x, sub_Dat$y)
+
     sub_Dat <- filtered_stp_All %>%
       dplyr::filter(locid == ori_sn[or])
 
-    sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat), 10000, replace = FALSE),]
+    sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat), 5000, replace = FALSE),]
 
     # somesample <- sample_sub_Dat[sample(1:nrow(sample_sub_Dat), 1052, replace = FALSE),]
     # tme <-as.numeric(as.Date(somesample$datetime))#[1:10]
@@ -447,7 +460,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     head(dt_convert)
 
     #given theshold
-    t_threshold <- c(10)
+    t_threshold <- c(7,  14)
     #t_threshold <- c(0:365)
 
     #maximize the occurence of this threshold
@@ -464,71 +477,70 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
       dplyr::top_frac(0.1) #top 10
 
     final_dt_convert <- sample_sub_Dat[dt_conver_Wthres_Comb_$ids,]
-    nrow(final_dt_convert)
-    tme <-as.numeric(as.Date(final_dt_convert$datetime))#[1:10]
-    dt = dist(tme)
-    dim(dt)
-    hist(dt, 365)
-
-    plot(sub_Dat$x, sub_Dat$y)
-    #
-    mydata <- final_dt_convert %>%
-      dplyr::mutate(date = as.Date(datetime))
-    nrow(mydata)
-    #
-    # #library(NearRepeat)
-    #
-    #
-    # # set.seed(10)
-    # # mydata <- data.frame(x = sample(x = 20, size = 20, replace = TRUE) * 5,
-    # #                      y = sample(x = 20, size = 20, replace = TRUE) * 5,
-    # #                      time = sort(sample(20, size = 20, replace = TRUE)))
-    # # mydata$date = as.Date(mydata$time, origin = "2018-01-01")
-
-#
-#     set.seed(123)
-#     myoutput <- NearRepeat(x = mydata$x, y = mydata$y,time = mydata$date,
-#                            sds = c(0,50,100, 150, 200), tds = 0:15)
-#
-#     dev.new()
-#     myoutput
-#     plot(mydata$x, mydata$y)
-#     plot(myoutput, text = "observed")
 
 
+    #----------------------------------------------------------------------------distance part
 
+    #apply distance threshold
+    xy <- data.frame(x=final_dt_convert$x, y=final_dt_convert$y)#[1:10,]
 
-    rep(c(1:3), 2)
-    Wthres <- unique(c(dt_conver_Wthres$cname, dt_conver_Wthres$rname))
+    ds <- dist(xy)
+    #for a specified time threshold
+    ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
+    head(ds_convert)
 
-    dt_conver_WOthres <- dt_convert %>%
-      dplyr::filter(!distVal %in% t_threshold)
+    s_threshold <- c(100,200)
 
-    #pick half of the rest
-    sample(1:nrow(dt_conver_WOthres))
+    #maximize the occurence of this threshold
+    ds_conver_Wthres <- data.frame(ds_convert) %>%
+      dplyr::mutate(filterField1 = if_else(distVal >= min(s_threshold), paste("yes"), paste("no"))) %>%
+      dplyr::mutate(filterField2 = if_else(distVal <= max(s_threshold), paste("yes"), paste("no"))) %>%
+      dplyr::filter(filterField1 == "yes" & filterField2 == "yes")
+
+    ds_conver_Wthres_Comb <- data.frame(ids = c(ds_conver_Wthres$cname,  ds_conver_Wthres$rname),
+                                        distVal=rep(ds_conver_Wthres$distVal, 2))
+
+    ds_conver_Wthres_Comb_ <- ds_conver_Wthres_Comb %>%
+      dplyr::group_by(ids) %>%
+      dplyr::summarise(n=n())%>%
+      dplyr::arrange(desc(n))%>%
+      dplyr::top_frac(0.1) #top 10
+
+    final_ds_convert <- final_dt_convert[ds_conver_Wthres_Comb_$ids,]
+
+    #----------------------------------------------------------------------------------------
 
 
 
+    fN_final_dt_convert <- rbind(fN_final_dt_convert,
+                                 final_ds_convert)
 
-    hist(dt_conver_Wthres$distVal)
-
-
-    #dt[1:20, ]
-    ds = dist(xy)
-
-    hist(ds)
+    flush.console()
+    print(or)
 
   }
 
 #--------------------------------------
 
+  if(length(n_events) > 1 & shortTerm == "repeat"){
+    n_events <- n_events[1]
+  }
+
+  #Also if the final list is very small compare
+  #to the list needed
+  if(nrow(fN_final_dt_convert) < round(n_events[1]*1.5, digits = 0)){
+    cat(paste0("*------------| Only ",  round(nrow(fN_final_dt_convert)*0.75, digits = 0),
+              " events are generated! |--------------*"))
+
+    n_events <- round(nrow(fN_final_dt_convert)*0.75, digits = 0)
+  }
 
 
   #generate all the results
-  for(h in seq_len(length(n_events))){
+  for(h in seq_len(length(n_events))){ #h<-1
 
     #add idx
-    stp_All_ <- stp_All %>%
+    stp_All_ <- fN_final_dt_convert %>%
       rownames_to_column('ID') #%>% #add row as column
 
     #sample to derive required number
@@ -539,7 +551,10 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
     #sort
     stp_All_ <- stp_All_ %>%
-      arrange(locid, tid, sn)
+      arrange(locid, tid, sn) %>%
+      rownames_to_column('ID2') %>%
+      dplyr::select(-c(ID))%>%
+      dplyr::rename(ID = ID2)
 
     output[h] <- list(stp_All_)
   }
