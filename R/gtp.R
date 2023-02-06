@@ -12,24 +12,24 @@
 #' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
 #' set as \code{NULL} for the `stable` trend.
-#' @param repeatType type of short- to medium-term
-#' fluctuations (patterns) associated with the
-#' trend line. Options are: \code{`"cyclical"` and `"acyclical"`}.
+#' @param shortTerm type of short- to medium-term
+#' fluctuations (patterns) of the time series.
+#' Options are: \code{`"cyclical"` and `"repeat"`}.
 #' Default is: \code{`"cyclical"`}.
-#' @param Tperiod time interval (in days) of repeat patterns
-#' in the event occurrences. Default value is \code{90}
+#' @param Tperiod time interval (in days) associated with
+#' the short term pattern. Default value is \code{90}
 #' indicating the first seasonal
-#' peak of cyclical repeat type. For `"acyclical"` repeat type,
+#' peak of cyclical short term. For `"repeat"` short term pattern
 #' a single value, e.g. 14, or a list of values,
-#' e.g. c(7, 14, 30), can be supplied.
+#' e.g. c(7, 14, 21), can be supplied.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
-#' slope = NULL, repeatType = "cyclical",
+#' slope = NULL, shortTerm = "cyclical",
 #' Tperiod = NULL, show.plot =FALSE)
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
-#' slope = NULL, repeatType = "cyclical",
+#' slope = NULL, shortTerm = "cyclical",
 #' Tperiod = 60, show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
@@ -40,7 +40,7 @@
 #'
 
 gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
-                slope = NULL, repeatType = "cyclical",
+                slope = NULL, shortTerm = "cyclical",
                 Tperiod=NULL,
                 show.plot = FALSE){
 
@@ -84,7 +84,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   t2 <- t1 + t
 
 
-  if(repeatType == "cyclical"){
+  if(shortTerm == "cyclical"){
 
     #n-th day of peak since start_date
     nth_day <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
@@ -97,7 +97,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   }
 
 
-  if(repeatType == "acyclical"){
+  if(shortTerm == "repeat"){
     y <- rep(60, length(t))
   }
 
@@ -109,12 +109,12 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     }
   }
 
-  if(repeatType == "cyclical"){
+  if(shortTerm == "cyclical"){
     gentle <- ((max(y)/2) - min(y))/(365-0) #slope
     steep <-  ((max(y)) - min(y))/(365-0) #slope
   }
 
-  if(repeatType == "acyclical"){
+  if(shortTerm == "repeat"){
     gentle <- 0.05#slope
     steep <-  0.1 #slope
   }
@@ -151,14 +151,14 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
       trendline <- 0 + steep * t
     }
 
-    if(repeatType == "acyclical"){
+    if(shortTerm == "repeat"){
       y <- y - 30
     }
     y <- y + trendline
     #plot(y)
   }
 
-  if(repeatType == "cyclical"){
+  if(shortTerm == "cyclical"){
     #remove negative values
     y <- round(y + (-1 * min(y)), digits = 0) #to remove negatives values
     baseline_occur <- 0.25 * (max(y)/2)
