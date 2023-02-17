@@ -51,7 +51,8 @@ Imports:
   methods,
   cowplot,
   gstat,
-  Rcpp
+  Rcpp,
+  otuSummary
 RoxygenNote: 7.1.2
 Suggests:
   knitr,
