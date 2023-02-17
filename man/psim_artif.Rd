@@ -7,8 +7,8 @@
 psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
 poly, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
-p_ratio, s_threshold = 50, step_length = 20,
-trend = "stable", repeatType = "cyclic", Tperiod=90,
+p_ratio, s_threshold = 50, s_band = NULL, step_length = 20,
+trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
@@ -75,6 +75,9 @@ location. Default: \code{250} (in the same
 linear unit
 as the \code{poly} - polygon shapefile).}
 
+\item{s_band}{distance bandwidth that maximizes space and time
+interaction. It is a vector of two distance values. Default: NULL.}
+
 \item{step_length}{the maximum step taken
 by a walker from one point to the next.}
 
@@ -83,17 +86,17 @@ long-term trend. Options are:
 \code{"falling"}, \code{"stable"},
 and \code{"rising"}. Default value is: \code{"stable"}.}
 
-\item{repeatType}{type of short- to medium-term
-fluctuations (patterns) associated with the
-trend line. Options are: \code{`"cyclic"` and `"single"`}.
-Default is: \code{`"cyclic"`}.}
+\item{shortTerm}{type of short- to medium-term
+fluctuations (patterns) of the time series.
+Options are: \code{`"cyclical"` and `"acyclical"`}.
+Default is: \code{`"cyclical"`}.}
 
-\item{Tperiod}{time interval (in days) of repeat patterns
-in the event occurrences. Default value is \code{90}
+\item{Tperiod}{time interval (in days) associated with
+the short term pattern. Default value is \code{90}
 indicating the first seasonal
-peak of cyclic repeat type. For \code{"single"} repeat type,
-a single value, e.g. 90, or a sequence of values,
-e.g. c(80:95), can be supplied.}
+peak of cyclical short term. For \code{"acyclical"} short term pattern
+a single value, e.g. 14, or a list of values,
+e.g. c(7, 14, 21), can be supplied.}
 
 \item{slope}{slope of the long-term trend when
 an \code{"rising"} or \code{"falling"} trend is specified.
@@ -158,13 +161,13 @@ landuse = camden$landuse # get landuse
 #'n_origin' (i.e. `20`) for faster computation:
 
 #simulate data
-simulated_stpp <- psim_artif(n_events=1000, start_date = "2021-01-01",
+simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
 poly=boundary, n_origin=20, restriction_feat = NULL,
 field = NULL,
 n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
-p_ratio = 20, s_threshold = 50, step_length = 20,
-trend = "stable", repeatType = "cyclic", Tperiod=90,
+p_ratio = 20, s_threshold = 50, s_band = NULL, step_length = 20,
+trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
