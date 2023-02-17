@@ -58,8 +58,10 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
     Tperiod <- 90
   }
 
+  if(shortTerm == "cyclical"){
   if(!is.null(Tperiod)){
     first_pDate <- as.Date(start_date) + Tperiod
+  }
   }
 
   if(date_checker(c(start_date)) == FALSE){
@@ -71,7 +73,8 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   # }
 
   #check if first_pDate is greater than start date
-  if(as.numeric(as.Date(first_pDate) - as.Date(start_date)) <= 0){
+  chk_date <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
+  if(chk_date <= 0){
     stop("The 'start_date' cannot be a later date than 'first_pDate' ")
   }
 
