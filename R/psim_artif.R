@@ -163,6 +163,8 @@
 #' @importFrom graphics points legend
 #' @importFrom lubridate hms
 #' @importFrom ggplot2 ggplot
+#' @importFrom stats lm
+#' @importFrom otuSummary matrixConvert
 #' @export
 #'
 
@@ -176,7 +178,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
   #define global variables...
-  nrowh <- origins <- locid <- sn <- prob <- z <- NULL
+  nrowh <- origins <- locid <- sn <- prob <- z <-
+    datetime <- distVal <- ids<- filterField1 <-
+    filterField2 <- ID <- ID2 <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
@@ -184,7 +188,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
                    mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
 
   #
-  if(shortTerm == "acyclical" & s_band = NULL) {
+  if(shortTerm == "acyclical" & is.null(s_band)) {
     stop(" 's_band' argument cannot be NULL for 'acyclical' short term pattern!")
   }
 
@@ -235,7 +239,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #coordinates of the event origins (i.e. initial coordinates of the
   #simulation)
   coords <- spo$origins %>%
-    select(x, y)
+    dplyr::select(x, y)
 
   #simulate the global temporal pattern
   gtp <- gtp(start_date = start_date, trend, slope=slope,
@@ -322,7 +326,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   options(digits.secs = 5)
   tme1 <- Sys.time()
   event_loc_N <- lapply(n, function(n)
-    stppSim::walker(n, s_threshold = s_threshold,
+    stppSim::walker(n, s_threshold = s_threshold, #
                     poly=poly, restriction_feat = restriction_feat,
                     field = field,
                     coords=as.vector(unlist(spo_xy[1,],)),
@@ -336,8 +340,17 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   flush.console()
   time_elapse <- time_elapse + (time_elapse * 0.1)#add 10%
   cat("#=====")
-  cat("The expected computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("*--------- Expected time of execution: ",paste(time_elapse, " minutes ---------*", sep=""),sep=" ")
   cat("=====#")
+
+  #preview
+  #-----------------
+  loc_N <- rbindlist(event_loc_N,
+                   use.names=TRUE, fill=TRUE, idcol="tid")
+  loc_N <- loc_N%>%dplyr::filter(tid==1)
+  #dev.new()
+  plot(loc_N$x, loc_N$y)
+  #-----------------
 
   #the actual process
   stp_All <- NULL
@@ -359,7 +372,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
       mutate(locid=b, prob=spo$origins$prob[b]) %>%
       mutate(time=format(((tid-1) + as.Date(start_date) + hms(time)),
                          "%Y-%m-%d %H:%M:%S"))%>%
-      rename(datetime=time)
+      dplyr::rename(datetime=time)
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
@@ -400,8 +413,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
       #unique(dat_sample_p$time)
 
-      plot(datxy_plot$time, datxy_plot$n, 'l')
-      head(datxy)
+      ##plot(datxy_plot$time, datxy_plot$n, 'l')
+      ##head(datxy)
 
       #fit and plot
       loessData1 <- data.frame(
@@ -475,7 +488,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
     #for a specified time threshold
     dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
-    head(dt_convert)
+    #head(dt_convert)
 
     #given theshold
     #t_threshold <- c(7,  14)
@@ -505,7 +518,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     ds <- dist(xy)
     #for a specified time threshold
     ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
-    head(ds_convert)
+    #head(ds_convert)
 
     #s_threshold <- c(100,200)
 
@@ -547,7 +560,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #Also if the final list is very small compare
   #to the list needed
   if(nrow(fN_final_dt_convert) < round(n_events[1]*1.5, digits = 0)){
-    cat(paste0("*------------| Only ",  round(nrow(fN_final_dt_convert)*0.75, digits = 0),
+    cat(paste0("*------------| A total of ",  round(nrow(fN_final_dt_convert)*0.75, digits = 0),
               " events are generated! |--------------*"))
 
     n_events <- round(nrow(fN_final_dt_convert)*0.75, digits = 0)
