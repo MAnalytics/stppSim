@@ -114,25 +114,35 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
   }
 
   #configure walker
+  # Walker <- species(
+  # state.CRW(0.005) + state.CRW(0.99),
+  # transitionMatrix(exp(-6.25679 + 1.26863*log(n)), #
+  #                  0.70))
+
   Walker <- species(
-  state.CRW(0.005) + state.CRW(0.99),
-  transitionMatrix(exp(-6.25679 + 1.26863*log(n)), #
-                   0.70))
+    state.CRW(0.005) + state.CRW(0.99),
+    transitionMatrix(exp(-6.25679 + 1.26863*log(n)), #
+                     0.70))
+
   #-6.25679 + 1.26863*log(n) is the
   #power regression that relate x and y (see 'calibra..R')
+
+  #define resolution (must be greater than step_length)
+  min_res <- ((step_length * 2) + (500/20)) + 10#plus some values
 
   #create the landscape restriction raster
   #create boundary
   #test polygon geometry
+
   if(!is.null(poly)){
     landscape <- space_restriction(shp = poly,
-                                   res = 50, binary = TRUE)
+                                   res = min_res, binary = TRUE)
 
     #update the landscape restriction map
     if(!is.null(restriction_feat)){
       landscape <- space_restriction(shp = restriction_feat,
                                      baseMap = landscape,
-                                    res = 50, field = field)
+                                    res = min_res, field = field)
     }
     #plot(landscape)
     #check point polygon intersection
@@ -150,14 +160,19 @@ walker <- function(n = 5, s_threshold = 250, step_length = 20,
   #plot(st_point(x = coords, dim = "XY"))
 
   #meaning 1-step/hrs
-  Walker <- (Walker + step_length) * s_threshold
+  #s_threshold <- 1000
+  Walker <- (Walker + (step_length + (s_threshold/10))) #20 assumed value
+  #Walker <- (Walker + 20) * s_threshold
 
   if(is.null(landscape)){
     sim <- simulate(Walker, time=200, coords)
+    #plot(sim[,1], sim[,2])
   }
 
   if(!is.null(landscape)){
     sim <- simulate(Walker, time=200, resist = landscape, coords)
+    #plot(landscape)
+    #points(sim[,1], sim[,2], add=TRUE)
   }
 
   #200 is the no of time.steps to be simulated
