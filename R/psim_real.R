@@ -17,11 +17,11 @@
 #' 1-year period.
 #' @param poly (An sf or S4 object)
 #' a polygon shapefile defining the extent of the landscape
-#' @param net (An sf or S4 object)
-#' A network paths (e.g. road and/or street)
-#' of the landscape. Default: \code{NULL}. If provided
-#' the final events are snapped to their respective
-#' nearest network segment.
+#' @param netw (An sf or S4 object)
+#' The network path of the landscape
+#' (e.g. road and/or street). Default: \code{NULL}.
+#' If provided each event is snapped to the closest
+#' network path/segment.
 #' @param s_threshold defines the spatial
 #' perception range of a walker at a given
 #' location. Default: \code{250} (in the same
