@@ -5,7 +5,7 @@
 \title{Global temporal pattern (GTP)}
 \usage{
 gtp(start_date, trend = "stable",
-slope = NULL, repeatType = "cyclic",
+slope = NULL, shortTerm = "cyclical",
 Tperiod = NULL, show.plot =FALSE)
 }
 \arguments{
@@ -23,17 +23,17 @@ an \code{"rising"} or \code{"falling"} trend is specified.
 Options: \code{"gentle"} or \code{"steep"}. The default value is
 set as \code{NULL} for the \code{stable} trend.}
 
-\item{repeatType}{type of short- to medium-term
-fluctuations (patterns) associated with the
-trend line. Options are: \code{`"cyclic"` and `"single"`}.
-Default is: \code{`"cyclic"`}.}
+\item{shortTerm}{type of short- to medium-term
+fluctuations (patterns) of the time series.
+Options are: \code{`"cyclical"` and `"acyclical"`}.
+Default is: \code{`"cyclical"`}.}
 
-\item{Tperiod}{time interval (in days) of repeat patterns
-in the event occurrences. Default value is \code{90}
+\item{Tperiod}{time interval (in days) associated with
+the short term pattern. Default value is \code{90}
 indicating the first seasonal
-peak of cyclic repeat type. For \code{"single"} repeat type,
-a single value, e.g. 90, or a sequence of values,
-e.g. c(80:95), can be supplied.}
+peak of cyclical short term. For \code{"acyclical"} short term pattern
+a single value, e.g. 14, or a list of values,
+e.g. c(7, 14, 21), can be supplied.}
 
 \item{show.plot}{(logical) Shows GTP.
 Default is \code{FALSE}.}
@@ -53,6 +53,6 @@ trends and patterns of the point patterns to be simulated.
 }
 \examples{
 gtp(start_date = "2020-01-01", trend = "stable",
-slope = NULL, repeatType = "cyclic",
+slope = NULL, shortTerm = "cyclical",
 Tperiod = 60, show.plot = FALSE)
 }
