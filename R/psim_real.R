@@ -17,6 +17,11 @@
 #' 1-year period.
 #' @param poly (An sf or S4 object)
 #' a polygon shapefile defining the extent of the landscape
+#' @param net (An sf or S4 object)
+#' A network paths (e.g. road and/or street)
+#' of the landscape. Default: \code{NULL}. If provided
+#' the final events are snapped to their respective
+#' nearest network segment.
 #' @param s_threshold defines the spatial
 #' perception range of a walker at a given
 #' location. Default: \code{250} (in the same
@@ -140,12 +145,13 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   idx <- tid <- x <- y <- if_else <- t2 <-
     axis <- . <- locid <- sn <- OriginType <-
-    prob <- NULL
+    prob <- sample_fast <- rcpp_sample_prob <-
+    tme <- tmeDiff<- datetime <- NULL
 
   output <- list()
 
   st_properties <- stp_learner(ppt=ppt, start_date = start_date,
-                               poly = poly, n_origin=50,
+                               poly = poly, n_origin=n_origin,
                                p_ratio = p_ratio, crsys = crsys)
   #return start_date
 
@@ -242,7 +248,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   time_elapse <- round((time_elapse * n_origin)/60, digits=2)
   flush.console()
   cat("#=====")
-  cat("The expected computational time for the process is:",paste(time_elapse, " minutes", sep=""),sep=" ")
+  cat("*--------- Expected time of execution: ",paste(time_elapse, " minutes ---------*", sep=""),sep=" ")
   cat("=====#")
 
   #the actual process
