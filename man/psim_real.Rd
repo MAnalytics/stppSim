@@ -5,7 +5,7 @@
 \title{Stpp from real (sample) origins}
 \usage{
 psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-s_threshold = NULL, step_length = 20, n_origin=50,
+netw = NULL, s_threshold = NULL, step_length = 20, n_origin=50,
 restriction_feat=NULL, field=NA,
 p_ratio=20, interactive = FALSE, crsys = NULL)
 }
@@ -27,6 +27,12 @@ The temporal pattern will normally cover
 
 \item{poly}{(An sf or S4 object)
 a polygon shapefile defining the extent of the landscape}
+
+\item{netw}{(An sf or S4 object)
+The network path of the landscape
+(e.g. road and/or street). Default: \code{NULL}.
+If provided each event is snapped to the closest
+network path/segment.}
 
 \item{s_threshold}{defines the spatial
 perception range of a walker at a given
@@ -67,7 +73,7 @@ of the expected distribution of the final simulated
 events (points).}
 
 \item{crsys}{(string) the EPSG code of the projection
-system of the \code{ppt} coordinates. This only used if
+system of the \code{ppt} coordinates. This is only used if
 \code{poly} argument is \code{NULL}.
 See "http://spatialreference.org/" for the list of
 EPSG codes for different regions of the world.
@@ -113,7 +119,7 @@ landuse = camden$landuse # get landuse
 
 #simulate data
 simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
-start_date = NULL, poly = NULL, s_threshold = NULL,
+start_date = NULL, poly = NULL, netw = NULL, s_threshold = NULL,
 step_length = 20, n_origin=20,
 restriction_feat = NULL, field=NULL,
 p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
