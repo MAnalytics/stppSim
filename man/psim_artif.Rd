@@ -5,7 +5,7 @@
 \title{Stpp from synthetic origins}
 \usage{
 psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
-poly, n_origin, restriction_feat=NULL, field,
+poly, netw = NULL, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio, s_threshold = 50, s_band = NULL, step_length = 20,
 trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
@@ -23,7 +23,13 @@ The date should be in the format \code{"yyyy-mm-dd"}.
 The GTP will normally cover a 1-year period.}
 
 \item{poly}{(An sf or S4 object)
-a polygon shapefile defining the extent of the landscape}
+a polygon shapefile defining the extent of the landscape.}
+
+\item{netw}{(An sf or S4 object)
+The network path of the landscape
+(e.g. road and/or street). Default: \code{NULL}.
+If provided each event is snapped to the closest
+network path/segment.}
 
 \item{n_origin}{number of locations to serve as
 origins for walkers. Default:\code{50}.}
@@ -162,7 +168,7 @@ landuse = camden$landuse # get landuse
 
 #simulate data
 simulated_stpp <- psim_artif(n_events=200, start_date = "2021-01-01",
-poly=boundary, n_origin=20, restriction_feat = NULL,
+poly=boundary, netw = NULL, n_origin=20, restriction_feat = NULL,
 field = NULL,
 n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
