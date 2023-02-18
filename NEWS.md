@@ -1,6 +1,8 @@
 # stppSim 1.2.8
 
-1.
+1. Added a netw to data
+2. parameters Tperiod
+3. change to short_term pattern
 
 
 # stppSim 1.2.7
