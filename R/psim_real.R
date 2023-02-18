@@ -54,14 +54,14 @@
 #' of the expected distribution of the final simulated
 #' events (points).
 #' @param crsys (string) the EPSG code of the projection
-#' system of the `ppt` coordinates. This only used if
+#' system of the `ppt` coordinates. This is only used if
 #' `poly` argument is \code{NULL}.
 #' See "http://spatialreference.org/" for the list of
 #' EPSG codes for different regions of the world.
 #' As an example, the EPSG code for the British National Grid
 #' projection system is: \code{"EPSG:27700"}.
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
-#' s_threshold = NULL, step_length = 20, n_origin=50,
+#' netw = NULL, s_threshold = NULL, step_length = 20, n_origin=50,
 #' restriction_feat=NULL, field=NA,
 #' p_ratio=20, interactive = FALSE, crsys = NULL)
 #' @examples
@@ -86,7 +86,7 @@
 #'
 #' #simulate data
 #' simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
-#' start_date = NULL, poly = NULL, s_threshold = NULL,
+#' start_date = NULL, poly = NULL, netw = NULL, s_threshold = NULL,
 #' step_length = 20, n_origin=20,
 #' restriction_feat = NULL, field=NULL,
 #' p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
@@ -138,7 +138,7 @@
 #' @export
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
-                      s_threshold = NULL, step_length = 20,
+                      netw = NULL, s_threshold = NULL, step_length = 20,
                       n_origin=50, restriction_feat=NULL,
                       field = NA, p_ratio=20, interactive = FALSE,
                       crsys = NULL){
@@ -167,6 +167,16 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     poly <- st_properties$poly
 
+  }
+
+  #testing if crs' are the same
+  if(!is.null(netw)){
+    crs_poly <- sf::st_crs(poly)$epsg
+    crs_netw <- sf::st_crs(netw)$epsg
+
+    if(crs_poly != crs_netw){
+      stop("Project of 'poly' and 'netw' shapefiles are not the same!! ")
+    }
   }
 
   #get coordinates
