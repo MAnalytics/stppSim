@@ -1,7 +1,6 @@
 #' @title Boundary coordinates
 #' @description Boundary coordinates of Camden
 #' Borough of London
-#'
 #' @format A dataframe containing one variable:
 #' \itemize{
 #'   \item x: x coordinate
