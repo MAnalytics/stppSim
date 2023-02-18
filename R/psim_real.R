@@ -457,6 +457,38 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     output[h] <- list(subsetFn)
   }
 
+  #snap function
+  st_snap_points = function(x, y, max_dist = 1000) {
+
+    if (inherits(x, "sf")) n = nrow(x)
+    if (inherits(x, "sfc")) n = length(x)
+
+    out = do.call(c,
+                  lapply(seq(n), function(i) {
+                    nrst = st_nearest_points(st_geometry(x)[i], y)
+                    nrst_len = st_length(nrst)
+                    nrst_mn = which.min(nrst_len)
+                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(st_geometry(x)[i])
+                    return(st_cast(nrst[nrst_mn], "POINT")[2])
+                  })
+    )
+    return(out)
+  }
+
+  #if network path is provided
+  if(!is.null(netw)){
+
+    #convert point to geometry type
+    output_pt <- data.frame(output) %>%
+      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
+      #tibble::rownames_to_column("id")
+
+    system.time(snappedData <- st_snap_points(output_pt, netw))
+    #plot(snappedData)
+
+    output[[1]]$x <- st_coordinates(snappedData)[,1]
+    output[[1]]$y <- st_coordinates(snappedData)[,2]
+  }
 
   #combine and add as details
   #-------------------------------------------
@@ -464,6 +496,10 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   output$origins <- st_properties$origins
   output$poly <- st_properties$poly
   output$resist <- restriction_feat
+
+  if(!is.null(netw)){
+    output$netw <- netw
+  }
 
   return(output)
 
