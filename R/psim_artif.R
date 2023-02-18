@@ -170,11 +170,13 @@
 #' @importFrom ggplot2 ggplot
 #' @importFrom stats lm
 #' @importFrom otuSummary matrixConvert
+#' @importFrom sf st_nearest_points st_length
+#' st_cast
 #' @export
 #'
 
 psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
-                       poly, n_origin, restriction_feat=NULL, field=NA,
+                       poly, netw = NULL, n_origin, restriction_feat=NULL, field=NA,
                        n_foci, foci_separation, mfocal = NULL,
                        conc_type = "dispersed", p_ratio,
                        s_threshold = 50, s_band = NULL, step_length = 20,
@@ -245,6 +247,18 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #simulation)
   coords <- spo$origins %>%
     dplyr::select(x, y)
+
+
+  #testing if crs' are the same
+  if(!is.null(netw)){
+    crs_poly <- sf::st_crs(poly)$epsg
+    crs_netw <- sf::st_crs(netw)$epsg
+
+    if(crs_poly != crs_netw){
+      stop("Project of 'poly' and 'netw' shapefiles are not the same!! ")
+    }
+  }
+
 
   #simulate the global temporal pattern
   gtp <- gtp(start_date = start_date, trend, slope=slope,
@@ -463,7 +477,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
       }
 
       filtered_stp_All
-  }
+  #}
 
   #repeat filter for spatial and temporal thresholds
 
@@ -556,7 +570,10 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   }
 
-#--------------------------------------
+  stp_All <- fN_final_dt_convert
+
+    }
+#--------------------------------------#stp_All
 
   if(length(n_events) > 1 & shortTerm == "acyclical"){
     n_events <- n_events[1]
@@ -564,11 +581,11 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
   #Also if the final list is very small compare
   #to the list needed
-  if(nrow(fN_final_dt_convert) < round(n_events[1]*1.5, digits = 0)){
-    cat(paste0("*------------| A total of ",  round(nrow(fN_final_dt_convert)*0.75, digits = 0),
+  if(nrow(stp_All) < round(n_events[1]*1.5, digits = 0)){
+    cat(paste0("*------------| A total of ",  round(nrow(stp_All)*0.75, digits = 0),
               " events are generated! |--------------*"))
 
-    n_events <- round(nrow(fN_final_dt_convert)*0.75, digits = 0)
+    n_events <- round(nrow(stp_All)*0.75, digits = 0)
   }
 
 
@@ -576,7 +593,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   for(h in seq_len(length(n_events))){ #h<-1
 
     #add idx
-    stp_All_ <- fN_final_dt_convert %>%
+    stp_All_ <- stp_All %>%
       rownames_to_column('ID') #%>% #add row as column
 
     #sample to derive required number
@@ -595,11 +612,50 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     output[h] <- list(stp_All_)
   }
 
+  #snap function
+  st_snap_points = function(x, y, max_dist = 1000) {
+
+    if (inherits(x, "sf")) n = nrow(x)
+    if (inherits(x, "sfc")) n = length(x)
+
+    out = do.call(c,
+                  lapply(seq(n), function(i) {
+                    nrst = st_nearest_points(st_geometry(x)[i], y)
+                    nrst_len = st_length(nrst)
+                    nrst_mn = which.min(nrst_len)
+                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(st_geometry(x)[i])
+                    return(st_cast(nrst[nrst_mn], "POINT")[2])
+                  })
+    )
+    return(out)
+  }
+
+  #if network path is provided
+  if(!is.null(netw)){
+
+    #convert point to geometry type
+    output_pt <- data.frame(output) %>%
+      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
+    #tibble::rownames_to_column("id")
+
+    system.time(snappedData <- st_snap_points(output_pt, netw))
+    #plot(snappedData)
+
+    output[[1]]$x <- st_coordinates(snappedData)[,1]
+    output[[1]]$y <- st_coordinates(snappedData)[,2]
+  }
+
+
   #add the origins
   output$origins <- spo$origins
   output$mfocal <- spo$mfocal
   output$poly <- spo$poly
   output$resist <- restriction_feat
+
+  #insert network path
+  if(!is.null(netw)){
+    output$netw <- netw
+  }
 
   return(output)
 }
