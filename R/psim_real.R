@@ -135,6 +135,8 @@
 #' @importFrom tibble rownames_to_column
 #' @importFrom Rcpp cppFunction
 #' @importFrom graphics hist
+#' @importFrom sf st_nearest_points st_length
+#' st_cast
 #' @export
 
 psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
@@ -244,7 +246,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   options(digits.secs = 5)
   tme1 <- Sys.time()
   event_loc_N <- lapply(n, function(n)
-    stppSim::walker(n, s_threshold = 100,
+    stppSim::walker(n, s_threshold = s_threshold,
                     poly=poly, restriction_feat = restriction_feat,
                     field = field,
                     coords=as.vector(unlist(spo_xy[1,],)),
@@ -497,6 +499,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   output$poly <- st_properties$poly
   output$resist <- restriction_feat
 
+  #insert network path
   if(!is.null(netw)){
     output$netw <- netw
   }
