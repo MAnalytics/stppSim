@@ -10,7 +10,7 @@
 #' represent different integer values.
 #' @param ppt A 3-column matrix or list containing
 #' `x` - eastings, `y` - northing, and `t` - time of occurrence
-#' (in the format: `yyyy-mm-dd').
+#' (in the format: `yyyy-mm-dd')
 #' @param start_date the start date of the temporal pattern.
 #' The date should be in the format `"yyyy-mm-dd"`.
 #' The temporal pattern will normally cover
