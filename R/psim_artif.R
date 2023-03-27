@@ -1,4 +1,4 @@
-#' @include gtp.R
+ #' @include gtp.R
 #' @include walker.R
 #' @title Stpp from synthetic origins
 #' @description Generates spatiotemporal

@@ -482,7 +482,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     #convert point to geometry type
     output_pt <- data.frame(output) %>%
-      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
+      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)##%>%
       #tibble::rownames_to_column("id")
 
     system.time(snappedData <- st_snap_points(output_pt, netw))

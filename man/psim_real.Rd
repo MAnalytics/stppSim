@@ -18,7 +18,7 @@ represent different integer values.}
 
 \item{ppt}{A 3-column matrix or list containing
 \code{x} - eastings, \code{y} - northing, and \code{t} - time of occurrence
-(in the format: `yyyy-mm-dd').}
+(in the format: `yyyy-mm-dd')}
 
 \item{start_date}{the start date of the temporal pattern.
 The date should be in the format \code{"yyyy-mm-dd"}.
