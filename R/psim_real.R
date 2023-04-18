@@ -70,7 +70,6 @@
 #' #subset 'theft' crime
 #' theft <- camden_crimes[which(camden_crimes$type ==
 #' "Theft"),]
-#'
 #' #specify the proportion of full data to use
 #' sample_size <- 0.2
 #' set.seed(1000)
