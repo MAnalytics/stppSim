@@ -399,10 +399,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     }
 
 
-  ##saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/defaultData_Artif.rds")
-
-
-  #saveRDS(stp_All, file="C:/Users/monsu/Documents/GitHub/sppSim backup/backup 27012023/stppSimbackupArtif_acyclical_60.rds")
+  ##saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/exampleDatadefaultData_Artif.rds")
 
 #-------------------------------------
 
@@ -446,12 +443,12 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
       )
       #library(ggplot2)
 
-      # ggplot(loessData1, aes(x, y)) +
-      #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
-      #   geom_line(col = "blue") +
-      #   facet_wrap(~method) +
-      #   ggtitle("Interpolation and smoothing functions in R") +
-      #   theme_bw(16)
+      ggplot(loessData1, aes(x, y)) +
+        geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
+        geom_line(col = "blue") +
+        facet_wrap(~method) +
+        ggtitle("Interpolation and smoothing functions in R") +
+        theme_bw(16)
 
       loessData1 <- round(loessData1$y, digits = 0)
 
@@ -481,6 +478,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
       filtered_stp_All
   #}
+
+      #GO TO SCRIPT FOR SPATIAL PLOT ("AH! SECION)
 
 
   # #filtering origin by origin
