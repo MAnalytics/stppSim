@@ -193,7 +193,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
                    n_foci=n_foci, foci_separation = foci_separation,
                    mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
-
+ spo
   #
   if(shortTerm == "acyclical" & is.null(s_band)) {
     stop(" 's_band' argument cannot be NULL for 'acyclical' short term pattern!")
@@ -265,6 +265,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
              shortTerm = shortTerm,
              Tperiod=Tperiod,
              show.plot=show.plot) #"01-01"
+
+  #gtp$data <- rep(20, 366)
 
 
   #prepare date
@@ -399,7 +401,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     }
 
 
-  ##saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/exampleDatadefaultData_Artif.rds")
+  ##
+
+  saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/exampleDatadefaultData_Artif_length_20_origin_20_flat.rds")
 
 #-------------------------------------
 
@@ -566,10 +570,14 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   #
   #   #----------------------------------------------------------------------------------------
 
+      ##s_band <- c(100, 200)
+      ##Tperiod <- 4:5
+      #n_events <- 1000
+
 
       event_Collate <- NULL
 
-      #filtering origin by origin
+      #filtering the data by different random samples
 
       #repeat filter for spatial and temporal thresholds
 
@@ -579,11 +587,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
       init_n <- 0
 
-      ##s_band <- c(500, 1000)
-      ##Tperiod <- 0:14
-
       #for(or in seq_len(length(ori_sn))){ #or=1 Tperiod <- 0:14 n_events <- 2000
-      while(init_n <= n_events * 5) {
+      ##while(init_n <= n_events * 5) {
+      while(init_n <= n_events * 2) {
 
         ##plot(filtered_stp_All$x, filtered_stp_All$y)
         ##plot(sub_Dat$x, sub_Dat$y)
@@ -632,6 +638,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
         #s_band <- c(0, 500)
         #s_band <- c(500, 1000)
+        #s_band <- c(0, 1000)
         #apply distance threshold
         xy <- data.frame(x=final_dt_convert$x, y=final_dt_convert$y)#[1:10,]
 
@@ -662,7 +669,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
         #----------------------------------------------------------------------------------------
 
     uu <- 2
-    if(uu == 3){
+    if(uu == 3){ #'just to prevent running this during execution
       #just previewing
       #-----------------------
       netw_ <- sf::st_read("C:/Users/55131065/Documents/GitHub/stppSim_backup/data/netwData2.shp", stringsAsFactors=F)
@@ -674,16 +681,17 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
       plot(netw)
 
       plot(st_geometry(netw))
-      #my.df <- final_ds_convert %>%
+      ##my.df <- final_ds_convert %>%
       #my.df <- filtered_stp_All %>%
-      ##my.df <- stp_All %>%
-      my.df <- output[[1]] %>%
+      my.df <- stp_All %>%
+      ##my.df <- output[[1]] %>%
       ##my.df <- event_Collate %>%
         dplyr::select(x, y, tid, datetime)
 
       my.sf.point <- st_as_sf(x = my.df,
                               coords = c("x", "y"),
-                              crs = st_crs(netw))
+                              crs = st_crs(netw))#
+      #dev.new()
       plot(st_geometry(my.sf.point), pch = 16, cex=0.5, add=TRUE, col="blue")
 
       #syntD_forR <- final_ds_convert %>%
@@ -731,6 +739,9 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
   ##stp_All <- fN_final_dt_convert
 
   stp_All <- event_Collate
+
+  #stp_All <- stp_All_0_100_5_1000 <- event_Collate #s_band, TPeriod, n_event
+
 
 
     }
