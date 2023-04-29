@@ -16,21 +16,18 @@
 #' fluctuations (patterns) of the time series.
 #' Options are: \code{`"cyclical"` and `"acyclical"`}.
 #' Default is: \code{`"cyclical"`}.
-#' @param Tperiod time interval (in days) associated with
-#' the short term pattern. Default value is \code{90}
-#' indicating the first seasonal
-#' peak of cyclical short term. For `"acyclical"` short term pattern
-#' a single value, e.g. 14, or a list of values,
-#' e.g. c(7, 14, 21), can be supplied.
+#' @param fPeak first seasonal
+#' peak of cyclical short term. Default value is \code{90}.
+#' Set as \code{NULL} for `"acyclical"` short term pattern.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
 #' slope = NULL, shortTerm = "cyclical",
-#' Tperiod = NULL, show.plot =FALSE)
+#' fPeak = NULL, show.plot =FALSE)
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
 #' slope = NULL, shortTerm = "cyclical",
-#' Tperiod = 60, show.plot = FALSE)
+#' fPeak = 60, show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
 #' @return Returns a time series (list) of 365
@@ -41,10 +38,10 @@
 
 gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
                 slope = NULL, shortTerm = "cyclical",
-                Tperiod=NULL,
+                fPeak=90,
                 show.plot = FALSE){
 
-  #function to check if start_date & Tperiod are
+  #function to check if start_date & fPeak are
   #in correct format
 
   #check that start_date has value
@@ -53,14 +50,14 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
   }
 
   #check first peak value
-  if(is.null(Tperiod)){
+  if(is.null(fPeak)){
     first_pDate <- as.Date(start_date) + 90
-    Tperiod <- 90
+    fPeak <- 90
   }
 
   if(shortTerm == "cyclical"){
-  if(!is.null(Tperiod)){
-    first_pDate <- as.Date(start_date) + Tperiod
+  if(!is.null(fPeak)){
+    first_pDate <- as.Date(start_date) + fPeak
   }
   }
 
@@ -171,7 +168,7 @@ gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
 
 
   output$data <- y
-  output$Tperiod <- Tperiod
+  output$fPeak <- fPeak
   #output$plot <- plot(t, y, 'l')
 
   if(show.plot == TRUE){
