@@ -4,11 +4,13 @@
 \alias{psim_artif}
 \title{Stpp from synthetic origins}
 \usage{
-psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
+psim_artif(n_events=1000, start_date = "2021-01-01",
 poly, netw = NULL, n_origin, restriction_feat=NULL, field,
 n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
-p_ratio, s_threshold = 50, s_band = NULL, step_length = 20,
-trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
+p_ratio=20, s_threshold = 50, step_length = 20,
+trend = "stable", shortTerm = "cyclical", fPeak=90,
+s_band = c(0, 200),
+t_band = 15,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
@@ -81,9 +83,6 @@ location. Default: \code{250} (in the same
 linear unit
 as the \code{poly} - polygon shapefile).}
 
-\item{s_band}{distance bandwidth that maximizes space and time
-interaction. It is a vector of two distance values. Default: NULL.}
-
 \item{step_length}{the maximum step taken
 by a walker from one point to the next.}
 
@@ -97,12 +96,19 @@ fluctuations (patterns) of the time series.
 Options are: \code{`"cyclical"` and `"acyclical"`}.
 Default is: \code{`"cyclical"`}.}
 
-\item{Tperiod}{time interval (in days) associated with
-the short term pattern. Default value is \code{90}
-indicating the first seasonal
-peak of cyclical short term. For \code{"acyclical"} short term pattern
-a single value, e.g. 14, or a list of values,
-e.g. c(7, 14, 21), can be supplied.}
+\item{fPeak}{first seasonal
+peak of cyclical short term. Default value is \code{90}.
+Only used for \code{"cyclical"} short term pattern.}
+
+\item{s_band}{distance bandwidth that maximizes space and time
+interaction. A vector of two spatial distance values.
+Default: \code{c(0, 200)}.
+Only used for \code{"acyclical"} short term pattern.}
+
+\item{t_band}{temporal bandwidth that maximizes space and time
+interaction.
+Default value is set as 15 days (i.e., t_band = \code{15}).
+Only used for \code{"acyclical"} short term pattern.}
 
 \item{slope}{slope of the long-term trend when
 an \code{"rising"} or \code{"falling"} trend is specified.
@@ -172,8 +178,10 @@ poly=boundary, netw = NULL, n_origin=20, restriction_feat = NULL,
 field = NULL,
 n_foci=1, foci_separation = 10, mfocal = NULL,
 conc_type = "dispersed",
-p_ratio = 20, s_threshold = 50, s_band = NULL, step_length = 20,
-trend = "stable", shortTerm = "cyclical", Tperiod=NULL,
+p_ratio = 20, s_threshold = 50,
+step_length = 20,
+trend = "stable", shortTerm = "cyclical",
+fPeak=90, s_band = c(0, 200), t_band = 15,
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
