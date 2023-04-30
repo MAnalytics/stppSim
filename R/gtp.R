@@ -19,15 +19,15 @@
 #' @param fPeak first seasonal
 #' peak of cyclical short term. Default value is \code{90}.
 #' Set as \code{NULL} for `"acyclical"` short term pattern.
-#' @param show.plot (logical) Shows GTP.
+#' @param show.plot (logical) Shows 'gtp'.
 #' Default is \code{FALSE}.
 #' @usage gtp(start_date, trend = "stable",
 #' slope = NULL, shortTerm = "cyclical",
-#' fPeak = NULL, show.plot =FALSE)
+#' fPeak = 90, show.plot =FALSE)
 #' @examples
 #' gtp(start_date = "2020-01-01", trend = "stable",
 #' slope = NULL, shortTerm = "cyclical",
-#' fPeak = 60, show.plot = FALSE)
+#' fPeak = 90, show.plot = FALSE)
 #' @details Models the GTP for anchoring the temporal
 #' trends and patterns of the point patterns to be simulated.
 #' @return Returns a time series (list) of 365
@@ -36,10 +36,9 @@
 #' @export
 #'
 
-gtp <- function(start_date = "yyyy-mm-dd", trend = "stable",
+gtp <- function(start_date = "2020-01-01", trend = "stable",
                 slope = NULL, shortTerm = "cyclical",
-                fPeak=90,
-                show.plot = FALSE){
+                fPeak=90, show.plot = FALSE){
 
   #function to check if start_date & fPeak are
   #in correct format
