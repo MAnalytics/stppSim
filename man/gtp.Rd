@@ -6,7 +6,7 @@
 \usage{
 gtp(start_date, trend = "stable",
 slope = NULL, shortTerm = "cyclical",
-Tperiod = NULL, show.plot =FALSE)
+fPeak = 90, show.plot =FALSE)
 }
 \arguments{
 \item{start_date}{the start date of the temporal pattern.
@@ -28,14 +28,11 @@ fluctuations (patterns) of the time series.
 Options are: \code{`"cyclical"` and `"acyclical"`}.
 Default is: \code{`"cyclical"`}.}
 
-\item{Tperiod}{time interval (in days) associated with
-the short term pattern. Default value is \code{90}
-indicating the first seasonal
-peak of cyclical short term. For \code{"acyclical"} short term pattern
-a single value, e.g. 14, or a list of values,
-e.g. c(7, 14, 21), can be supplied.}
+\item{fPeak}{first seasonal
+peak of cyclical short term. Default value is \code{90}.
+Set as \code{NULL} for \code{"acyclical"} short term pattern.}
 
-\item{show.plot}{(logical) Shows GTP.
+\item{show.plot}{(logical) Shows 'gtp'.
 Default is \code{FALSE}.}
 }
 \value{
@@ -54,5 +51,5 @@ trends and patterns of the point patterns to be simulated.
 \examples{
 gtp(start_date = "2020-01-01", trend = "stable",
 slope = NULL, shortTerm = "cyclical",
-Tperiod = 60, show.plot = FALSE)
+fPeak = 90, show.plot = FALSE)
 }
