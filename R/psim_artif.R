@@ -11,7 +11,7 @@
 #' represent different integer values.
 #' @param start_date the start date of the temporal pattern.
 #' The date should be in the format `"yyyy-mm-dd"`.
-#' The GTP will normally cover a 1-year period.
+#' The 'gtp' will normally cover a 1-year period.
 #' @param poly (An sf or S4 object)
 #' a polygon shapefile defining the extent of the landscape.
 #' @param netw (An sf or S4 object)
@@ -66,10 +66,6 @@
 #' long-term trend. Options are:
 #' `"falling"`, `"stable"`,
 #' and `"rising"`. Default value is: `"stable"`.
-#' @param slope slope of the long-term trend when
-#' an `"rising"` or `"falling"` trend is specified.
-#' Options: `"gentle"` or `"steep"`. The default value is
-#' set as \code{NULL} for the `stable` trend.
 #' @param shortTerm type of short- to medium-term
 #' fluctuations (patterns) of the time series.
 #' Options are: \code{`"cyclical"` and `"acyclical"`}.
@@ -85,6 +81,10 @@
 #' interaction.
 #' Default value is set as 15 days (i.e., t_band = \code{15}).
 #' Only used for `"acyclical"` short term pattern.
+#' @param slope slope of the long-term trend when
+#' an `"rising"` or `"falling"` trend is specified.
+#' Options: `"gentle"` or `"steep"`. The default value is
+#' set as \code{NULL} for the `stable` trend.
 #' @param show.plot (logical) Shows GTP.
 #' Default is \code{FALSE}.
 #' @param show.data (TRUE or FALSE) To show the output
@@ -97,13 +97,13 @@
 #' @param ... additional arguments to pass from
 #' \code{gtp}, \code{walker} and \code{artif_spo}
 #' functions.
-#' @usage psim_artif(n_events=1000, start_date = "yyyy-mm-dd",
+#' @usage psim_artif(n_events=1000, start_date = "2021-01-01",
 #' poly, netw = NULL, n_origin, restriction_feat=NULL, field,
 #' n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
-#' p_ratio, s_threshold = 50, step_length = 20,
-#' trend = "stable", shortTerm = "cyclical",
+#' p_ratio=20, s_threshold = 50, step_length = 20,
+#' trend = "stable", shortTerm = "cyclical", fPeak=90,
 #' s_band = c(0, 200),
-#' t_band = 15, fPeak=90,
+#' t_band = 15,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
@@ -126,7 +126,7 @@
 #' p_ratio = 20, s_threshold = 50,
 #' step_length = 20,
 #' trend = "stable", shortTerm = "cyclical",
-#' s_band = c(0, 200), t_band = 15, fPeak=90,
+#' fPeak=90, s_band = c(0, 200), t_band = 15,
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
@@ -182,20 +182,21 @@
 #' @export
 #'
 
-psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
+psim_artif <- function(n_events=1000, start_date = "2021-01-01",
                        poly, netw = NULL, n_origin, restriction_feat=NULL, field=NA,
                        n_foci, foci_separation, mfocal = NULL,
-                       conc_type = "dispersed", p_ratio,
-                       s_threshold = 50, s_band = c(0, 200), t_band = 15,
+                       conc_type = "dispersed", p_ratio=20,
+                       s_threshold = 50,
                        step_length = 20,
                        trend = "stable", shortTerm = "cyclical",
-                       fPeak=90,
+                       fPeak=90, s_band = c(0, 200), t_band = 15,
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
   #define global variables...
   nrowh <- origins <- locid <- sn <- prob <- z <-
     datetime <- distVal <- ids<- filterField1 <-
-    filterField2 <- ID <- ID2 <- NULL
+    filterField2 <- ID <- ID2 <- distVal1 <-
+    distVal2 <- rname <- cname <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
@@ -247,8 +248,8 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
      stop(" 'fPeak' value must be an integer!")
    }
 
-   if(fPeak >= 90){
-     stop(" 'fPeak' value must be less or equal to 90!")
+   if(fPeak > 90){
+     stop(" 'fPeak' value must be less than or equal to 90!")
    }
 
  }
@@ -304,13 +305,11 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
 
   #simulate the global temporal pattern
-  gtp <- gtp(start_date = start_date, trend, slope=slope,
+  gtp <- gtp(start_date = start_date, trend = trend, slope=slope,
              shortTerm = shortTerm,
              fPeak=fPeak,
              show.plot=show.plot) #"01-01"
 
-  #gtp$data <- rep(20, 366)
-  #gtp$data <- rep(20, 366)
   #gtp$data <- rep(20, 366)
 
 
@@ -446,7 +445,6 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
     }
 
     ##stp_All <- readRDS(file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/exampleDatadefaultData_Artif_length_20_origin_20_flat.rds")
-      #to adjust the baseline of time series
 
 
       ##filtered_stp_All
@@ -455,13 +453,14 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
       if(shortTerm == "cyclical"){
 
-
+        stp_All_ <- stp_All
 
       }
 
 
       if(shortTerm == "acyclical"){
 
+        #to adjust the baseline of time series
         datxy <- stp_All
 
         #divide the data and keep backup
@@ -497,12 +496,12 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
         )
         #library(ggplot2)
 
-        ggplot(loessData1, aes(x, y)) +
-          geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
-          geom_line(col = "blue") +
-          facet_wrap(~method) +
-          ggtitle("Interpolation and smoothing functions in R") +
-          theme_bw(16)
+        # ggplot(loessData1, aes(x, y)) +
+        #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
+        #   geom_line(col = "blue") +
+        #   facet_wrap(~method) +
+        #   ggtitle("Interpolation and smoothing functions in R") +
+        #   theme_bw(16)
 
         loessData1 <- round(loessData1$y, digits = 0)
 
@@ -539,7 +538,7 @@ psim_artif <- function(n_events=1000, start_date = "yyyy-mm-dd",
 
         init_n <- 0
 
-        for(or in seq_len(length(ori_sn))){ #or=1 Tperiod <- 0:14 n_events <- 2000
+        for(or in seq_len(length(ori_sn))){ #or=1
 
           sub_Dat <- filtered_stp_All %>%
             ##tibble::rownames_to_column("ptid")
