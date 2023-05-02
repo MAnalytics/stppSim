@@ -261,8 +261,8 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     #suppressWarnings(
 
-    b1 <- hpi(x=ppt_df[,1])
-    b2 <- hpi(x=ppt_df[,2])
+    b1 <- ks::hpi(x=ppt_df[,1])
+    b2 <- ks::hpi(x=ppt_df[,2])
 
     sbw <- (b1 + b2) / 2
     #)
@@ -373,13 +373,60 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #if a user deems fit.
 
     spo <- spo %>%
-      select(x, y, prob, count, grid_id)
+      dplyr::select(x, y, prob, count, grid_id)
 
     #x <- as.numeric(spo$x)
     #y <- as.numeric(spo$y)
 
     #spo_xy <- data.frame(cbind(x,y))
     #colnames(spo_xy) <- c("x","y")
+
+
+    #---------------------------------------------------------
+    #detect space-time signature
+    #spatial threshold
+    s_list <- c(0, 200, 400, 600, 800,1000)
+    #temporal thresholds
+    t_list <- c(1:30)
+
+    colnames(ppt) <- c("x", "y", "date")
+
+    #checking the st interaction
+    ppt_proc <- ppt %>%
+      dplyr::mutate(date = as.Date(substr(date, 1, 10)))%>%
+      dplyr::select(x, y,date)%>%
+      data.frame()
+
+
+    flush.console()
+    print("****Detecting spatiotemporal signatures:")
+    t_all <- NULL
+    for(t in 1:length(t_list)){ #t<-1
+      system.time(myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
+                                          sds = s_list,
+                                          tds = c(t_list[t]-1, t_list[t]),
+                                          s_include.lowest = FALSE, s_right = TRUE, # include leftmost and include right most
+                                          t_include.lowest = TRUE, t_right = TRUE)) # include exclude leftmost and include right most
+      ##myoutput2
+      t_all <- cbind(t_all, myoutput2$pvalues)
+      flush.console()
+      print(paste0(t, " of ", length(t_list)))
+    }
+
+    c_005 <- NULL
+    for(c in 1:nrow(t_all)){ #c<-1
+      ct <- length(which(t_all[c,] <= 0.05))
+      c_005 <- c(c_005, ct)
+    }
+    c_005
+
+    idx <- which.max(c_005)[1]
+
+    s_bd <- c(s_list[idx], s_list[idx+1])
+    t_bd <- t_list[which(t_all[idx,] <= 0.05)]
+    s_bd
+    t_bd
+    #---------------------------------------------------------
 
     output$origins <- spo
     output$gtp <- gtp
@@ -388,11 +435,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #output$plot <- p
     output$poly <- boundary_ppt
     output$Class <- "real_spo"
-
-    output$origins <- spo
-
+    output$s_sign <- s_bd
+    output$t_sign <- t_bd
 
     return(output)
-
 }
 
