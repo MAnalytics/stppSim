@@ -154,6 +154,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   st_properties <- stp_learner(ppt=ppt, start_date = start_date,
                                poly = poly, n_origin=n_origin,
                                p_ratio = p_ratio, crsys = crsys)
+  st_properties
   #return start_date
 
   #names(st_properties)
@@ -262,6 +263,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   cat("*--------- Expected time of execution: ",paste(time_elapse, " minutes ---------*", sep=""),sep=" ")
   cat("=====#")
 
+
   #the actual process
   stp_All <- NULL
 
@@ -290,6 +292,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
   }
 
+  #saveRDS(stp_All, file = "realsave.rds")
+
   if(!is.null(s_threshold)){
   for(b in seq_len(nrow(spo_xy))){ #b<-1
     event_loc_N <- lapply(n, function(n)
@@ -317,85 +321,204 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
   }
 
-  #-------------------------
-  #C++ function to do sampling based on probability field
-  cppFunction('IntegerVector rcpp_sample_prob(const IntegerVector& ind_sample, int N, int n) {
 
-  LogicalVector is_chosen(N);
-  IntegerVector ind_chosen(n);
+  #---------------------------
+  #to adjust the baseline of time series
+  datxy <- stp_All
 
-  int i, k, ind;
+  #divide the data and keep backup
+  s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
+  div_75 <- datxy[s_id, ]
 
-  for (k = 0, i = 0; i < n; i++) {
-    do {
-      ind = ind_sample[k++];
-    } while (is_chosen[ind-1]);
-    is_chosen[ind-1] = true;
-    ind_chosen[i] = ind;
+  div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
+
+  datxy_plot <- div_75 %>%
+    #datxy_plot <- stp_All_sub %>%
+    dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
+    group_by(t) %>%
+    summarise(n = n()) %>%
+    mutate(time = as.numeric(difftime(t, as.Date(st_properties$start_date)-1, units="days")))%>%
+    ##mutate(time = as.numeric(difftime(as.Date(st_properties$start_date + 364),
+                                      ##t,
+                                      ##units="days")))%>%
+    as.data.frame()
+
+
+  ##datxy_plot$time <- abs(datxy_plot$time)
+
+  time <- data.frame(time=1:365)
+
+  datxy_plot <- time %>%
+    left_join(datxy_plot) %>%
+    dplyr::mutate(n = replace_na(n, 0))
+
+  #unique(dat_sample_p$time)
+
+  ##plot(datxy_plot$time, datxy_plot$n, 'l')
+  ##head(datxy)
+
+  #fit and plot
+  loessData1 <- data.frame(
+    x = 1:nrow(datxy_plot),
+    y = predict(lm(n~time, datxy_plot)),
+    method = "loess()"
+  )
+
+  loessData1 <- round(loessData1$y, digits = 0)
+
+  #randomly remove point for each day data
+  filtered_stp_All <- NULL
+
+  for(rmv in seq_len(length(loessData1))){ #rmv = 1
+
+    #data to either reduce or increase
+    stp_All_on_day <- div_75 %>%
+      dplyr::filter(tid == rmv)
+
+    if(datxy_plot$n[rmv] >= loessData1[rmv]){
+      orig_pt <- sample(1:datxy_plot$n[rmv], loessData1[rmv], replace = FALSE)
+      todaysData <- stp_All_on_day[orig_pt, ]
+    }
+
+    if(datxy_plot$n[rmv] < loessData1[rmv]){
+      #first borrow the remainder
+      rem_D <- div_25[sample(1:nrow(div_25), (loessData1[rmv] - datxy_plot$n[rmv]), replace = F),]
+      todaysData <- rbind(stp_All_on_day, rem_D)
+    }
+
+    filtered_stp_All <- rbind(filtered_stp_All, todaysData)
+
   }
+  #---------------------------
 
-  return ind_chosen;
-}')
 
-  sample_fast <- function(n, prb) {
-    N <- length(prb)
-    sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
-    rcpp_sample_prob(sample_more, N, n)
-  }
-  #-------------------------
+#   #-------------------------
+#   #C++ function to do sampling based on probability field
+#   cppFunction('IntegerVector rcpp_sample_prob(const IntegerVector& ind_sample, int N, int n) {
+#
+#   LogicalVector is_chosen(N);
+#   IntegerVector ind_chosen(n);
+#
+#   int i, k, ind;
+#
+#   for (k = 0, i = 0; i < n; i++) {
+#     do {
+#       ind = ind_sample[k++];
+#     } while (is_chosen[ind-1]);
+#     is_chosen[ind-1] = true;
+#     ind_chosen[i] = ind;
+#   }
+#
+#   return ind_chosen;
+# }')
+#
+#   sample_fast <- function(n, prb) {
+#     N <- length(prb)
+#     sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
+#     rcpp_sample_prob(sample_more, N, n)
+#   }
+#   #-------------------------
 
   #-----------------------------------------------
-  #get repeat pattern in real (across the whole area)
+  #integrate the spatiotemporal sign.
   #-----------------------------------------------
-  #n <- 365 #daily temporal resolution (accuracy)
 
-  ppt_diff <- ppt %>%
-    dplyr::select(date) %>%
-    dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
-    dplyr::mutate(tmeDiff = tme - min(tme)) #from origin
+  #to adjust the baseline of time series
 
-#head(ppt_diff)
-  # tme <-as.numeric(as.Date(ppt$date))#[1:10] #check patterns first
-  # t_origin <- min(tme)
-  # dt_origin = tme - t_origin
-  #hist(dt_origin, n)
+  #--------------
+  event_Collate <- NULL
 
-  probList <- hist(ppt_diff %>% dplyr::pull(tmeDiff), 365)
-  probList <- c(0, probList$density)
-  probList <- data.frame(date = seq.Date(from = min(as.Date(st_properties$start_date)),
-                                         to = min(as.Date(st_properties$start_date))+364, by = 'days'),
-                         probVal = probList/sum(probList))
+    fN_final_dt_convert <- NULL
 
-  fnDateList <- probList %>%
-    dplyr::mutate(tme = as.numeric(as.Date(date)))%>%
-    dplyr::mutate(tme=paste0("D",as.character(tme))) ##%>%
-    # dplyr::mutate(probVal = as.numeric(if_else(tme %in% paste0("D", 18717:18740),
-    #                                            paste("0.5"), paste(probVal))))
+    #loop by origin
+    ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
-  #head(probList)
-  #join the dataList
-  # fnDateList <- ppt_diff %>%
-  #   dplyr::left_join(probList) %>%
-  #   #dplyr::select(tmeDiff, probVal)%>%
-  #   #dplyr::select(-c(date, tmeDiff))%>%
-  #   dplyr::mutate(tme=paste0("D",as.character(tme)))%>%
-  #   dplyr::arrange(tme)
+    init_n <- 0
 
-  #get the proportions
-  # head(stp_All)
-  # stp_All %>%
-  #   dplyr::group_by(locid) %>%
-  #   count()
+    for(or in seq_len(length(ori_sn))){ #or=41
 
-  #plot(probList$valDist,probList$probVal, type="l")
-  #probList
+      sub_Dat <- filtered_stp_All %>%
+        ##tibble::rownames_to_column("ptid")
+        dplyr::filter(locid == ori_sn[or])
 
-  #n_events <- c(2000, 3000)
-  #reformat/generate all the results
+      ##if(nrow(sub_Dat) < 5000){
+      sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                       round(nrow(sub_Dat)*0.5, digits = 0),
+                                       replace = FALSE),]
+      ##}
+
+      tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
+      dt = dist(tme)
+
+      #for a specified time threshold
+      dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
+      #head(dt_convert)
+
+      #maximize the occurence of this threshold
+      dt_conver_Wthres <- dt_convert %>%
+        dplyr::filter(distVal %in% st_properties$t_sign) %>% #[1]
+        dplyr::rename(distVal1 = distVal)
+
+      #apply distance threshold
+      xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
+
+      ds <- dist(xy)
+
+      ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
+
+      ds_convert2 <- ds_convert %>%
+        dplyr::rename(distVal2 = distVal) %>%
+        dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
+        dplyr::filter(distVal2 %in% c(st_properties$s_sign[1]:st_properties$s_sign[2]))
+
+      #join together
+      ds_convert2_dsdt <- ds_convert2 %>%
+        dplyr::left_join(dt_conver_Wthres) %>%
+        dplyr::filter(!is.na(distVal1)) %>%
+        dplyr::arrange(rname, distVal2) %>%
+        dplyr::group_by(rname) %>%
+        dplyr::mutate(n=n())%>%
+        dplyr::arrange(desc(n), rname)%>%
+        dplyr::filter(!duplicated(cname))%>%
+        data.frame()%>%
+        dplyr::top_frac(0.01) #top 10
+
+      dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
+      ids <- unique(dt_conver_Wthres_Comb$ids)
+      sample_sub_DatNew <- sample_sub_Dat[ids,]
+      #plot(sample_sub_DatNew$x, sample_sub_DatNew$y)
+
+      #when agent got stocked and delta ds = 0
+      # if(length(ids) == 0){
+      #   stop(cat("Interaction between ds and dt may not be possible! Try smaller ds (or dt) value!"))
+      # }
+      #-----------------------------------------------------------
+
+
+      #------------------------------------------...#
+      if(length(ids) != 0){
+        event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+      }
+      #----------------event_Collate--------------------------...#
+
+      init_n <- nrow(event_Collate)
+
+      flush.console()
+      print(or)
+      print(init_n)
+
+    }
+
+    ##THIS IS USING ORIGIN
+    #------------------------------------------.......#
+    stp_All_bk <- event_Collate
+    #------------------------------------------.......#
+
+
   for(h in seq_len(length(n_events))){ #h<-1
 
     #add idx
-    stp_All_ <- stp_All %>%
+    stp_All_ <- stp_All_bk %>%
       rownames_to_column('ID') #%>% #add row as column
 
     #head(stp_All_)
@@ -406,90 +529,74 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         ##dplyr::filter(locid == orList[or]) %>%
         data.frame() %>%
         #dplyr::select(datetime)%>%
-        dplyr::mutate(tme= paste0("D", as.character(as.numeric(as.Date(datetime))))) %>%
-        dplyr::left_join(fnDateList)
+        dplyr::mutate(tme= paste0("D", as.character(as.numeric(as.Date(datetime))))) ##%>%
+        ##dplyr::left_join(fnDateList)
 
         #for sampling, define probability val and n
         prb <- stp_All_subset$probVal
         n <- round(nrow(stp_All_subset)/2, digits = 0) #select half of the data
 
         #to call sampling function c++
-        sample_fast <- function(n, prb) {
-          N <- length(prb)
-          sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
-          rcpp_sample_prob(sample_more, N, n)
-        }
+        # sample_fast <- function(n, prb) {
+        #   N <- length(prb)
+        #   sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
+        #   rcpp_sample_prob(sample_more, N, n)
+        # }
 
-        system.time(ind <- sample_fast(n, prb))
+        ##system.time(ind <- sample_fast(n, prb))
 
-        subsetFn <- stp_All_[ind, ]
-
-        # #uncomment=========
-        # system.time(samp_idx <- as.numeric(sample(stp_All_subset$ID, size = round(nrow(stp_All_subset)/2, digits = 0),
-        #                               replace = FALSE, prob = stp_All_subset$probVal))) #%>
-        # stp_All_subset <- stp_All_subset[which(stp_All_subset$ID %in% samp_idx), ]
-        # subsetFn <- stp_All_subset
-        # #nrow(subsetFn)
-        # tme <-as.numeric(as.Date(stp_All_subset$datetime))#[1:10] #check patterns first
-        # dt <- tme - min(tme)
-        # #dev
-        # hist(dt, 365)
-        #==================
-    #}
+        samp_idx <- as.numeric(sample(stp_All_subset$ID, size = n_events[h],
+                                      replace = FALSE, prob = stp_All_subset$prob)) #%>
 
 
+        subsetFn <- stp_All_[samp_idx, ]
 
-    #----------------------------
-    #sample to derive required number
-    samp_idx <- as.numeric(sample(subsetFn$ID, size = n_events[h],  #n_events[h]
-                                  replace = FALSE, prob = subsetFn$prob)) #%>
-
-    subsetFn <- subsetFn[which(subsetFn$ID %in% samp_idx), ]
-    #uncomment
-    # tme <-as.numeric(as.Date(subsetFn$datetime))#[1:10] #check patterns first
-    # ##dt <- tme - min(tme)
-    # dt <- dist(tme) #dim(dt)
-    # dev
-    # hist(dt, 365)
-
-    #sort
-    subsetFn <- subsetFn %>%
-      arrange(locid, tid, sn)
 
     output[h] <- list(subsetFn)
+
   }
 
   #snap function
-  st_snap_points = function(x, y, max_dist = 1000) {
+  st_snap_points = function(x=output_pt, y=netw, max_dist = 300) {
 
     if (inherits(x, "sf")) n = nrow(x)
     if (inherits(x, "sfc")) n = length(x)
 
     out = do.call(c,
                   lapply(seq(n), function(i) {
-                    nrst = st_nearest_points(st_geometry(x)[i], y)
-                    nrst_len = st_length(nrst)
+                    nrst = sf::st_nearest_points(sf::st_geometry(x)[i], y)
+                    nrst_len = sf::st_length(nrst)
                     nrst_mn = which.min(nrst_len)
-                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(st_geometry(x)[i])
-                    return(st_cast(nrst[nrst_mn], "POINT")[2])
+                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(sf::st_geometry(x)[i])
+                    return(sf::st_cast(nrst[nrst_mn], "POINT")[2])
                   })
     )
     return(out)
   }
 
-  #if network path is provided
-  if(!is.null(netw)){
 
-    #convert point to geometry type
-    output_pt <- data.frame(output) %>%
-      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)##%>%
+  #if network path is provided
+  if(!is.null(netw)){ #netw <- netw_
+
+    flush.console()
+    print("***------Generating network data, processing....:")
+
+    for(g in seq_len(length(n_events))){ #g<-1
+
+      #convert point to geometry type
+      output_pt <- data.frame(output[g]) %>%
+        st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
       #tibble::rownames_to_column("id")
 
-    system.time(snappedData <- st_snap_points(output_pt, netw))
-    #plot(snappedData)
+      #system.time(
+      ##exists("c")
+      snappedData <- st_snap_points(output_pt, netw)
+        #)
+      #plot(snappedData)
 
-    output[[1]]$x <- st_coordinates(snappedData)[,1]
-    output[[1]]$y <- st_coordinates(snappedData)[,2]
+      output[[g]]$x <- st_coordinates(snappedData)[,1]
+      output[[g]]$y <- st_coordinates(snappedData)[,2]
+    }
   }
 
   #combine and add as details
