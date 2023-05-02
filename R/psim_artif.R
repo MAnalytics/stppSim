@@ -202,7 +202,7 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
                    n_foci=n_foci, foci_separation = foci_separation,
                    mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
- spo
+  spo
   #
   if(shortTerm == "acyclical" & is.null(s_band)) {
     stop(" 's_band' argument cannot be NULL for 'acyclical' short term pattern!")
@@ -444,20 +444,30 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
     }
 
-    ##stp_All <- readRDS(file="C:/Users/55131065/Documents/GitHub/stppSim_backup/data/exampleDatadefaultData_Artif_length_20_origin_20_flat.rds")
-
 
       ##filtered_stp_All
 
       #This is the second option
 
+      #-----------------------
       if(shortTerm == "cyclical"){
+        #add idx
+        stp_All_bk <- stp_All %>%
+          rownames_to_column('ID') #%>% #add row as column
 
-        stp_All_ <- stp_All
+        samp_idx <- as.numeric(sample(stp_All_bk$ID,
+                                      size = round(0.05 * nrow(stp_All_bk), digits=0),
+                                      replace = FALSE)) #%>
+        #select 5%
+        stp_All_ <- stp_All_bk[samp_idx, ]
 
+        #regenerate IDs
+        stp_All_ <-  stp_All_ %>%
+          dplyr::select(-c(ID))%>%
+          rownames_to_column('ID') #%
       }
 
-
+      #-----------------------
       if(shortTerm == "acyclical"){
 
         #to adjust the baseline of time series
@@ -494,14 +504,6 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
           y = predict(lm(n~time, datxy_plot)),
           method = "loess()"
         )
-        #library(ggplot2)
-
-        # ggplot(loessData1, aes(x, y)) +
-        #   geom_point(dat = datxy_plot, aes(time, n), alpha = 0.2, col = "red") +
-        #   geom_line(col = "blue") +
-        #   facet_wrap(~method) +
-        #   ggtitle("Interpolation and smoothing functions in R") +
-        #   theme_bw(16)
 
         loessData1 <- round(loessData1$y, digits = 0)
 
@@ -598,9 +600,9 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
           init_n <- nrow(event_Collate)
 
-          flush.console()
+          ##flush.console()
           #print(or)
-          print(init_n)
+          ##print(init_n)
 
         }
 
@@ -609,11 +611,12 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
         stp_All_bk <- event_Collate
         #------------------------------------------.......#
 
+        #add idx
+        stp_All_ <- stp_All_bk %>%
+          rownames_to_column('ID') #%>% #add row as column
+
       }
 
-  #add idx
-  stp_All_ <- stp_All_bk %>%
-    rownames_to_column('ID') #%>% #add row as column
 
 
   #finalizing!
