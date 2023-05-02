@@ -49,12 +49,12 @@ gtp <- function(start_date = "2020-01-01", trend = "stable",
   }
 
   #check first peak value
+  if(shortTerm == "cyclical"){
   if(is.null(fPeak)){
-    first_pDate <- as.Date(start_date) + 90
     fPeak <- 90
+    first_pDate <- as.Date(start_date) + fPeak
   }
 
-  if(shortTerm == "cyclical"){
   if(!is.null(fPeak)){
     first_pDate <- as.Date(start_date) + fPeak
   }
@@ -64,13 +64,9 @@ gtp <- function(start_date = "2020-01-01", trend = "stable",
     stop("The 'start_date' specified is not in the correct format!")
   }
 
-  # if(date_checker(c(first_pDate)) == FALSE){
-  #   stop("The 'first_pDate' specified is not in the correct format!")
-  # }
-
   #check if first_pDate is greater than start date
-  chk_date <- as.numeric(as.Date(first_pDate) - as.Date(start_date))
-  if(chk_date <= 0){
+  chk_date <- as.numeric(as.Date(start_date) - as.Date(first_pDate))
+  if(chk_date > 0){
     stop("The 'start_date' cannot be a later date than 'first_pDate' ")
   }
 
@@ -166,7 +162,7 @@ gtp <- function(start_date = "2020-01-01", trend = "stable",
   }
 
 
-  output$data <- y
+  output$data <- round(y, digits = 0)
   output$fPeak <- fPeak
   #output$plot <- plot(t, y, 'l')
 
