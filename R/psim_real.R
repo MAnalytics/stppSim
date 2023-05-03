@@ -241,12 +241,12 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
 
 
-
+  #note resist feature should be .shp
   #estimating computational time
   options(digits.secs = 5)
   tme1 <- Sys.time()
   event_loc_N <- lapply(n, function(n)
-    stppSim::walker(n, s_threshold = s_threshold,
+    stppSim::walker(n, s_threshold = st_properties$s_threshold,
                     poly=poly, restriction_feat = restriction_feat,
                     field = field,
                     coords=as.vector(unlist(spo_xy[1,],)),
@@ -423,8 +423,20 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #integrate the spatiotemporal sign.
   #-----------------------------------------------
 
+  #prepare the st signature table
+  signTable <- NULL
+
+  for(sg in 1:length(st_properties$st_sign)){#sg<-1
+..........WORK ON COLLATING st signatures together...
+  }
+  #TODO
+  #1. also address when there is no st sign returned, ##DONE!!
+  #2. #spread the point patterns
+
   #to adjust the baseline of time series
 
+  #TODO 1.
+  if(length(st_properties$st_sign) != 1){
   #--------------
   event_Collate <- NULL
 
@@ -435,7 +447,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     init_n <- 0
 
-    for(or in seq_len(length(ori_sn))){ #or=41
+    for(or in seq_len(length(ori_sn))){ #or=1
 
       sub_Dat <- filtered_stp_All %>%
         ##tibble::rownames_to_column("ptid")
@@ -456,7 +468,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       #maximize the occurence of this threshold
       dt_conver_Wthres <- dt_convert %>%
-        dplyr::filter(distVal %in% st_properties$t_sign) %>% #[1]
+        dplyr::filter(distVal %in% st_properties$st_sign) %>% #[1]
         dplyr::rename(distVal1 = distVal)
 
       #apply distance threshold
@@ -508,12 +520,18 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       print(init_n)
 
     }
-
-    ##THIS IS USING ORIGIN
     #------------------------------------------.......#
     stp_All_bk <- event_Collate
     #------------------------------------------.......#
+  }
+    ##THIS IS USING ORIGIN
 
+  if(length(st_properties$st_sign) == 1){
+
+    #..try and reduce the size of 'filtered_stp_All' first
+    stp_All_bk <- filtered_stp_All
+
+  }
 
   for(h in seq_len(length(n_events))){ #h<-1
 
