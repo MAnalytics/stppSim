@@ -413,19 +413,26 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       print(paste0(t, " of ", length(t_list)))
     }
 
-    c_005 <- NULL
-    for(c in 1:nrow(t_all)){ #c<-1
-      ct <- length(which(t_all[c,] <= 0.05))
-      c_005 <- c(c_005, ct)
+    c_005 <- list()
+    for(c in 1:nrow(t_all)){ #c<-3
+      ##ct <- length(which(t_all[c,] <= 0.05))
+      ct <- as.numeric(which(t_all[c,] <= 0.05))
+      if(length(ct)!=0){
+      c_005[[c]] <- ct
+      names(c_005)[c] <- paste0(s_list[c], "-",s_list[c+1])
+      }
     }
-    c_005
+    st_band <- c_005
 
-    idx <- which.max(c_005)[1]
-
-    s_bd <- c(s_list[idx], s_list[idx+1])
-    t_bd <- t_list[which(t_all[idx,] <= 0.05)]
-    s_bd
-    t_bd
+    if(length(st_band) == 0){
+      st_band <- NULL
+    }
+    # idx <- which.max(c_005)[1]
+    #
+    # s_bd <- c(s_list[idx], s_list[idx+1])
+    # t_bd <- t_list[which(t_all[idx,] <= 0.05)]
+    # s_bd
+    # t_bd
     #---------------------------------------------------------
 
     output$origins <- spo
@@ -435,8 +442,8 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #output$plot <- p
     output$poly <- boundary_ppt
     output$Class <- "real_spo"
-    output$s_sign <- s_bd
-    output$t_sign <- t_bd
+    output$st_sign <- st_band
+    #output$t_sign <- t_bd
 
     return(output)
 }
