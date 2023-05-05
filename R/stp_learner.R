@@ -194,7 +194,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     #scaling by a factor of 10
     #for high intensity data
-    s_factor <- 10
+    s_factor <- 20
     #--------------------
     loessData$y <- loessData$y * s_factor
 
@@ -401,7 +401,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     flush.console()
     print("****Detecting spatiotemporal signatures:")
     t_all <- NULL
-    for(t in 1:length(t_list)){ #t<-1
+    for(t in 1:length(t_list)){ #t<5
       system.time(myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
                                           sds = s_list,
                                           tds = c(t_list[t]-1, t_list[t]),
@@ -414,11 +414,14 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     }
 
     c_005 <- list()
-    for(c in 1:nrow(t_all)){ #c<-3
+
+    for(c in 1:nrow(t_all)){ #c<-1
       ##ct <- length(which(t_all[c,] <= 0.05))
-      ct <- as.numeric(which(t_all[c,] <= 0.05))
+      ct <- as.numeric(which(t_all[c,] <= 0.0001))#'0.05' with tolerance of 0.02 (for sample data)
       if(length(ct)!=0){
       c_005[[c]] <- ct
+      #c_005[[c]][2] <- ct
+      #c_005[c][[2]] <- paste0(s_list[c], "-",s_list[c+1])
       names(c_005)[c] <- paste0(s_list[c], "-",s_list[c+1])
       }
     }
