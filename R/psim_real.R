@@ -427,7 +427,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   signTable <- NULL
 
   for(sg in 1:length(st_properties$st_sign)){#sg<-1
-..........WORK ON COLLATING st signatures together...
+..........WORK ON COLLATING st signatures together......
   }
   #TODO
   #1. also address when there is no st sign returned, ##DONE!!
@@ -436,27 +436,34 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #to adjust the baseline of time series
 
   #TODO 1.
-  if(length(st_properties$st_sign) != 1){
+  if(length(st_properties$st_sign) >= 1){
+
   #--------------
   event_Collate <- NULL
 
     fN_final_dt_convert <- NULL
 
     #loop by origin
-    ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+    ##ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
     init_n <- 0
 
-    for(or in seq_len(length(ori_sn))){ #or=1
+    ###for(or in seq_len(length(ori_sn))){ #or=1
+    while(init_n <= n_events * 2) {
 
       sub_Dat <- filtered_stp_All %>%
-        ##tibble::rownames_to_column("ptid")
-        dplyr::filter(locid == ori_sn[or])
+        tibble::rownames_to_column("ptid")
+        ##dplyr::filter(locid == ori_sn[or])
 
       ##if(nrow(sub_Dat) < 5000){
+      ##sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                       ##round(nrow(sub_Dat)*0.5, digits = 0),
+                                       ##replace = FALSE),]
+
       sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-                                       round(nrow(sub_Dat)*0.5, digits = 0),
+                                       round(nrow(sub_Dat)*0.02, digits = 0),
                                        replace = FALSE),]
+
       ##}
 
       tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
@@ -464,11 +471,12 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       #for a specified time threshold
       dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
-      #head(dt_convert)
+      #nrow(dt_convert)
 
       #maximize the occurence of this threshold
       dt_conver_Wthres <- dt_convert %>%
-        dplyr::filter(distVal %in% st_properties$st_sign) %>% #[1]
+        tibble()%>%
+        dplyr::filter(distVal %in% st_properties$st_sign[[1]]) %>% #[1]
         dplyr::rename(distVal1 = distVal)
 
       #apply distance threshold
@@ -478,10 +486,13 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
 
+      #get names
+      nm <- names(st_properties$st_sign)[2]
+
       ds_convert2 <- ds_convert %>%
         dplyr::rename(distVal2 = distVal) %>%
         dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
-        dplyr::filter(distVal2 %in% c(st_properties$s_sign[1]:st_properties$s_sign[2]))
+        dplyr::filter(distVal2 %in% c(names(st_properties$st_sign):st_properties$st_sign[[2]]))
 
       #join together
       ds_convert2_dsdt <- ds_convert2 %>%
@@ -506,12 +517,31 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       # }
       #-----------------------------------------------------------
 
+      # #for looping by origin
+      # #------------------------------------------...#
+      # if(length(ids) != 0){
+      #   event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+      # }
+      # #----------------event_Collate--------------------------...#
 
-      #------------------------------------------...#
-      if(length(ids) != 0){
-        event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+
+      #for looping by day
+      if(init_n == 0){
+        event_Collate <- sample_sub_DatNew
       }
-      #----------------event_Collate--------------------------...#
+
+      if(init_n != 0){
+
+        filtered_evnt <- sample_sub_DatNew[which(!sample_sub_DatNew$ptid %in% event_Collate$ptid),]
+
+        event_Collate <- rbind(event_Collate, filtered_evnt)
+      }
+
+      init_n <- nrow(event_Collate)
+
+      flush.console()
+      #print(or)
+      print(init_n)
 
       init_n <- nrow(event_Collate)
 
@@ -524,9 +554,10 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     stp_All_bk <- event_Collate
     #------------------------------------------.......#
   }
+
     ##THIS IS USING ORIGIN
 
-  if(length(st_properties$st_sign) == 1){
+  if(length(st_properties$st_sign) == 0){
 
     #..try and reduce the size of 'filtered_stp_All' first
     stp_All_bk <- filtered_stp_All
