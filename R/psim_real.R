@@ -131,8 +131,7 @@
 #' @importFrom sp SpatialPoints proj4string
 #' @importFrom stats predict loess
 #' @importFrom lubridate hms
-#' @importFrom tibble rownames_to_column
-#' @importFrom Rcpp cppFunction
+#' @importFrom tibble rownames_to_column tibble
 #' @importFrom graphics hist
 #' @importFrom sf st_nearest_points st_length
 #' st_cast
@@ -146,7 +145,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   idx <- tid <- x <- y <- if_else <- t2 <-
     axis <- . <- locid <- sn <- OriginType <-
-    prob <- sample_fast <- rcpp_sample_prob <-
+    prob <- cname <- rname <- locID_sub <-
+    distVal1 <- distVal2 <- distVal <-
     tme <- tmeDiff<- datetime <- NULL
 
   output <- list()
@@ -154,7 +154,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   st_properties <- stp_learner(ppt=ppt, start_date = start_date,
                                poly = poly, n_origin=n_origin,
                                p_ratio = p_ratio, crsys = crsys)
-  st_properties
+
   #return start_date
 
   #names(st_properties)
@@ -316,8 +316,11 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     stp_All <- stp_All %>%
       bind_rows(loc_N)
-    #saveRDS(stp_All,
-    #file="C:/Users/monsu/Documents/GitHub/stppSim backup/backup 27012023/stppSimbackupReal.rds")
+    #
+    # saveRDS(stp_All,
+    # file="stppSimbackupReal_040.rds")
+    #
+
   }
   }
 
@@ -327,7 +330,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   datxy <- stp_All
 
   #divide the data and keep backup
-  s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.75, digits = 0), replace=FALSE)
+  s_id <- sample(1:nrow(datxy), round(nrow(datxy)*0.6, digits = 0), replace=FALSE)
   div_75 <- datxy[s_id, ]
 
   div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
@@ -392,51 +395,17 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #---------------------------
 
 
-#   #-------------------------
-#   #C++ function to do sampling based on probability field
-#   cppFunction('IntegerVector rcpp_sample_prob(const IntegerVector& ind_sample, int N, int n) {
-#
-#   LogicalVector is_chosen(N);
-#   IntegerVector ind_chosen(n);
-#
-#   int i, k, ind;
-#
-#   for (k = 0, i = 0; i < n; i++) {
-#     do {
-#       ind = ind_sample[k++];
-#     } while (is_chosen[ind-1]);
-#     is_chosen[ind-1] = true;
-#     ind_chosen[i] = ind;
-#   }
-#
-#   return ind_chosen;
-# }')
-#
-#   sample_fast <- function(n, prb) {
-#     N <- length(prb)
-#     sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
-#     rcpp_sample_prob(sample_more, N, n)
-#   }
-#   #-------------------------
-
   #-----------------------------------------------
   #integrate the spatiotemporal sign.
   #-----------------------------------------------
 
+  st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
+
   #prepare the st signature table
   signTable <- NULL
 
-  for(sg in 1:length(st_properties$st_sign)){#sg<-1
-..........WORK ON COLLATING st signatures together......
-  }
-  #TODO
-  #1. also address when there is no st sign returned, ##DONE!!
-  #2. #spread the point patterns
-
-  #to adjust the baseline of time series
-
-  #TODO 1.
-  if(length(st_properties$st_sign) >= 1){
+  #spatial temporal sign detected
+  if(length(st_signature_filtered) >= 1){
 
   #--------------
   event_Collate <- NULL
@@ -444,25 +413,29 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     fN_final_dt_convert <- NULL
 
     #loop by origin
-    ##ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+    ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
     init_n <- 0
 
-    ###for(or in seq_len(length(ori_sn))){ #or=1
-    while(init_n <= n_events * 2) {
+    for(or in seq_len(length(ori_sn))){ #or=1
+    ##while(init_n <= n_events * 2) {
 
       sub_Dat <- filtered_stp_All %>%
-        tibble::rownames_to_column("ptid")
-        ##dplyr::filter(locid == ori_sn[or])
+        ##tibble::rownames_to_column("ptid")
+        dplyr::filter(locid == ori_sn[or])
 
       ##if(nrow(sub_Dat) < 5000){
-      ##sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-                                       ##round(nrow(sub_Dat)*0.5, digits = 0),
-                                       ##replace = FALSE),]
-
       sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-                                       round(nrow(sub_Dat)*0.02, digits = 0),
+                                       round(nrow(sub_Dat)*0.5, digits = 0),
                                        replace = FALSE),]
+
+      #marking this sample #just added
+      sample_sub_Dat <- sample_sub_Dat %>%
+        rownames_to_column('locID_sub') #
+
+      # sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+      #                                  round(nrow(sub_Dat)*0.02, digits = 0),
+      #                                  replace = FALSE),]
 
       ##}
 
@@ -473,10 +446,25 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
       #nrow(dt_convert)
 
-      #maximize the occurence of this threshold
+
+      #maximize the occurence of t threshold
+
+
+
+      #loop through all the spatial threshold
+
+      st_collate <- NULL
+
+      for(st in seq_len(length(st_signature_filtered))){ #st<-2
+
+      if(!is.null(st_signature_filtered[[st]])){
+      #get t threshold
+      t_st <- st_signature_filtered[[st]]
+
+      #maximize the occurence of t threshold
       dt_conver_Wthres <- dt_convert %>%
         tibble()%>%
-        dplyr::filter(distVal %in% st_properties$st_sign[[1]]) %>% #[1]
+        dplyr::filter(distVal %in%  t_st) %>% #[1]
         dplyr::rename(distVal1 = distVal)
 
       #apply distance threshold
@@ -487,12 +475,14 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
 
       #get names
-      nm <- names(st_properties$st_sign)[2]
+      nm <- names(st_signature_filtered)[st]
+      nm <- as.numeric(strsplit(nm, split= '-', fixed=TRUE)[[1]])
 
+      #maximize the occurence of s threshold
       ds_convert2 <- ds_convert %>%
         dplyr::rename(distVal2 = distVal) %>%
         dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
-        dplyr::filter(distVal2 %in% c(names(st_properties$st_sign):st_properties$st_sign[[2]]))
+        dplyr::filter(distVal2 %in% c(nm[1]:nm[2]))
 
       #join together
       ds_convert2_dsdt <- ds_convert2 %>%
@@ -504,11 +494,27 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         dplyr::arrange(desc(n), rname)%>%
         dplyr::filter(!duplicated(cname))%>%
         data.frame()%>%
-        dplyr::top_frac(0.01) #top 10
+        dplyr::top_frac(0.05) #top 10
+
 
       dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
       ids <- unique(dt_conver_Wthres_Comb$ids)
       sample_sub_DatNew <- sample_sub_Dat[ids,]
+
+      st_collate <- rbind(st_collate, sample_sub_DatNew)
+
+      flush.console()
+      print(st)
+      }
+
+
+      }
+
+      st_collate <- st_collate %>%
+        dplyr::filter(!duplicated(locID_sub))
+
+
+
       #plot(sample_sub_DatNew$x, sample_sub_DatNew$y)
 
       #when agent got stocked and delta ds = 0
@@ -517,31 +523,31 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       # }
       #-----------------------------------------------------------
 
-      # #for looping by origin
-      # #------------------------------------------...#
-      # if(length(ids) != 0){
-      #   event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+      #for looping by origin
+      #------------------------------------------...#
+      if(length(ids) != 0){
+        event_Collate <- rbind(event_Collate,  st_collate)
+      }
+      #----------------event_Collate--------------------------...#
+
+
+      # #for looping by day
+      # if(init_n == 0){
+      #   event_Collate <- sample_sub_DatNew
       # }
-      # #----------------event_Collate--------------------------...#
-
-
-      #for looping by day
-      if(init_n == 0){
-        event_Collate <- sample_sub_DatNew
-      }
-
-      if(init_n != 0){
-
-        filtered_evnt <- sample_sub_DatNew[which(!sample_sub_DatNew$ptid %in% event_Collate$ptid),]
-
-        event_Collate <- rbind(event_Collate, filtered_evnt)
-      }
-
-      init_n <- nrow(event_Collate)
-
-      flush.console()
-      #print(or)
-      print(init_n)
+      #
+      # if(init_n != 0){
+      #
+      #   filtered_evnt <- sample_sub_DatNew[which(!sample_sub_DatNew$ptid %in% event_Collate$ptid),]
+      #
+      #   event_Collate <- rbind(event_Collate, filtered_evnt)
+      # }
+      #
+      # init_n <- nrow(event_Collate)
+      #
+      # flush.console()
+      # #print(or)
+      # print(init_n)
 
       init_n <- nrow(event_Collate)
 
@@ -550,14 +556,16 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       print(init_n)
 
     }
+
+
     #------------------------------------------.......#
     stp_All_bk <- event_Collate
     #------------------------------------------.......#
   }
 
     ##THIS IS USING ORIGIN
-
-  if(length(st_properties$st_sign) == 0){
+  #no spatial temporal sign detected
+  if(length(st_signature_filtered) == 0){
 
     #..try and reduce the size of 'filtered_stp_All' first
     stp_All_bk <- filtered_stp_All
@@ -585,15 +593,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         prb <- stp_All_subset$probVal
         n <- round(nrow(stp_All_subset)/2, digits = 0) #select half of the data
 
-        #to call sampling function c++
-        # sample_fast <- function(n, prb) {
-        #   N <- length(prb)
-        #   sample_more <- sample.int(N, size = 2 * n, prob = prb, replace = TRUE)
-        #   rcpp_sample_prob(sample_more, N, n)
-        # }
-
-        ##system.time(ind <- sample_fast(n, prb))
-
         samp_idx <- as.numeric(sample(stp_All_subset$ID, size = n_events[h],
                                       replace = FALSE, prob = stp_All_subset$prob)) #%>
 
@@ -603,8 +602,13 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     output[h] <- list(subsetFn)
 
+    saveRDS(output[[1]],
+            file="real_simulated_for_Detroid_60.rds")
+
+
   }
 
+  #write.table(output[[1]], file="simulated_planar.csv", sep=",", row.names=F)
   #snap function
   st_snap_points = function(x=output_pt, y=netw, max_dist = 300) {
 
