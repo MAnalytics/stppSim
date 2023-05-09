@@ -22,7 +22,7 @@ represent different integer values.}
 
 \item{start_date}{the start date of the temporal pattern.
 The date should be in the format \code{"yyyy-mm-dd"}.
-The GTP will normally cover a 1-year period.}
+The 'gtp' will normally cover a 1-year period.}
 
 \item{poly}{(An sf or S4 object)
 a polygon shapefile defining the extent of the landscape.}
