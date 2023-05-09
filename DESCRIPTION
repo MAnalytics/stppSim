@@ -52,7 +52,8 @@ Imports:
   cowplot,
   gstat,
   otuSummary,
-  NearRepeat
+  NearRepeat,
+  progress
 RoxygenNote: 7.2.3
 Suggests:
   knitr,
