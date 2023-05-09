@@ -72,13 +72,14 @@
 #' @importFrom sparr OS
 #' @importFrom tibble rownames_to_column
 #' @importFrom ks hpi
+#' @importFrom NearRepeat NearRepeat
 #' @export
 #'
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         n_origin=50, p_ratio, gridSize = 150,
                         crsys = NULL, show.plot = FALSE){
 
-  prob <- NULL
+  prob <- NearRepeat <- NULL
 
   output <- list()
 
@@ -400,13 +401,14 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     flush.console()
     print("****Detecting spatiotemporal signatures:")
+
     t_all <- NULL
     for(t in 1:length(t_list)){ #t<5
-      system.time(myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
+      myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
                                           sds = s_list,
                                           tds = c(t_list[t]-1, t_list[t]),
                                           s_include.lowest = FALSE, s_right = TRUE, # include leftmost and include right most
-                                          t_include.lowest = TRUE, t_right = TRUE)) # include exclude leftmost and include right most
+                                          t_include.lowest = TRUE, t_right = TRUE)#) # include exclude leftmost and include right most
       ##myoutput2
       t_all <- cbind(t_all, myoutput2$pvalues)
       flush.console()
@@ -417,7 +419,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     for(c in 1:nrow(t_all)){ #c<-1
       ##ct <- length(which(t_all[c,] <= 0.05))
-      ct <- as.numeric(which(t_all[c,] <= 0.0001))#'0.05' with tolerance of 0.02 (for sample data)
+      ct <- as.numeric(which(t_all[c,] <= 0.1))#'0.05' with tolerance of 0.02 (for sample data)
       if(length(ct)!=0){
       c_005[[c]] <- ct
       #c_005[[c]][2] <- ct
@@ -426,6 +428,10 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       }
     }
     st_band <- c_005
+
+    if(length(st_band) != 0){
+      st_band <- st_band
+    }
 
     if(length(st_band) == 0){
       st_band <- NULL
