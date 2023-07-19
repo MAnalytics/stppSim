@@ -338,8 +338,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   datxy_plot <- div_75 %>%
     #datxy_plot <- stp_All_sub %>%
     dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
-    group_by(t) %>%
-    summarise(n = n()) %>%
+    dplyr::group_by(t) %>%
+    summarise(n = dplyr::n()) %>%
     mutate(time = as.numeric(difftime(t, as.Date(st_properties$start_date)-1, units="days")))%>%
     ##mutate(time = as.numeric(difftime(as.Date(st_properties$start_date + 364),
                                       ##t,
@@ -490,7 +490,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         dplyr::filter(!is.na(distVal1)) %>%
         dplyr::arrange(rname, distVal2) %>%
         dplyr::group_by(rname) %>%
-        dplyr::mutate(n=n())%>%
+        ##dplyr::mutate(n=n())%>%
+        dplyr::count()%>%
         dplyr::arrange(desc(n), rname)%>%
         dplyr::filter(!duplicated(cname))%>%
         data.frame()%>%
@@ -602,8 +603,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     output[h] <- list(subsetFn)
 
-    saveRDS(output[[1]],
-            file="real_simulated_for_Detroid_60.rds")
+    ##saveRDS(output[[1]],
+            ##file="real_simulated_for_Detroid_60.rds")
 
 
   }
