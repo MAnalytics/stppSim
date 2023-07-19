@@ -479,13 +479,16 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
         div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
 
+
+        #add the count function here.. if n() doesn't work
+
         datxy_plot <- div_75 %>%
-          #datxy_plot <- stp_All_sub %>%
-          dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
-          group_by(t) %>%
-          summarise(n = n()) %>%
-          mutate(time = as.numeric(difftime(t, as.Date("2020-12-31"), units="days")))%>%
-          as.data.frame()
+        #datxy_plot <- stp_All_sub %>%
+        dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
+        group_by(t) %>%
+        dplyr::summarise(n = dplyr::n()) %>%
+        mutate(time = as.numeric(difftime(t, as.Date("2020-12-31"), units="days")))%>%
+        as.data.frame()
 
         time <- data.frame(time=1:365)
 
@@ -572,13 +575,23 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
             dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
             dplyr::filter(distVal2 %in% c(s_band[1]:s_band[2]))
 
+          #get summary
+          f_count <- ds_convert2 %>%
+            dplyr::left_join(dt_conver_Wthres) %>%
+            dplyr::filter(!is.na(distVal1)) %>%
+            dplyr::arrange(rname, distVal2) %>%
+            ##dplyr::mutate(rname = as.character(rname))%>%
+            #dplyr::group_by(rname) %>%
+            dplyr::count(rname)
+
           #join together
           ds_convert2_dsdt <- ds_convert2 %>%
             dplyr::left_join(dt_conver_Wthres) %>%
             dplyr::filter(!is.na(distVal1)) %>%
             dplyr::arrange(rname, distVal2) %>%
-            dplyr::group_by(rname) %>%
-            dplyr::mutate(n=n())%>%
+            #dplyr::group_by(rname) %>%
+            ##dplyr::mutate(n=n())%>%
+            dplyr::left_join(f_count)%>%
             dplyr::arrange(desc(n), rname)%>%
             dplyr::filter(!duplicated(cname))%>%
             data.frame()%>%
