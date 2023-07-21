@@ -76,6 +76,7 @@ Collate:
     'walker.R'
     'psim_artif.R'
     'psim_real.R'
+    'snap_points_to_lines.R'
     'space_restriction.R'
     'stm.R'
     'stp_learner.R'
