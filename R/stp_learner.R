@@ -414,12 +414,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       flush.console()
       print(paste0(t, " of ", length(t_list)))
     }
-
-    c_005 <- list()
-
     for(c in 1:nrow(t_all)){ #c<-1
       ##ct <- length(which(t_all[c,] <= 0.05))
-      ct <- as.numeric(which(t_all[c,] <= 0.1))#'0.05' with tolerance of 0.02 (for sample data)
+      ct <- as.numeric(which(t_all[c,] <= 0.05))#'0.05' with tolerance of 0.02 (for sample data)
       if(length(ct)!=0){
       c_005[[c]] <- ct
       #c_005[[c]][2] <- ct
