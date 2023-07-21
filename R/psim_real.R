@@ -71,7 +71,7 @@
 #' theft <- camden_crimes[which(camden_crimes$type ==
 #' "Theft"),]
 #' #specify the proportion of full data to use
-#' sample_size <- 0.2
+#' sample_size <- 0.3
 #' set.seed(1000)
 #' dat_sample <- theft[sample(1:nrow(theft),
 #' round((sample_size * nrow(theft)), digits=0),
@@ -171,7 +171,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   }
 
-  #testing if crs' are the same
+   #testing if crs' are the same
   if(!is.null(netw)){
     crs_poly <- sf::st_crs(poly)$epsg
     crs_netw <- sf::st_crs(netw)$epsg
@@ -292,7 +292,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
   }
 
-  #saveRDS(stp_All, file = "realsave.rds")
+
+  #
+  #saveRDS(stp_All, file = "realsave_70_origins.rds")
 
   if(!is.null(s_threshold)){
   for(b in seq_len(nrow(spo_xy))){ #b<-1
@@ -319,10 +321,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     #
     # saveRDS(stp_All,
     # file="stppSimbackupReal_040.rds")
-    #
 
   }
+
   }
+
+  #saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_100.rds")
+  #saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_100.rds")
+  saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_70_2fn.rds")
+  saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_70_2fn.rds")
 
 
   #---------------------------
@@ -366,6 +373,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     y = predict(lm(n~time, datxy_plot)),
     method = "loess()"
   )
+
 
   loessData1 <- round(loessData1$y, digits = 0)
 
@@ -455,9 +463,10 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       st_collate <- NULL
 
-      for(st in seq_len(length(st_signature_filtered))){ #st<-2
+      for(st in seq_len(length(st_signature_filtered))){ #st<-1
 
       if(!is.null(st_signature_filtered[[st]])){
+
       #get t threshold
       t_st <- st_signature_filtered[[st]]
 
@@ -493,7 +502,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         ##dplyr::mutate(n=n())%>%
         dplyr::count()%>%
         dplyr::arrange(desc(n), rname)%>%
-        dplyr::filter(!duplicated(cname))%>%
+        dplyr::filter(!duplicated(rname))%>%#changing to rname from cname
         data.frame()%>%
         dplyr::top_frac(0.05) #top 10
 
@@ -604,30 +613,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     output[h] <- list(subsetFn)
 
     ##saveRDS(output[[1]],
-            ##file="real_simulated_for_Detroid_60.rds")
+            ##file="real_simulated_for_Detroid_100.rds")
+    saveRDS(output[[1]],
+      file="real_simulated_for_Detroid_70_planar_2fn.rds")
 
 
   }
 
-  #write.table(output[[1]], file="simulated_planar.csv", sep=",", row.names=F)
+
   #snap function
-  st_snap_points = function(x=output_pt, y=netw, max_dist = 300) {
-
-    if (inherits(x, "sf")) n = nrow(x)
-    if (inherits(x, "sfc")) n = length(x)
-
-    out = do.call(c,
-                  lapply(seq(n), function(i) {
-                    nrst = sf::st_nearest_points(sf::st_geometry(x)[i], y)
-                    nrst_len = sf::st_length(nrst)
-                    nrst_mn = which.min(nrst_len)
-                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(sf::st_geometry(x)[i])
-                    return(sf::st_cast(nrst[nrst_mn], "POINT")[2])
-                  })
-    )
-    return(out)
-  }
-
 
   #if network path is provided
   if(!is.null(netw)){ #netw <- netw_
@@ -644,7 +638,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       #system.time(
       ##exists("c")
-      snappedData <- st_snap_points(output_pt, netw)
+      snappedData <- snap_points_to_lines(points=output_pt,
+                                          lines=netw,
+                                          verbose = FALSE)
         #)
       #plot(snappedData)
 
@@ -653,6 +649,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     }
   }
 
+  saveRDS(output[[1]],
+          file="real_simulated_for_Detroid_70_network_2fn.rds")
   #combine and add as details
   #-------------------------------------------
   #add the origins
@@ -666,5 +664,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
 
   return(output)
+
+  #write.table(subsetFn, file="simulated_planar_100.csv", sep=",", row.names=F)
+  #write.table(output[[1]], file="simulated_network_100.csv", sep=",", row.names=F)
+  #write.table(ppt, file="sample_100.csv", sep=",", row.names=F)
 
 }

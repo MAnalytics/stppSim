@@ -104,7 +104,7 @@ data(camden_crimes)
 theft <- camden_crimes[which(camden_crimes$type ==
 "Theft"),]
 #specify the proportion of full data to use
-sample_size <- 0.2
+sample_size <- 0.3
 set.seed(1000)
 dat_sample <- theft[sample(1:nrow(theft),
 round((sample_size * nrow(theft)), digits=0),

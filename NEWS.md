@@ -4,6 +4,7 @@
 2. parameters Tperiod
 3. change to short_term pattern
 4. s_band
+5. fun to snap points to network
 
 
 # stppSim 1.2.7
