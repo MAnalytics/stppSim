@@ -109,11 +109,12 @@
 #' \dontrun{
 #'
 #' #load boundary and land use of Camden
-#' load(file = system.file("extdata", "camden.rda",
-#' package="stppSim"))
-#' boundary = camden$boundary # get boundary
-#' landuse = camden$landuse # get landuse
-#'
+#' #load(file = system.file("extdata", "camden.rda",
+#' #package="stppSim"))
+#' #boundary = camden$boundary # get boundary
+#' #landuse = camden$landuse # get landuse
+#' boundary <- stppSim:::boundary
+#' landuse <- stppSim:::landuse
 #' #In this example, we will use a minimal number of
 #' #'n_origin' (i.e. `20`) for faster computation:
 #'
