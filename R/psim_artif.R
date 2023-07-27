@@ -73,14 +73,14 @@
 #' @param fPeak first seasonal
 #' peak of cyclical short term. Default value is \code{90}.
 #' Only used for `"cyclical"` short term pattern.
-#' @param s_band distance bandwidth that maximizes space and time
-#' interaction. A vector of two spatial distance values.
-#' Default: \code{c(0, 200)}.
-#' Only used for `"acyclical"` short term pattern.
-#' @param t_band temporal bandwidth that maximizes space and time
-#' interaction.
-#' Default value is set as 15 days (i.e., t_band = \code{15}).
-#' Only used for `"acyclical"` short term pattern.
+#' @param s_band distance bandwidth within which
+#' the event re-occurences are maximized (i.e.,
+#' interactions are maximum). Specified as a vector of
+#' two distance values. Default: \code{c(0, 200)}.
+#' @param t_band temporal bandwidth within which
+#' event re-occurences are maximized (i.e., interactions
+#' are maximum). Specified as a vector of values (in days)
+#' \code{c(1, 5, 7, 14)}.
 #' @param slope slope of the long-term trend when
 #' an `"rising"` or `"falling"` trend is specified.
 #' Options: `"gentle"` or `"steep"`. The default value is
@@ -103,7 +103,7 @@
 #' p_ratio=20, s_threshold = 50, step_length = 20,
 #' trend = "stable", shortTerm = "cyclical", fPeak=90,
 #' s_band = c(0, 200),
-#' t_band = 15,
+#' t_band = c(1, 5, 10),
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 #' @examples
 #' \dontrun{
@@ -127,7 +127,8 @@
 #' p_ratio = 20, s_threshold = 50,
 #' step_length = 20,
 #' trend = "stable", shortTerm = "cyclical",
-#' fPeak=90, s_band = c(0, 200), t_band = 15,
+#' fPeak=90, s_band = c(0, 200),
+#' t_band = c(1, 5, 10),
 #' slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 #'
 #' #If `n_events` is a vector of values,
@@ -145,26 +146,10 @@
 #' }
 #'
 #' @details
-#' Both the walkers
-#' and the landscape are configured arbitrarily (in accordance
-#' with the users knowledge of the domain.
-#' This function is computationally intensive. When run,
-#' an estimate of the expected computational time
-#' is first printed in the console for the user.
-#' Argument with the largest impacts on the computational
-#' time include `n_origin=50`, and `restriction_feat` when
-#' not \code{NULL}. Note: the `n_events`
-#' argument has little of no impacts on the
-#' computational time, and so it is recommended that
-#' that a user inputs a vector of several values
-#' to simulate.
-#' Lastly, in addition to exporting the simulated
-#' point patterns, the
-#' function also returns the simulated origins,
-#' the boundary and the restriction features
-#' (if supplied).
+#' Simulate artificial spatiotemporal patterns
+#' and interactions based user specifications.
 #' @return Returns a list of artificial spatiotemporal
-#' point patterns generated from scratch.
+#' point patterns based on user-defined parameters.
 #' @importFrom data.table rbindlist
 #' @importFrom SiMRiv resistanceFromShape
 #' @importFrom raster raster extent
@@ -190,7 +175,7 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
                        s_threshold = 50,
                        step_length = 20,
                        trend = "stable", shortTerm = "cyclical",
-                       fPeak=90, s_band = c(0, 200), t_band = 15,
+                       fPeak=90, s_band = c(0, 200), t_band = c(1, 5, 10),
                        slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE,...){
 
   #define global variables...
@@ -234,9 +219,9 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
    stop(" 't_band' value must be an integer!")
  }
 
- if(t_band >= 90){
-   stop(" 't_band' value may be too large! Input a smaller value!")
- }
+ # if(t_band >= 90){
+ #   stop(" 't_band' value may be too large! Input a smaller value!")
+ # }
 
  }
 
@@ -377,14 +362,6 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
     }
   }
 
-  # if(!query1 %in% c("N","n")){
-  #     stop("Invalid input! 'N' or 'n' expected! Process terminated!")
-  #   }
-  #
-  # if(query1 %in% c("N","n")){
-  #   #do nothing
-  # }
-
   }
 
   #-----
@@ -444,9 +421,6 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
       bind_rows(loc_N)
 
     }
-
-
-      ##filtered_stp_All
 
       #This is the second option
 
@@ -535,6 +509,32 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
         }
 
+
+        #-----------------------------------------------
+        #integrate the spatiotemporal sign.
+        #-----------------------------------------------
+
+        #temporal bandwidths
+        ##t_list <- st_properties$st_sign
+        # t_list <- as.data.frame(do.call(rbind, t_list))[, 2:3]
+        #
+        # t_band
+        # st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
+        #
+        # #prepare the st signature table
+        # signTable <- NULL
+
+        #spatial temporal sign detected
+        #if(length(st_signature_filtered) >= 1){
+
+        #to print for the three intervals..
+        #
+        #s_interaction = "medium"
+
+        ##if(length(st_signature_filtered) != 0){
+
+        ##for(st in 1:3){ #st<-1 3 "small" "medium" and "large"
+        #--------------
         event_Collate <- NULL
 
         fN_final_dt_convert <- NULL
@@ -544,94 +544,124 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
         init_n <- 0
 
+        ##if(length(st_signature_filtered[[st]])>=1 &
+           ##!"NA" %in% st_signature_filtered[[st]]){
+
+          #st_collate <- NULL
+
         for(or in seq_len(length(ori_sn))){ #or=1
+            ##while(init_n <= n_events * 2) {
 
-          sub_Dat <- filtered_stp_All %>%
-            ##tibble::rownames_to_column("ptid")
-            dplyr::filter(locid == ori_sn[or])
+            sub_Dat <- filtered_stp_All %>%
+              rownames_to_column('locID_sub') %>%
+              ##tibble::rownames_to_column("ptid")
+              dplyr::filter(locid == ori_sn[or])
 
-          sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat), 5000, replace = FALSE),]
+            ##if(nrow(sub_Dat) < 5000){
+            sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                             round(nrow(sub_Dat)*0.5, digits = 0),
+                                             replace = FALSE),]
 
-          tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
-          dt = dist(tme)
+            tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
+            dt = dist(tme)
 
-          #for a specified time threshold
-          dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
-          #head(dt_convert)
+            #for a specified time threshold
+            dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
+            #nrow(dt_convert)
 
-          #maximize the occurence of this threshold
-          dt_conver_Wthres <- dt_convert %>%
-            dplyr::filter(distVal %in% t_band) %>%
-            dplyr::rename(distVal1 = distVal)
 
-          #apply distance threshold
-          xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
 
-          ds <- dist(xy)
+            ##t_st <- st_properties$t_bands[t_st]
+            #t_st <- as.vector(unlist(t_list[t_st, ]))
 
-          ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
+            # #collapse the temporal
+            # t_st_List <- NULL
+            # for(q in 1:length(t_st)){#q<-1
+            #   tsm <- substring(t_st[q], 2, str_length(t_st[q]))
+            #   tsm <- substring(tsm, 1, str_length(tsm)-1)
+            #   tsm <- as.numeric(strsplit(tsm, split= ',', fixed=TRUE)[[1]])
+            #   t_st_List <- c(t_st_List, tsm[1]:(tsm[2]-1))
+            # }
 
-          ds_convert2 <- ds_convert %>%
-            dplyr::rename(distVal2 = distVal) %>%
-            dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
-            dplyr::filter(distVal2 %in% c(s_band[1]:s_band[2]))
+            #get t threshold
+            t_st_List <- t_band
 
-          #get summary
-          f_count <- ds_convert2 %>%
-            dplyr::left_join(dt_conver_Wthres) %>%
-            dplyr::filter(!is.na(distVal1)) %>%
-            dplyr::arrange(rname, distVal2) %>%
-            ##dplyr::mutate(rname = as.character(rname))%>%
-            #dplyr::group_by(rname) %>%
-            dplyr::count(rname)
+            #maximize the occurence of t threshold
+            dt_conver_Wthres <- dt_convert %>%
+              tibble()%>%
+              dplyr::filter(distVal %in%  t_st_List) %>% #[1]
+              dplyr::rename(distVal1 = distVal)
 
-          #join together
-          ds_convert2_dsdt <- ds_convert2 %>%
-            dplyr::left_join(dt_conver_Wthres) %>%
-            dplyr::filter(!is.na(distVal1)) %>%
-            dplyr::arrange(rname, distVal2) %>%
-            #dplyr::group_by(rname) %>%
-            ##dplyr::mutate(n=n())%>%
-            dplyr::left_join(f_count)%>%
-            dplyr::arrange(desc(n), rname)%>%
-            dplyr::filter(!duplicated(cname))%>%
-            data.frame()%>%
-            dplyr::top_frac(0.05) #top 10
+            #apply distance threshold
+            xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
 
-          dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
-          ids <- unique(dt_conver_Wthres_Comb$ids)
-          sample_sub_DatNew <- sample_sub_Dat[ids,]
-          #plot(sample_sub_DatNew$x, sample_sub_DatNew$y)
+            ds <- dist(xy)
 
-          if(length(ids) == 0){
-            stop(cat("Interaction between ds and dt may not be possible! Try smaller ds (or dt) value!"))
+            ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
+
+            # #get names
+            # nm <- names(st_signature_filtered)[st]
+            # nm <- substring(nm, 2, str_length(nm))
+            # nm <- substring(nm, 1, str_length(nm)-1)
+            # nm <- as.numeric(strsplit(nm, split= ',', fixed=TRUE)[[1]])
+
+            #get s threshold
+            nm <- s_band
+
+            #maximize the occurence of s threshold
+            ds_convert2 <- ds_convert %>%
+              dplyr::rename(distVal2 = distVal) %>%
+              dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
+              dplyr::filter(distVal2 %in% c(nm[1]:nm[2]))
+
+            f_count <- ds_convert2 %>%
+              dplyr::left_join(dt_conver_Wthres) %>%
+              dplyr::filter(!is.na(distVal1))
+
+            f_count_col <- f_count %>%
+              dplyr::group_by(cname)%>%
+              dplyr::count()%>%
+              dplyr::arrange(desc(n))%>%
+              data.frame()%>%
+              dplyr::top_frac(0.05)
+
+            f_count_row <- f_count %>%
+              dplyr::group_by(rname)%>%
+              dplyr::count()%>%
+              dplyr::arrange(desc(n))%>%
+              data.frame()%>%
+              dplyr::top_frac(0.05)
+
+
+            dt_conver_Wthres_Comb <- data.frame(ids = c(f_count_row$rname, f_count_col$cname))
+            ids <- unique(dt_conver_Wthres_Comb$ids)
+            sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
+
+            #-----------------------------------------------------------
+            if(length(ids) != 0){
+              event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+            }
+            #----------------event_Collate--------------------------...#
+
+            flush.console()
+            print(st)
+            print(nrow(event_Collate))
+
+            event_Collate <- event_Collate %>%
+              dplyr::filter(!duplicated(locID_sub))
+
+            init_n <- nrow(event_Collate)
+
+            flush.console()
+            print(or)
+            print(init_n)
+
           }
-          #-----------------------------------------------------------
+  }
 
-          #------------------------------------------...#
-          event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
-          #------------------------------------------...#
-
-          init_n <- nrow(event_Collate)
-
-          ##flush.console()
-          #print(or)
-          ##print(init_n)
-
-        }
-
-        ##THIS IS USING ORIGIN
-        #------------------------------------------.......#
-        stp_All_bk <- event_Collate
-        #------------------------------------------.......#
-
-        #add idx
-        stp_All_ <- stp_All_bk %>%
-          rownames_to_column('ID') #%>% #add row as column
-
-      }
-
-
+          #------------------------------------------.......#
+          stp_All_bk <- event_Collate
+          #------------------------------------------.......#
 
   #finalizing!
   #--------------------------------------#stp_All
@@ -641,71 +671,65 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
     #Also if the final list is very small compare
     #to the list needed
-    if(nrow(stp_All_) < round(n_events[h]*1.5, digits = 0)){
-      cat(paste0("*------------| A total of ",  round(nrow(stp_All_)*0.75, digits = 0),
+    if(nrow(stp_All_bk) < round(n_events[h]*1.5, digits = 0)){
+      cat(paste0("*------------| A total of ",  round(nrow(stp_All_bk)*0.75, digits = 0),
                  " events are generated! |--------------*"))
 
-      n_events_h <- round(nrow(stp_All_)*0.75, digits = 0)
+      n_events_h <- round(nrow(stp_All_bk)*0.75, digits = 0)
 
       #sample to derive required number
-      samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events_h,
-                                    replace = FALSE, prob = stp_All_$prob)) #%>
+      samp_idx <- as.numeric(sample(1:nrow(stp_All_bk), size = n_events_h,
+                                    replace = FALSE, prob = stp_All_bk$prob)) #%>
     }
 
-    if(nrow(stp_All_) >= round(n_events[h]*1.5, digits = 0)){
+    if(nrow(stp_All_bk) >= round(n_events[h]*1.5, digits = 0)){
       #sample to derive required number
-      samp_idx <- as.numeric(sample(stp_All_$ID, size = n_events[h],
-                                    replace = FALSE, prob = stp_All_$prob)) #%>
+      samp_idx <- as.numeric(sample(1:nrow(stp_All_bk), size = n_events[h],
+                                    replace = FALSE, prob = stp_All_bk$prob)) #%>
 
     }
 
-    stp_All_fn <- stp_All_[samp_idx, ]
+    stp_All_fn <- stp_All_bk[samp_idx, ]
 
     #sort
     stp_All_fn <- stp_All_fn %>%
-      arrange(locid, tid, sn) %>%
-      rownames_to_column('ID2') %>%
-      dplyr::select(-c(ID))%>%
-      dplyr::rename(ID = ID2)
+      arrange(locid, tid, sn) #%>%
+      #rownames_to_column('ID2') #%>%
+      #dplyr::select(-c(ID))%>%
+      #dplyr::rename(ID = ID2)
 
     output[h] <- list(stp_All_fn)
   }
 
-  #snap function
-  st_snap_points = function(x, y, max_dist = 1000) {
-
-    if (inherits(x, "sf")) n = nrow(x)
-    if (inherits(x, "sfc")) n = length(x)
-
-    out = do.call(c,
-                  lapply(seq(n), function(i) {
-                    nrst = st_nearest_points(st_geometry(x)[i], y)
-                    nrst_len = st_length(nrst)
-                    nrst_mn = which.min(nrst_len)
-                    if (as.vector(nrst_len[nrst_mn]) > max_dist) return(st_geometry(x)[i])
-                    return(st_cast(nrst[nrst_mn], "POINT")[2])
-                  })
-    )
-    return(out)
-  }
 
   #if network path is provided
-  if(!is.null(netw)){
+  if(!is.null(netw)){ #netw <- netw_
+
+    flush.console()
+    print("***------Generating network data, processing....:")
 
     for(g in seq_len(length(n_events))){ #g<-1
 
-    #convert point to geometry type
-    output_pt <- data.frame(output[g]) %>%
-      st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
-    #tibble::rownames_to_column("id")
+      #convert point to geometry type
+      output_pt <- data.frame(output[g]) %>%
+        st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
+      #tibble::rownames_to_column("id")
 
-    system.time(snappedData <- st_snap_points(output_pt, netw))
-    #plot(snappedData)
+      #system.time(
+      ##exists("c")
+      snappedData <- snap_points_to_lines(points=output_pt,
+                                          lines=netw,
+                                          verbose = FALSE)
+      #)
+      #plot(snappedData)
 
-    output[[g]]$x <- st_coordinates(snappedData)[,1]
-    output[[g]]$y <- st_coordinates(snappedData)[,2]
+      output[[g]]$x <- st_coordinates(snappedData)[,1]
+      output[[g]]$y <- st_coordinates(snappedData)[,2]
     }
   }
+
+
+
 
   #add the origins
   output$origins <- spo$origins
