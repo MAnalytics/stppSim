@@ -6,7 +6,8 @@
 a sample data}
 \usage{
 stp_learner(ppt, start_date = NULL, poly = NULL,
-n_origin=50, p_ratio, gridSize = 150,
+n_origin=50, p_ratio, gridSize = 150, s_range =  150,
+tolerance = 0.07,
 crsys = NULL, show.plot = FALSE)
 }
 \arguments{
@@ -33,6 +34,18 @@ implies a \code{20:80} Pareto ratio.}
 \item{gridSize}{the size of square grid
 to use for discretizing the space.
 Default is: \code{150}.}
+
+\item{s_range}{A value (in metres), not less than 150,
+specifying the maximum range of spatial
+interaction across the space. For example, for 150m,
+the intervals of spatial interactions are created as
+\code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
+representing the "small", "medium", and "large",
+spatial interaction ranges, respectively.}
+
+\item{tolerance}{Pvalue to use for the extraction of
+space-time interaction in the sample data. Default
+value: \code{0.07}.}
 
 \item{crsys}{(string) the EPSG code of the projection
 system of the \code{ppt} coordinates. This only used if
@@ -76,7 +89,9 @@ replace=FALSE),]
 
 stp_learner(dat_sample,
 start_date = NULL, poly = NULL, n_origin=50,
-p_ratio=20, gridSize = 150, crsys = "EPSG:27700",
+p_ratio=20, gridSize = 150,
+s_range =  150, tolerance = 0.07,
+crsys = "EPSG:27700",
 show.plot = FALSE)
 }
 \references{

@@ -5,7 +5,7 @@
 \title{Snapping point to network}
 \usage{
 snap_points_to_lines(points, lines,
-all_points = FALSE, verbose = FALSE)
+verbose = FALSE)
 }
 \arguments{
 \item{points}{point data (sf object)}
@@ -32,16 +32,16 @@ their original locations (Credit: Michal Kvasnicka)
 \examples{
 
 #get line and point data
-load(file = system.file("extdata", "camden.rda",
-package="stppSim"))
-lines <- camden$lines
-pts <- camden$pts
+#load(file = system.file("extdata", "camden.rda",
+#package="stppSim"))
+lines <- stppSim:::lines
+pts <- stppSim:::pts
 my_points <- snap_points_to_lines(points=pts,
 lines=lines,
 verbose = FALSE)
 
 #preview result
 #ggplot()+
-#geom_sf(data = roads, col = 'red')+
-#geom_sf(data = my_points, shape = 1)
+#geom_sf(data = lines, col = 'red')+
+#geom_sf(data = pts, shape = 1)
 }

@@ -10,7 +10,7 @@ n_foci, foci_separation, mfocal = NULL, conc_type = "dispersed",
 p_ratio=20, s_threshold = 50, step_length = 20,
 trend = "stable", shortTerm = "cyclical", fPeak=90,
 s_band = c(0, 200),
-t_band = 15,
+t_band = c(1, 5, 10),
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE, ...)
 }
 \arguments{
@@ -100,15 +100,15 @@ Default is: \code{`"cyclical"`}.}
 peak of cyclical short term. Default value is \code{90}.
 Only used for \code{"cyclical"} short term pattern.}
 
-\item{s_band}{distance bandwidth that maximizes space and time
-interaction. A vector of two spatial distance values.
-Default: \code{c(0, 200)}.
-Only used for \code{"acyclical"} short term pattern.}
+\item{s_band}{distance bandwidth within which
+the event re-occurences are maximized (i.e.,
+interactions are maximum). Specified as a vector of
+two distance values. Default: \code{c(0, 200)}.}
 
-\item{t_band}{temporal bandwidth that maximizes space and time
-interaction.
-Default value is set as 15 days (i.e., t_band = \code{15}).
-Only used for \code{"acyclical"} short term pattern.}
+\item{t_band}{temporal bandwidth within which
+event re-occurences are maximized (i.e., interactions
+are maximum). Specified as a vector of values (in days)
+\code{c(1, 5, 7, 14)}.}
 
 \item{slope}{slope of the long-term trend when
 an \code{"rising"} or \code{"falling"} trend is specified.
@@ -133,7 +133,7 @@ functions.}
 }
 \value{
 Returns a list of artificial spatiotemporal
-point patterns generated from scratch.
+point patterns based on user-defined parameters.
 }
 \description{
 Generates spatiotemporal
@@ -141,34 +141,19 @@ point patterns based on a set of
 synthesized origins.
 }
 \details{
-Both the walkers
-and the landscape are configured arbitrarily (in accordance
-with the users knowledge of the domain.
-This function is computationally intensive. When run,
-an estimate of the expected computational time
-is first printed in the console for the user.
-Argument with the largest impacts on the computational
-time include \code{n_origin=50}, and \code{restriction_feat} when
-not \code{NULL}. Note: the \code{n_events}
-argument has little of no impacts on the
-computational time, and so it is recommended that
-that a user inputs a vector of several values
-to simulate.
-Lastly, in addition to exporting the simulated
-point patterns, the
-function also returns the simulated origins,
-the boundary and the restriction features
-(if supplied).
+Simulate artificial spatiotemporal patterns
+and interactions based user specifications.
 }
 \examples{
 \dontrun{
 
 #load boundary and land use of Camden
-load(file = system.file("extdata", "camden.rda",
-package="stppSim"))
-boundary = camden$boundary # get boundary
-landuse = camden$landuse # get landuse
-
+#load(file = system.file("extdata", "camden.rda",
+#package="stppSim"))
+#boundary = camden$boundary # get boundary
+#landuse = camden$landuse # get landuse
+boundary <- stppSim:::boundary
+landuse <- stppSim:::landuse
 #In this example, we will use a minimal number of
 #'n_origin' (i.e. `20`) for faster computation:
 
@@ -181,7 +166,8 @@ conc_type = "dispersed",
 p_ratio = 20, s_threshold = 50,
 step_length = 20,
 trend = "stable", shortTerm = "cyclical",
-fPeak=90, s_band = c(0, 200), t_band = 15,
+fPeak=90, s_band = c(0, 200),
+t_band = c(1, 5, 10),
 slope = NULL, interactive = FALSE, show.plot=FALSE, show.data=FALSE)
 
 #If `n_events` is a vector of values,
