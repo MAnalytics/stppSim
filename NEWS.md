@@ -5,6 +5,9 @@
 3. change to short_term pattern
 4. s_band
 5. fun to snap points to network
+6. adding argument spatial_interaction
+7. tolerance
+8. s_range.
 
 
 # stppSim 1.2.7
