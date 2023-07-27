@@ -53,6 +53,19 @@
 #' a user is able to preview the spatial and temporal models
 #' of the expected distribution of the final simulated
 #' events (points).
+#' @param s_range A value (in metres), not less than 150,
+#' specifying the maximum range of spatial
+#' interaction across the space. For example, for 150m,
+#' the intervals of spatial interactions are created as
+#' \code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
+#' representing the "small", "medium", and "large",
+#' spatial interaction ranges, respectively.
+#' @param s_interaction (string) indicating the
+#' type of spatial interaction to detect.
+#' Default: \code{"medium"} (See parameter \code{'s_range'})
+#' @param tolerance Pvalue to use for the extraction of
+#' space-time interaction in the sample data. Default
+#' value: \code{0.05}.
 #' @param crsys (string) the EPSG code of the projection
 #' system of the `ppt` coordinates. This is only used if
 #' `poly` argument is \code{NULL}.
@@ -63,13 +76,14 @@
 #' @usage psim_real(n_events, ppt, start_date = NULL, poly = NULL,
 #' netw = NULL, s_threshold = NULL, step_length = 20, n_origin=50,
 #' restriction_feat=NULL, field=NA,
-#' p_ratio=20, interactive = FALSE, crsys = NULL)
+#' p_ratio=20, interactive = FALSE, s_range = 150,
+#' s_interaction = "medium", tolerance = 0.07,
+#' crsys = NULL)
 #' @examples
 #' \dontrun{
 #' data(camden_crimes)
 #' #subset 'theft' crime
-#' theft <- camden_crimes[which(camden_crimes$type ==
-#' "Theft"),]
+#' theft <- camden_crimes[which(camden_crimes$type == "Theft"),]
 #' #specify the proportion of full data to use
 #' sample_size <- 0.3
 #' set.seed(1000)
@@ -79,17 +93,18 @@
 #' #plot(dat_sample$x, dat_sample$y) #preview
 #'
 #' #load boundary and land use of Camden
-#' load(file = system.file("extdata", "camden.rda",
-#' package="stppSim"))
-#' landuse = camden$landuse # get landuse
-#'
+#' #load(file = system.file("extdata", "camden.rda",
+#' #package="stppSim"))
+#' #landuse = camden$landuse # get landuse
+#' landuse <- stppSim:::landuse
 #' #simulate data
 #' simulated_stpp <- psim_real(n_events=2000, ppt=dat_sample,
 #' start_date = NULL, poly = NULL, netw = NULL, s_threshold = NULL,
 #' step_length = 20, n_origin=20,
 #' restriction_feat = NULL, field=NULL,
-#' p_ratio=20, interactive = FALSE, crsys = "EPSG:27700")
-#'
+#' p_ratio=20, interactive = FALSE, s_range = 150,
+#' s_interaction = "medium", tolerance = 0.07,
+#' crsys = "EPSG:27700")
 #' #If `n_events` is a vector of values,
 #' #retrieve the simulated data for the
 #' #corresponding vector element by using
@@ -98,23 +113,23 @@
 #' #simulated_stpp[[1]].
 #'
 #' #The above example simulates point patterns on
-#' #an unrestricted landscape. If
-#' #`restriction_feat = landuse` and
-#' #`field = "restrVal"`, then the simulation
+#' #an unrestricted landscape. If \code{restriction_feat = landuse} and \code{field = "restrVal"},
+#' then the simulation
 #' #is run with the landuse features as restrictions
 #' #on the landscape.
 #' }
-#'
 #' @details
-#' The movement characteristics of walkers as well
-#' as the configuration of the landscape are defined
-#' based on the properties learnt from the real sample
-#' data. See under `psim_artif`
-#' function for details on the computation time and
-#' the exported objects.
-#' @return Returns a list of artificial spatiotemporal
-#' point patterns generated based on a sample
-#' real data.
+#' The spatial and temporal patterns and
+#' interactions detected in sample datasets
+#' are extrapolated to synthetise larger
+#' data size. Details of the spatiotemporal
+#' interactions detected in the sample
+#' dataset are provided. If the street network
+#' of the area is provided, each point is
+#' snapped to its nearest street segment.
+#' @return A list of artificial spatiotemporal
+#' point patterns and interaction generated based on a sample
+#' (real) data.
 #' @references
 #' Davies, T.M. and Hazelton, M.L. (2010), Adaptive
 #' kernel estimation of spatial relative risk,
@@ -141,6 +156,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
                       netw = NULL, s_threshold = NULL, step_length = 20,
                       n_origin=50, restriction_feat=NULL,
                       field = NA, p_ratio=20, interactive = FALSE,
+                      s_range =  150,
+                      s_interaction = "medium",
+                      tolerance = 0.07,
                       crsys = NULL){
 
   idx <- tid <- x <- y <- if_else <- t2 <-
@@ -149,11 +167,21 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     distVal1 <- distVal2 <- distVal <-
     tme <- tmeDiff<- datetime <- NULL
 
+  #check s_interaction
+  if(!s_interaction %in% c("small",
+                          "medium",
+                          "large")){
+    stop("Argument 's_interaction' is invalid!!")
+  }
+
   output <- list()
 
+  #ppt <- burg_df_samp
   st_properties <- stp_learner(ppt=ppt, start_date = start_date,
                                poly = poly, n_origin=n_origin,
-                               p_ratio = p_ratio, crsys = crsys)
+                               p_ratio = p_ratio,
+                               s_range =  s_range, tolerance = tolerance,
+                               crsys = crsys)
 
   #return start_date
 
@@ -292,7 +320,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
   }
 
-
   #
   #saveRDS(stp_All, file = "realsave_70_origins.rds")
 
@@ -326,10 +353,11 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   }
 
+
   #saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_100.rds")
   #saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_100.rds")
-  saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_70_2fn.rds")
-  saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_70_2fn.rds")
+  saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_50_5fn_single.rds")
+  saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_50_5fn_single.rds")
 
 
   #---------------------------
@@ -402,10 +430,25 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
   #---------------------------
 
+  #-------------------------------
+  if(s_interaction == "small"){
+    st <- 1
+  }
+  if(s_interaction == "medium"){
+    st <- 2
+  }
+  if(s_interaction == "large"){
+    st <- 3
+  }
 
   #-----------------------------------------------
   #integrate the spatiotemporal sign.
   #-----------------------------------------------
+
+  #temporal bandwidths
+  t_list <- st_properties$st_sign
+  #t_list <- as.data.frame(do.call(rbind, t_list))[, 2:3]
+
 
   st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
 
@@ -413,8 +456,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   signTable <- NULL
 
   #spatial temporal sign detected
-  if(length(st_signature_filtered) >= 1){
+  #if(length(st_signature_filtered) >= 1){
 
+  #to print for the three intervals..
+  #
+  #s_interaction = "medium"
+
+  ##if(length(st_signature_filtered) != 0){
+
+  ##for(st in 1:3){ #st<-1 3 "small" "medium" and "large"
   #--------------
   event_Collate <- NULL
 
@@ -425,27 +475,27 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     init_n <- 0
 
-    for(or in seq_len(length(ori_sn))){ #or=1
+  if(length(st_signature_filtered[[st]])>=1 &
+       !"NA" %in% st_signature_filtered[[st]]){
+
+  #st_collate <- NULL
+
+  for(or in seq_len(length(ori_sn))){ #or=1
     ##while(init_n <= n_events * 2) {
 
-      sub_Dat <- filtered_stp_All %>%
+    sub_Dat <- filtered_stp_All %>%
+        rownames_to_column('locID_sub') %>%
         ##tibble::rownames_to_column("ptid")
         dplyr::filter(locid == ori_sn[or])
 
       ##if(nrow(sub_Dat) < 5000){
-      sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+    sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
                                        round(nrow(sub_Dat)*0.5, digits = 0),
                                        replace = FALSE),]
 
       #marking this sample #just added
-      sample_sub_Dat <- sample_sub_Dat %>%
-        rownames_to_column('locID_sub') #
-
-      # sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-      #                                  round(nrow(sub_Dat)*0.02, digits = 0),
-      #                                  replace = FALSE),]
-
-      ##}
+      ##sample_sub_Dat <- sample_sub_Dat %>%
+        ##rownames_to_column('locID_sub') #
 
       tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
       dt = dist(tme)
@@ -454,26 +504,30 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
       #nrow(dt_convert)
 
-
       #maximize the occurence of t threshold
-
-
-
       #loop through all the spatial threshold
 
-      st_collate <- NULL
-
-      for(st in seq_len(length(st_signature_filtered))){ #st<-1
-
-      if(!is.null(st_signature_filtered[[st]])){
+      ##for(st in seq_len(length(st_signature_filtered))){ #st<-1
 
       #get t threshold
       t_st <- st_signature_filtered[[st]]
+      t_st <- st_properties$t_bands[t_st]
+      #t_st <- as.vector(unlist(t_list[t_st, ]))
+
+      #collapse the temporal
+      t_st_List <- NULL
+      for(q in 1:length(t_st)){#q<-1
+        tsm <- substring(t_st[q], 2, str_length(t_st[q]))
+        tsm <- substring(tsm, 1, str_length(tsm)-1)
+        tsm <- as.numeric(strsplit(tsm, split= ',', fixed=TRUE)[[1]])
+        t_st_List <- c(t_st_List, tsm[1]:(tsm[2]-1))
+      }
+
 
       #maximize the occurence of t threshold
       dt_conver_Wthres <- dt_convert %>%
         tibble()%>%
-        dplyr::filter(distVal %in%  t_st) %>% #[1]
+        dplyr::filter(distVal %in%  t_st_List) %>% #[1]
         dplyr::rename(distVal1 = distVal)
 
       #apply distance threshold
@@ -485,7 +539,9 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
       #get names
       nm <- names(st_signature_filtered)[st]
-      nm <- as.numeric(strsplit(nm, split= '-', fixed=TRUE)[[1]])
+      nm <- substring(nm, 2, str_length(nm))
+      nm <- substring(nm, 1, str_length(nm)-1)
+      nm <- as.numeric(strsplit(nm, split= ',', fixed=TRUE)[[1]])
 
       #maximize the occurence of s threshold
       ds_convert2 <- ds_convert %>%
@@ -493,71 +549,81 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
         dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
         dplyr::filter(distVal2 %in% c(nm[1]:nm[2]))
 
-      #join together
-      ds_convert2_dsdt <- ds_convert2 %>%
+      # f_count <- ds_convert2 %>%
+      #   dplyr::left_join(dt_conver_Wthres) %>%
+      #   dplyr::filter(!is.na(distVal1)) %>%
+      #   ##dplyr::arrange(rname, distVal2) %>%
+      #   dplyr::mutate(rname = as.character(rname), cname = as.character(cname))%>%
+      #   dplyr::group_by(cname) %>%
+      #   dplyr::count()%>%
+      #   dplyr::arrange(desc(n))
+
+
+      f_count <- ds_convert2 %>%
         dplyr::left_join(dt_conver_Wthres) %>%
-        dplyr::filter(!is.na(distVal1)) %>%
-        dplyr::arrange(rname, distVal2) %>%
-        dplyr::group_by(rname) %>%
-        ##dplyr::mutate(n=n())%>%
+        dplyr::filter(!is.na(distVal1))
+
+      f_count_col <- f_count %>%
+        dplyr::group_by(cname)%>%
         dplyr::count()%>%
-        dplyr::arrange(desc(n), rname)%>%
-        dplyr::filter(!duplicated(rname))%>%#changing to rname from cname
+        dplyr::arrange(desc(n))%>%
         data.frame()%>%
-        dplyr::top_frac(0.05) #top 10
+        dplyr::top_frac(0.05)
+
+      f_count_row <- f_count %>%
+        dplyr::group_by(rname)%>%
+        dplyr::count()%>%
+        dplyr::arrange(desc(n))%>%
+        data.frame()%>%
+        dplyr::top_frac(0.05)
 
 
-      dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
+      dt_conver_Wthres_Comb <- data.frame(ids = c(f_count_row$rname, f_count_col$cname))
       ids <- unique(dt_conver_Wthres_Comb$ids)
-      sample_sub_DatNew <- sample_sub_Dat[ids,]
+      sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
+      # ds_convert2_dsdt <- ds_convert2 %>%
+      #   dplyr::left_join(dt_conver_Wthres) %>%
+      #   dplyr::filter(!is.na(distVal1)) %>%
+      #   ##dplyr::arrange(rname, distVal2) %>%
+      #   dplyr::mutate(rname = as.character(rname))%>%
+      #   ##dplyr::group_by(rname) %>%
+      #   ##dplyr::count(rname)%>%
+      #   ###dplyr::left_join(f_count)%>%
+      #   dplyr::arrange(desc(n))%>%
+      #   dplyr::filter(!duplicated(cname))%>%
+      #   data.frame()%>%
+      #   dplyr::top_frac(0.05) #top 10
 
-      st_collate <- rbind(st_collate, sample_sub_DatNew)
 
-      flush.console()
-      print(st)
-      }
+      # dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
+      # ids <- unique(dt_conver_Wthres_Comb$ids)
+      # sample_sub_DatNew <- sample_sub_Dat[ids,]
+      #
+      # st_collate <- rbind(st_collate, sample_sub_DatNew)
 
+      # dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
+      # ids <- unique(dt_conver_Wthres_Comb$ids)
+      # sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
 
-      }
-
-      st_collate <- st_collate %>%
-        dplyr::filter(!duplicated(locID_sub))
-
-
-
-      #plot(sample_sub_DatNew$x, sample_sub_DatNew$y)
-
-      #when agent got stocked and delta ds = 0
-      # if(length(ids) == 0){
-      #   stop(cat("Interaction between ds and dt may not be possible! Try smaller ds (or dt) value!"))
-      # }
       #-----------------------------------------------------------
-
-      #for looping by origin
-      #------------------------------------------...#
       if(length(ids) != 0){
-        event_Collate <- rbind(event_Collate,  st_collate)
+        event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
       }
       #----------------event_Collate--------------------------...#
 
+      ##st_collate <- rbind(st_collate, sample_sub_DatNew)
 
-      # #for looping by day
-      # if(init_n == 0){
-      #   event_Collate <- sample_sub_DatNew
-      # }
-      #
-      # if(init_n != 0){
-      #
-      #   filtered_evnt <- sample_sub_DatNew[which(!sample_sub_DatNew$ptid %in% event_Collate$ptid),]
-      #
-      #   event_Collate <- rbind(event_Collate, filtered_evnt)
-      # }
-      #
-      # init_n <- nrow(event_Collate)
-      #
-      # flush.console()
-      # #print(or)
-      # print(init_n)
+
+      flush.console()
+      print(st)
+      print(nrow(event_Collate))
+
+      ##}
+    ##}
+
+      event_Collate <- event_Collate %>%
+        dplyr::filter(!duplicated(locID_sub))
+
 
       init_n <- nrow(event_Collate)
 
@@ -567,20 +633,52 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     }
 
+}
 
-    #------------------------------------------.......#
+    if(st_signature_filtered[[st]]=="NA"){
+
+      for(or in seq_len(length(ori_sn))){ #or=1
+        ##while(init_n <= n_events * 2) {
+
+        sub_Dat <- filtered_stp_All %>%
+          ##tibble::rownames_to_column("ptid")
+          dplyr::filter(locid == ori_sn[or])
+
+        ##if(nrow(sub_Dat) < 5000){
+        sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                         round(nrow(sub_Dat)*0.5, digits = 0),
+                                         replace = FALSE),]
+
+        #marking this sample #just added
+        sample_sub_Dat <- sample_sub_Dat %>%
+          rownames_to_column('locID_sub') #
+
+        event_Collate <- rbind(event_Collate, sample_sub_Dat)
+
+        flush.console()
+        print(or)
+
+      }
+
+}
+     #------------------------------------------.......#
     stp_All_bk <- event_Collate
     #------------------------------------------.......#
-  }
 
-    ##THIS IS USING ORIGIN
-  #no spatial temporal sign detected
-  if(length(st_signature_filtered) == 0){
+    #}
 
-    #..try and reduce the size of 'filtered_stp_All' first
-    stp_All_bk <- filtered_stp_All
-
-  }
+    ##write.table(stp_All_bk, file=paste("output_planar_0.6",
+    ##s_interaction, sep="-"), sep=",", row.names=F)
+  #}
+ ### }
+  #   ##THIS IS USING ORIGIN
+  # #no spatial temporal sign detected
+  # if(length(st_signature_filtered) == 0){
+  #
+  #   #..try and reduce the size of 'filtered_stp_All' first
+  #   stp_All_bk <- filtered_stp_All
+  #
+  # }
 
   for(h in seq_len(length(n_events))){ #h<-1
 
@@ -612,10 +710,11 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
     output[h] <- list(subsetFn)
 
+
     ##saveRDS(output[[1]],
             ##file="real_simulated_for_Detroid_100.rds")
     saveRDS(output[[1]],
-      file="real_simulated_for_Detroid_70_planar_2fn.rds")
+      file="real_simulated_for_Detroid_50_planar_4fn.rds")
 
 
   }
@@ -650,13 +749,15 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
 
   saveRDS(output[[1]],
-          file="real_simulated_for_Detroid_70_network_2fn.rds")
+          file="real_simulated_for_Detroid_50_network_3fn.rds")
   #combine and add as details
   #-------------------------------------------
   #add the origins
   output$origins <- st_properties$origins
   output$poly <- st_properties$poly
   output$resist <- restriction_feat
+  output$st_interaction_detected <- t_list
+  output$st_interaction_simulated <- t_list[st]
 
   #insert network path
   if(!is.null(netw)){
