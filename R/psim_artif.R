@@ -1,4 +1,4 @@
- #' @include gtp.R
+#' @include gtp.R
 #' @include walker.R
 #' @title Stpp from synthetic origins
 #' @description Generates spatiotemporal
@@ -182,7 +182,7 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
   nrowh <- origins <- locid <- sn <- prob <- z <-
     datetime <- distVal <- ids<- filterField1 <-
     filterField2 <- ID <- ID2 <- distVal1 <-
-    distVal2 <- rname <- cname <- NULL
+    distVal2 <- rname <- cname <- st <- locID_sub <- NULL
 
   #first derive the spo object
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
