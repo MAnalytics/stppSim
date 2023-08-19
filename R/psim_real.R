@@ -748,8 +748,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     }
   }
 
-  saveRDS(output[[1]],
-          file="real_simulated_for_Detroid_50_network_3fn.rds")
+  ##saveRDS(output[[1]],
+          ##file="real_simulated_for_Detroid_50_network_3fn.rds")
   #combine and add as details
   #-------------------------------------------
   #add the origins
