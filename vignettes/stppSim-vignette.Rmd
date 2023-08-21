@@ -294,9 +294,37 @@ knitr::include_graphics("onemonth.png")
 
 * **Simulating spatiotemporal interactions**
 
-The simulation of point patterns with distinct spatiotemporal interactions can be achieved using two parameters: the spatial bandwidth (`s_band`) and the temporal bandwidth (`t_band`). When we speak of spatiotemporal interaction, we're referring to the likelihood that events within these specified bandwidths occur more frequently than what would be expected in a completely random scenario. In simulated datasets, it's feasible to observe interactions across several spatiotemporal bandwidths.
+The simulation of point patterns with distinct spatiotemporal interactions can be achieved using two parameters: the spatial bandwidth (`s_band`) and the temporal bandwidth (`t_band`). When we speak of spatiotemporal interaction, we're referring to the likelihood that events within these specified bandwidths occur more frequently than what would be expected in a completely random scenario. In simulated datasets, it's feasible to observe interactions across several spatiotemporal bandwidths. For example, 
 
-assigned values, allows synthetic data with ...  with can be utilized to ..
+```{r eval=FALSE, echo = TRUE, message=FALSE, warning=FALSE}
+
+#load the data
+load(file = system.file("extdata", "camden.rda",
+                        package="stppSim"))
+
+boundary <- camden$boundary # get boundary data
+
+#specifying data sizes
+pt_sizes = c(1500)
+
+#simulate data
+artif_stpp <- psim_artif(n_events=pt_sizes, start_date = NULL,
+  poly=boundary, n_origin=50, resistance_feat = NULL,
+  field = NA,
+  n_foci=5, foci_separation = 10, mfocal = NULL,
+  conc_type = "dispersed",
+  p_ratio = 20, s_threshold = 50, step_length = 20,
+  trend = "stable", fpeak=NULL,
+  shortTerm = "acyclical"
+  s_band = c(0, 200),
+  t_band = c(1,2),
+  slope = NULL,show.plot=FALSE, show.data=FALSE)
+
+```
+
+
+In the above code, .....  s_band = c(0, 200),
+  t_band = c(1,2),
 
 
 ## ***Simulating `stpp` from sample real dataset***
@@ -417,8 +445,34 @@ summary(sim_fullData[[1]])
 
 * **Spatiotemporal interactions**
 
-Within the primary simulation function, `psim_real`, the `st_learner` function is employed to detect spatial and temporal bandwidths where the frequency of point events exceeds what would typically arise from mere chance, in a sample dataset (i.e., spatiotemporal interaction). If interaction bandwidths are detected, the main simulation function, psim_real, automatically incorporates them to generate point patterns that mirror the characteristics of the actual datasets.
+Within the primary simulation function, `psim_real`, the `st_learner` function is employed to detect spatial and temporal bandwidths where the frequency of point events exceeds what would typically arise from mere chance, in a sample dataset (i.e., spatiotemporal interaction). If interaction bandwidths are detected, the main simulation function, `psim_real`, automatically incorporates them to generate point patterns that mirror the characteristics of the actual datasets.
 
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+#get the restriction data
+landuse <- as_Spatial(landuse)
+
+simulated_stpp_ <- psim_real(
+  n_events=2000,
+  ppt=dat_sample,
+  start_date = NULL,
+  poly = NULL,
+  netw = NULL,
+  s_threshold = NULL,
+  step_length = 20,
+  n_origin=100,
+  restriction_feat = landuse,
+  field="restrVal",
+  p_ratio=20,
+  interactive = FALSE,
+  s_range = 600,
+  s_interaction = "medium",
+  crsys = "EPSG:27700"
+)
+
+```
+
+In the above code, .....
 
 ### ***Comparing simulated data and (`full`) real data***
 
