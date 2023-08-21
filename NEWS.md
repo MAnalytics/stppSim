@@ -7,7 +7,7 @@
 5. fun to snap points to network
 6. adding argument spatial_interaction
 7. tolerance
-8. s_range.
+8. s_range. and s_interaction
 
 
 # stppSim 1.2.7
