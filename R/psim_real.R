@@ -59,7 +59,11 @@
 #' the intervals of spatial interactions are created as
 #' \code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
 #' representing the "small", "medium", and "large",
-#' spatial interaction ranges, respectively.
+#' spatial interaction ranges, respectively. If
+#' `s_range` is set as `"NULL"`, simulation
+#' focusses only on generating point pattern with
+#' similar spatiotemporal patterns as the sample
+#' dataset.
 #' @param s_interaction (string) indicating the
 #' type of spatial interaction to detect.
 #' Default: \code{"medium"} (See parameter \code{'s_range'})
@@ -170,7 +174,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #check s_interaction
   if(!s_interaction %in% c("small",
                           "medium",
-                          "large")){
+                          "large") & s_range != "NULL"){
     stop("Argument 's_interaction' is invalid!!")
   }
 
@@ -356,8 +360,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_100.rds")
   #saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_100.rds")
-  saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_50_5fn_single.rds")
-  saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_50_5fn_single.rds")
+  ##saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_50_5fn_single.rds")
+  ##saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_50_5fn_single.rds")
 
 
   #---------------------------
