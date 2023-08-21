@@ -26,7 +26,11 @@
 #' the intervals of spatial interactions are created as
 #' \code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
 #' representing the "small", "medium", and "large",
-#' spatial interaction ranges, respectively.
+#' spatial interaction ranges, respectively. If
+#' `s_range` is set as `"NULL"`, simulation
+#' focusses only on generating point pattern with
+#' similar spatiotemporal patterns as the sample
+#' dataset.
 #' @param tolerance Pvalue to use for the extraction of
 #' space-time interaction in the sample data. Default
 #' value: \code{0.07}.
