@@ -60,7 +60,7 @@
 #' \code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
 #' representing the "small", "medium", and "large",
 #' spatial interaction ranges, respectively. If
-#' `s_range` is set as `"NULL"`, simulation
+#' `s_range` is set as `NULL`, simulation
 #' focusses only on generating point pattern with
 #' similar spatiotemporal patterns as the sample
 #' dataset.
@@ -174,7 +174,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #check s_interaction
   if(!s_interaction %in% c("small",
                           "medium",
-                          "large") & s_range != "NULL"){
+                          "large") & !is.null(s_range)){
     stop("Argument 's_interaction' is invalid!!")
   }
 
@@ -435,14 +435,19 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #---------------------------
 
   #-------------------------------
-  if(s_interaction == "small"){
-    st <- 1
-  }
-  if(s_interaction == "medium"){
-    st <- 2
-  }
-  if(s_interaction == "large"){
-    st <- 3
+
+  if(!is.null(st_properties$st_sign)){
+
+    if(s_interaction == "small"){
+      st <- 1
+    }
+    if(s_interaction == "medium"){
+      st <- 2
+    }
+    if(s_interaction == "large"){
+      st <- 3
+    }
+
   }
 
   #-----------------------------------------------
@@ -453,6 +458,16 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   t_list <- st_properties$st_sign
   #t_list <- as.data.frame(do.call(rbind, t_list))[, 2:3]
 
+  event_Collate <- NULL
+
+  fN_final_dt_convert <- NULL
+
+  #loop by origin
+  ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+
+  #if st_sign is not detected or set as null
+
+  if(!is.null(st_properties$st_sign)){
 
   st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
 
@@ -470,12 +485,12 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   ##for(st in 1:3){ #st<-1 3 "small" "medium" and "large"
   #--------------
-  event_Collate <- NULL
-
-    fN_final_dt_convert <- NULL
-
-    #loop by origin
-    ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+  # event_Collate <- NULL
+  #
+  #   fN_final_dt_convert <- NULL
+  #
+  #   #loop by origin
+  #   ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
 
     init_n <- 0
 
@@ -635,11 +650,13 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       print(or)
       print(init_n)
 
+      }
+
     }
 
-}
+  }
 
-    if(st_signature_filtered[[st]]=="NA"){
+    if("NA" %in% st_signature_filtered[[st]] | is.null(st_properties$st_sign)){
 
       for(or in seq_len(length(ori_sn))){ #or=1
         ##while(init_n <= n_events * 2) {

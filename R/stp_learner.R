@@ -27,7 +27,7 @@
 #' \code{(0, 50]}, \code{(50 - 100]}, and \code{(100-150]},
 #' representing the "small", "medium", and "large",
 #' spatial interaction ranges, respectively. If
-#' `s_range` is set as `"NULL"`, simulation
+#' `s_range` is set as `NULL`, simulation
 #' focusses only on generating point pattern with
 #' similar spatiotemporal patterns as the sample
 #' dataset.
@@ -107,8 +107,10 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
   origins <- list()
 
   #check spatial range
+  if(!is.null(s_range)){
   if(s_range < 150){
     stop("Spatial range ('s_range') cannot be less than 150.")
+  }
   }
 
 
@@ -411,6 +413,9 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     #---------------------------------------------------------
     #detect space-time signature
     #spatial threshold
+
+    if(!is.null(s_range)){
+
     s_list <- seq(0, s_range, len=4)
 
     #temporal thresholds
@@ -453,20 +458,22 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
       c_005
     st_band <- c_005
 
+    #}
+
     if(length(st_band) != 0){
       st_band <- st_band
     }
 
-    collapsing <- unlist(st_band)
+    ##collapsing <- unlist(st_band)
     if(length(st_band) == 0){
       st_band <- NULL
     }
-    # idx <- which.max(c_005)[1]
-    #
-    # s_bd <- c(s_list[idx], s_list[idx+1])
-    # t_bd <- t_list[which(t_all[idx,] <= 0.05)]
-    # s_bd
-    # t_bd
+
+    }
+
+    if(is.null(s_range)){
+      st_band <- NULL
+    }
     #---------------------------------------------------------
 
     output$origins <- spo

@@ -473,6 +473,7 @@ simulated_stpp_ <- psim_real(
 ```
 
 In the above code, .....
+revert to simulating spatiotemporal patterns only.
 
 ### ***Comparing simulated data and (`full`) real data***
 
