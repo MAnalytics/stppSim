@@ -36,11 +36,13 @@
 #' @export
 #'
 
-snap_points_to_lines <- function(points, lines,
+snap_points_to_lines <- function(points = dataToPlot, lines = netw_Plot,
                                  verbose = FALSE){
 
   all_points = TRUE
   dist = 300
+
+  lines$idunique <- 1:nrow(lines)
 
   buffer_lines <- function(lines, dist = 300, verbose = FALSE) {
     if (verbose) message("Creating buffer for lines...")
@@ -51,7 +53,8 @@ snap_points_to_lines <- function(points, lines,
                                         verbose = FALSE) {
     buff <- buffer_lines(lines, dist = dist, verbose = verbose)
     if (verbose) message("Finding which points are in buffer...")
-    st_intersects(points, buff, sparse = FALSE)
+    st_intersects(points, buff, sparse = FALSE) #%>%
+      #lapply(., function(n){lines$idunique[n]})
   }
 
 
