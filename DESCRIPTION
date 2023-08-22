@@ -52,7 +52,6 @@ Imports:
   cowplot,
   gstat,
   otuSummary,
-  progress,
   progressr,
   future.apply
 RoxygenNote: 7.2.3
