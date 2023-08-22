@@ -445,7 +445,7 @@ summary(sim_fullData[[1]])
 
 * **Spatiotemporal interactions**
 
-Within the primary simulation function, `psim_real`, the `st_learner` function is employed to detect spatial and temporal bandwidths where the frequency of point events exceeds what would typically arise from mere chance, in a sample dataset (i.e., spatiotemporal interaction). If interaction bandwidths are detected, the main simulation function, `psim_real`, automatically incorporates them to generate point patterns that mirror the characteristics of the actual datasets.
+Within the primary simulation function, `psim_real`, the `st_learner` function is employed to detect spatial and temporal bandwidths where the closeness (in space and time) of point events exceeds what would typically arise from mere chance, in a sample dataset (i.e., spatiotemporal interaction). If interaction bandwidths are detected, the main simulation function, `psim_real`, automatically incorporates them to generate point patterns that mirror the characteristics of the actual datasets.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -472,8 +472,48 @@ simulated_stpp_ <- psim_real(
 
 ```
 
-In the above code, .....
-revert to simulating spatiotemporal patterns only.
+In the above code, the `s_range` parameter is used to set the spatial range. The default temporal bandwidth is 30 days with a daily incremental range. if `s_range` parameter is set as `NULL`, the function ignores the detection of space-time interaction and simply focuses on simulating the spatial and temporal patterns only. The NearRepeat calculator [see here](https://github.com/wsteenbeek/NearRepeat) can be utilized to examine the spatiotemporal interaction in any dataset as follows:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+
+#extract the output of a simulation
+stpp <- simulated_stpp_[[1]]
+
+stpp <- stpp %>%
+  dplyr::mutate(date = substr(datetime, 1, 10))%>%
+  dplyr::mutate(date = as.Date(date))
+
+#define spatial and temporal thresholds 
+s_range <- 600
+s_thres <- seq(0, s_range, len=4)
+
+t_thres <- 1:31
+
+myoutput2 <- NearRepeat(x = stpp$x, y = stpp$y, time = stpp$date,
+                        sds = s_thres,
+                        tds = t_thres,
+                        s_include.lowest = FALSE, s_right = FALSE, 
+                        t_include.lowest = FALSE, t_right = FALSE)
+
+#extract the knox ratio
+knox_ratio <- round(myoutput2$knox_ratio, digits = 2)
+
+#extract the corresponding significance values
+pvalues <- myoutput2$pvalues
+
+#append asterisks to significant results
+for(i in 1:nrow(pvalues)){ #i<-1
+    id <- which(pvalues[i,] <= 0.05)
+    knox_ratio[i,id] <- paste0(knox_ratio[i,id], "*")
+
+}
+
+#output the results
+knox_ratio
+
+```
+
+
 
 ### ***Comparing simulated data and (`full`) real data***
 
