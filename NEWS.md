@@ -2,14 +2,15 @@
 
 ## Bug Fixing:
 
-- Resolved the issue of dependencies on retiring package, rgdal: 'https://github.com/MAnalytics/stppSim/issues/2'
+- Resolved the issue of dependencies on retiring package (`rgdal`): 'https://github.com/MAnalytics/stppSim/issues/2'
 
 ## New changes:
-- Added two parameters `s_band` and  `t_band` to `psim_artif` function
-- Created new function `snap_points_to_line` and integrated the function into `psim_artif` and `psim_real` functions.
-- Added two new arguments `s_range` to set maximum spatial range, and `s_interaction` to specify type of point interation in simulation
-- Added `tolerance` argument to set pvalue threshold for point interactions 
-8. s_range. and s_interaction
+
+- Introduced two new parameters, `s_band` and `t_band`, to the `psim_artif` function.
+- Developed a new function named snap_points_to_line, which has been incorporated into both psim_artif and psim_real functions.
+- Incorporated a new argument, s_range, to `psim_real` function to establish the maximum spatial range.
+- Introduced the `s_interaction` argument to `psim_real` function to determine the spatial properties of point interactions.
+- Added the `tolerance` parameter, allowing users to set a p-value threshold for the detection of point interaction .
 
 
 # stppSim 1.2.7
