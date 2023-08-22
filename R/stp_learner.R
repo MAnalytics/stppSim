@@ -89,7 +89,6 @@
 #' @importFrom sparr OS
 #' @importFrom tibble rownames_to_column
 #' @importFrom ks hpi
-#' @importFrom NearRepeat NearRepeat
 #' @export
 #'
 stp_learner <- function(ppt, start_date = NULL, poly = NULL,
@@ -98,7 +97,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
                         crsys = NULL,
                         show.plot = FALSE){
 
-  prob <- NearRepeat <- NULL
+  prob <- NRepeat <- NULL
 
   output <- list()
 
