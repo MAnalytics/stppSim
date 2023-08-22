@@ -36,7 +36,7 @@
 #' @export
 #'
 
-snap_points_to_lines <- function(points = dataToPlot, lines = netw_Plot,
+snap_points_to_lines <- function(points, lines,
                                  verbose = FALSE){
 
   all_points = TRUE
