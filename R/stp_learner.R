@@ -436,7 +436,6 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
 
     myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
                               sds = s_list,
-                              #tds = c(t_list[t]-1, t_list[t]),
                               tds = 1:30,
                               #tds = seq(1, 30, 2),
                               s_include.lowest = FALSE, s_right = FALSE, # include leftmost and include right most
