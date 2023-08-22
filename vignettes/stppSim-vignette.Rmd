@@ -472,7 +472,8 @@ simulated_stpp_ <- psim_real(
 
 ```
 
-In the above code, the `s_range` parameter is used to set the spatial range. The default temporal bandwidth is 30 days with a daily incremental range. if `s_range` parameter is set as `NULL`, the function ignores the detection of space-time interaction and simply focuses on simulating the spatial and temporal patterns only. The NearRepeat calculator [see here](https://github.com/wsteenbeek/NearRepeat) can be utilized to examine the spatiotemporal interaction in any dataset as follows:
+In the above code snippet, the `s_range` parameter is used to set the spatial range. The default temporal bandwidth is 30 days with a daily incremental range. 
+If the `s_range` parameter is assigned a value of NULL, the function bypasses the detection of space-time interactions and concentrates solely on modeling the spatial and temporal patterns. To assess the spatiotemporal interaction within any dataset, the NearRepeat calculator, which can be found [here](https://github.com/wsteenbeek/NearRepeat), may be employed.
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 
@@ -489,6 +490,7 @@ s_thres <- seq(0, s_range, len=4)
 
 t_thres <- 1:31
 
+#detect space-time interactions
 myoutput2 <- NearRepeat(x = stpp$x, y = stpp$y, time = stpp$date,
                         sds = s_thres,
                         tds = t_thres,
