@@ -52,8 +52,8 @@ Imports:
   cowplot,
   gstat,
   otuSummary,
-  NearRepeat,
-  progress
+  progressr,
+  future.apply
 RoxygenNote: 7.2.3
 Suggests:
   knitr,
@@ -63,6 +63,7 @@ Suggests:
   utils
 VignetteBuilder: knitr
 Collate: 
+    'NRepeat.R'
     'artif_spo.R'
     'chull_poly.R'
     'compare_areas.R'
