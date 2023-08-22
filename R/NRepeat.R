@@ -107,7 +107,8 @@ NULL
 #' @references
 #' Steenbeek W. Near Repeat. R package version 0.1.1. 2018.
 #' URL: https://github.com/wsteenbeek/NearRepeat
-#' @importFrom progressr
+#' @importFrom progressr handlers with_progress
+#' progressor
 #' @importFrom future.apply future_apply
 #' @export
 NRepeat <- function(x, y, time,
