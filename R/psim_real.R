@@ -174,8 +174,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   #check s_interaction
   if(!s_interaction %in% c("small",
-                          "medium",
-                          "large") & !is.null(s_range)){
+                           "medium",
+                           "large") & !is.null(s_range)){
     stop("Argument 's_interaction' is invalid!!")
   }
 
@@ -204,7 +204,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   }
 
-   #testing if crs' are the same
+  #testing if crs' are the same
   if(!is.null(netw)){
     crs_poly <- sf::st_crs(poly)$epsg
     crs_netw <- sf::st_crs(netw)$epsg
@@ -224,7 +224,7 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   #subset xy columns
   spo_xy <- st_properties$origins %>%
     dplyr::select(x, y)#%>%
-    #top_n(3)
+  #top_n(3)
 
   #t1 <- Sys.time()
   if(interactive == TRUE){
@@ -301,68 +301,62 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   stp_All <- NULL
 
   if(is.null(s_threshold)){
-  for(b in seq_len(nrow(spo_xy))){ #b<-1
-    event_loc_N <- lapply(n, function(n)
-      stppSim::walker(n, s_threshold = st_properties$s_threshold,
-                      poly=poly, restriction_feat = restriction_feat,
-                      field = field,
-                      coords=as.vector(unlist(spo_xy[b,],)),
-                      step_length = step_length ,
-                      show.plot = FALSE)
-    )
+    for(b in seq_len(nrow(spo_xy))){ #b<-1
+      event_loc_N <- lapply(n, function(n)
+        stppSim::walker(n, s_threshold = st_properties$s_threshold,
+                        poly=poly, restriction_feat = restriction_feat,
+                        field = field,
+                        coords=as.vector(unlist(spo_xy[b,],)),
+                        step_length = step_length ,
+                        show.plot = FALSE)
+      )
 
-    loc_N <- rbindlist(event_loc_N,
-                       use.names=TRUE, fill=TRUE, idcol="tid")
+      loc_N <- rbindlist(event_loc_N,
+                         use.names=TRUE, fill=TRUE, idcol="tid")
 
-    loc_N <- loc_N %>%
-      mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
-      mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
-                         "%Y-%m-%d %H:%M:%S"))%>%
-      dplyr::rename(datetime=time)
+      loc_N <- loc_N %>%
+        mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
+        mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
+                           "%Y-%m-%d %H:%M:%S"))%>%
+        dplyr::rename(datetime=time)
 
-    stp_All <- stp_All %>%
-      bind_rows(loc_N)
-  }
+      stp_All <- stp_All %>%
+        bind_rows(loc_N)
+    }
   }
 
   #
   #saveRDS(stp_All, file = "realsave_70_origins.rds")
 
   if(!is.null(s_threshold)){
-  for(b in seq_len(nrow(spo_xy))){ #b<-1
-    event_loc_N <- lapply(n, function(n)
-      stppSim::walker(n, s_threshold = s_threshold,
-                      poly=poly, restriction_feat = restriction_feat,
-                      field = field,
-                      coords=as.vector(unlist(spo_xy[b,],)),
-                      step_length = step_length ,
-                      show.plot = FALSE)
-    )
+    for(b in seq_len(nrow(spo_xy))){ #b<-1
+      event_loc_N <- lapply(n, function(n)
+        stppSim::walker(n, s_threshold = s_threshold,
+                        poly=poly, restriction_feat = restriction_feat,
+                        field = field,
+                        coords=as.vector(unlist(spo_xy[b,],)),
+                        step_length = step_length ,
+                        show.plot = FALSE)
+      )
 
-    loc_N <- rbindlist(event_loc_N,
-                       use.names=TRUE, fill=TRUE, idcol="tid")
+      loc_N <- rbindlist(event_loc_N,
+                         use.names=TRUE, fill=TRUE, idcol="tid")
 
-    loc_N <- loc_N %>%
-      mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
-      mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
-                         "%Y-%m-%d %H:%M:%S"))%>%
-      dplyr::rename(datetime=time)
+      loc_N <- loc_N %>%
+        mutate(locid=b, prob=st_properties$origins$prob[b]) %>%
+        mutate(time=format(((tid-1) + as.Date(st_properties$start_date) + hms(time)),
+                           "%Y-%m-%d %H:%M:%S"))%>%
+        dplyr::rename(datetime=time)
 
-    stp_All <- stp_All %>%
-      bind_rows(loc_N)
-    #
-    # saveRDS(stp_All,
-    # file="stppSimbackupReal_040.rds")
+      stp_All <- stp_All %>%
+        bind_rows(loc_N)
+      #
+      # saveRDS(stp_All,
+      # file="stppSimbackupReal_040.rds")
+
+    }
 
   }
-
-  }
-
-
-  #saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_100.rds")
-  #saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_100.rds")
-  ##saveRDS(stp_All, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/stppSimbackupReal_50_5fn_single.rds")
-  ##saveRDS(st_properties, file="C:/Users/55131065/Documents/GitHub/stppSim_backup/st_properties_50_5fn_single.rds")
 
 
   #---------------------------
@@ -376,18 +370,11 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   div_25 <- datxy[!1:nrow(datxy)%in%s_id,]
 
   datxy_plot <- div_75 %>%
-    #datxy_plot <- stp_All_sub %>%
     dplyr::mutate(t = as.Date(substr(datetime, 1,10)))%>%
     dplyr::group_by(t) %>%
     summarise(n = dplyr::n()) %>%
     mutate(time = as.numeric(difftime(t, as.Date(st_properties$start_date)-1, units="days")))%>%
-    ##mutate(time = as.numeric(difftime(as.Date(st_properties$start_date + 364),
-                                      ##t,
-                                      ##units="days")))%>%
     as.data.frame()
-
-
-  ##datxy_plot$time <- abs(datxy_plot$time)
 
   time <- data.frame(time=1:365)
 
@@ -433,9 +420,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     filtered_stp_All <- rbind(filtered_stp_All, todaysData)
 
   }
-  #---------------------------
-
-  #-------------------------------
 
   if(!is.null(st_properties$st_sign)){
 
@@ -470,186 +454,114 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   if(!is.null(st_properties$st_sign)){
 
-  st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
+    st_signature_filtered <- Filter(Negate(is.null), st_properties$st_sign)
 
-  #prepare the st signature table
-  signTable <- NULL
-
-  #spatial temporal sign detected
-  #if(length(st_signature_filtered) >= 1){
-
-  #to print for the three intervals..
-  #
-  #s_interaction = "medium"
-
-  ##if(length(st_signature_filtered) != 0){
-
-  ##for(st in 1:3){ #st<-1 3 "small" "medium" and "large"
-  #--------------
-  # event_Collate <- NULL
-  #
-  #   fN_final_dt_convert <- NULL
-  #
-  #   #loop by origin
-  #   ori_sn <- unique(filtered_stp_All$locid)[order(unique(filtered_stp_All$locid))]
+    #prepare the st signature table
+    signTable <- NULL
 
     init_n <- 0
 
-  if(length(st_signature_filtered[[st]])>=1 &
+    if(length(st_signature_filtered[[st]])>=1 &
        !"NA" %in% st_signature_filtered[[st]]){
 
-  #st_collate <- NULL
+      #st_collate <- NULL
 
-  for(or in seq_len(length(ori_sn))){ #or=1
-    ##while(init_n <= n_events * 2) {
+      for(or in seq_len(length(ori_sn))){ #or=1
 
-    sub_Dat <- filtered_stp_All %>%
-        rownames_to_column('locID_sub') %>%
-        ##tibble::rownames_to_column("ptid")
-        dplyr::filter(locid == ori_sn[or])
+        sub_Dat <- filtered_stp_All %>%
+          rownames_to_column('locID_sub') %>%
+          dplyr::filter(locid == ori_sn[or])
 
-      ##if(nrow(sub_Dat) < 5000){
-    sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-                                       round(nrow(sub_Dat)*0.5, digits = 0),
-                                       replace = FALSE),]
+        sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                         round(nrow(sub_Dat)*0.5, digits = 0),
+                                         replace = FALSE),]
 
-      #marking this sample #just added
-      ##sample_sub_Dat <- sample_sub_Dat %>%
-        ##rownames_to_column('locID_sub') #
+        tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
+        dt = dist(tme)
 
-      tme <-as.numeric(as.Date(sample_sub_Dat$datetime))#[1:10]
-      dt = dist(tme)
+        #for a specified time threshold
+        dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
 
-      #for a specified time threshold
-      dt_convert <- matrixConvert(dt, colname = c("cname", "rname", "distVal"))
-      #nrow(dt_convert)
+        #get t threshold
+        t_st <- st_signature_filtered[[st]]
+        t_st <- st_properties$t_bands[t_st]
+        #t_st <- as.vector(unlist(t_list[t_st, ]))
 
-      #maximize the occurence of t threshold
-      #loop through all the spatial threshold
+        #collapse the temporal
+        t_st_List <- NULL
+        for(q in 1:length(t_st)){#q<-1
+          tsm <- substring(t_st[q], 2, str_length(t_st[q]))
+          tsm <- substring(tsm, 1, str_length(tsm)-1)
+          tsm <- as.numeric(strsplit(tsm, split= ',', fixed=TRUE)[[1]])
+          t_st_List <- c(t_st_List, tsm[1]:(tsm[2]-1))
+        }
 
-      ##for(st in seq_len(length(st_signature_filtered))){ #st<-1
+        #maximize the occurence of t threshold
+        dt_conver_Wthres <- dt_convert %>%
+          tibble()%>%
+          dplyr::filter(distVal %in%  t_st_List) %>% #[1]
+          dplyr::rename(distVal1 = distVal)
 
-      #get t threshold
-      t_st <- st_signature_filtered[[st]]
-      t_st <- st_properties$t_bands[t_st]
-      #t_st <- as.vector(unlist(t_list[t_st, ]))
+        #apply distance threshold
+        xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
 
-      #collapse the temporal
-      t_st_List <- NULL
-      for(q in 1:length(t_st)){#q<-1
-        tsm <- substring(t_st[q], 2, str_length(t_st[q]))
-        tsm <- substring(tsm, 1, str_length(tsm)-1)
-        tsm <- as.numeric(strsplit(tsm, split= ',', fixed=TRUE)[[1]])
-        t_st_List <- c(t_st_List, tsm[1]:(tsm[2]-1))
-      }
+        ds <- dist(xy)
 
+        ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
 
-      #maximize the occurence of t threshold
-      dt_conver_Wthres <- dt_convert %>%
-        tibble()%>%
-        dplyr::filter(distVal %in%  t_st_List) %>% #[1]
-        dplyr::rename(distVal1 = distVal)
+        #get names
+        nm <- names(st_signature_filtered)[st]
+        nm <- substring(nm, 2, str_length(nm))
+        nm <- substring(nm, 1, str_length(nm)-1)
+        nm <- as.numeric(strsplit(nm, split= ',', fixed=TRUE)[[1]])
 
-      #apply distance threshold
-      xy <- data.frame(x=sample_sub_Dat$x, y=sample_sub_Dat$y)#[1:10,]
+        #maximize the occurence of s threshold
+        ds_convert2 <- ds_convert %>%
+          dplyr::rename(distVal2 = distVal) %>%
+          dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
+          dplyr::filter(distVal2 %in% c(nm[1]:nm[2]))
 
-      ds <- dist(xy)
+        f_count <- ds_convert2 %>%
+          dplyr::left_join(dt_conver_Wthres) %>%
+          dplyr::filter(!is.na(distVal1))
 
-      ds_convert <- matrixConvert(ds, colname = c("cname", "rname", "distVal"))
+        f_count_col <- f_count %>%
+          dplyr::group_by(cname)%>%
+          dplyr::count()%>%
+          dplyr::arrange(desc(n))%>%
+          data.frame()%>%
+          dplyr::top_frac(0.05)
 
-      #get names
-      nm <- names(st_signature_filtered)[st]
-      nm <- substring(nm, 2, str_length(nm))
-      nm <- substring(nm, 1, str_length(nm)-1)
-      nm <- as.numeric(strsplit(nm, split= ',', fixed=TRUE)[[1]])
-
-      #maximize the occurence of s threshold
-      ds_convert2 <- ds_convert %>%
-        dplyr::rename(distVal2 = distVal) %>%
-        dplyr::mutate(distVal2 = round(distVal2, digits = 0)) %>%
-        dplyr::filter(distVal2 %in% c(nm[1]:nm[2]))
-
-      # f_count <- ds_convert2 %>%
-      #   dplyr::left_join(dt_conver_Wthres) %>%
-      #   dplyr::filter(!is.na(distVal1)) %>%
-      #   ##dplyr::arrange(rname, distVal2) %>%
-      #   dplyr::mutate(rname = as.character(rname), cname = as.character(cname))%>%
-      #   dplyr::group_by(cname) %>%
-      #   dplyr::count()%>%
-      #   dplyr::arrange(desc(n))
+        f_count_row <- f_count %>%
+          dplyr::group_by(rname)%>%
+          dplyr::count()%>%
+          dplyr::arrange(desc(n))%>%
+          data.frame()%>%
+          dplyr::top_frac(0.05)
 
 
-      f_count <- ds_convert2 %>%
-        dplyr::left_join(dt_conver_Wthres) %>%
-        dplyr::filter(!is.na(distVal1))
+        dt_conver_Wthres_Comb <- data.frame(ids = c(f_count_row$rname, f_count_col$cname))
+        ids <- unique(dt_conver_Wthres_Comb$ids)
+        sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
 
-      f_count_col <- f_count %>%
-        dplyr::group_by(cname)%>%
-        dplyr::count()%>%
-        dplyr::arrange(desc(n))%>%
-        data.frame()%>%
-        dplyr::top_frac(0.05)
+        #-----------------------------------------------------------
+        if(length(ids) != 0){
+          event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
+        }
+        #----------------event_Collate--------------------------...#
 
-      f_count_row <- f_count %>%
-        dplyr::group_by(rname)%>%
-        dplyr::count()%>%
-        dplyr::arrange(desc(n))%>%
-        data.frame()%>%
-        dplyr::top_frac(0.05)
+        # flush.console()
+        # print(st)
+        # print(nrow(event_Collate))
 
+        event_Collate <- event_Collate %>%
+          dplyr::filter(!duplicated(locID_sub))
 
-      dt_conver_Wthres_Comb <- data.frame(ids = c(f_count_row$rname, f_count_col$cname))
-      ids <- unique(dt_conver_Wthres_Comb$ids)
-      sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
-      # ds_convert2_dsdt <- ds_convert2 %>%
-      #   dplyr::left_join(dt_conver_Wthres) %>%
-      #   dplyr::filter(!is.na(distVal1)) %>%
-      #   ##dplyr::arrange(rname, distVal2) %>%
-      #   dplyr::mutate(rname = as.character(rname))%>%
-      #   ##dplyr::group_by(rname) %>%
-      #   ##dplyr::count(rname)%>%
-      #   ###dplyr::left_join(f_count)%>%
-      #   dplyr::arrange(desc(n))%>%
-      #   dplyr::filter(!duplicated(cname))%>%
-      #   data.frame()%>%
-      #   dplyr::top_frac(0.05) #top 10
+        init_n <- nrow(event_Collate)
 
-
-      # dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
-      # ids <- unique(dt_conver_Wthres_Comb$ids)
-      # sample_sub_DatNew <- sample_sub_Dat[ids,]
-      #
-      # st_collate <- rbind(st_collate, sample_sub_DatNew)
-
-      # dt_conver_Wthres_Comb <- data.frame(ids = c(ds_convert2_dsdt$cname,  ds_convert2_dsdt$rname))
-      # ids <- unique(dt_conver_Wthres_Comb$ids)
-      # sample_sub_DatNew <- sample_sub_Dat[as.numeric(ids),]
-
-      #-----------------------------------------------------------
-      if(length(ids) != 0){
-        event_Collate <- rbind(event_Collate,  sample_sub_DatNew)
-      }
-      #----------------event_Collate--------------------------...#
-
-      ##st_collate <- rbind(st_collate, sample_sub_DatNew)
-
-
-      flush.console()
-      print(st)
-      print(nrow(event_Collate))
-
-      ##}
-    ##}
-
-      event_Collate <- event_Collate %>%
-        dplyr::filter(!duplicated(locID_sub))
-
-
-      init_n <- nrow(event_Collate)
-
-      flush.console()
-      print(or)
-      print(init_n)
+        flush.console()
+        print(or)
+        print(init_n)
 
       }
 
@@ -657,50 +569,32 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   }
 
-    if("NA" %in% st_signature_filtered[[st]] | is.null(st_properties$st_sign)){
+  if("NA" %in% st_signature_filtered[[st]] | is.null(st_properties$st_sign)){
 
-      for(or in seq_len(length(ori_sn))){ #or=1
-        ##while(init_n <= n_events * 2) {
+    for(or in seq_len(length(ori_sn))){ #or=1
 
-        sub_Dat <- filtered_stp_All %>%
-          ##tibble::rownames_to_column("ptid")
-          dplyr::filter(locid == ori_sn[or])
+      sub_Dat <- filtered_stp_All %>%
+        dplyr::filter(locid == ori_sn[or])
 
-        ##if(nrow(sub_Dat) < 5000){
-        sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
-                                         round(nrow(sub_Dat)*0.5, digits = 0),
-                                         replace = FALSE),]
+      sample_sub_Dat <- sub_Dat[sample(1:nrow(sub_Dat),
+                                       round(nrow(sub_Dat)*0.5, digits = 0),
+                                       replace = FALSE),]
 
-        #marking this sample #just added
-        sample_sub_Dat <- sample_sub_Dat %>%
-          rownames_to_column('locID_sub') #
+      #marking this sample #just added
+      sample_sub_Dat <- sample_sub_Dat %>%
+        rownames_to_column('locID_sub') #
 
-        event_Collate <- rbind(event_Collate, sample_sub_Dat)
+      event_Collate <- rbind(event_Collate, sample_sub_Dat)
 
-        flush.console()
-        print(or)
+      flush.console()
+      print(or)
 
-      }
+    }
 
-}
-     #------------------------------------------.......#
-    stp_All_bk <- event_Collate
-    #------------------------------------------.......#
-
-    #}
-
-    ##write.table(stp_All_bk, file=paste("output_planar_0.6",
-    ##s_interaction, sep="-"), sep=",", row.names=F)
-  #}
- ### }
-  #   ##THIS IS USING ORIGIN
-  # #no spatial temporal sign detected
-  # if(length(st_signature_filtered) == 0){
-  #
-  #   #..try and reduce the size of 'filtered_stp_All' first
-  #   stp_All_bk <- filtered_stp_All
-  #
-  # }
+  }
+  #------------------------------------------.......#
+  stp_All_bk <- event_Collate
+  #------------------------------------------.......#
 
   for(h in seq_len(length(n_events))){ #h<-1
 
@@ -712,38 +606,31 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     nrow(stp_All_)
     #----------------------------
     #apply repeat filtering
-      stp_All_subset <- stp_All_ %>%
-        ##dplyr::filter(locid == orList[or]) %>%
-        data.frame() %>%
-        #dplyr::select(datetime)%>%
-        dplyr::mutate(tme= paste0("D", as.character(as.numeric(as.Date(datetime))))) ##%>%
-        ##dplyr::left_join(fnDateList)
+    stp_All_subset <- stp_All_ %>%
+      data.frame() %>%
+      dplyr::mutate(tme= paste0("D", as.character(as.numeric(as.Date(datetime))))) ##%>%
 
-        #for sampling, define probability val and n
-        prb <- stp_All_subset$probVal
-        n <- round(nrow(stp_All_subset)/2, digits = 0) #select half of the data
+    #for sampling, define probability val and n
+    prb <- stp_All_subset$probVal
+    n <- round(nrow(stp_All_subset)/2, digits = 0) #select half of the data
 
-        samp_idx <- as.numeric(sample(stp_All_subset$ID, size = n_events[h],
-                                      replace = FALSE, prob = stp_All_subset$prob)) #%>
+    samp_idx <- as.numeric(sample(stp_All_subset$ID, size = n_events[h],
+                                  replace = FALSE, prob = stp_All_subset$prob)) #%>
 
 
-        subsetFn <- stp_All_[samp_idx, ]
+    subsetFn <- stp_All_[samp_idx, ]
 
 
     output[h] <- list(subsetFn)
 
 
-    ##saveRDS(output[[1]],
-            ##file="real_simulated_for_Detroid_100.rds")
-    saveRDS(output[[1]],
-      file="real_simulated_for_Detroid_50_planar_4fn.rds")
-
+    #saveRDS(output[[1]],
+    #file="real_simulated_for_Detroid_100.rds")
 
   }
 
 
   #snap function
-
   #if network path is provided
   if(!is.null(netw)){ #netw <- netw_
 
@@ -755,23 +642,16 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
       #convert point to geometry type
       output_pt <- data.frame(output[g]) %>%
         st_as_sf(coords = c("x", "y"), crs = crs_netw, remove =F)#%>%
-      #tibble::rownames_to_column("id")
 
-      #system.time(
-      ##exists("c")
       snappedData <- snap_points_to_lines(points=output_pt,
                                           lines=netw,
                                           verbose = FALSE)
-        #)
-      #plot(snappedData)
 
       output[[g]]$x <- st_coordinates(snappedData)[,1]
       output[[g]]$y <- st_coordinates(snappedData)[,2]
     }
   }
 
-  ##saveRDS(output[[1]],
-          ##file="real_simulated_for_Detroid_50_network_3fn.rds")
   #combine and add as details
   #-------------------------------------------
   #add the origins
@@ -787,9 +667,5 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
   }
 
   return(output)
-
-  #write.table(subsetFn, file="simulated_planar_100.csv", sep=",", row.names=F)
-  #write.table(output[[1]], file="simulated_network_100.csv", sep=",", row.names=F)
-  #write.table(ppt, file="sample_100.csv", sep=",", row.names=F)
 
 }
