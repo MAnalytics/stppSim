@@ -434,7 +434,7 @@ stp_learner <- function(ppt, start_date = NULL, poly = NULL,
     print("****Detecting spatiotemporal signatures:")
 
 
-    myoutput2 <- NearRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
+    myoutput2 <- NRepeat(x = ppt_proc$x, y = ppt_proc$y, time = ppt_proc$date,
                               sds = s_list,
                               tds = 1:30,
                               #tds = seq(1, 30, 2),
