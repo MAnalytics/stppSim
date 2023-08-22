@@ -15,7 +15,7 @@ urlcolor: blue
 linestretch: 1.5
 fontsize: 16pt
 bibliography: references.bib
-abstract: In light of the progressively limited access to comprehensive spatially and temporally logged point data, the stppSim package presents an alternate data solution that carries substantial promise across a spectrum of research and practical applications. This package equips users with the capability to specify the attributes of an assemblage of 'agents' (symbolic of entities like objects, individuals, etc.), whose activities within spatial (landscape) and temporal contexts yield fresh instances of point interactions within the surroundings. The resultant assemblage of points and patterns can subsequently be quantified, scrutinized, and processed to facilitate assessments and evaluations of spatial and/or temporal models.
+abstract: In light of the progressively limited access to comprehensive spatially and temporally logged point data, the stppSim package presents an alternate data solution that carries substantial promise across a spectrum of research and practical applications. This package equips users with the capability to specify the attributes of an assemblage of 'agents' (symbolic of entities like objects, individuals, etc.), whose activities within spatial (landscape) and temporal contexts yield fresh instances of point patterns and interactions within the surroundings. The resultant assemblage of points and patterns can subsequently be quantified, scrutinized, and processed to facilitate assessments and evaluations of spatial and/or temporal models.
 
 vignette: >
   %\VignetteIndexEntry{stppSim: An R package for synthesizing spatiotemporal point patterns - A user guide}
