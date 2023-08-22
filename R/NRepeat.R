@@ -1,7 +1,3 @@
-#' @import future.apply
-#' @import progressr
-NULL
-
 #' @title Near Repeat calculator using the Knox test
 #' @description This function uses the Knox test for space-time
 #' clustering to quantify the spatio-temporal
@@ -51,7 +47,7 @@ NULL
 #' or a list of length(X) with pre-generated random seeds. Default = TRUE.
 #' See R package future.apply for details.
 #' @param ... (optional) Additional arguments passed to future_lapply()
-#' @usage NRepeat <- function(x, y, time, sds, tds, s_include.lowest = FALSE,
+#' @usage NRepeat(x, y, time, sds, tds, s_include.lowest = FALSE,
 #' s_right = FALSE, t_include.lowest = FALSE, t_right = FALSE,
 #' method = "manhattan", nrep = 999, saveSimulations = FALSE,
 #' future.seed = TRUE,...)
@@ -68,19 +64,19 @@ NULL
 #' # Near Repeat calculation using 0-100 meters and 100-Inf meters, and three
 #' # temporal intervals of 2 days
 #' set.seed(38673)
-#' NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+#' NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
 #'            sds = c(0,100,Inf), tds = c(0,2,4))
 #'
 #' # Add a 'same repeat' spatial interval of 0.001 meters, and use Euclidean
 #' # distance
 #' set.seed(38673)
-#' NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+#' NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
 #'            sds = c(0,0.001,100,Inf), tds = c(0,2,4),
 #'            method = "euclidean")
 #'
 #' # Only do 99 replications
 #' set.seed(38673)
-#' NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+#' NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
 #'            sds = c(0,0.001,100,Inf), tds = c(0,2,4),
 #'            method = "euclidean", nrep = 99)
 #'
@@ -88,7 +84,7 @@ NULL
 #' # The plot() function can be used to plot a Heat Map of Near Repeat results
 #' # based on p-values
 #' set.seed(4622)
-#' myoutput <- NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+#' myoutput <- NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
 #'                        sds = c(0,100,200,300,400), td = c(0,1,2,3,4,5))
 #'
 #' # The default range of p-values that will be highlighted (0-.05) can be
@@ -109,7 +105,7 @@ NULL
 #' URL: https://github.com/wsteenbeek/NearRepeat
 #' @importFrom progressr handlers with_progress
 #' progressor
-#' @importFrom future.apply future_apply
+#' @importFrom future.apply future_lapply
 #' @export
 NRepeat <- function(x, y, time,
                        sds, tds,
@@ -121,6 +117,8 @@ NRepeat <- function(x, y, time,
                        future.seed = TRUE,
                        ...
 ){
+
+  median <- NULL
 
   # check for at least 2 replications
   if (nrep < 2) stop("At least 2 replications are needed. Increase 'nrep'")
