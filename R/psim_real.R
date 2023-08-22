@@ -358,7 +358,6 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
 
   }
 
-
   #---------------------------
   #to adjust the baseline of time series
   datxy <- stp_All
