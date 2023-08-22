@@ -4,7 +4,7 @@
 \alias{NRepeat}
 \title{Near Repeat calculator using the Knox test}
 \usage{
-NRepeat <- function(x, y, time, sds, tds, s_include.lowest = FALSE,
+NRepeat(x, y, time, sds, tds, s_include.lowest = FALSE,
 s_right = FALSE, t_include.lowest = FALSE, t_right = FALSE,
 method = "manhattan", nrep = 999, saveSimulations = FALSE,
 future.seed = TRUE,...)
@@ -98,19 +98,19 @@ set.seed(10)
 # Near Repeat calculation using 0-100 meters and 100-Inf meters, and three
 # temporal intervals of 2 days
 set.seed(38673)
-NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
            sds = c(0,100,Inf), tds = c(0,2,4))
 
 # Add a 'same repeat' spatial interval of 0.001 meters, and use Euclidean
 # distance
 set.seed(38673)
-NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
            sds = c(0,0.001,100,Inf), tds = c(0,2,4),
            method = "euclidean")
 
 # Only do 99 replications
 set.seed(38673)
-NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
            sds = c(0,0.001,100,Inf), tds = c(0,2,4),
            method = "euclidean", nrep = 99)
 
@@ -118,7 +118,7 @@ NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
 # The plot() function can be used to plot a Heat Map of Near Repeat results
 # based on p-values
 set.seed(4622)
-myoutput <- NearRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
+myoutput <- NRepeat(x = mydata$x, y = mydata$y, time = mydata$date,
                        sds = c(0,100,200,300,400), td = c(0,1,2,3,4,5))
 
 # The default range of p-values that will be highlighted (0-.05) can be
