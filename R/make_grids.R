@@ -39,7 +39,6 @@
 #' @importFrom sf st_as_sf as_Spatial
 #' st_intersection
 #' @importFrom dplyr select
-#' @importFrom rgdal writeOGR
 #' @importFrom terra linearUnits rast
 #' @importFrom raster raster extent<- res<- crs<-
 #' @importFrom leaflet leaflet addLayersControl
