@@ -169,7 +169,8 @@ psim_real <- function(n_events, ppt, start_date = NULL, poly = NULL,#
     axis <- . <- locid <- sn <- OriginType <-
     prob <- cname <- rname <- locID_sub <-
     distVal1 <- distVal2 <- distVal <-
-    tme <- tmeDiff<- datetime <- NULL
+    tme <- tmeDiff<- datetime <-
+    str_length <- NULL
 
   #check s_interaction
   if(!s_interaction %in% c("small",
