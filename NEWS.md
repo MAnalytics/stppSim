@@ -1,12 +1,14 @@
-# stppSim 1.2.8
+# stppSim 1.3.0
 
-1. Added an internal data 'netw' to data
-2. parameters Tperiod
-3. change to short_term pattern
-4. s_band
-5. fun to snap points to network
-6. adding argument spatial_interaction
-7. tolerance
+## Bug Fixing:
+
+- Resolved the issue of dependencies on retiring package, rgdal: 'https://github.com/MAnalytics/stppSim/issues/2'
+
+## New changes:
+- Added two parameters `s_band` and  `t_band` to `psim_artif` function
+- Created new function `snap_points_to_line` and integrated the function into `psim_artif` and `psim_real` functions.
+- Added two new arguments `s_range` to set maximum spatial range, and `s_interaction` to specify type of point interation in simulation
+- Added `tolerance` argument to set pvalue threshold for point interactions 
 8. s_range. and s_interaction
 
 
