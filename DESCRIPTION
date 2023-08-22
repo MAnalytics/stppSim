@@ -32,7 +32,6 @@ Imports:
   tidyr,
   magrittr,
   sf,
-  rgdal,
   sp,
   ks,
   terra, 
