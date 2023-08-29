@@ -48,6 +48,7 @@
 #' tolerance = 0.07,
 #' crsys = NULL, show.plot = FALSE)
 #' @examples
+#' \dontrun{
 #' #Goal: To learn the ST properties
 #' #of a sample data, for the purpose of
 #' #simulating the full dataset (see `psim_real`).
@@ -69,6 +70,7 @@
 #' s_range =  150, tolerance = 0.07,
 #' crsys = "EPSG:27700",
 #' show.plot = FALSE)
+#' }
 #' @details Returns an object of the class `real_spo`,
 #' storing details of the spatiotemporal
 #' properties of the sample data learnt.
