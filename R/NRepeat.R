@@ -158,7 +158,7 @@ NRepeat <- function(x, y, time,
   spat_cut <- cut(s_dist, sds, include.lowest = s_include.lowest, right = s_right, dig.lab = 10)
 
   #### Run permutations, calculate pairs, and save to list
-  progressr::handlers("progress")
+  progressr::handlers(global = TRUE)
   progressr::with_progress({
     p <- progressr::progressor(along = seq_len(nrep))
     mylist <- future_lapply(seq_len(nrep), function(i) {
