@@ -76,6 +76,7 @@ storing details of the spatiotemporal
 properties of the sample data learnt.
 }
 \examples{
+\dontrun{
 #Goal: To learn the ST properties
 #of a sample data, for the purpose of
 #simulating the full dataset (see `psim_real`).
@@ -97,6 +98,7 @@ p_ratio=20, gridSize = 150,
 s_range =  150, tolerance = 0.07,
 crsys = "EPSG:27700",
 show.plot = FALSE)
+}
 }
 \references{
 Silverman, B.W., 2018. Density estimation
