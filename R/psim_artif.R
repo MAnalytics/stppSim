@@ -188,7 +188,8 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
   spo <- artif_spo(poly, n_origin =  n_origin, restriction_feat = restriction_feat,
                    n_foci=n_foci, foci_separation = foci_separation,
                    mfocal = mfocal, conc_type = conc_type, p_ratio = p_ratio)
-  spo
+
+  #spo
   #
   if(shortTerm == "acyclical" & is.null(s_band)) {
     stop(" 's_band' argument cannot be NULL for 'acyclical' short term pattern!")
@@ -391,7 +392,7 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
                      use.names=TRUE, fill=TRUE, idcol="tid")
   loc_N <- loc_N%>%dplyr::filter(tid==1)
   #dev.new()
-  plot(loc_N$x, loc_N$y)
+  ##plot(loc_N$x, loc_N$y)
   #-----------------
 
   #the actual process
@@ -421,6 +422,7 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
 
   }
 
+
   #This is the second option
   #-----------------------
   if(shortTerm == "cyclical"){
@@ -438,6 +440,8 @@ psim_artif <- function(n_events=1000, start_date = "2021-01-01",
     stp_All_ <-  stp_All_ %>%
       dplyr::select(-c(ID))%>%
       rownames_to_column('ID') #%
+
+    event_Collate <- stp_All_
   }
 
   #-----------------------
