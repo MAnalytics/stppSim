@@ -2,7 +2,8 @@
 
 ##Bug Fixing
 
--Correcting a bug relating to event point collation
+- Correcting a bug relating to event point collation
+- Parameter previously named 'resistance_feat' renamed to 'restriction_feat'
 
 
 ## Bug Fixing:
