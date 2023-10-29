@@ -238,7 +238,7 @@ pt_sizes = c(200, 1000, 2000)
 
 #simulate data
 artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
-  poly=boundary, n_origin=50, resistance_feat = NULL,
+  poly=boundary, n_origin=50, restriction_feat = NULL,
   field = NA,
   n_foci=5, foci_separation = 10, mfocal = NULL,
   conc_type = "dispersed",
@@ -248,7 +248,7 @@ artif_stpp <- psim_artif(n_events=pt_sizes, start_date = "2021-01-01",
 
 ```
 
-The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `12.5 minutes`. The processing time is increases to `45.2` minutes if landscape restriction is added. Specifically, this increase occurs when the argument `resistance_feat = camden$landuse` is used, accompanied by `field = "val"`.
+The processing time on an Intel Core i7-7500CPU @ 2.70GHz, 16.0GB RAM PC is `12.5 minutes`. The processing time is increases to `45.2` minutes if landscape restriction is added. Specifically, this increase occurs when the argument `restriction_feat = camden$landuse` is used, accompanied by `field = "val"`.
 
 To retrieve the result of any `n_events`, simply type the object name with the value index. For example to retrieve the result based on `n_events = 1000`, type: 
 
@@ -258,15 +258,15 @@ stpp_1000 <- artif_stpp[[2]]
 
 * **Spatial Patterns**
 
-The configuration and clustering of events in the spatial domain can be fine-tuned by adjusting parameters that determine spatial components (such as `resistance_feat`, `n_origin`, `mfocal`, `foci_separation`, `n_foci`, `s_band`, and so forth) as well as those that guide walker behaviors (for example, `step_length`, `s_threshold`, and `p_ratio`). To introduce a focal point in the simulation (refer to the `mfocal` see package manual), employ the `make_grids` function. This function produces an interactive map that displays and permits the extraction of the xy coordinates from any location on the map. Enhanced with an integrated `OpenStreetMap`, the interactive platform aids users in more conveniently pinpointing specific locations.
+The configuration and clustering of events in the spatial domain can be fine-tuned by adjusting parameters that determine spatial components (such as `restriction_feat`, `n_origin`, `mfocal`, `foci_separation`, `n_foci`, `s_band`, and so forth) as well as those that guide walker behaviors (for example, `step_length`, `s_threshold`, and `p_ratio`). To introduce a focal point in the simulation (refer to the `mfocal` see package manual), employ the `make_grids` function. This function produces an interactive map that displays and permits the extraction of the xy coordinates from any location on the map. Enhanced with an integrated `OpenStreetMap`, the interactive platform aids users in more conveniently pinpointing specific locations.
 
 `Figure 4` showcases the spatial point patterns (`spp`) for `n_events = 1000` under diverse parameter settings. `Note:` The spatial configuration may differ with each code execution due to inherent random aspects within the function.
 
 `Figure 4a` displays the outcome when relying solely on default arguments, as demonstrated in the previous code.
 
-`Figure 4b` presents the pattern resulting from the integration of additional parameters: `resistance_feat = camden$landuse` and `mfocal = c(530000, 182250)`. Here, the first parameter restricts the number of events created within the land use (restriction) features, while the second emphasizes a central spatial concentration of origins, highlighted by a red dot on the map.
+`Figure 4b` presents the pattern resulting from the integration of additional parameters: `restriction_feat = camden$landuse` and `mfocal = c(530000, 182250)`. Here, the first parameter restricts the number of events created within the land use (restriction) features, while the second emphasizes a central spatial concentration of origins, highlighted by a red dot on the map.
 
-`Figure 4c` depicts the configuration when the parameters of `resistance_feat` and `mfocal` are retained (as in 4b), but with an added `foci_separation = 50`. This ensures a moderate spatial distance between individual origins.
+`Figure 4c` depicts the configuration when the parameters of `restriction_feat` and `mfocal` are retained (as in 4b), but with an added `foci_separation = 50`. This ensures a moderate spatial distance between individual origins.
 
 Lastly, `Figure 4d` illustrates the spatial pattern when, besides maintaining the `mfocal` setting (similar to the above figures), the `s_threshold` and `step_length` are set at `250` and `50` respectively. This configuration aims to promote a broader distribution of points relative to their origins.
 
@@ -309,7 +309,7 @@ pt_sizes = c(1500)
 
 #simulate data
 artif_stpp <- psim_artif(n_events=pt_sizes, start_date = NULL,
-  poly=boundary, n_origin=50, resistance_feat = NULL,
+  poly=boundary, n_origin=50, restriction_feat = NULL,
   field = NA,
   n_foci=5, foci_separation = 10, mfocal = NULL,
   conc_type = "dispersed",
