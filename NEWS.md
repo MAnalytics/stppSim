@@ -1,5 +1,7 @@
 # stppSim 1.3.2
 
+##Bug Fixing
+
 -Correcting a bug relating to event point collation
 
 
