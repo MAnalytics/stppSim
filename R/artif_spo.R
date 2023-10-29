@@ -116,7 +116,7 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
   perc_sep <- as.numeric(sub("%","",foci_separation))
   perc_sep <- round(perc_sep, digits = 0)
 
-  if(!perc_sep %in% 0:100){
+  if(!perc_sep %in% c(0:100)){
     stop("Foci separation should be a value between 1 and 100!")
   }
 
@@ -127,11 +127,11 @@ artif_spo <- function(poly, n_origin =  50, restriction_feat = NULL,
 
   poly <- extract_coords(poly)
 
-    #set.seed(1234)
-    #generate random points inside the boundary
-    ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
-    colnames(ran_points) <- c("x", "y")
-    #plot(ran_points$x,ran_points$y)
+  #set.seed(1234)
+  #generate random points inside the boundary
+  ran_points <- as.data.frame(csr(as.matrix(poly,,2), n_origin))
+  colnames(ran_points) <- c("x", "y")
+  #plot(ran_points$x,ran_points$y)
 
 
   if(is.null(restriction_feat)){
