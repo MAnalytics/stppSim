@@ -1,3 +1,18 @@
+# stppSim 1.3.2
+
+-Correcting a bug relating to event point collation
+
+
+## Bug Fixing:
+
+- Resolved the issue of dependencies on retiring package (`rgdal`): 'https://github.com/MAnalytics/stppSim/issues/2'
+
+## New changes:
+
+- Introduced two new parameters, `s_band` and `t_band`, to the `psim_artif` function.
+- Developed a new function named `snap_points_to_line`, which has been incorporated into both psim_artif and psim_real functions.
+
+
 # stppSim 1.3.0
 
 ## Bug Fixing:
