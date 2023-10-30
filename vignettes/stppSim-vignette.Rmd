@@ -162,7 +162,7 @@ The following parameters define the temporal dimension:
 
 * `Falling`: Denotes a downward trend in the time series. Similar to the rising trend, when this is chosen, the `slope` argument can be used to distinguish between a `gentle` decline or a `steep` drop.
 
-This parameter is pertinent only when simulating a time series from the beginning, without any pre-existing data.
+This parameter is pertinent only when simulating a time series from the scratch, without any pre-existing data.
 
 * ***Seasonal peak [`fPeak`]*** - This parameter sets the initial temporal peak of a sinusoidal pattern in a time series, thereby dictating the medium-term undulations throughout the series' duration. For instance, a first peak set at `90` days denotes a seasonal cycle spanning `180` days in the time series. This approach is primarily employed when the simulation's objective isn't to produce spatiotemporal interactions but to capture more general cyclic patterns within the data. 
 
