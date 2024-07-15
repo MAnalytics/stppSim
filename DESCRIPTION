@@ -6,21 +6,19 @@ Author: Monsuru Adepeju [cre, aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial point patterns marked by their
   spatial and temporal signatures. The generated point cloud
-  may include inherent interactions between both signatures.
-  The simulation process is achieved through the integration of 
-  microsimulation (Holm, E., (2017)<doi:10.1002/9781118786352.wbieg0320>) 
-  and agent-based models (Bonabeau, E., (2002)<doi:10.1073/pnas.082080899>). 
-  The simulation process is initiated by configuring the movement
-  characteristics of the specified agents (called 'walkers') and how
-  they interact within the simulation environment. 
-  These interactions (Quaglietta, L. and Porto, M., 
-  (2019)<doi:10.1186/s40462-019-0154-8>) ensures the realisation of 
-  and time domains result in specific spatiotemporal point patterns 
-  spatiotemporal patterns which can be visualized, analyzed, and/or
-  deployed for various analytical purposes. Given the growing scarcity 
-  of detailed spatiotemporal data in a wide range of domains, this 
-  package offers an alternative data source for use several domains, 
-  including social and life sciences.
+  may exhibit inherent interactions between both signatures.
+  The simulation integrates microsimulation 
+  (Holm, E., (2017)<doi:10.1002/9781118786352.wbieg0320>) 
+  and agent-based models (Bonabeau, E., (2002)<doi:10.1073/pnas.082080899>),
+  beginning with the configuration of movement characteristics for 
+  the specified agents (referred to as 'walkers') and their interactions 
+  within the simulation environment. These interactions 
+  (Quaglietta, L. and Porto, M., (2019)<doi:10.1186/s40462-019-0154-8>) 
+  result in specific spatiotemporal patterns that can be visualized, 
+  analyzed, and used for various analytical purposes. 
+  Given the growing scarcity of detailed spatiotemporal data 
+  across many domains, this package provides an alternative data source 
+  for applications in social and life sciences. 
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
