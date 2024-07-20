@@ -1,3 +1,11 @@
+# stppSim 1.3.3
+
+## New changes
+
+- Modify model description to better capture the essence of the package
+- Increasing default value for 'size' arguments in `make_grids` function to facilitate quicker computation.
+
+
 # stppSim 1.3.2
 
 ##Bug Fixing
