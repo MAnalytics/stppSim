@@ -18,7 +18,7 @@ Description: Generates artificial point patterns marked by their
   analyzed, and used for various analytical purposes. 
   Given the growing scarcity of detailed spatiotemporal data 
   across many domains, this package provides an alternative data source 
-  for applications in social and life sciences. 
+  for applications in social and life sciences.
 Language: en-US
 License: GPL-3
 URL: https://github.com/MAnalytics/stppSim
