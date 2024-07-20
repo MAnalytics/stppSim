@@ -4,7 +4,7 @@
 \alias{make_grids}
 \title{Make square grids}
 \usage{
-make_grids(poly, size = 250,
+make_grids(poly, size = 350,
 show_output = FALSE, interactive = FALSE)
 }
 \arguments{
@@ -15,7 +15,7 @@ which square grids are to be created.}
 
 \item{size}{Size of square grids to be
 created. For example, the input \code{size}
-for a 250 by 250 square grids is \code{250}.}
+for a 350 by 350 square grids is \code{350}.}
 
 \item{show_output}{(logical) Display the output.
 Default: \code{FALSE}}
@@ -48,6 +48,6 @@ added to help identify places.
 load(file = system.file("extdata", "camden.rda",
 package="stppSim"))
 boundary = camden$boundary
-make_grids(poly=boundary, size = 250,
+make_grids(poly=boundary, size = 350,
 show_output = FALSE, interactive = FALSE)
 }
