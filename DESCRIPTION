@@ -5,7 +5,7 @@ Version: 1.3.3
 Author: Monsuru Adepeju [cre, aut]
 Maintainer: Monsuru Adepeju <monsuur2010@yahoo.com>
 Description: Generates artificial point patterns marked by their
-  spatial and temporal signatures. The point cloud
+  spatial and temporal signatures. The resulting point cloud
   may exhibit inherent interactions between both signatures.
   The simulation integrates microsimulation 
   (Holm, E., (2017)<doi:10.1002/9781118786352.wbieg0320>) 
