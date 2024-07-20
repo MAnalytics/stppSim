@@ -7,20 +7,20 @@
 #' which square grids are to be created.
 #' @param size Size of square grids to be
 #' created. For example, the input `size`
-#' for a 250 by 250 square grids is \code{250}.
+#' for a 350 by 350 square grids is \code{350}.
 #' @param show_output (logical) Display the output.
 #' Default: \code{FALSE}
 #' @param interactive (logical) to show
 #' interactive map of the grids generated.
 #' Default: \code{FALSE}.
-#' @usage make_grids(poly, size = 250,
+#' @usage make_grids(poly, size = 350,
 #' show_output = FALSE, interactive = FALSE)
 #' @examples
 #' #load boundary of Camden
 #' load(file = system.file("extdata", "camden.rda",
 #' package="stppSim"))
 #' boundary = camden$boundary
-#' make_grids(poly=boundary, size = 250,
+#' make_grids(poly=boundary, size = 350,
 #' show_output = FALSE, interactive = FALSE)
 #' @details Generates a square grid system in a shapefile
 #' format (in the same `crs` as the input `poly`).
@@ -44,7 +44,7 @@
 #' @importFrom leaflet leaflet addLayersControl
 #' addTiles addPolygons labelOptions
 #' @export
-make_grids <- function(poly, size = 250, show_output = FALSE,
+make_grids <- function(poly, size = 350, show_output = FALSE,
                        interactive = FALSE){
 
   show.output <- intersect_grid <- as <-
